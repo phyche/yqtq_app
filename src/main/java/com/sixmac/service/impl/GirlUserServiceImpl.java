@@ -72,4 +72,9 @@ public class GirlUserServiceImpl implements GirlUserService {
         return girlUserDao.findByUserId(userId);
     }
 
+    @Override
+    public List<GirlUser> findByGirlId(Integer girlId) {
+        return girlUserDao.findByGirlId(girlId);
+    }
+
 }

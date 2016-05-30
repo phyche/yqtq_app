@@ -12,4 +12,6 @@ public interface GirlUserService extends ICommonService<GirlUser> {
 
     public List<GirlUser> findByUserId(Integer userId);
 
+    public List<GirlUser> findByGirlId(Integer girlId);
+
 }

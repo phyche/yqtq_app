@@ -15,4 +15,7 @@ public interface GirlUserDao extends JpaRepository<GirlUser, Integer>, JpaSpecif
     @Query("select a from GirlUser a where a.user.id = ?1 ")
     public List<GirlUser> findByUserId(Integer userId);
 
+    @Query("select a from GirlUser a where a.girl.id = ?1 ")
+    public List<GirlUser> findByGirlId(Integer girlId);
+
 }

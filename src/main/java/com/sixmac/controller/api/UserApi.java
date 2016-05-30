@@ -54,7 +54,7 @@ public class UserApi extends CommonController {
      *  @api {post} /api/user/info 用户个人资料
      * @apiName user.info
      * @apiGroup user
-     * @apiParam {Integer} userId 用户id
+     * @apiParam {Integer} userId 用户id <必传 />
      *
      * @apiSuccess {Object}  user 用户
      * @apiSuccess {String} user.nickname 用户昵称
@@ -118,7 +118,7 @@ public class UserApi extends CommonController {
      * @api {post} /api/user/edit 编辑个人资料
      * @apiName user.edit
      * @apiGroup user
-     * @apiParam {Integer} userId 用户id
+     * @apiParam {Integer} userId 用户id <必传 />
      * @apiParam {String} avater 用户头像
      * @apiParam {String} nickname 用户昵称
      * @apiParam {Integer} gender 用户性别（0：男 1：女）
@@ -128,7 +128,16 @@ public class UserApi extends CommonController {
      * @apiParam {Double} weight 体重
      * @apiParam {Integer} position 位置（0：前 1：中 2：后 3：守）
      *
-     * @apiSuccess {Object}  teamList 我加入的球队列表
+     * @apiSuccess {Object} user 用户
+     * @apiSuccess {Integer} user.id 用户id
+     * @apiSuccess {String} user.avater 用户头像
+     * @apiSuccess {String} user.nickname 用户昵称
+     * @apiSuccess {Integer} user.gender 用户性别（0：男 1：女）
+     * @apiSuccess {Long} user.birthday 用户出生日期
+     * @apiSuccess {Integer} user.cityId 用户城市
+     * @apiSuccess {Double} user.height 身高
+     * @apiSuccess {Double} user.weight 体重
+     * @apiSuccess {Integer} user.position 位置（0：前 1：中 2：后 3：守）
      *
      */
     @RequestMapping(value = "/edit")
@@ -178,7 +187,8 @@ public class UserApi extends CommonController {
 
         userService.update(user);
 
-        Result result = new Result(true).data(0);
+        Result obj = new Result(true).data(user);
+        String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
 
@@ -208,7 +218,7 @@ public class UserApi extends CommonController {
      * @api {post} /api/user/commentList 我的评论
      * @apiName user.commentList
      * @apiGroup user
-     * @apiParam {Integer} userId 用户id
+     * @apiParam {Integer} userId 用户id <必传 />
      *
      * @apiSuccess {Object} tUser 被评论用户
      * @apiSuccess {Integer} tUser.id 被评论用户id
@@ -234,7 +244,7 @@ public class UserApi extends CommonController {
      * @api {post} /api/user/postList 我的帖子
      * @apiName user.postList
      * @apiGroup user
-     * @apiParam {Integer} userId 用户id
+     * @apiParam {Integer} userId 用户id <必传 />
      *
      * @apiSuccess {Object} postList 帖子
      * @apiSuccess {Object} postList.user 用户
@@ -266,7 +276,7 @@ public class UserApi extends CommonController {
      * @api {post} /api/user/postInfo 我的帖子详情
      * @apiName user.postInfo
      * @apiGroup user
-     * @apiParam {Integer} postId 帖子id
+     * @apiParam {Integer} postId 帖子id <必传 />
      *
      * @apiSuccess {Object} post 帖子
      * @apiSuccess {Integer} post.content 帖子内容
@@ -310,27 +320,28 @@ public class UserApi extends CommonController {
     }
 
     /**
-     *
+     * 完成
      *
      *  @api {post} /api/user/watchingList 我的看球列表
      * @apiName user.watchingList
      * @apiGroup user
-     * @apiParam {Integer} userId 用户id
+     * @apiParam {Integer} userId 用户id <必传 />
      *
      * @apiSuccess {Object} girlUserList 用户约看列表
-     * @apiSuccess {Integer} post.content 约看id
-     * @apiSuccess {Object} girlUserList.girl 宝贝
-     * @apiSuccess {Long} girlUserList.girl.avater 宝贝头像
-     * @apiSuccess {Object} girlUserList.girl,nickname 宝贝昵称
-     * @apiSuccess {Integer} girlUserList.girl.price 宝贝价格
-     * @apiSuccess {String} girlUserList.girl.tip 宝贝红包（小费）
-     * @apiSuccess {Object} girlUserList. 时长
-     * @apiSuccess {String} postImages.avater 预约时间
+     * @apiSuccess {Integer} girlUserList.id 约看id
+     * @apiSuccess {Integer} girlUserList.duration 时长
+     * @apiSuccess {Double} girlUserList.tip 红包（小费）
+     * @apiSuccess {Long} girlUserList.startDate 预约时间
      *
-     * @apiSuccess {Object} postComments 赛事
-     * @apiSuccess {Integer} postComments.content 赛事id
-     * @apiSuccess {Long} postComments.createDate 球队1的名字
-     * @apiSuccess {Object} postComments.fUser 球队2的名字
+     * @apiSuccess {Object} girlUserList.girl 宝贝
+     * @apiSuccess {String} girlUserList.girl.avater 宝贝头像
+     * @apiSuccess {String} girlUserList.girl,nickname 宝贝昵称
+     * @apiSuccess {Double} girlUserList.girl.price 宝贝价格
+     *
+     * @apiSuccess {Object} girlUserList.bigRace 赛事
+     * @apiSuccess {Integer} girlUserList.bigRace.id 赛事id
+     * @apiSuccess {Long} girlUserList.bigRace.team1name 球队1的名字
+     * @apiSuccess {Object} girlUserList.bigRace.team2name 球队2的名字
      *
      */
     @RequestMapping(value = "/watchingList")
@@ -344,7 +355,28 @@ public class UserApi extends CommonController {
     }
 
     /**
-     * 我的看球详情
+     * 完成
+     *
+     * @api {post} /api/user/watchingInfo 我的看球详情
+     * @apiName user.watchingInfo
+     * @apiGroup user
+     * @apiParam {Integer} girlUserId 约看id <必传 />
+     *
+     * @apiSuccess {Object} girlUsers 用户约看列表
+     * @apiSuccess {Double} girlUsers.tip 红包（小费）
+     * @apiSuccess {Double} girlUsers.price 总费用
+     *
+     * @apiSuccess {Object} girlUsers.girl 宝贝
+     * @apiSuccess {String} girlUsers.girl.avater 宝贝头像
+     * @apiSuccess {String} girlUsers.girl,nickname 宝贝昵称
+     * @apiSuccess {Integer} girlUsers.duration 宝贝年龄
+     * @apiSuccess {Double} girlUsers.tip 宝贝身高
+     * @apiSuccess {Double} girlUsers.tip 宝贝体重
+     *
+     * @apiSuccess {Object} girlUsers.bigRace 赛事
+     * @apiSuccess {Integer} girlUsers.bigRace.id 赛事id
+     * @apiSuccess {Long} girlUsers.bigRace.team1name 球队1的名字
+     * @apiSuccess {Object} girlUsers.bigRace.team2name 球队2的名字
      *
      */
     @RequestMapping(value = "/watchingInfo")
@@ -358,7 +390,13 @@ public class UserApi extends CommonController {
     }
 
     /**
-     * 我的看球 确认
+     * 完成
+     *
+     * @api {post} /api/user/confirm 我的看球确认
+     * @apiName user.confirm
+     * @apiGroup user
+     * @apiParam {Integer} watchingId 约看id
+     *
      */
     @RequestMapping(value = "/confirm")
     public void confirm(HttpServletResponse response, Integer watchingId) {
@@ -372,18 +410,28 @@ public class UserApi extends CommonController {
     }
 
     /**
-     * 我的看球 评价
+     * 完成
+     *
+     * @api {post} /api/user/comment 我的看球评价
+     * @apiName user.comment
+     * @apiGroup user
+     * @apiParam {Integer} watchingId 约看id <必传 />
+     * @apiParam {Integer} star 服务打分 <必传 />
+     * @apiParam {String} content 评论内容 <必传 />
+     *
      */
     @RequestMapping(value = "/comment")
-    public void comment(HttpServletResponse response, Integer star, String comment, Integer watchingId) {
+    public void comment(HttpServletResponse response, Integer star, String content, Integer watchingId) {
 
         GirlUser girlUser = girlUserService.getById(watchingId);
 
         if (girlUser.getStatus() == 1) {
 
             GirlComment girlComment = new GirlComment();
+            girlComment.setUser(girlUser.getUser());
+            girlComment.setGirl(girlUser.getGirl());
             girlComment.setStar(star);
-            girlComment.setContent(comment);
+            girlComment.setContent(content);
             girlCommentService.create(girlComment);
         }
 

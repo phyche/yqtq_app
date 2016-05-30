@@ -17,7 +17,7 @@ public class GirlImage extends BaseEntity{
     private Integer type;
 
     @Column(name = "url")
-    private Integer url;
+    private String url;
 
     public Girl getGirl() {
         return girl;
@@ -35,11 +35,11 @@ public class GirlImage extends BaseEntity{
         this.type = type;
     }
 
-    public Integer getUrl() {
+    public String getUrl() {
         return url;
     }
 
-    public void setUrl(Integer url) {
+    public void setUrl(String url) {
         this.url = url;
     }
 }

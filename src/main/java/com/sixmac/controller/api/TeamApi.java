@@ -90,7 +90,7 @@ public class TeamApi extends CommonController {
      * @api {post} /api/team/info 球队详情
      * @apiName team.info
      * @apiGroup team
-     * @apiParam {Integer} teamId 球队Id
+     * @apiParam {Integer} teamId 球队Id <必传 />
      *
      * @apiSuccess {Object}  team 球队
      * @apiSuccess {Integer} team.id 球队id
@@ -151,10 +151,10 @@ public class TeamApi extends CommonController {
      * @api {post} /api/team/add 创建球队
      * @apiName team.add
      * @apiGroup team
-     * @apiParam {Integer} userId 用户Id
-     * @apiParam {String} name 球队名称
-     * @apiParam {String} avater 球队队徽
-     * @apiParam {Integer} slogan 球队口号
+     * @apiParam {Integer} userId 用户Id <必传 />
+     * @apiParam {String} name 球队名称 <必传 />
+     * @apiParam {String} avater 球队队徽 <必传 />
+     * @apiParam {Integer} slogan 球队口号 <必传 />
      * @apiParam {Integer} address 球队地址
      *
      *
@@ -185,8 +185,8 @@ public class TeamApi extends CommonController {
      * @api {post} /api/team/order 约球队
      * @apiName team.order
      * @apiGroup team
-     * @apiParam {Integer} userId 用户Id
-     * @apiParam {Integer} teamId 球队Id
+     * @apiParam {Integer} userId 用户Id <必传 />
+     * @apiParam {Integer} teamId 球队Id <必传 />
      * @apiParam {Long} time 约球时间
      * @apiParam {Integer} address 约球地址
      */
@@ -227,7 +227,7 @@ public class TeamApi extends CommonController {
      * @api {post} /api/team/playerList 球员列表
      * @apiName team.playerList
      * @apiGroup team
-     * @apiParam {Integer} teamId 球队Id
+     * @apiParam {Integer} teamId 球队Id <必传 />
      *
      * @apiSuccess {Object}  userList 队员
      * @apiSuccess {Integer} userList.id 队员id
@@ -254,7 +254,7 @@ public class TeamApi extends CommonController {
      * @api {post} /api/team/schedule 日程
      * @apiName team.schedule
      * @apiGroup team
-     * @apiParam {Integer} teamId 球队Id
+     * @apiParam {Integer} teamId 球队Id <必传 />
      *
      * @apiSuccess {Object}  watchBallVos 球员所在球队为主队赛事列表
      * @apiSuccess {Integer} watchBallVos.id 赛事id

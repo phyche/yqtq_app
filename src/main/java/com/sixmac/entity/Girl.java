@@ -3,6 +3,7 @@ package com.sixmac.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  * Created by Administrator on 2016/5/23 0023.
@@ -40,6 +41,9 @@ public class Girl extends BaseEntity{
 
     @Column(name = "weight")
     private Double weight;
+
+    @Transient
+    private Integer orderNum;
 
     public Integer getCityId() {
         return cityId;
@@ -119,5 +123,13 @@ public class Girl extends BaseEntity{
 
     public void setWeight(Double weight) {
         this.weight = weight;
+    }
+
+    public Integer getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(Integer orderNum) {
+        this.orderNum = orderNum;
     }
 }

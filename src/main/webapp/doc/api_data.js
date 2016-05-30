@@ -1852,28 +1852,28 @@ define({ "api": [
             "type": "Integer",
             "optional": false,
             "field": "userId",
-            "description": "<p>用户Id</p>"
+            "description": "<p>用户Id &lt;必传 /&gt;</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "name",
-            "description": "<p>球队名称</p>"
+            "description": "<p>球队名称 &lt;必传 /&gt;</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "avater",
-            "description": "<p>球队队徽</p>"
+            "description": "<p>球队队徽 &lt;必传 /&gt;</p>"
           },
           {
             "group": "Parameter",
             "type": "Integer",
             "optional": false,
             "field": "slogan",
-            "description": "<p>球队口号</p>"
+            "description": "<p>球队口号 &lt;必传 /&gt;</p>"
           },
           {
             "group": "Parameter",
@@ -1908,7 +1908,7 @@ define({ "api": [
             "type": "Integer",
             "optional": false,
             "field": "teamId",
-            "description": "<p>球队Id</p>"
+            "description": "<p>球队Id &lt;必传 /&gt;</p>"
           }
         ]
       }
@@ -2172,14 +2172,14 @@ define({ "api": [
             "type": "Integer",
             "optional": false,
             "field": "userId",
-            "description": "<p>用户Id</p>"
+            "description": "<p>用户Id &lt;必传 /&gt;</p>"
           },
           {
             "group": "Parameter",
             "type": "Integer",
             "optional": false,
             "field": "teamId",
-            "description": "<p>球队Id</p>"
+            "description": "<p>球队Id &lt;必传 /&gt;</p>"
           },
           {
             "group": "Parameter",
@@ -2221,7 +2221,7 @@ define({ "api": [
             "type": "Integer",
             "optional": false,
             "field": "teamId",
-            "description": "<p>球队Id</p>"
+            "description": "<p>球队Id &lt;必传 /&gt;</p>"
           }
         ]
       }
@@ -2283,7 +2283,7 @@ define({ "api": [
             "type": "Integer",
             "optional": false,
             "field": "teamId",
-            "description": "<p>球队Id</p>"
+            "description": "<p>球队Id &lt;必传 /&gt;</p>"
           }
         ]
       }
@@ -2431,6 +2431,48 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "/api/user/comment",
+    "title": "我的看球评价",
+    "name": "user_comment",
+    "group": "user",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "watchingId",
+            "description": "<p>约看id &lt;必传 /&gt;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "star",
+            "description": "<p>服务打分 &lt;必传 /&gt;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "content",
+            "description": "<p>评论内容 &lt;必传 /&gt;</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/UserApi.java",
+    "groupTitle": "user",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:8080/yqtq_app/api/user/comment"
+      }
+    ]
+  },
+  {
+    "type": "post",
     "url": "/api/user/commentList",
     "title": "我的评论",
     "name": "user_commentList",
@@ -2443,7 +2485,7 @@ define({ "api": [
             "type": "Integer",
             "optional": false,
             "field": "userId",
-            "description": "<p>用户id</p>"
+            "description": "<p>用户id &lt;必传 /&gt;</p>"
           }
         ]
       }
@@ -2500,6 +2542,34 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "/api/user/confirm",
+    "title": "我的看球确认",
+    "name": "user_confirm",
+    "group": "user",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "watchingId",
+            "description": "<p>约看id</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/UserApi.java",
+    "groupTitle": "user",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:8080/yqtq_app/api/user/confirm"
+      }
+    ]
+  },
+  {
+    "type": "post",
     "url": "/api/user/edit",
     "title": "编辑个人资料",
     "name": "user_edit",
@@ -2512,7 +2582,7 @@ define({ "api": [
             "type": "Integer",
             "optional": false,
             "field": "userId",
-            "description": "<p>用户id</p>"
+            "description": "<p>用户id &lt;必传 /&gt;</p>"
           },
           {
             "group": "Parameter",
@@ -2580,8 +2650,71 @@ define({ "api": [
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "teamList",
-            "description": "<p>我加入的球队列表</p>"
+            "field": "user",
+            "description": "<p>用户</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "user.id",
+            "description": "<p>用户id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "user.avater",
+            "description": "<p>用户头像</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "user.nickname",
+            "description": "<p>用户昵称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "user.gender",
+            "description": "<p>用户性别（0：男 1：女）</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "user.birthday",
+            "description": "<p>用户出生日期</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "user.cityId",
+            "description": "<p>用户城市</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "user.height",
+            "description": "<p>身高</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "user.weight",
+            "description": "<p>体重</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "user.position",
+            "description": "<p>位置（0：前 1：中 2：后 3：守）</p>"
           }
         ]
       }
@@ -2609,7 +2742,7 @@ define({ "api": [
             "type": "Integer",
             "optional": false,
             "field": "userId",
-            "description": "<p>用户id</p>"
+            "description": "<p>用户id &lt;必传 /&gt;</p>"
           }
         ]
       }
@@ -2818,7 +2951,7 @@ define({ "api": [
             "type": "Integer",
             "optional": false,
             "field": "postId",
-            "description": "<p>帖子id</p>"
+            "description": "<p>帖子id &lt;必传 /&gt;</p>"
           }
         ]
       }
@@ -2957,7 +3090,7 @@ define({ "api": [
             "type": "Integer",
             "optional": false,
             "field": "userId",
-            "description": "<p>用户id</p>"
+            "description": "<p>用户id &lt;必传 /&gt;</p>"
           }
         ]
       }
@@ -3037,6 +3170,1136 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "http://localhost:8080/yqtq_app/api/user/postList"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/api/user/watchingInfo",
+    "title": "我的看球详情",
+    "name": "user_watchingInfo",
+    "group": "user",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "girlUserId",
+            "description": "<p>约看id &lt;必传 /&gt;</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "girlUsers",
+            "description": "<p>用户约看列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "girlUsers.tip",
+            "description": "<p>红包（小费）</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "girlUsers.price",
+            "description": "<p>总费用</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "girlUsers.girl",
+            "description": "<p>宝贝</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "girlUsers.girl.avater",
+            "description": "<p>宝贝头像</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "girlUsers.duration",
+            "description": "<p>宝贝年龄</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "girlUsers.bigRace",
+            "description": "<p>赛事</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "girlUsers.bigRace.id",
+            "description": "<p>赛事id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "girlUsers.bigRace.team1name",
+            "description": "<p>球队1的名字</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "girlUsers.bigRace.team2name",
+            "description": "<p>球队2的名字</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/UserApi.java",
+    "groupTitle": "user",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:8080/yqtq_app/api/user/watchingInfo"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/api/user/watchingList",
+    "title": "我的看球列表",
+    "name": "user_watchingList",
+    "group": "user",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>用户id &lt;必传 /&gt;</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "girlUserList",
+            "description": "<p>用户约看列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "girlUserList.id",
+            "description": "<p>约看id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "girlUserList.duration",
+            "description": "<p>时长</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "girlUserList.tip",
+            "description": "<p>红包（小费）</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "girlUserList.startDate",
+            "description": "<p>预约时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "girlUserList.girl",
+            "description": "<p>宝贝</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "girlUserList.girl.avater",
+            "description": "<p>宝贝头像</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "girlUserList.girl.price",
+            "description": "<p>宝贝价格</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "girlUserList.bigRace",
+            "description": "<p>赛事</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "girlUserList.bigRace.id",
+            "description": "<p>赛事id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "girlUserList.bigRace.team1name",
+            "description": "<p>球队1的名字</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "girlUserList.bigRace.team2name",
+            "description": "<p>球队2的名字</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/UserApi.java",
+    "groupTitle": "user",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:8080/yqtq_app/api/user/watchingList"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/api/watching/girlComment",
+    "title": "宝贝陪看评价",
+    "name": "watching_girlComment",
+    "group": "watching",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "girlId",
+            "description": "<p>宝贝id &lt;必传/&gt;</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "girlCommentList",
+            "description": "<p>宝贝陪看评价列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "girlCommentList.id",
+            "description": "<p>评价id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "girl.name",
+            "description": "<p>服务打分</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "girl.age",
+            "description": "<p>评论内容</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "girl.height",
+            "description": "<p>评论时间</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/WatchingApi.java",
+    "groupTitle": "watching",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:8080/yqtq_app/api/watching/girlComment"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/api/watching/girlInfo",
+    "title": "现场看球宝贝详情",
+    "name": "watching_girlInfo",
+    "group": "watching",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "girlId",
+            "description": "<p>宝贝id &lt;必传/&gt;</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "girl",
+            "description": "<p>看球宝贝列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "girl.id",
+            "description": "<p>宝贝id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "girl.name",
+            "description": "<p>宝贝昵称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "girl.age",
+            "description": "<p>宝贝年龄</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "girl.height",
+            "description": "<p>宝贝身高</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "girl.weight",
+            "description": "<p>宝贝体重</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "girl.price",
+            "description": "<p>宝贝价格</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "girl.orderNum",
+            "description": "<p>宝贝预约次数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "girl.interest",
+            "description": "<p>宝贝兴趣</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "girl.profession",
+            "description": "<p>宝贝职业</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "girl.favoriteTeam",
+            "description": "<p>宝贝喜欢球队</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "girl.label",
+            "description": "<p>宝贝签名</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "girl.cityId",
+            "description": "<p>宝贝陪看区域</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "girlImages",
+            "description": "<p>宝贝相册列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "girlImages.id",
+            "description": "<p>宝贝相册id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "girlImages.avater",
+            "description": "<p>宝贝相册</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/WatchingApi.java",
+    "groupTitle": "watching",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:8080/yqtq_app/api/watching/girlInfo"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/api/watching/girlList",
+    "title": "现场看球宝贝列表",
+    "name": "watching_girlList",
+    "group": "watching",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "pageNum",
+            "description": "<p>当前页</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "pageSize",
+            "description": "<p>每页显示数</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list",
+            "description": "<p>现场看球宝贝列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list.girl",
+            "description": "<p>宝贝</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "list.girl.id",
+            "description": "<p>宝贝id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.avater",
+            "description": "<p>宝贝封面</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "page",
+            "description": "<p>翻页信息</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "page.totalNum",
+            "description": "<p>总记录数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "page.totalPage",
+            "description": "<p>总页数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "page.currentPage",
+            "description": "<p>当前页</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/WatchingApi.java",
+    "groupTitle": "watching",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:8080/yqtq_app/api/watching/girlList"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/api/watching/orderGirl",
+    "title": "约宝贝看球确认",
+    "name": "watching_orderGirl",
+    "group": "watching",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>用户id &lt;必传/&gt;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "girlId",
+            "description": "<p>宝贝id &lt;必传/&gt;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "sceneId",
+            "description": "<p>比赛id &lt;必传/&gt;</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "girlUsers",
+            "description": "<p>用户约看列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "girlUsers.tip",
+            "description": "<p>红包（小费）</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "girlUsers.price",
+            "description": "<p>总费用</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "girlUsers.girl",
+            "description": "<p>宝贝</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "girlUsers.girl.avater",
+            "description": "<p>宝贝头像</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "girlUsers.duration",
+            "description": "<p>宝贝年龄</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "girlUsers.bigRace",
+            "description": "<p>赛事</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "girlUsers.bigRace.id",
+            "description": "<p>赛事id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "girlUsers.bigRace.team1name",
+            "description": "<p>球队1的名字</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "girlUsers.bigRace.team2name",
+            "description": "<p>球队2的名字</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/WatchingApi.java",
+    "groupTitle": "watching",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:8080/yqtq_app/api/watching/orderGirl"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/api/watching/pay",
+    "title": "约宝贝支付",
+    "name": "watching_pay",
+    "group": "watching",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "girlUserId",
+            "description": "<p>约看id &lt;必传/&gt;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Double",
+            "optional": false,
+            "field": "tip",
+            "description": "<p>红包费</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "girlUsers",
+            "description": "<p>用户约看列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "girlUsers.tip",
+            "description": "<p>红包（小费）</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "girlUsers.price",
+            "description": "<p>总费用</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/WatchingApi.java",
+    "groupTitle": "watching",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:8080/yqtq_app/api/watching/pay"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/api/watching/sceneInfo",
+    "title": "现场看球详情",
+    "name": "watching_sceneInfo",
+    "group": "watching",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "sceneId",
+            "description": "<p>看球id &lt;必传/&gt;</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list",
+            "description": "<p>现场看球列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "list.id",
+            "description": "<p>看球id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.name",
+            "description": "<p>看球名称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.description",
+            "description": "<p>看球描述</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.team1name",
+            "description": "<p>球队1名称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.avater1",
+            "description": "<p>球队1队徽</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.team2name",
+            "description": "<p>球队2名称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.avater2",
+            "description": "<p>球队2队徽</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.startDate",
+            "description": "<p>开始时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list.stadium",
+            "description": "<p>现场看球球场</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.stadium.name",
+            "description": "<p>球场名字</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/WatchingApi.java",
+    "groupTitle": "watching",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:8080/yqtq_app/api/watching/sceneInfo"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/api/watching/sceneList",
+    "title": "现场看球列表",
+    "name": "watching_sceneList",
+    "group": "watching",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "cityId",
+            "description": "<p>城市id</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "pageNum",
+            "description": "<p>当前页</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "pageSize",
+            "description": "<p>每页显示数</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list",
+            "description": "<p>现场看球列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "list.id",
+            "description": "<p>看球id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.team1name",
+            "description": "<p>球队1名称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.avater1",
+            "description": "<p>球队1队徽</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.team2name",
+            "description": "<p>球队2名称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.avater2",
+            "description": "<p>球队2队徽</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.startDate",
+            "description": "<p>开始时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list.stadium",
+            "description": "<p>现场看球球场</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.stadium.name",
+            "description": "<p>球场名字</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "page",
+            "description": "<p>翻页信息</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "page.totalNum",
+            "description": "<p>总记录数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "page.totalPage",
+            "description": "<p>总页数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "page.currentPage",
+            "description": "<p>当前页</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/WatchingApi.java",
+    "groupTitle": "watching",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:8080/yqtq_app/api/watching/sceneList"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/api/watching/telecastInfo",
+    "title": "直播看球详情",
+    "name": "watching_telecastInfo",
+    "group": "watching",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "telecastId",
+            "description": "<p>看球id</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list",
+            "description": "<p>直播看球列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "list.id",
+            "description": "<p>看球id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.name",
+            "description": "<p>看球名称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.avater",
+            "description": "<p>封面</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.description",
+            "description": "<p>介绍</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/WatchingApi.java",
+    "groupTitle": "watching",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:8080/yqtq_app/api/watching/telecastInfo"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/api/watching/telecastList",
+    "title": "直播看球列表",
+    "name": "watching_telecastList",
+    "group": "watching",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "pageNum",
+            "description": "<p>当前页</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "pageSize",
+            "description": "<p>每页显示数</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list",
+            "description": "<p>直播看球列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "list.id",
+            "description": "<p>看球id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.name",
+            "description": "<p>看球名称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.avater",
+            "description": "<p>封面</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "page",
+            "description": "<p>翻页信息</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "page.totalNum",
+            "description": "<p>总记录数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "page.totalPage",
+            "description": "<p>总页数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "page.currentPage",
+            "description": "<p>当前页</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/WatchingApi.java",
+    "groupTitle": "watching",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:8080/yqtq_app/api/watching/telecastList"
       }
     ]
   }
