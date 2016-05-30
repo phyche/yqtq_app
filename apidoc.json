@@ -1,0 +1,17 @@
+{
+  "name": "一起踢球接口文档",
+  "version": "0.0.1",
+  "description": "",
+  "title": "一起踢球测试界面",
+  "url": "http://localhost:8080/yqtq_app",
+  "sampleUrl": "http://localhost:8080/yqtq_app",
+  "header": {
+    "title": "start",
+    "filename": "header.md"
+  },
+  "template": {
+    "forceLanguage": "zh",
+    "withCompare": true,
+    "withGenerator": true
+  }
+}
