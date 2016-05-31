@@ -1,9 +1,6 @@
 package com.sixmac.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 /**
  * Created by Administrator on 2016/5/23 0023.
@@ -12,8 +9,9 @@ import javax.persistence.Transient;
 @Table(name = "t_girl")
 public class Girl extends BaseEntity{
 
-    @Column(name = "city_id")
-    private Integer cityId;
+    @OneToMany
+    @JoinColumn(name = "city_id")
+    private City city;
 
     @Column(name = "name")
     private String name;
@@ -45,12 +43,12 @@ public class Girl extends BaseEntity{
     @Transient
     private Integer orderNum;
 
-    public Integer getCityId() {
-        return cityId;
+    public City getCity() {
+        return city;
     }
 
-    public void setCityId(Integer cityId) {
-        this.cityId = cityId;
+    public void setCity(City city) {
+        this.city = city;
     }
 
     public String getName() {

@@ -115,7 +115,7 @@ public class ReserveServiceImpl implements ReserveService {
                 }
 
                 if (areaId != null) {
-                    Predicate pre = cb.equal(root.get("cityId").as(Integer.class), areaId);
+                    Predicate pre = cb.equal(root.get("stadium").get("area").get("id").as(Integer.class), areaId);
                     predicateList.add(pre);
                 }
 

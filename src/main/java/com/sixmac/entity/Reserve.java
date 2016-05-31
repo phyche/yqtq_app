@@ -24,8 +24,9 @@ public class Reserve extends BaseEntity{
     @JoinColumn(name = "site_id")
     private Site site;
 
-    @Column(name = "city_id")
-    private Integer cityId;
+    @OneToMany
+    @JoinColumn(name = "city_id",referencedColumnName = "city_id")
+    private City city;
 
     @Column(name = "match_type")
     private Integer matchType =3;
@@ -42,6 +43,9 @@ public class Reserve extends BaseEntity{
 
     @Column(name = "start_date")
     private Long startTime;
+
+    @Column(name = "status")
+    private Integer status;
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "reserve_id")
@@ -110,14 +114,6 @@ public class Reserve extends BaseEntity{
         this.site = site;
     }
 
-    public Integer getCityId() {
-        return cityId;
-    }
-
-    public void setCityId(Integer cityId) {
-        this.cityId = cityId;
-    }
-
     public Integer getMatchType() {
         return matchType;
     }
@@ -180,5 +176,13 @@ public class Reserve extends BaseEntity{
 
     public void setSumPrice(Double sumPrice) {
         this.sumPrice = sumPrice;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

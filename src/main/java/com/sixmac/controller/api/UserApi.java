@@ -48,6 +48,8 @@ public class UserApi extends CommonController {
     @Autowired
     private GirlCommentService girlCommentService;
 
+    @Autowired
+    private CityService cityService;
     /**
      * 完成
      *
@@ -180,7 +182,7 @@ public class UserApi extends CommonController {
         user.setGender(gender);
         user.setBirthday(birthday);
         user.setAge(age);
-        user.setCityId(cityId);
+        user.setCity(cityService.getById(cityId));
         user.setHeight(height);
         user.setWeight(weight);
         user.setPosition(position);

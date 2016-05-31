@@ -70,6 +70,8 @@ public class StadiumApi extends CommonController {
      * @apiSuccess {Integer} list.id 球场id
      * @apiSuccess {String} list.name 球场名称
      * @apiSuccess {Integer} list.type 球场类型 （0:私人球场 1:公共球场）
+     * @apiSuccess {Integer} list.park 是否有停车场 (0：有 1：没有)
+     * @apiSuccess {String} list.giving 赠送
      * @apiSuccess {Integer} list.cityId 球场地区
      * @apiSuccess {String} list.address 球场地址
      * @apiSuccess {String} list.avater 球场封面
@@ -81,12 +83,17 @@ public class StadiumApi extends CommonController {
      */
     @RequestMapping(value = "/list")
     public void list(HttpServletResponse response,
+                     Integer cityId,
                      Integer areaId,
                      Integer type,
                      Integer pageNum,
                      Integer pageSize){
 
         Page<Stadium> page = stadiumService.page(areaId, type, pageNum, pageSize);
+        List<Stadium> stadiumList = page.getContent();
+        for (Stadium stadium : stadiumList) {
+
+        }
 
         Map<String, Object> dataMap = APIFactory.fitting(page);
         String result = JsonUtil.obj2ApiJson(dataMap,"description","siteType","sodType");
@@ -242,7 +249,7 @@ public class StadiumApi extends CommonController {
         StadiumVo stadiumVo = new StadiumVo();
         stadiumVo.setId(site.getStadium().getId());
         stadiumVo.setName(site.getStadium().getName());
-        stadiumVo.setCityId(site.getStadium().getCityId());
+        stadiumVo.setCityId(site.getStadium().getCity().getId());
 
         map.put("site",site);
         map.put("stadiumVo",stadiumVo);
@@ -441,6 +448,7 @@ public class StadiumApi extends CommonController {
             }
 
             ReserveTeam reserveTeam = new ReserveTeam();
+
             reserveTeam.setSite(siteService.getById(siteId));
             reserveTeam.setUser(userService.getById(userId));
             reserveTeam.setPrice(money);
@@ -457,6 +465,8 @@ public class StadiumApi extends CommonController {
             money = (siteService.getById(siteId).getPrice() + sysInsurance.getPrice() * num) * preferente;
 
             ReserveTeam reserveTeam = new ReserveTeam();
+            reserveTeam.setStatus(0);
+            reserveTeam.setStadium(siteService.getById(siteId).getStadium());
             reserveTeam.setSite(siteService.getById(siteId));
             reserveTeam.setUser(userService.getById(userId));
             reserveTeam.setInsurance(sysInsurance);

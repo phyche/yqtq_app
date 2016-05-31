@@ -17,11 +17,19 @@ public class ReserveTeam extends BaseEntity{
     @JoinColumn(name = "site_id")
     private Site site;
 
-    @Column(name = "city_id")
-    private Integer cityId;
+    @OneToMany
+    @JoinColumn(name = "city_id")
+    private City city;
 
     @Column(name = "price")
     private double price;
+
+    @Column(name = "status")
+    private Integer status = 0;
+
+    @ManyToOne
+    @JoinColumn(name = "stadium_id")
+    private Stadium stadium;
 
     @ManyToOne
     @JoinColumn(name = "insurance_id")
@@ -43,12 +51,12 @@ public class ReserveTeam extends BaseEntity{
         this.site = site;
     }
 
-    public Integer getCityId() {
-        return cityId;
+    public City getCity() {
+        return city;
     }
 
-    public void setCityId(Integer cityId) {
-        this.cityId = cityId;
+    public void setCity(City city) {
+        this.city = city;
     }
 
     public double getPrice() {
@@ -67,4 +75,19 @@ public class ReserveTeam extends BaseEntity{
         this.insurance = insurance;
     }
 
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Stadium getStadium() {
+        return stadium;
+    }
+
+    public void setStadium(Stadium stadium) {
+        this.stadium = stadium;
+    }
 }

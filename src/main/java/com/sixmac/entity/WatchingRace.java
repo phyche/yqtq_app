@@ -1,8 +1,6 @@
 package com.sixmac.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by Administrator on 2016/5/23 0023.
@@ -14,8 +12,9 @@ public class WatchingRace extends BaseEntity{
     @Column(name = "name")
     private String name;
 
-    @Column(name = "city_id")
-    private Long cityId;
+    @OneToMany
+    @JoinColumn(name = "city_id")
+    private City city;
 
     @Column(name = "avater")
     private String avater;
@@ -31,12 +30,12 @@ public class WatchingRace extends BaseEntity{
         this.name = name;
     }
 
-    public Long getCityId() {
-        return cityId;
+    public City getCity() {
+        return city;
     }
 
-    public void setCityId(Long cityId) {
-        this.cityId = cityId;
+    public void setCity(City city) {
+        this.city = city;
     }
 
     public String getAvater() {

@@ -33,6 +33,9 @@ public class Post extends BaseEntity{
     @Transient
     List<PostImage> postImages = new ArrayList<PostImage>();
 
+    @Transient
+    List<PostComment> postCommentList = new ArrayList<PostComment>();
+
     public User getUser() {
         return user;
     }
@@ -87,5 +90,13 @@ public class Post extends BaseEntity{
 
     public void setPostImages(List<PostImage> postImages) {
         this.postImages = postImages;
+    }
+
+    public List<PostComment> getPostCommentList() {
+        return postCommentList;
+    }
+
+    public void setPostCommentList(List<PostComment> postCommentList) {
+        this.postCommentList = postCommentList;
     }
 }

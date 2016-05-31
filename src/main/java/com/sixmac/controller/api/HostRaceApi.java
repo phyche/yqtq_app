@@ -2,10 +2,7 @@ package com.sixmac.controller.api;
 
 import com.sixmac.core.bean.Result;
 import com.sixmac.entity.*;
-import com.sixmac.service.HostJoinService;
-import com.sixmac.service.HostRaceService;
-import com.sixmac.service.ReserveService;
-import com.sixmac.service.UserReserveService;
+import com.sixmac.service.*;
 import com.sixmac.utils.JsonUtil;
 import com.sixmac.utils.WebUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +29,23 @@ public class HostRaceApi {
     private HostJoinService hostJoinService;
 
     @Autowired
-    private ReserveService reserveService;
-
-    @Autowired
-    private UserReserveService userReserveService;
+    private EventInformationService eventInformationService;
 
     /**
-     * 草根杯列表（完成）
+     * （完成）
+     *
+     * @api {post} /api/hostRace/list 草根杯列表
+     * @apiName hostRace.list
+     * @apiGroup hostRace
+     *
+     * @apiSuccess {Object}  hostRace 草根杯列表
+     * @apiSuccess {Integer} hostRace.id 草根杯id
+     * @apiSuccess {Integer} hostRace.id 草根杯赛制
+     * @apiSuccess {String} hostRace.name 草根杯名字
+     * @apiSuccess {String} hostRace.avater 草根杯封面
+     * @apiSuccess {Long} hostRace.createDate 草根杯创建时间
+     * @apiSuccess {Object} hostRace.stadium 球场
+     * @apiSuccess {String} hostRace.stadium.name 球场名称
      */
     @RequestMapping(value = "/list")
     public void list(HttpServletResponse response) {
@@ -52,7 +59,21 @@ public class HostRaceApi {
     }
 
     /**
-     * 草根杯详情（完成）
+     * 完成
+     *
+     * @api {post} /api/hostRace/info 草根杯详情
+     * @apiName hostRace.info
+     * @apiGroup hostRace
+     * @apiParam {Integer} raceId 草根杯id <必传 />
+     *
+     * @apiSuccess {Object}  hostRace 草根杯列表
+     * @apiSuccess {Integer} hostRace.id 草根杯id
+     * @apiSuccess {Integer} hostRace.type 草根杯赛制
+     * @apiSuccess {String} hostRace.name 草根杯名字
+     * @apiSuccess {String} hostRace.avater 草根杯封面
+     * @apiSuccess {String} hostRace.description 草根杯介绍
+     * @apiSuccess {Object} hostRace.stadium 球场
+     * @apiSuccess {String} hostRace.stadium.name 球场名称
      */
     @RequestMapping(value = "/info")
     public void info(HttpServletResponse response, Integer raceId) {
@@ -65,7 +86,21 @@ public class HostRaceApi {
     }
 
     /**
-     * 草根杯参赛队伍(完成)
+     * 完成
+     *
+     * @api {post} /api/hostRace/teamList 草根杯参赛队伍
+     * @apiName hostRace.teamList
+     * @apiGroup hostRace
+     * @apiParam {Integer} raceId 草根杯id <必传 />
+     *
+     * @apiSuccess {Object}  hostRace 草根杯列表
+     * @apiSuccess {Object} hostRace.team 草根杯参赛队伍列表
+     * @apiSuccess {Integer} hostRace.team.id 球队id
+     * @apiSuccess {String} hostRace.team.name 球队名称
+     * @apiSuccess {String} hostRace.team.avater 球队队徽
+     * @apiSuccess {Integer} hostRace.team.count 球队总人数
+     * @apiSuccess {Integer} hostRace.team.cityId 球队所在地
+     * @apiSuccess {Integer} hostRace.team.num 球队场次
      */
     @RequestMapping(value = "/teamList")
     public void teamList(HttpServletResponse response, Integer raceId) {
@@ -74,6 +109,8 @@ public class HostRaceApi {
 
         List<HostJoin> hostJoinList = hostJoinService.findByHostRaceId(raceId);
         for (HostJoin hostJoin : hostJoinList) {
+            hostJoin.getTeam().setNum(hostJoin.getTeam().getBattleNum() + hostJoin.getTeam().getDeclareNum());
+            hostJoin.getTeam().setCount(hostJoin.getTeam().getList().size());
             teams.add(hostJoin.getTeam());
         }
 
@@ -83,34 +120,23 @@ public class HostRaceApi {
     }
 
     /**
-     * 草根杯赛事资讯
+     *
+     *
+     * @api {post} /api/hostRace/eventInformation 草根杯赛事资讯
+     * @apiName hostRace.eventInformation
+     * @apiGroup hostRace
+     * @apiParam {Integer} raceId 草根杯id <必传 />
+     *
+     * @apiSuccess {Object}  hostRace 草根杯列表
+     * @apiSuccess {String} hostRace.content 草根杯赛事资讯
      */
+    @RequestMapping(value = "/eventInformation")
+    public void eventInformation(HttpServletResponse response, Integer raceId) {
 
-    /**
-     * 踢球首页约球列表
-     */
-    @RequestMapping(value = "orderballList")
-    public void orderballList(HttpServletResponse response,Integer userId) {
+        EventInformation eventInformation = eventInformationService.findByRaceId(raceId);
 
-        Map<String, Object> map = new HashMap<String, Object>();
-
-        //球友参与的约球
-        List<Reserve> reserveList = new ArrayList<Reserve>();
-        List<UserReserve> userReserves = userReserveService.findByUserId(userId);
-        for (UserReserve userReserve : userReserves) {
-            reserveList.add(userReserve.getReserve());
-        }
-
-        //查询约球的前三条信息
-        List<Reserve> reserves = new ArrayList<Reserve>();
-        reserves.add(reserveList.get(reserveList.size()-3));
-        reserves.add(reserveList.get(reserveList.size()-2));
-        reserves.add(reserveList.get(reserveList.size()-1));
-
-        map.put("reserves", reserves);
-
-        Result obj = new Result(true).data(map);
-        String result = JsonUtil.obj2ApiJson(obj);
+        Result obj = new Result(true).data(eventInformation);
+        String result = JsonUtil.obj2ApiJson(obj,"hostRace");
         WebUtil.printApi(response, result);
     }
 }

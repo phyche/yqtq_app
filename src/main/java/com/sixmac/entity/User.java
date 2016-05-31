@@ -50,14 +50,16 @@ public class User extends BaseEntity{
     @Column(name = "avater")
     private String avater;
 
-    @Column(name = "provice_id")
-    private Integer proviceId;
+    @OneToMany
+    @JoinColumn(name = "provice_id")
+    private Province province;
 
     @Column(name = "vip_end_date")
     private Long endDate;
 
-    @Column(name = "city_id")
-    private Integer cityId;
+    @OneToMany
+    @JoinColumn(name = "city_id")
+    private City city;
 
     @Column(name = "status")
     private Integer status = 0;
@@ -164,14 +166,6 @@ public class User extends BaseEntity{
         this.avater = avater;
     }
 
-    public Integer getProviceId() {
-        return proviceId;
-    }
-
-    public void setProviceId(Integer proviceId) {
-        this.proviceId = proviceId;
-    }
-
     public Long getEndDate() {
         return endDate;
     }
@@ -180,12 +174,20 @@ public class User extends BaseEntity{
         this.endDate = endDate;
     }
 
-    public Integer getCityId() {
-        return cityId;
+    public Province getProvince() {
+        return province;
     }
 
-    public void setCityId(Integer cityId) {
-        this.cityId = cityId;
+    public void setProvince(Province province) {
+        this.province = province;
+    }
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
     }
 
     public Integer getStatus() {

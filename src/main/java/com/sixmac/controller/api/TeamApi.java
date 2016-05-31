@@ -3,14 +3,13 @@ package com.sixmac.controller.api;
 import com.sixmac.common.DataTableFactory;
 import com.sixmac.controller.common.CommonController;
 import com.sixmac.core.bean.Result;
+import com.sixmac.entity.Province;
 import com.sixmac.entity.Team;
 import com.sixmac.entity.TeamRace;
 import com.sixmac.entity.User;
 import com.sixmac.entity.vo.UserVo;
 import com.sixmac.entity.vo.WatchBallVo;
-import com.sixmac.service.TeamRaceService;
-import com.sixmac.service.TeamService;
-import com.sixmac.service.UserService;
+import com.sixmac.service.*;
 import com.sixmac.utils.APIFactory;
 import com.sixmac.utils.DateUtils;
 import com.sixmac.utils.JsonUtil;
@@ -40,6 +39,12 @@ public class TeamApi extends CommonController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CityService cityService;
+
+    @Autowired
+    private ProvinceService provinceService;
 
 
     /**
@@ -164,13 +169,15 @@ public class TeamApi extends CommonController {
                     Integer userId,
                     String cover,
                     String name,
-                    String address,
+                    Integer cityId,
+                    Integer provinceId,
                     String slogan) {
 
         Team team = new Team();
         team.setAvater(cover);
         team.setName(name);
-        team.setAddress(address);
+        team.setCity(cityService.getById(cityId));
+        team.setProvince(provinceService.getById(provinceId));
         team.setSlogan(slogan);
         team.setLeaderUser(userService.getById(userId));
         teamService.create(team);
@@ -195,7 +202,7 @@ public class TeamApi extends CommonController {
                       Integer userId,
                       Integer teamId,
                       Long time,
-                      Integer address) {
+                      Integer cityId) {
 
         Map<String, Object> map = new HashMap<String, Object>();
 
@@ -210,7 +217,7 @@ public class TeamApi extends CommonController {
             teamRace.setHomeTeam(team2);
             teamRace.setVisitingTeam(team1);
             teamRace.setStartTime(time);
-            teamRace.setCityId(address);
+            teamRace.setCity(cityService.getById(cityId));
             team2.setDeclareNum(team2.getDeclareNum() + 1);
             teamRaceService.create(teamRace);
 

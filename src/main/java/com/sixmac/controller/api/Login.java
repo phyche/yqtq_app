@@ -38,16 +38,23 @@ public class Login extends CommonController {
     private UserService userService;
 
     /**
-     * 登录检查
+     * 无法通过手机号获得密码
+     *
+     * @api {post} /api/login/checkLogin 登录检查
+     * @apiName login.checkLogin
+     * @apiGroup login
+     * @apiParam {String} mobile 手机号
+     * @apiParam {String} password 密码
+     *
      */
     @RequestMapping(value = "/checkLogin")
-    public void checkLogin(HttpServletResponse response, String mobile, String password) {
+    public void checkLogin(HttpServletResponse response, String mobile, String password, String password2) {
 
         if (userService.findByMobile(mobile) == null) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0015));
             return;
         }
-
+        userService.findByMobile(mobile).getPassword();
         if(password != userService.findByMobile(mobile).getPassword()){
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0027));
             return;
@@ -57,7 +64,16 @@ public class Login extends CommonController {
     }
 
     /**
-     * 发送验证码
+     * 待定
+     *
+     * @api {post} /api/login/sendCode 发送验证码
+     * @apiName login.sendCode
+     * @apiGroup login
+     * @apiParam {String} mobile 手机号
+     *
+     * @apiSuccess {Object}  codeMap 约球列表
+     * @apiSuccess {String} codeMap.mobile 发送验证码的手机号
+     * @apiSuccess {String} codeMap.code 验证码
      */
     @RequestMapping(value = "/sendCode")
     public void sendCode(HttpServletResponse response,String mobile) {
@@ -79,7 +95,13 @@ public class Login extends CommonController {
     }
 
     /**
-     * 确认验证码
+     * 待定
+     *
+     * @api {post} /api/login/confirmCode 确认验证码
+     * @apiName login.confirmCode
+     * @apiGroup login
+     * @apiParam {String} mobile 手机号
+     * @apiParam {String} requestCode 验证码
      */
     @RequestMapping(value = "/confirmCode")
     public void confirmCode(HttpServletResponse response,
@@ -105,6 +127,12 @@ public class Login extends CommonController {
 
     /**
      * 设置密码
+     *
+     * @api {post} /api/login/findPassword 设置密码
+     * @apiName login.findPassword
+     * @apiGroup login
+     * @apiParam {Integer} userId 用户id
+     * @apiParam {String} password 密码
      */
     @RequestMapping(value = "/findPassword")
     public void findPassword(HttpServletResponse response,String password, Integer userId) {

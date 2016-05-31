@@ -140,6 +140,9 @@ public class OrderBallApi extends CommonController {
             }
 
             Reserve reserve = reserveService.getById(reserveId);
+            reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
+            reserve.setJoinCount(reserve.getList() != null ? reserve.getList().size() : 0);
+            reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
 
             if (null == reserve) {
                 WebUtil.printApi(response, new Result(false).msg(ErrorCode.ERROR_CODE_0003));

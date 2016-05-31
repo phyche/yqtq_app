@@ -14,8 +14,17 @@ public class Team extends BaseEntity{
     @Column(name = "name")
     private String name;
 
-    @Column(name = "city_id")
-    private Integer cityId;
+    @OneToMany
+    @JoinColumn(name = "city_id")
+    private City city;
+
+    @OneToMany
+    @JoinColumn(name = "province_id")
+    private Province province;
+
+    @OneToMany
+    @JoinColumn(name = "area_id")
+    private Area area;
 
     @Column(name = "slogan")
     private String slogan;
@@ -26,9 +35,6 @@ public class Team extends BaseEntity{
     @OneToOne
     @JoinColumn(name = "leader_user_id")
     private User leaderUser;
-
-    @Column(name = "address")
-    private String address;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "t_team_member",joinColumns = {@JoinColumn(name = "team_id",referencedColumnName = "id")},
@@ -41,7 +47,7 @@ public class Team extends BaseEntity{
     @Column(name = "battle_num")
     private Integer battleNum = 0;
 
-    @Column(name = "count")
+    @Transient
     private Integer count;
 
     @Transient
@@ -67,12 +73,20 @@ public class Team extends BaseEntity{
         this.name = name;
     }
 
-    public Integer getCityId() {
-        return cityId;
+    public City getCity() {
+        return city;
     }
 
-    public void setCityId(Integer cityId) {
-        this.cityId = cityId;
+    public void setCity(City city) {
+        this.city = city;
+    }
+
+    public Province getProvince() {
+        return province;
+    }
+
+    public void setProvince(Province province) {
+        this.province = province;
     }
 
     public String getSlogan() {
@@ -164,19 +178,19 @@ public class Team extends BaseEntity{
         this.sum = sum;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public Integer getNum() {
         return num;
     }
 
     public void setNum(Integer num) {
         this.num = num;
+    }
+
+    public Area getArea() {
+        return area;
+    }
+
+    public void setArea(Area area) {
+        this.area = area;
     }
 }

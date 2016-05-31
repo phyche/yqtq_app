@@ -331,9 +331,6 @@ public class WatchingApi extends CommonController {
         girlUser.setBigRace(bigRace);
         girlUser.setStartDate(bigRace.getStartDate());
         girlUser.setStadium(bigRace.getStadium());
-
-        //约宝贝时间 暂无
-        girlUser.setDuration(2);
         girlUser.setPrice(girl.getPrice());
         girlUserService.create(girlUser);
 

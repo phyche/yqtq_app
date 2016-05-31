@@ -9,8 +9,13 @@ import javax.persistence.*;
 @Table(name = "t_stadium")
 public class Stadium extends BaseEntity{
 
-    @Column(name = "city_id")
-    private Integer cityId;
+    @OneToMany
+    @JoinColumn(name = "city_id")
+    private City city;
+
+    @OneToMany
+    @JoinColumn(name = "area_id")
+    private Area area;
 
     @Column(name = "name")
     private String name;
@@ -42,12 +47,15 @@ public class Stadium extends BaseEntity{
     @Column(name = "address")
     private String address;
 
-    public Integer getCityId() {
-        return cityId;
+    @Transient
+    private double distance;
+
+    public City getCity() {
+        return city;
     }
 
-    public void setCityId(Integer cityId) {
-        this.cityId = cityId;
+    public void setCity(City city) {
+        this.city = city;
     }
 
     public String getName() {
@@ -128,5 +136,21 @@ public class Stadium extends BaseEntity{
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
+
+    public Area getArea() {
+        return area;
+    }
+
+    public void setArea(Area area) {
+        this.area = area;
     }
 }

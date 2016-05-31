@@ -22,7 +22,7 @@ public class PostComment extends BaseEntity{
     private User tUser;
 
     @Column(name = "status")
-    private Integer status;
+    private Integer status = 0;
 
     @Column(name = "content")
     private String content;
