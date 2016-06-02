@@ -9,13 +9,25 @@ import javax.persistence.*;
 @Table(name = "t_stadium")
 public class Stadium extends BaseEntity{
 
-    @OneToMany
-    @JoinColumn(name = "city_id")
+   /* @ManyToOne
+    @JoinColumn(name = "city_id",referencedColumnName = "city_id")
     private City city;
 
-    @OneToMany
-    @JoinColumn(name = "area_id")
-    private Area area;
+    @ManyToOne
+    @JoinColumn(name = "area_id",referencedColumnName = "area_id")
+    private Area area;*/
+
+    @Column(name = "city_id")
+    private Integer cityId;
+
+    @Column(name = "area_id")
+    private Integer areaId;
+
+    @Transient
+    private String cityName;
+
+    @Transient
+    private String areaName;
 
     @Column(name = "name")
     private String name;
@@ -50,12 +62,20 @@ public class Stadium extends BaseEntity{
     @Transient
     private double distance;
 
-    public City getCity() {
-        return city;
+    public String getCityName() {
+        return cityName;
     }
 
-    public void setCity(City city) {
-        this.city = city;
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public String getAreaName() {
+        return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
     }
 
     public String getName() {
@@ -146,11 +166,19 @@ public class Stadium extends BaseEntity{
         this.distance = distance;
     }
 
-    public Area getArea() {
-        return area;
+    public Integer getCityId() {
+        return cityId;
     }
 
-    public void setArea(Area area) {
-        this.area = area;
+    public void setCityId(Integer cityId) {
+        this.cityId = cityId;
+    }
+
+    public Integer getAreaId() {
+        return areaId;
+    }
+
+    public void setAreaId(Integer areaId) {
+        this.areaId = areaId;
     }
 }

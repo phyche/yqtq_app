@@ -14,7 +14,13 @@ public class Area {
     private Integer id;
 
     @Column(name = "area_id")
-    private Long areaId;
+    private Integer areaId;
+
+    @Column(name = "area")
+    private String area;
+
+    @Column(name = "city_id")
+    private Integer cityId;
 
     public Integer getId() {
         return id;
@@ -24,11 +30,27 @@ public class Area {
         this.id = id;
     }
 
-    public Long getAreaId() {
+    public Integer getAreaId() {
         return areaId;
     }
 
-    public void setAreaId(Long areaId) {
+    public void setAreaId(Integer areaId) {
         this.areaId = areaId;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public Integer getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(Integer cityId) {
+        this.cityId = cityId;
     }
 }

@@ -1,5 +1,7 @@
 package com.sixmac.entity.vo;
 
+import com.sixmac.entity.City;
+
 /**
  * Created by Administrator on 2016/5/25 0025.
  */
@@ -9,7 +11,7 @@ public class StadiumVo {
 
     private String name;
 
-    private Integer cityId;
+    private String cityName;
 
     public Integer getId() {
         return id;
@@ -27,11 +29,11 @@ public class StadiumVo {
         this.name = name;
     }
 
-    public Integer getCityId() {
-        return cityId;
+    public String getCityName() {
+        return cityName;
     }
 
-    public void setCityId(Integer cityId) {
-        this.cityId = cityId;
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 }

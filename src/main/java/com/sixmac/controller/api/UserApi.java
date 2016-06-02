@@ -50,6 +50,13 @@ public class UserApi extends CommonController {
 
     @Autowired
     private CityService cityService;
+
+    @Autowired
+    private CredibilityMessageService credibilityMessageService;
+
+    @Autowired
+    private VipMessageService vipMessageService;
+
     /**
      * 完成
      *
@@ -117,6 +124,48 @@ public class UserApi extends CommonController {
     /**
      * 完成
      *
+     * @api {post} /api/user/credibilityMessage 信誉评分
+     * @apiName user.credibilityMessage
+     * @apiGroup user
+     *
+     * @apiSuccess {Object} credibilityMessage 信誉评分
+     * @apiSuccess {String} credibilityMessage.content 信誉评分内容
+     *
+     */
+    @RequestMapping(value = "/credibilityMessage")
+    public void credibilityMessage(HttpServletResponse response) {
+
+        List<CredibilityMessage> credibilityMessage = credibilityMessageService.findAll();
+
+        Result obj = new Result(true).data(credibilityMessage);
+        String result = JsonUtil.obj2ApiJson(obj);
+        WebUtil.printApi(response, result);
+    }
+
+    /**
+     * 完成
+     *
+     * @api {post} /api/user/vipMessage 会员说明
+     * @apiName user.vipMessage
+     * @apiGroup user
+     *
+     * @apiSuccess {Object} vipMessage 会员说明
+     * @apiSuccess {String} vipMessage.content 会员说明内容
+     *
+     */
+    @RequestMapping(value = "/vipMessage")
+    public void vipMessage(HttpServletResponse response) {
+
+        List<VipMessage> vipMessage = vipMessageService.findAll();
+
+        Result obj = new Result(true).data(vipMessage);
+        String result = JsonUtil.obj2ApiJson(obj);
+        WebUtil.printApi(response, result);
+    }
+
+    /**
+     * 完成
+     *
      * @api {post} /api/user/edit 编辑个人资料
      * @apiName user.edit
      * @apiGroup user
@@ -125,6 +174,7 @@ public class UserApi extends CommonController {
      * @apiParam {String} nickname 用户昵称
      * @apiParam {Integer} gender 用户性别（0：男 1：女）
      * @apiParam {Long} birthday 用户出生日期
+     * @apiParam {Integer} provinceId 用户省份
      * @apiParam {Integer} cityId 用户城市
      * @apiParam {Double} height 身高
      * @apiParam {Double} weight 体重
@@ -149,6 +199,7 @@ public class UserApi extends CommonController {
                      String nickname,
                      Integer gender,
                      Long birthday,
+                     Integer provinceId,
                      Integer cityId,
                      Double height,
                      Double weight,
@@ -182,7 +233,8 @@ public class UserApi extends CommonController {
         user.setGender(gender);
         user.setBirthday(birthday);
         user.setAge(age);
-        user.setCity(cityService.getById(cityId));
+        user.setProvinceId(provinceId);
+        user.setCityId(cityId);
         user.setHeight(height);
         user.setWeight(weight);
         user.setPosition(position);
@@ -359,7 +411,7 @@ public class UserApi extends CommonController {
     /**
      * 完成
      *
-     * @api {post} /api/user/watchingInfo 我的看球详情
+     * @api {post} /api/user/watchingInfo 我的约看详情
      * @apiName user.watchingInfo
      * @apiGroup user
      * @apiParam {Integer} girlUserId 约看id <必传 />

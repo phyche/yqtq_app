@@ -31,6 +31,12 @@ public class HostRaceApi {
     @Autowired
     private EventInformationService eventInformationService;
 
+    @Autowired
+    private CityService cityService;
+
+    @Autowired
+    private ProvinceService provinceService;
+
     /**
      * （完成）
      *
@@ -99,7 +105,8 @@ public class HostRaceApi {
      * @apiSuccess {String} hostRace.team.name 球队名称
      * @apiSuccess {String} hostRace.team.avater 球队队徽
      * @apiSuccess {Integer} hostRace.team.count 球队总人数
-     * @apiSuccess {Integer} hostRace.team.cityId 球队所在地
+     * @apiSuccess {String} hostRace.team.provinceName 球队所在地的省份
+     * @apiSuccess {String} hostRace.team.cityName 球队所在地的城市
      * @apiSuccess {Integer} hostRace.team.num 球队场次
      */
     @RequestMapping(value = "/teamList")
@@ -111,6 +118,8 @@ public class HostRaceApi {
         for (HostJoin hostJoin : hostJoinList) {
             hostJoin.getTeam().setNum(hostJoin.getTeam().getBattleNum() + hostJoin.getTeam().getDeclareNum());
             hostJoin.getTeam().setCount(hostJoin.getTeam().getList().size());
+            hostJoin.getTeam().setCityName(cityService.getByCityId(hostJoin.getTeam().getCityId()).getCity());
+            hostJoin.getTeam().setProvinceName(provinceService.getByProvinceId(hostJoin.getTeam().getProvinceId()).getProvince());
             teams.add(hostJoin.getTeam());
         }
 
@@ -127,8 +136,8 @@ public class HostRaceApi {
      * @apiGroup hostRace
      * @apiParam {Integer} raceId 草根杯id <必传 />
      *
-     * @apiSuccess {Object}  hostRace 草根杯列表
-     * @apiSuccess {String} hostRace.content 草根杯赛事资讯
+     * @apiSuccess {Object}  eventInformation 草根杯赛事资讯列表
+     * @apiSuccess {String} eventInformation.content 草根杯赛事资讯内容
      */
     @RequestMapping(value = "/eventInformation")
     public void eventInformation(HttpServletResponse response, Integer raceId) {

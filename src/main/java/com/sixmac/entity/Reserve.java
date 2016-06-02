@@ -24,9 +24,12 @@ public class Reserve extends BaseEntity{
     @JoinColumn(name = "site_id")
     private Site site;
 
-    @OneToMany
+    /*@ManyToOne
     @JoinColumn(name = "city_id",referencedColumnName = "city_id")
-    private City city;
+    private City city;*/
+
+    @Column(name = "city_id")
+    private Integer cityId;
 
     @Column(name = "match_type")
     private Integer matchType =3;
@@ -46,6 +49,9 @@ public class Reserve extends BaseEntity{
 
     @Column(name = "status")
     private Integer status;
+
+    @Column(name = "information")
+    private String information;
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "reserve_id")
@@ -184,5 +190,21 @@ public class Reserve extends BaseEntity{
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(Integer cityId) {
+        this.cityId = cityId;
+    }
+
+    public String getInformation() {
+        return information;
+    }
+
+    public void setInformation(String information) {
+        this.information = information;
     }
 }

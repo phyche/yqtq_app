@@ -4,7 +4,10 @@ import cn.emay.channel.SmsSend;
 import com.sixmac.controller.common.CommonController;
 import com.sixmac.core.ErrorCode;
 import com.sixmac.core.bean.Result;
+import com.sixmac.entity.GirlServiceMessage;
+import com.sixmac.entity.ServiceMessage;
 import com.sixmac.entity.User;
+import com.sixmac.service.ServiceMessageService;
 import com.sixmac.service.UserService;
 import com.sixmac.utils.CommonUtils;
 import com.sixmac.utils.JsonUtil;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,6 +28,9 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "api/login")
 public class Login extends CommonController {
+
+    @Autowired
+    private ServiceMessageService serviceMessageService;
 
     private static Map<String,String> codeMap = new HashMap<String,String>();
 
@@ -92,6 +99,28 @@ public class Login extends CommonController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 完成
+     *
+     * @api {post} /api/login/information 服务条款说明
+     * @apiName login.information
+     * @apiGroup login
+     *
+     * @apiSuccess {Object}  serviceMessage 服务条款说明
+     * @apiSuccess {String} serviceMessage.content 服务条款说明内容
+     *
+     */
+    @RequestMapping(value = "/information")
+    public void information(HttpServletResponse response) {
+
+        List<ServiceMessage> serviceMessage = serviceMessageService.findAll();
+
+        Result obj = new Result(true).data(serviceMessage);
+        String result = JsonUtil.obj2ApiJson(obj);
+        WebUtil.printApi(response, result);
+
     }
 
     /**

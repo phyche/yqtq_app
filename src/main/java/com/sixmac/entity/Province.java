@@ -14,8 +14,13 @@ public class Province {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "father_id",referencedColumnName = "province_id")
+    @Column(name = "province_id")
+    private Integer provinceId;
+
+    @Column(name = "province")
+    private String province;
+
+    @Transient
     private List<City> list;
 
     public List<City> getList() {
@@ -32,5 +37,21 @@ public class Province {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getProvinceId() {
+        return provinceId;
+    }
+
+    public void setProvinceId(Integer provinceId) {
+        this.provinceId = provinceId;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
     }
 }

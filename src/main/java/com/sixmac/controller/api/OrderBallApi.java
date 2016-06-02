@@ -46,6 +46,9 @@ public class OrderBallApi extends CommonController {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private OrderballMessageService orderballMessageService;
+
 
     /**
      * 完成
@@ -70,6 +73,7 @@ public class OrderBallApi extends CommonController {
      * @apiSuccess {String} list.user.avater 创建人头像
      * @apiSuccess {Object} list.stadium 球场
      * @apiSuccess {String} list.stadium.name 球场名字
+     * @apiSuccess {Integer} list.stadium.type 球场类型 (0:私人球场 1:公共球场)
      * @apiSuccess {Long} list.startTime 开始时间
      *
      * @apiSuccess {Object}  page 翻页信息
@@ -102,7 +106,8 @@ public class OrderBallApi extends CommonController {
 
 
     /**
-     * 约球的详情(完成)
+     * 完成
+     *
      * @api {post} /api/orderball/orderInfo 约球的详情
      * @apiName orderball.orderInfo
      * @apiGroup orderball
@@ -185,6 +190,27 @@ public class OrderBallApi extends CommonController {
 
     /**
      * 完成
+     *
+     * @api {post} /api/orderball/information 约球须知
+     * @apiName orderball.information
+     * @apiGroup orderball
+     *
+     * @apiSuccess {Object} orderballMessage 约球须知
+     * @apiSuccess {String} orderballMessage.content 约球须知内容
+     *
+     */
+    @RequestMapping(value = "/information")
+    public void information(HttpServletResponse response) {
+
+        List<OrderballMessage> orderballMessage = orderballMessageService.findAll();
+
+        Result obj = new Result(true).data(orderballMessage);
+        String result = JsonUtil.obj2ApiJson(obj);
+        WebUtil.printApi(response, result);
+    }
+
+    /**
+     * 完成
      * * @api {post} /api/orderball/info 球友个人资料
      * @apiName orderball.info
      * @apiGroup orderball
@@ -228,7 +254,7 @@ public class OrderBallApi extends CommonController {
         map.put("team", team);
 
         Result obj = new Result(true).data(map);
-        String result = JsonUtil.obj2ApiJson(obj, "address", "cityId", "slogan", "leaderUser");
+        String result = JsonUtil.obj2ApiJson(obj, "address", "city", "slogan", "leaderUser");
         WebUtil.printApi(response, result);
     }
 
@@ -434,7 +460,7 @@ public class OrderBallApi extends CommonController {
     /**
      * 球友的帖子
      *
-     * 与USERAPI里我的帖子相同
+     * 与UserApi里我的帖子相同
      */
 
     /**
@@ -461,26 +487,30 @@ public class OrderBallApi extends CommonController {
 
         //球场已经全额付款的
         if (reserve.getPayment() == 0) {
-            insurance.setMoney(0.0);
-            money = 0.0;
+            WebUtil.printApi(response, new Result(true).data("加入成功"));
         }
         //球场AA付款
         if (reserve.getPayment() == 1) {
             insurance.setMoney(reserve.getInsurance().getPrice());
             money = reserve.getPrice() / reserve.getMatchType() + reserve.getInsurance().getPrice();
+
+            insurance.setUser(userService.getById(userId));
+            insurance.setReserve(reserve);
+            insuranceService.create(insurance);
+
+            String sn = CommonUtils.generateSn(); // 订单号
+            Order order = new Order();
+            order.setUsername(userService.getById(userId).getNickname());
+            order.setStadiumname(reserve.getStadium().getName());
+            order.setPrice(money);
+            order.setSn(sn);
+            orderService.create(order);
+
+            Result obj = new Result(true).data(order);
+            String result = JsonUtil.obj2ApiJson(obj);
+            WebUtil.printApi(response, result);
+
         }
-
-        insurance.setUser(userService.getById(userId));
-        insurance.setReserve(reserve);
-        insuranceService.create(insurance);
-
-        String sn = CommonUtils.generateSn(); // 订单号
-        Order order = new Order();
-        order.setUsername(userService.getById(userId).getNickname());
-        order.setStadiumname(reserve.getStadium().getName());
-        order.setPrice(money);
-        order.setSn(sn);
-        orderService.create(order);
 
         UserReserve userReserve = new UserReserve();
         userReserve.setUser(userService.getById(userId));
@@ -488,8 +518,6 @@ public class OrderBallApi extends CommonController {
         userReserve.setStatus(0);
         userReserveService.create(userReserve);;
 
-        Result obj = new Result(true).data(order);
-        String result = JsonUtil.obj2ApiJson(obj);
-        WebUtil.printApi(response, result);
+
     }
 }

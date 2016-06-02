@@ -14,23 +14,44 @@ public class Team extends BaseEntity{
     @Column(name = "name")
     private String name;
 
-    @OneToMany
-    @JoinColumn(name = "city_id")
+    /*@ManyToOne
+    @JoinColumn(name = "city_id",referencedColumnName = "city_id")
     private City city;
 
-    @OneToMany
-    @JoinColumn(name = "province_id")
+    @ManyToOne
+    @JoinColumn(name = "province_id",referencedColumnName = "city_id")
     private Province province;
 
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name = "area_id")
-    private Area area;
+    private Area area;*/
+
+    @Column(name = "province_id")
+    private Integer provinceId;
+
+    @Column(name = "city_id")
+    private Integer cityId;
+
+    @Column(name = "area_id")
+    private Integer areaId;
+
+    @Transient
+    private String areaName;
+
+    @Transient
+    private String cityName;
+
+    @Transient
+    private String provinceName;
 
     @Column(name = "slogan")
     private String slogan;
 
     @Column(name = "avater")
     private String avater;
+
+    @Column(name = "address")
+    private String address;
 
     @OneToOne
     @JoinColumn(name = "leader_user_id")
@@ -65,28 +86,20 @@ public class Team extends BaseEntity{
     @Transient
     private Integer num;
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public City getCity() {
-        return city;
-    }
-
-    public void setCity(City city) {
-        this.city = city;
-    }
-
-    public Province getProvince() {
-        return province;
-    }
-
-    public void setProvince(Province province) {
-        this.province = province;
     }
 
     public String getSlogan() {
@@ -186,11 +199,51 @@ public class Team extends BaseEntity{
         this.num = num;
     }
 
-    public Area getArea() {
-        return area;
+    public Integer getProvinceId() {
+        return provinceId;
     }
 
-    public void setArea(Area area) {
-        this.area = area;
+    public void setProvinceId(Integer provinceId) {
+        this.provinceId = provinceId;
+    }
+
+    public Integer getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(Integer cityId) {
+        this.cityId = cityId;
+    }
+
+    public Integer getAreaId() {
+        return areaId;
+    }
+
+    public void setAreaId(Integer areaId) {
+        this.areaId = areaId;
+    }
+
+    public String getAreaName() {
+        return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public String getProvinceName() {
+        return provinceName;
+    }
+
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
     }
 }

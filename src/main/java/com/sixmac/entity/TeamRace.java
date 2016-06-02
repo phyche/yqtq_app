@@ -16,9 +16,12 @@ public class TeamRace extends BaseEntity{
     @JoinColumn(name = "visiting_team_id")
     private Team visitingTeam;
 
-    @OneToMany
-    @JoinColumn(name = "city_id")
-    private City city;
+    /*@ManyToOne
+    @JoinColumn(name = "city_id",referencedColumnName = "city_id")
+    private City city;*/
+
+    @Column(name = "city_id")
+    private Integer cityId;
 
     @Column(name = "status")
     private Integer status = 0;
@@ -48,12 +51,12 @@ public class TeamRace extends BaseEntity{
         this.visitingTeam = visitingTeam;
     }
 
-    public City getCity() {
-        return city;
+    public Integer getCityId() {
+        return cityId;
     }
 
-    public void setCity(City city) {
-        this.city = city;
+    public void setCityId(Integer cityId) {
+        this.cityId = cityId;
     }
 
     public Stadium getStadium() {

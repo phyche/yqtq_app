@@ -77,23 +77,27 @@ public class PlayIndexApi extends CommonController {
             reserveList.add(userReserve.getReserve());
         }
 
-        //查询约球的前三条信息
-        List<Reserve> reserves = new ArrayList<Reserve>();
-        if (reserveList.size() >= 3) {
-            reserves.add(reserveList.get(reserveList.size()-3));
-        }
-        if (reserveList.size() >= 2) {
-            reserves.add(reserveList.get(reserveList.size()-2));
-        }
-        if (reserveList.size() >= 1) {
-            reserves.add(reserveList.get(reserveList.size()-1));
-        }
+        if (reserveList == null) {
+            WebUtil.printApi(response, new Result(true).data("无赛事信息"));
+        }else {
+            //查询约球的前三条信息
+            List<Reserve> reserves = new ArrayList<Reserve>();
+            if (reserveList.size() >= 3) {
+                reserves.add(reserveList.get(reserveList.size()-3));
+            }
+            if (reserveList.size() >= 2) {
+                reserves.add(reserveList.get(reserveList.size()-2));
+            }
+            if (reserveList.size() >= 1) {
+                reserves.add(reserveList.get(reserveList.size()-1));
+            }
 
-        map.put("reserves", reserves);
+            map.put("reserves", reserves);
 
-        Result obj = new Result(true).data(map);
-        String result = JsonUtil.obj2ApiJson(obj,"set","insurance","site","list");
-        WebUtil.printApi(response, result);
+            Result obj = new Result(true).data(map);
+            String result = JsonUtil.obj2ApiJson(obj,"set","insurance","site","list");
+            WebUtil.printApi(response, result);
+        }
     }
 
     /**

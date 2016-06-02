@@ -17,9 +17,12 @@ public class ReserveTeam extends BaseEntity{
     @JoinColumn(name = "site_id")
     private Site site;
 
-    @OneToMany
-    @JoinColumn(name = "city_id")
-    private City city;
+    /*@ManyToOne
+    @JoinColumn(name = "city_id",referencedColumnName = "city_id")
+    private City city;*/
+
+    @Column(name = "city_id")
+    private Integer cityId;
 
     @Column(name = "price")
     private double price;
@@ -51,12 +54,12 @@ public class ReserveTeam extends BaseEntity{
         this.site = site;
     }
 
-    public City getCity() {
-        return city;
+    public Integer getCityId() {
+        return cityId;
     }
 
-    public void setCity(City city) {
-        this.city = city;
+    public void setCityId(Integer cityId) {
+        this.cityId = cityId;
     }
 
     public double getPrice() {

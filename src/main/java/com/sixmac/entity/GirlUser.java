@@ -34,9 +34,6 @@ public class GirlUser extends BaseEntity{
     @Column(name = "tip")
     private Double tip;
 
-    @Column(name = "duration")
-    private Integer duration;
-
     @Column(name = "status")
     private Integer status;
 
@@ -96,14 +93,6 @@ public class GirlUser extends BaseEntity{
 
     public void setTip(Double tip) {
         this.tip = tip;
-    }
-
-    public Integer getDuration() {
-        return duration;
-    }
-
-    public void setDuration(Integer duration) {
-        this.duration = duration;
     }
 
     public Integer getStatus() {

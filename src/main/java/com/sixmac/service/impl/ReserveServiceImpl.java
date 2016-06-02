@@ -92,18 +92,6 @@ public class ReserveServiceImpl implements ReserveService {
                 Predicate result = null;
                 List<Predicate> predicateList = new ArrayList<Predicate>();
 
-//                if (timelimit != null) {
-//                    if(timelimit == 1) {
-//                        reserveDao.findListByTime(CommonController.getYesterday());
-//                    }else if(timelimit == 2) {
-//                        reserveDao.findListByTime(CommonController.getTwodayago());
-//                    }else if(timelimit == 3) {
-//                        reserveDao.findListByTime(CommonController.getFivedayago());
-//                    }else if(timelimit == 4) {
-//                        reserveDao.findListByTime(CommonController.getweekago());
-//                    }
-//                    //predicateList.add(pre);
-//                }
                 if(timelimit != null) {
                     long beforeDate = DateUtils.dateAddDay(timelimit * -1).getTime();
                     predicateList.add(cb.between(root.get("startTime").as(Long.class),beforeDate,System.currentTimeMillis()));
@@ -115,7 +103,7 @@ public class ReserveServiceImpl implements ReserveService {
                 }
 
                 if (areaId != null) {
-                    Predicate pre = cb.equal(root.get("stadium").get("area").get("id").as(Integer.class), areaId);
+                    Predicate pre = cb.equal(root.get("stadium").get("area").get("areaId").as(Integer.class), areaId);
                     predicateList.add(pre);
                 }
 

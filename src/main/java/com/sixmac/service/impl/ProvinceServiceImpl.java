@@ -66,4 +66,9 @@ public class ProvinceServiceImpl implements ProvinceService {
             deleteById(id);
         }
     }
+
+    @Override
+    public Province getByProvinceId(Integer provinceId) {
+        return provinceDao.getByProvinceId(provinceId);
+    }
 }

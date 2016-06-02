@@ -50,6 +50,12 @@ public class WatchingApi extends CommonController {
     @Autowired
     private GirlCommentService girlCommentService;
 
+    @Autowired
+    private GirlServiceMessageService girlServiceMessageService;
+
+    @Autowired
+    private CityService cityService;
+
     /**
      * 完成
      *
@@ -164,6 +170,7 @@ public class WatchingApi extends CommonController {
      * @apiSuccess {Long} list.startDate 开始时间
      * @apiSuccess {Object}  list.stadium 现场看球球场
      * @apiSuccess {String} list.stadium.name 球场名字
+     *
      */
     @RequestMapping(value = "/sceneInfo")
     public void sceneInfo(HttpServletResponse response, Integer sceneId) {
@@ -211,6 +218,28 @@ public class WatchingApi extends CommonController {
     /**
      * 完成
      *
+     * @api {post} /api/watching/information 足球宝贝服务说明
+     * @apiName watching.information
+     * @apiGroup watching
+     *
+     * @apiSuccess {Object}  girlServiceMessage 足球宝贝服务说明
+     * @apiSuccess {String} girlServiceMessage.content 足球宝贝服务说明内容
+     *
+     */
+    @RequestMapping(value = "/information")
+    public void information(HttpServletResponse response) {
+
+        List<GirlServiceMessage> girlServiceMessage = girlServiceMessageService.findAll();
+
+        Result obj = new Result(true).data(girlServiceMessage);
+        String result = JsonUtil.obj2ApiJson(obj);
+        WebUtil.printApi(response, result);
+
+    }
+
+    /**
+     * 完成
+     *
      * @api {post} /api/watching/girlInfo 现场看球宝贝详情
      * @apiName watching.girlInfo
      * @apiGroup watching
@@ -239,6 +268,7 @@ public class WatchingApi extends CommonController {
         Map<String,Object> map = new HashMap<String,Object>();
         //宝贝个人信息
         Girl girl = girlService.getById(girlId);
+        girl.setCityName(cityService.getByCityId(girl.getCityId()).getCity());
 
         //宝贝相册
         List<GirlImage> girlImages = girlImageService.findByGirlId(girlId);

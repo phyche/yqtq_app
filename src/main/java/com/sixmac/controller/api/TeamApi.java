@@ -3,10 +3,7 @@ package com.sixmac.controller.api;
 import com.sixmac.common.DataTableFactory;
 import com.sixmac.controller.common.CommonController;
 import com.sixmac.core.bean.Result;
-import com.sixmac.entity.Province;
-import com.sixmac.entity.Team;
-import com.sixmac.entity.TeamRace;
-import com.sixmac.entity.User;
+import com.sixmac.entity.*;
 import com.sixmac.entity.vo.UserVo;
 import com.sixmac.entity.vo.WatchBallVo;
 import com.sixmac.service.*;
@@ -46,6 +43,9 @@ public class TeamApi extends CommonController {
     @Autowired
     private ProvinceService provinceService;
 
+    @Autowired
+    private AreaService areaService;
+
 
     /**
      * 完成
@@ -62,7 +62,8 @@ public class TeamApi extends CommonController {
      * @apiSuccess {String} list.name 球队名称
      * @apiSuccess {String} list.avater 球队队徽
      * @apiSuccess {Integer} list.count 球队人数
-     * @apiSuccess {Integer} list.cityId 球队地区
+     * @apiSuccess {String} list.provinceName 球队省份名字
+     * @apiSuccess {String} list.cityName 球队城市名字
      * @apiSuccess {Integer} list.num 球队场次
      *
      *
@@ -82,6 +83,8 @@ public class TeamApi extends CommonController {
         List<Team> list = page.getContent();
         for (Team team : list) {
             team.setNum(team.getBattleNum() + team.getDeclareNum());
+            team.setProvinceName(provinceService.getByProvinceId(team.getProvinceId()).getProvince());
+            team.setCityName(cityService.getByCityId(team.getCityId()).getCity());
         }
 
         Map<String, Object> dataMap = APIFactory.fitting(page);
@@ -102,7 +105,7 @@ public class TeamApi extends CommonController {
      * @apiSuccess {String} team.name 球队名称
      * @apiSuccess {String} team.avater 球队队徽
      * @apiSuccess {Integer} team.slogan 球队口号
-     * @apiSuccess {Integer} team.address 球队地址
+     * @apiSuccess {String} team.address 球队地址
      * @apiSuccess {Integer} team.aveAge 球队平均年龄
      * @apiSuccess {Integer} team.aveHeight 球队平均身高
      * @apiSuccess {Integer} team.aveWeight 球队平均体重
@@ -169,15 +172,13 @@ public class TeamApi extends CommonController {
                     Integer userId,
                     String cover,
                     String name,
-                    Integer cityId,
-                    Integer provinceId,
+                    String address,
                     String slogan) {
 
         Team team = new Team();
         team.setAvater(cover);
         team.setName(name);
-        team.setCity(cityService.getById(cityId));
-        team.setProvince(provinceService.getById(provinceId));
+        team.setAddress(address);
         team.setSlogan(slogan);
         team.setLeaderUser(userService.getById(userId));
         teamService.create(team);
@@ -217,7 +218,7 @@ public class TeamApi extends CommonController {
             teamRace.setHomeTeam(team2);
             teamRace.setVisitingTeam(team1);
             teamRace.setStartTime(time);
-            teamRace.setCity(cityService.getById(cityId));
+            teamRace.setCityId(cityId);
             team2.setDeclareNum(team2.getDeclareNum() + 1);
             teamRaceService.create(teamRace);
 

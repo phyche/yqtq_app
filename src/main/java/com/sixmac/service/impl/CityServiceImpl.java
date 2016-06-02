@@ -66,4 +66,9 @@ public class CityServiceImpl implements CityService {
             deleteById(id);
         }
     }
+
+    @Override
+    public City getByCityId(Integer cityId) {
+        return cityDao.getByCityId(cityId);
+    }
 }

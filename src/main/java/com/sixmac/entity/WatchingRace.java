@@ -12,9 +12,12 @@ public class WatchingRace extends BaseEntity{
     @Column(name = "name")
     private String name;
 
-    @OneToMany
-    @JoinColumn(name = "city_id")
-    private City city;
+    /*@ManyToOne
+    @JoinColumn(name = "city_id",referencedColumnName = "city_id")
+    private City city;*/
+
+    @Column(name = "city_id")
+    private Integer cityId;
 
     @Column(name = "avater")
     private String avater;
@@ -30,12 +33,12 @@ public class WatchingRace extends BaseEntity{
         this.name = name;
     }
 
-    public City getCity() {
-        return city;
+    public Integer getCityId() {
+        return cityId;
     }
 
-    public void setCity(City city) {
-        this.city = city;
+    public void setCityId(Integer cityId) {
+        this.cityId = cityId;
     }
 
     public String getAvater() {

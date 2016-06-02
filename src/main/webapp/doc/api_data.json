@@ -25,15 +25,15 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "hostRace",
-            "description": "<p>草根杯列表</p>"
+            "field": "eventInformation",
+            "description": "<p>草根杯赛事资讯列表</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "hostRace.content",
-            "description": "<p>草根杯赛事资讯</p>"
+            "field": "eventInformation.content",
+            "description": "<p>草根杯赛事资讯内容</p>"
           }
         ]
       }
@@ -273,10 +273,17 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "String",
             "optional": false,
-            "field": "hostRace.team.cityId",
-            "description": "<p>球队所在地</p>"
+            "field": "hostRace.team.provinceName",
+            "description": "<p>球队所在地的省份</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "hostRace.team.cityName",
+            "description": "<p>球队所在地的城市</p>"
           },
           {
             "group": "Success 200",
@@ -1196,6 +1203,41 @@
   },
   {
     "type": "post",
+    "url": "/api/login/information",
+    "title": "服务条款说明",
+    "name": "login_information",
+    "group": "login",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "serviceMessage",
+            "description": "<p>服务条款说明</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "serviceMessage.content",
+            "description": "<p>服务条款说明内容</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/Login.java",
+    "groupTitle": "login",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:8080/yqtq_app/api/login/information"
+      }
+    ]
+  },
+  {
+    "type": "post",
     "url": "/api/login/sendCode",
     "title": "发送验证码",
     "name": "login_sendCode",
@@ -1411,6 +1453,41 @@
   },
   {
     "type": "post",
+    "url": "/api/orderball/information",
+    "title": "约球须知",
+    "name": "orderball_information",
+    "group": "orderball",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "orderballMessage",
+            "description": "<p>约球须知</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "orderballMessage.content",
+            "description": "<p>约球须知内容</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/OrderBallApi.java",
+    "groupTitle": "orderball",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:8080/yqtq_app/api/orderball/information"
+      }
+    ]
+  },
+  {
+    "type": "post",
     "url": "/api/orderball/list",
     "title": "约球列表",
     "name": "orderball_list",
@@ -1535,6 +1612,13 @@
             "optional": false,
             "field": "list.stadium.name",
             "description": "<p>球场名字</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "list.stadium.type",
+            "description": "<p>球场类型 (0:私人球场 1:公共球场)</p>"
           },
           {
             "group": "Success 200",
@@ -1688,6 +1772,13 @@
             "optional": false,
             "field": "reserve.stadium.name",
             "description": "<p>球场名字</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "reserve.stadium.city.cityId",
+            "description": "<p>球场城市id</p>"
           },
           {
             "group": "Success 200",
@@ -2242,7 +2333,7 @@
       }
     },
     "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/playIndexApi.java",
+    "filename": "src/main/java/com/sixmac/controller/api/PlayIndexApi.java",
     "groupTitle": "playIndex",
     "sampleRequest": [
       {
@@ -2430,7 +2521,7 @@
       }
     },
     "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/playIndexApi.java",
+    "filename": "src/main/java/com/sixmac/controller/api/PlayIndexApi.java",
     "groupTitle": "playIndex",
     "sampleRequest": [
       {
@@ -2548,7 +2639,7 @@
       }
     },
     "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/playIndexApi.java",
+    "filename": "src/main/java/com/sixmac/controller/api/PlayIndexApi.java",
     "groupTitle": "playIndex",
     "sampleRequest": [
       {
@@ -2645,7 +2736,7 @@
       }
     },
     "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/playIndexApi.java",
+    "filename": "src/main/java/com/sixmac/controller/api/PlayIndexApi.java",
     "groupTitle": "playIndex",
     "sampleRequest": [
       {
@@ -2793,6 +2884,13 @@
             "optional": false,
             "field": "type",
             "description": "<p>球赛类型 N人制 N代表数量</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "myAdr",
+            "description": "<p>定位的地址</p>"
           },
           {
             "group": "Parameter",
@@ -3678,8 +3776,22 @@
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "team.address",
-            "description": "<p>球队地址</p>"
+            "field": "team.province.provinceId",
+            "description": "<p>球队省份</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "team.city.cityId",
+            "description": "<p>球队城市</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "team.area.areaId",
+            "description": "<p>球队地区</p>"
           },
           {
             "group": "Success 200",
@@ -4293,6 +4405,41 @@
   },
   {
     "type": "post",
+    "url": "/api/user/credibilityMessage",
+    "title": "信誉评分",
+    "name": "user_credibilityMessage",
+    "group": "user",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "credibilityMessage",
+            "description": "<p>信誉评分</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "credibilityMessage.content",
+            "description": "<p>信誉评分内容</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/UserApi.java",
+    "groupTitle": "user",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:8080/yqtq_app/api/user/credibilityMessage"
+      }
+    ]
+  },
+  {
+    "type": "post",
     "url": "/api/user/edit",
     "title": "编辑个人资料",
     "name": "user_edit",
@@ -4898,6 +5045,41 @@
   },
   {
     "type": "post",
+    "url": "/api/user/vipMessage",
+    "title": "会员说明",
+    "name": "user_vipMessage",
+    "group": "user",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "vipMessage",
+            "description": "<p>会员说明</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "vipMessage.content",
+            "description": "<p>会员说明内容</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/UserApi.java",
+    "groupTitle": "user",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:8080/yqtq_app/api/user/vipMessage"
+      }
+    ]
+  },
+  {
+    "type": "post",
     "url": "/api/user/watchingInfo",
     "title": "我的看球详情",
     "name": "user_watchingInfo",
@@ -5432,6 +5614,41 @@
   },
   {
     "type": "post",
+    "url": "/api/watching/information",
+    "title": "足球宝贝服务说明",
+    "name": "watching_information",
+    "group": "watching",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "girlServiceMessage",
+            "description": "<p>足球宝贝服务说明</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "girlServiceMessage.content",
+            "description": "<p>足球宝贝服务说明内容</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/WatchingApi.java",
+    "groupTitle": "watching",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:8080/yqtq_app/api/watching/information"
+      }
+    ]
+  },
+  {
+    "type": "post",
     "url": "/api/watching/orderGirl",
     "title": "约宝贝看球确认",
     "name": "watching_orderGirl",
@@ -5708,6 +5925,13 @@
             "optional": false,
             "field": "list.stadium.name",
             "description": "<p>球场名字</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "list.stadium.city.cityId",
+            "description": "<p>球场所在城市</p>"
           }
         ]
       }

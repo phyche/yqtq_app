@@ -66,4 +66,9 @@ public class AreaServiceImpl implements AreaService {
             deleteById(id);
         }
     }
+
+    @Override
+    public Area getByAreaId(Integer areaId) {
+        return areaDao.getByAreaId(areaId);
+    }
 }

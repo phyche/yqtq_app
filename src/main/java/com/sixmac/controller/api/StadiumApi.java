@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -55,6 +56,12 @@ public class StadiumApi extends CommonController {
     @Autowired
     private UserReserveService userReserveService;
 
+    @Autowired
+    private CityService cityService;
+
+    @Autowired
+    private AreaService areaService;
+
     /**
      * 完成
      *
@@ -62,20 +69,19 @@ public class StadiumApi extends CommonController {
      * @apiName stadium.list
      * @apiGroup stadium
      * @apiParam {Integer} type 球赛类型 N人制 N代表数量
+     * @apiParam {String} myAdr 定位的地址
      * @apiParam {Integer} areaId 区域ID
      * @apiParam {Integer} pageNum 当前页
      * @apiParam {Integer} pageSize 每页显示数
-     *
      * @apiSuccess {Object}  list 球场列表
      * @apiSuccess {Integer} list.id 球场id
      * @apiSuccess {String} list.name 球场名称
      * @apiSuccess {Integer} list.type 球场类型 （0:私人球场 1:公共球场）
      * @apiSuccess {Integer} list.park 是否有停车场 (0：有 1：没有)
      * @apiSuccess {String} list.giving 赠送
-     * @apiSuccess {Integer} list.cityId 球场地区
+     * @apiSuccess {String} stadium.areaName 球场地区名字
      * @apiSuccess {String} list.address 球场地址
      * @apiSuccess {String} list.avater 球场封面
-     *
      * @apiSuccess {Object}  page 翻页信息
      * @apiSuccess {Integer} page.totalNum 总记录数
      * @apiSuccess {Integer} page.totalPage 总页数
@@ -83,20 +89,34 @@ public class StadiumApi extends CommonController {
      */
     @RequestMapping(value = "/list")
     public void list(HttpServletResponse response,
-                     Integer cityId,
+                     String myAdr,
                      Integer areaId,
                      Integer type,
                      Integer pageNum,
-                     Integer pageSize){
+                     Integer pageSize) throws IOException {
 
         Page<Stadium> page = stadiumService.page(areaId, type, pageNum, pageSize);
         List<Stadium> stadiumList = page.getContent();
         for (Stadium stadium : stadiumList) {
 
+            stadium.setAreaName(areaService.getByAreaId(stadium.getAreaId()).getArea());
+
+            String stAdr = stadium.getAddress();
+
+            Object[] d1 = LatAndLng.getCoordinate(myAdr);
+            Object[] d2 = LatAndLng.getCoordinate(stAdr);
+
+            System.out.println(d1[0]);
+            System.out.println(d1[1]);
+            System.out.println(d2[0]);
+            System.out.println(d2[1]);
+
+            // stadium.setDistance(Distance.GetDistance(Double.parseDouble(d1[0].toString()), Double.parseDouble(d1[1].toString()), Double.parseDouble(d2[0].toString()), Double.parseDouble(d2[1].toString())));
+
         }
 
         Map<String, Object> dataMap = APIFactory.fitting(page);
-        String result = JsonUtil.obj2ApiJson(dataMap,"description","siteType","sodType");
+        String result = JsonUtil.obj2ApiJson(dataMap, "description", "siteType", "sodType");
         WebUtil.printApi(response, result);
     }
 
@@ -107,11 +127,10 @@ public class StadiumApi extends CommonController {
      * @apiName stadium.info
      * @apiGroup stadium
      * @apiParam {Integer} stadiumId 球场ID  <必传/>
-     *
      * @apiSuccess {Object}  stadium 球场
      * @apiSuccess {Integer} stadium.id 球场id
      * @apiSuccess {String} stadium.name 球场名称
-     * @apiSuccess {Integer} stadium.cityId 球场地区
+     * @apiSuccess {String} stadium.areaName 球场地区名字
      * @apiSuccess {String} stadium.address 球场地址
      * @apiSuccess {String} stadium.avater 球场封面
      * @apiSuccess {String} stadium.siteType 场地类型
@@ -120,25 +139,23 @@ public class StadiumApi extends CommonController {
      * @apiSuccess {Integer} stadium.park 停车场（0：有停车场 1；没有停车场）
      * @apiSuccess {String} stadium.giving 赠送
      * @apiSuccess {String} stadium.description 球场简介
-     *
      * @apiSuccess {Object} sites 球场场地
-     *
-     *
      */
     @RequestMapping(value = "/info")
-    public void info(HttpServletResponse response,Integer stadiumId) {
+    public void info(HttpServletResponse response, Integer stadiumId) {
 
         Map<String, Object> map = new HashMap<String, Object>();
 
         Stadium stadium = stadiumService.getById(stadiumId);
+        stadium.setAreaName(areaService.getByAreaId(stadium.getAreaId()).getArea());
 
-        if(stadiumService.getById(stadiumId).getType() == 1) {
+        if (stadiumService.getById(stadiumId).getType() == 1) {
             //私有球场的可预订场地列表
             List<Site> sites = siteService.findByStadiumId(stadiumId);
-            map.put("sites",sites);
+            map.put("sites", sites);
         }
 
-        map.put("stadium",stadium);
+        map.put("stadium", stadium);
         Result obj = new Result(true).data(map);
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
@@ -151,21 +168,20 @@ public class StadiumApi extends CommonController {
      * @apiName stadium.order
      * @apiGroup stadium
      * @apiParam {Integer} stadiumId 球场ID <必传/>
-     *
      * @apiSuccess {Object}  stadium 球场
      * @apiSuccess {Integer} stadium.id 球场id
      * @apiSuccess {String} stadium.name 球场名称
-     * @apiSuccess {Integer} stadium.cityId 球场地区
+     * @apiSuccess {String} stadium.areaName 球场地区名字
      * @apiSuccess {String} stadium.avater 球场封面
-     *
      */
     @RequestMapping(value = "/order")
     public void order(HttpServletResponse response, Integer stadiumId) {
 
         Stadium stadium = stadiumService.getById(stadiumId);
+        stadium.setAreaName(areaService.getByAreaId(stadium.getAreaId()).getArea());
 
         Result obj = new Result(true).data(stadium);
-        String result = JsonUtil.obj2ApiJson(obj,"type","description","siteType","sodType","light","park","giving");
+        String result = JsonUtil.obj2ApiJson(obj, "type", "description", "siteType", "sodType", "light", "park", "giving");
         WebUtil.printApi(response, result);
     }
 
@@ -179,7 +195,6 @@ public class StadiumApi extends CommonController {
      * @apiParam {Integer} userId 用户ID <必传/>
      * @apiParam {String} title 标题  <必传/>
      * @apiParam {Long} time 约球时间 <必传/>
-     *
      * @apiSuccess {Object}  stadium 球场
      * @apiSuccess {Integer} stadium.id 球场id
      * @apiSuccess {String} stadium.name 球场名称
@@ -188,10 +203,10 @@ public class StadiumApi extends CommonController {
      */
     @RequestMapping(value = "/publish")
     public void publish(HttpServletResponse response,
-                      Integer userId,
-                      Integer stadiumId,
-                      String title,
-                      Long time) {
+                        Integer userId,
+                        Integer stadiumId,
+                        String title,
+                        Long time) {
 
         User user = userService.getById(userId);
         Stadium stadium = stadiumService.getById(stadiumId);
@@ -224,43 +239,40 @@ public class StadiumApi extends CommonController {
      * @apiGroup stadium
      * @apiParam {Integer} siteId 场地ID <必传/>
      * @apiParam {Integer} status 运动保险状态（0：不买  1：买） <必传/>
-     *
      * @apiSuccess {Object}  site 场地
-     *
      * @apiSuccess {Object}  stadiumVo 场地
      * @apiSuccess {Integer} stadiumVo.id 球场id
      * @apiSuccess {String} stadiumVo.name 球场名称
      * @apiSuccess {Integer} stadiumVo.cityId 球场地区
-     *
      */
     @RequestMapping(value = "/siteOrder")
     public void siteOrder(HttpServletResponse response, Integer siteId, Integer status) {
 
-        Map<String,Object> map = new HashMap<String,Object>();
+        Map<String, Object> map = new HashMap<String, Object>();
 
         Site site = siteService.getById(siteId);
 
         //status == 1 代表顾客要买保险
         if (status == 1) {
             List<SysInsurance> sysInsurances = sysInsuranceService.findAll();
-            map.put("sysInsurances",sysInsurances);
+            map.put("sysInsurances", sysInsurances);
         }
 
         StadiumVo stadiumVo = new StadiumVo();
         stadiumVo.setId(site.getStadium().getId());
         stadiumVo.setName(site.getStadium().getName());
-        stadiumVo.setCityId(site.getStadium().getCity().getId());
+        stadiumVo.setCityName(cityService.getByCityId(site.getStadium().getCityId()).getCity());
 
-        map.put("site",site);
-        map.put("stadiumVo",stadiumVo);
+        map.put("site", site);
+        map.put("stadiumVo", stadiumVo);
 
         Result obj = new Result(true).data(map);
-        String result = JsonUtil.obj2ApiJson(obj,"stadium");
+        String result = JsonUtil.obj2ApiJson(obj, "stadium");
         WebUtil.printApi(response, result);
     }
 
     /**
-     *完成
+     * 完成
      *
      * @api {post} /api/stadium/pay 散客支付订单
      * @apiName stadium.pay
@@ -269,9 +281,7 @@ public class StadiumApi extends CommonController {
      * @apiParam {Integer} userId 用户ID（0：不买  1：买） <必传/>
      * @apiParam {Integer} insuranceId 保险ID
      * @apiParam {Integer} num 购买保险数
-     *
      * @apiSuccess {Object}  site 场地
-     *
      * @apiSuccess {Object}  sysInsurance 保险
      * @apiSuccess {Integer} sysInsurance.id 保险id
      * @apiSuccess {Integer} sysInsurance.name 保险名称
@@ -282,7 +292,6 @@ public class StadiumApi extends CommonController {
      * @apiSuccess {String} money 总金额
      * @apiSuccess {Object}  reserve 散客预定（约球）
      * @apiSuccess {Integer} reserve.id 预定id
-     *
      */
     @RequestMapping(value = "/pay")
     public void pay(HttpServletResponse response,
@@ -293,14 +302,14 @@ public class StadiumApi extends CommonController {
                     Double preferente,
                     Double money) {
 
-        Map<String,Object> map = new HashMap<String,Object>();
+        Map<String, Object> map = new HashMap<String, Object>();
 
         if (insuranceId == null) {
             if (userService.getById(userId).getVipNum() == 0) {
                 preferente = 1.0;
                 num = 0;
                 money = siteService.getById(siteId).getPrice() * preferente;
-            }else {
+            } else {
                 preferente = vipLevelService.findBylevel(userService.getById(userId).getVipNum()).getPreferente();
                 num = 0;
                 money = siteService.getById(siteId).getPrice() * preferente;
@@ -312,7 +321,7 @@ public class StadiumApi extends CommonController {
             reserve.setUser(userService.getById(userId));
             reserve.setPrice(money);
             reserveService.create(reserve);
-            map.put("reserve",reserve);
+            map.put("reserve", reserve);
 
             UserReserve userReserve = new UserReserve();
             userReserve.setUser(userService.getById(userId));
@@ -320,11 +329,11 @@ public class StadiumApi extends CommonController {
             userReserve.setStatus(1);
             userReserveService.create(userReserve);
 
-        }else {
+        } else {
             SysInsurance sysInsurance = sysInsuranceService.getById(insuranceId);
             if (userService.getById(userId).getVipNum() == 0) {
                 preferente = 1.0;
-            }else {
+            } else {
                 preferente = vipLevelService.findBylevel(userService.getById(userId).getVipNum()).getPreferente();
             }
 
@@ -337,7 +346,7 @@ public class StadiumApi extends CommonController {
             reserve.setInsurance(sysInsurance);
             reserve.setPrice(money);
             reserveService.create(reserve);
-            map.put("reserve",reserve);
+            map.put("reserve", reserve);
 
             UserReserve userReserve = new UserReserve();
             userReserve.setUser(userService.getById(userId));
@@ -345,13 +354,13 @@ public class StadiumApi extends CommonController {
             userReserve.setStatus(1);
             userReserveService.create(userReserve);
 
-            map.put("sysInsurance",sysInsurance);
+            map.put("sysInsurance", sysInsurance);
         }
 
-        map.put("preferente",preferente);
-        map.put("money",money);
-        map.put("siteMoney",siteService.getById(siteId).getPrice());
-        map.put("vipNum",userService.getById(userId).getVipNum());
+        map.put("preferente", preferente);
+        map.put("money", money);
+        map.put("siteMoney", siteService.getById(siteId).getPrice());
+        map.put("vipNum", userService.getById(userId).getVipNum());
 
         Result obj = new Result(true).data(map);
         String result = JsonUtil.obj2ApiJson(obj);
@@ -366,7 +375,6 @@ public class StadiumApi extends CommonController {
      * @apiGroup stadium
      * @apiParam {Integer} reserveId 预定ID <必传/>
      * @apiParam {Integer} type 支付类型（0：全额支付  1：AA支付） <必传/>
-     *
      * @apiSuccess {Object} order 订单
      * @apiSuccess {String} order.userName 用户昵称
      * @apiSuccess {String} order.stadiumName 球场名称
@@ -412,9 +420,7 @@ public class StadiumApi extends CommonController {
      * @apiParam {Integer} userId 用户ID（0：不买  1：买） <必传/>
      * @apiParam {Integer} insuranceId 保险ID
      * @apiParam {Integer} num 购买保险数
-     *
      * @apiSuccess {Object}  site 场地
-     *
      * @apiSuccess {Object}  sysInsurance 保险
      * @apiSuccess {Integer} sysInsurance.name 保险名称
      * @apiSuccess {String} sysInsurance.price 保险金额
@@ -427,21 +433,21 @@ public class StadiumApi extends CommonController {
      */
     @RequestMapping(value = "/teamPay")
     public void teamPay(HttpServletResponse response,
-                    Integer userId,
-                    Integer siteId,
-                    Integer insuranceId,
-                    Integer num,
-                    Double preferente,
-                    Double money) {
+                        Integer userId,
+                        Integer siteId,
+                        Integer insuranceId,
+                        Integer num,
+                        Double preferente,
+                        Double money) {
 
-        Map<String,Object> map = new HashMap<String,Object>();
+        Map<String, Object> map = new HashMap<String, Object>();
 
         if (insuranceId == null) {
             if (userService.getById(userId).getVipNum() == 0) {
                 preferente = 1.0;
                 num = 0;
                 money = siteService.getById(siteId).getPrice() * preferente;
-            }else {
+            } else {
                 preferente = vipLevelService.findBylevel(userService.getById(userId).getVipNum()).getPreferente();
                 num = 0;
                 money = siteService.getById(siteId).getPrice() * preferente;
@@ -454,12 +460,12 @@ public class StadiumApi extends CommonController {
             reserveTeam.setPrice(money);
             reserveTeamService.create(reserveTeam);
 
-            map.put("reserveTeam",reserveTeam);
-        }else {
+            map.put("reserveTeam", reserveTeam);
+        } else {
             SysInsurance sysInsurance = sysInsuranceService.getById(insuranceId);
             if (userService.getById(userId).getVipNum() == 0) {
                 preferente = 1.0;
-            }else {
+            } else {
                 preferente = vipLevelService.findBylevel(userService.getById(userId).getVipNum()).getPreferente();
             }
             money = (siteService.getById(siteId).getPrice() + sysInsurance.getPrice() * num) * preferente;
@@ -473,14 +479,14 @@ public class StadiumApi extends CommonController {
             reserveTeam.setPrice(money);
             reserveTeamService.create(reserveTeam);
 
-            map.put("reserveTeam",reserveTeam);
-            map.put("sysInsurance",sysInsurance);
+            map.put("reserveTeam", reserveTeam);
+            map.put("sysInsurance", sysInsurance);
         }
 
-        map.put("preferente",preferente);
-        map.put("money",money);
-        map.put("siteMoney",siteService.getById(siteId).getPrice());
-        map.put("vipNum",userService.getById(userId).getVipNum());
+        map.put("preferente", preferente);
+        map.put("money", money);
+        map.put("siteMoney", siteService.getById(siteId).getPrice());
+        map.put("vipNum", userService.getById(userId).getVipNum());
 
         Result obj = new Result(true).data(map);
         String result = JsonUtil.obj2ApiJson(obj);
@@ -494,7 +500,6 @@ public class StadiumApi extends CommonController {
      * @apiName stadium.teamPayConfirm
      * @apiGroup stadium
      * @apiParam {Integer} reserveTeamId 预定ID <必传/>
-     *
      * @apiSuccess {Object} order 订单
      * @apiSuccess {String} order.userName 用户昵称
      * @apiSuccess {String} order.stadiumName 球场名称

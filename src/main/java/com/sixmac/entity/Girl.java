@@ -9,9 +9,14 @@ import javax.persistence.*;
 @Table(name = "t_girl")
 public class Girl extends BaseEntity{
 
-    @OneToMany
-    @JoinColumn(name = "city_id")
-    private City city;
+    /*@ManyToOne
+    @JoinColumn(name = "city_id",referencedColumnName = "city_id")
+    private City city;*/
+    @Column(name = "city_id")
+    private Integer cityId;
+
+    @Transient
+    private String cityName;
 
     @Column(name = "name")
     private String name;
@@ -43,12 +48,20 @@ public class Girl extends BaseEntity{
     @Transient
     private Integer orderNum;
 
-    public City getCity() {
-        return city;
+    public String getCityName() {
+        return cityName;
     }
 
-    public void setCity(City city) {
-        this.city = city;
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public Integer getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(Integer cityId) {
+        this.cityId = cityId;
     }
 
     public String getName() {

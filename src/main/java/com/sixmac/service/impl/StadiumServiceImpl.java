@@ -85,7 +85,7 @@ public class StadiumServiceImpl implements StadiumService {
                 List<Predicate> predicateList = new ArrayList<Predicate>();
 
                 if (areaId != null) {
-                    Predicate pre = cb.equal(root.get("cityId").as(Integer.class), areaId);
+                    Predicate pre = cb.equal(root.get("areaId").as(Integer.class), areaId);
                     predicateList.add(pre);
                 }
 
