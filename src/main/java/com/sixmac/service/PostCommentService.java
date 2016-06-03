@@ -14,4 +14,5 @@ public interface PostCommentService extends ICommonService<PostComment> {
 
     public List<PostComment> findByFuserId(Integer userId);
 
+    public List<PostComment> findByToUserId(Integer userId);
 }

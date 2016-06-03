@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Table(name = "t_user_reserve_join")
 public class UserReserve extends BaseEntity{
 
-    @Column(name = "status")
+    @Transient
     private Integer status;
 
     @ManyToOne
@@ -22,6 +22,9 @@ public class UserReserve extends BaseEntity{
 
     @Column(name = "title")
     private String title;
+
+    @Transient
+    private String content;
 
     public Integer getStatus() {
         return status;
@@ -56,4 +59,11 @@ public class UserReserve extends BaseEntity{
         this.title = title;
     }
 
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 }

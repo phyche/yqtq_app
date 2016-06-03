@@ -22,7 +22,7 @@ import java.util.*;
  * 约散客
  */
 @Controller
-@RequestMapping(value = "/api/orderball")
+@RequestMapping(value = "/api/orderBall")
 public class OrderBallApi extends CommonController {
 
     @Autowired
@@ -53,9 +53,9 @@ public class OrderBallApi extends CommonController {
     /**
      * 完成
      *
-     * @api {post} /api/orderball/list 约球列表
-     * @apiName orderball.list
-     * @apiGroup orderball
+     * @api {post} /api/orderBall/list 约球列表
+     * @apiName orderBall.list
+     * @apiGroup orderBall
      * @apiParam {Integer} timelimit 时间期限
      * @apiParam {Integer} type 球赛类型 N人制 N代表数量
      * @apiParam {Integer} areaId 区域ID
@@ -64,7 +64,7 @@ public class OrderBallApi extends CommonController {
      *
      * @apiSuccess {Object}  list 约球列表
      * @apiSuccess {Integer} list.id 约球id
-     * @apiSuccess {Integer} list.content 约球内容
+     * @apiSuccess {String} list.content 约球内容
      * @apiSuccess {Integer} list.matchType 赛制
      * @apiSuccess {Integer} list.joinCount 已报人数
      * @apiSuccess {Integer} list.lackCount 剩余人数
@@ -108,14 +108,14 @@ public class OrderBallApi extends CommonController {
     /**
      * 完成
      *
-     * @api {post} /api/orderball/orderInfo 约球的详情
-     * @apiName orderball.orderInfo
-     * @apiGroup orderball
+     * @api {post} /api/orderBall/orderInfo 约球的详情
+     * @apiName orderBall.orderInfo
+     * @apiGroup orderBall
      * @apiParam {Integer} reserveId 约球ID <必传 />
      *
      * @apiSuccess {Object}  reserve 约球列表
      * @apiSuccess {Integer} reserve.id 约球id
-     * @apiSuccess {Integer} reserve.content 约球内容
+     * @apiSuccess {String} reserve.content 约球内容
      * @apiSuccess {Integer} reserve.matchType 赛制
      * @apiSuccess {Integer} reserve.joinCount 已报人数
      * @apiSuccess {Integer} reserve.lackCount 剩余人数
@@ -191,9 +191,9 @@ public class OrderBallApi extends CommonController {
     /**
      * 完成
      *
-     * @api {post} /api/orderball/information 约球须知
-     * @apiName orderball.information
-     * @apiGroup orderball
+     * @api {post} /api/orderBall/information 约球须知
+     * @apiName orderBall.information
+     * @apiGroup orderBall
      *
      * @apiSuccess {Object} orderballMessage 约球须知
      * @apiSuccess {String} orderballMessage.content 约球须知内容
@@ -211,9 +211,9 @@ public class OrderBallApi extends CommonController {
 
     /**
      * 完成
-     * * @api {post} /api/orderball/info 球友个人资料
-     * @apiName orderball.info
-     * @apiGroup orderball
+     * * @api {post} /api/orderBall/info 球友个人资料
+     * @apiName orderBall.info
+     * @apiGroup orderBall
      * @apiParam {Integer} playerId 球友ID <必传 />
      *
      * @apiSuccess {Object}  user 球友列表
@@ -261,9 +261,9 @@ public class OrderBallApi extends CommonController {
     /**
      * 完成
      *
-     *  @api {post} /api/orderball/orderList 球友的约球列表
-     * @apiName orderball.orderList
-     * @apiGroup orderball
+     *  @api {post} /api/orderBall/orderList 球友的约球列表
+     * @apiName orderBall.orderList
+     * @apiGroup orderBall
      * @apiParam {Integer} playerId 球友ID <必传 />
      *
      * @apiSuccess {Object}  list 约球列表
@@ -307,9 +307,9 @@ public class OrderBallApi extends CommonController {
     /**
      * 完成
      *
-     *  @api {post} /api/orderball/raceList 球友的赛事列表
-     * @apiName orderball.raceList
-     * @apiGroup orderball
+     *  @api {post} /api/orderBall/raceList 球友的赛事列表
+     * @apiName orderBall.raceList
+     * @apiGroup orderBall
      * @apiParam {Integer} playerId 球友ID <必传 />
      *
      * @apiSuccess {Object}  watchBallVos 球员所在球队为主队赛事列表
@@ -400,9 +400,9 @@ public class OrderBallApi extends CommonController {
     /**
      * 完成
      *
-     * @api {post} /api/orderball/raceInfo 球友的赛事详情
-     * @apiName orderball.raceInfo
-     * @apiGroup orderball
+     * @api {post} /api/orderBall/raceInfo 球友的赛事详情
+     * @apiName orderBall.raceInfo
+     * @apiGroup orderBall
      * @apiParam {Integer} userId 球友ID <必传 />
      * @apiParam {Integer} raceId 赛事ID <必传 />
      *
@@ -466,9 +466,9 @@ public class OrderBallApi extends CommonController {
     /**
      * 完成
      *
-     * @api {post} /api/orderball/pay 球友的约球支付
-     * @apiName orderball.pay
-     * @apiGroup orderball
+     * @api {post} /api/orderBall/pay 球友的约球支付
+     * @apiName orderBall.pay
+     * @apiGroup orderBall
      * @apiParam {Integer} reserveId 约球ID <必传 />
      * @apiParam {Integer} userId 赛事ID <必传 />
      *

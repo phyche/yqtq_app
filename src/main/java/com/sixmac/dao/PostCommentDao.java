@@ -19,4 +19,7 @@ public interface PostCommentDao extends JpaRepository<PostComment, Integer> {
     //根据评论人Id筛选评论
     @Query("select a from PostComment a where a.fUser.id = ?1 ")
     public List<PostComment> findByFuserId(Integer userId);
+
+    @Query("select a from PostComment a where a.tUser.id = ?1 ")
+    public List<PostComment> findByToUserId(Integer userId);
 }

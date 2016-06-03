@@ -6,30 +6,18 @@ import javax.persistence.*;
  * Created by Administrator on 2016/6/2 0002.
  */
 @Entity
-@Table(name = "t_message_add")
-public class MessageAdd extends BaseEntity {
-
-    @ManyToOne
-    @JoinColumn( name= "user_id")
-    private User user;
+@Table(name = "t_system_message")
+public class SystemMessage extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "to_user_id")
     private User toUser;
 
-    @Column(name = "status")
-    private Integer status;
+    @Column(name = "title")
+    private String title;
 
-    @Transient
+    @Column(name = "content")
     private String content;
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     public User getToUser() {
         return toUser;
@@ -39,12 +27,12 @@ public class MessageAdd extends BaseEntity {
         this.toUser = toUser;
     }
 
-    public Integer getStatus() {
-        return status;
+    public String getTitle() {
+        return title;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getContent() {

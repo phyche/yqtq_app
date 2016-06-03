@@ -25,7 +25,7 @@ public class HostRace extends BaseEntity{
     @Column(name = "start_date")
     private Long startDate;
 
-    @Column(name = "type")
+    @Column(name = "match_type")
     private Integer type;
 
     public String getName() {

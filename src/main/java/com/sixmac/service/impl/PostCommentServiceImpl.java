@@ -76,4 +76,9 @@ public class PostCommentServiceImpl implements PostCommentService {
     public List<PostComment> findByFuserId(Integer userId) {
         return postCommentDao.findByFuserId(userId);
     }
+
+    @Override
+    public List<PostComment> findByToUserId(Integer userId) {
+        return postCommentDao.findByToUserId(userId);
+    }
 }
