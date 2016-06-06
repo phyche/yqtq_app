@@ -76,4 +76,9 @@ public class MessageAddServiceImpl implements MessageAddService {
     public List<MessageAdd> findByToUserId(Integer userId) {
         return messageAddDao.findByToUserId(userId);
     }
+
+    @Override
+    public List<MessageAdd> findUserId(Integer userId) {
+        return messageAddDao.findUserId(userId);
+    }
 }

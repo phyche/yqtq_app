@@ -50,6 +50,9 @@ public class Reserve extends BaseEntity{
     @Column(name = "status")
     private Integer status;
 
+    @Column(name = "title")
+    private String title;
+
     @Column(name = "information")
     private String information;
 
@@ -206,5 +209,13 @@ public class Reserve extends BaseEntity{
 
     public void setInformation(String information) {
         this.information = information;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

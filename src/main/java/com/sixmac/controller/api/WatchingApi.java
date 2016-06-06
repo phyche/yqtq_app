@@ -56,6 +56,9 @@ public class WatchingApi extends CommonController {
     @Autowired
     private CityService cityService;
 
+    @Autowired
+    private MessageWatchingService messageWatchingService;
+
     /**
      * 完成
      *
@@ -93,12 +96,12 @@ public class WatchingApi extends CommonController {
      * @api {post} /api/watching/telecastInfo 直播看球详情
      * @apiName watching.telecastInfo
      * @apiGroup watching
-     * @apiParam {Integer} telecastId 看球id
+     * @apiParam {Integer} telecastId 看球id <必传/>
      *
      * @apiSuccess {Object}  list 直播看球列表
      * @apiSuccess {Integer} list.id 看球id
      * @apiSuccess {String} list.name 看球名称
-     * @apiSuccess {String} list.avater 封面
+     * @apiSuccess {String} list.avater 看球封面
      * @apiSuccess {String} list.description 介绍
      *
      */
@@ -115,10 +118,39 @@ public class WatchingApi extends CommonController {
     /**
      * 完成
      *
+     * @api {post} /api/watching/telecastOrder 直播看球邀请
+     * @apiName watching.telecastOrder
+     * @apiGroup watching
+     * @apiParam {Integer} telecastId 看球id <必传/>
+     * @apiParam {Integer} userId 用户id <必传/>
+     * @apiParam {Integer} toUserId 好友id <必传/>
+     *
+     */
+    @RequestMapping(value = "/telecastOrder")
+    public void telecastOrder(HttpServletResponse response,
+                              Integer telecastId,
+                              Integer userId,
+                              Integer toUserId) {
+
+        MessageWatching messageWatching = new MessageWatching();
+
+        messageWatching.setUser(userService.getById(userId));
+        messageWatching.setType(1);
+        messageWatching.setToUser(userService.getById(toUserId));
+        messageWatching.setWatchingRace(watchingRaceService.getById(telecastId));
+
+        messageWatchingService.create(messageWatching);
+
+        WebUtil.printApi(response, new Result(true).data(0));
+    }
+
+    /**
+     * 完成
+     *
      * @api {post} /api/watching/sceneList 现场看球列表
      * @apiName watching.sceneList
      * @apiGroup watching
-     * @apiParam {Integer} cityId 城市id
+     * @apiParam {Integer} cityId 城市id <必传/>
      * @apiParam {Integer} pageNum 当前页
      * @apiParam {Integer} pageSize 每页显示数
      *
@@ -180,6 +212,35 @@ public class WatchingApi extends CommonController {
         Result obj = new Result(true).data(bigRace);
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
+    }
+
+    /**
+     * 完成
+     *
+     * @api {post} /api/watching/sceneOrder 现场看球邀请
+     * @apiName watching.sceneOrder
+     * @apiGroup watching
+     * @apiParam {Integer} sceneId 看球id <必传/>
+     * @apiParam {Integer} userId 用户id <必传/>
+     * @apiParam {Integer} toUserId 好友id <必传/>
+     *
+     */
+    @RequestMapping(value = "/sceneOrder")
+    public void sceneOrder(HttpServletResponse response,
+                              Integer sceneId,
+                              Integer userId,
+                              Integer toUserId) {
+
+        MessageWatching messageWatching = new MessageWatching();
+
+        messageWatching.setUser(userService.getById(userId));
+        messageWatching.setType(0);
+        messageWatching.setToUser(userService.getById(toUserId));
+        messageWatching.setBigRace(bigRaceService.getById(sceneId));
+
+        messageWatchingService.create(messageWatching);
+
+        WebUtil.printApi(response, new Result(true).data(0));
     }
 
     /**
@@ -393,8 +454,10 @@ public class WatchingApi extends CommonController {
         GirlUser girlUser = girlUserService.getById(girlUserId);
         if (tip == null) {
             girlUser.setTip(0.0);
+        }else {
+            girlUser.setTip(tip);
         }
-        girlUser.setTip(tip);
+
         girlUserService.update(girlUser);
 
         String sn = CommonUtils.generateSn(); // 订单号

@@ -43,6 +43,9 @@ public class InteractApi extends CommonController {
     @Autowired
     private PostImageService postImageService;
 
+    @Autowired
+    private MessageAddService messageAddService;
+
     /**
      * 完成
      *
@@ -199,6 +202,57 @@ public class InteractApi extends CommonController {
         postCommentService.create(postComment);
 
         WebUtil.printApi(response, new Result(true));
+    }
+
+    /**
+     * 完成
+     *
+     * @api {post} /api/interact/addressBook 通讯录
+     * @apiName interact.addressBook
+     * @apiGroup interact
+     * @apiParam {Integer} userId 用户id <必传/>
+     *
+     * @apiSuccess {Object}  messageAddList 通讯录列表
+     * @apiSuccess {Integer} messageAddList.id 通讯录id
+     * @apiSuccess {Object} messageAddList.toUser 通讯录好友
+     * @apiSuccess {Integer} messageAddList.toUser.id 好友id
+     * @apiSuccess {String} messageAddList.toUser.nickname 好友昵称
+     * @apiSuccess {String} messageAddList.toUser.avater 好友头像
+     *
+     */
+    @RequestMapping(value = "/addressBook")
+    public void addressBook(HttpServletResponse response, Integer userId) {
+
+        List<MessageAdd> messageAddList = messageAddService.findUserId(userId);
+
+        Result obj = new Result(true).data(messageAddList);
+        String result = JsonUtil.obj2ApiJson(obj,"user","content","status");
+        WebUtil.printApi(response, result);
+    }
+
+    /**
+     * 完成
+     *
+     * @api {post} /api/interact/addFriend 添加好友
+     * @apiName interact.addFriend
+     * @apiGroup interact
+     * @apiParam {Integer} userId 用户id <必传/>
+     * @apiParam {String} mobile 好友手机号（账号） <必传/>
+     *
+     */
+    @RequestMapping(value = "/addFriend")
+    public void addFriend(HttpServletResponse response, Integer userId, String mobile) {
+
+        User user = userService.findByMobile(mobile);
+
+        MessageAdd messageAdd = new MessageAdd();
+        messageAdd.setStatus(0);
+        messageAdd.setUser(userService.getById(userId));
+        messageAdd.setToUser(user);
+
+        messageAddService.create(messageAdd);
+        WebUtil.printApi(response, new Result(true).data(0));
+
     }
 
     /**

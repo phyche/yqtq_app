@@ -69,10 +69,12 @@ public class StadiumApi extends CommonController {
      * @apiName stadium.list
      * @apiGroup stadium
      * @apiParam {Integer} type 球赛类型 N人制 N代表数量
-     * @apiParam {String} myAdr 定位的地址
+     * @apiParam {Double} longitude 经度
+     * @apiParam {Double} latitude 纬度
      * @apiParam {Integer} areaId 区域ID
      * @apiParam {Integer} pageNum 当前页
      * @apiParam {Integer} pageSize 每页显示数
+     *
      * @apiSuccess {Object}  list 球场列表
      * @apiSuccess {Integer} list.id 球场id
      * @apiSuccess {String} list.name 球场名称
@@ -89,7 +91,8 @@ public class StadiumApi extends CommonController {
      */
     @RequestMapping(value = "/list")
     public void list(HttpServletResponse response,
-                     String myAdr,
+                     Double longitude,
+                     Double latitude,
                      Integer areaId,
                      Integer type,
                      Integer pageNum,
@@ -101,17 +104,7 @@ public class StadiumApi extends CommonController {
 
             stadium.setAreaName(areaService.getByAreaId(stadium.getAreaId()).getArea());
 
-            String stAdr = stadium.getAddress();
-
-            Object[] d1 = LatAndLng.getCoordinate(myAdr);
-            Object[] d2 = LatAndLng.getCoordinate(stAdr);
-
-            System.out.println(d1[0]);
-            System.out.println(d1[1]);
-            System.out.println(d2[0]);
-            System.out.println(d2[1]);
-
-            // stadium.setDistance(Distance.GetDistance(Double.parseDouble(d1[0].toString()), Double.parseDouble(d1[1].toString()), Double.parseDouble(d2[0].toString()), Double.parseDouble(d2[1].toString())));
+            stadium.setDistance(Distance.GetDistance(longitude, latitude,stadium.getLongitude(), stadium.getLatitude()));
 
         }
 
@@ -215,13 +208,14 @@ public class StadiumApi extends CommonController {
         reserve.setUser(user);
         reserve.setStadium(stadium);
         reserve.setStartTime(time);
+        reserve.setTitle(title);
         reserveService.create(reserve);
 
         UserReserve userReserve = new UserReserve();
         userReserve.setUser(user);
         userReserve.setReserve(reserve);
         userReserve.setStatus(1);
-        userReserve.setTitle(title);
+
         userReserveService.create(userReserve);
 
         WebUtil.printApi(response, new Result(true));
@@ -320,6 +314,7 @@ public class StadiumApi extends CommonController {
             reserve.setSite(siteService.getById(siteId));
             reserve.setUser(userService.getById(userId));
             reserve.setPrice(money);
+            reserve.setMatchType(siteService.getById(siteId).getType());
             reserveService.create(reserve);
             map.put("reserve", reserve);
 
@@ -345,6 +340,7 @@ public class StadiumApi extends CommonController {
             reserve.setUser(userService.getById(userId));
             reserve.setInsurance(sysInsurance);
             reserve.setPrice(money);
+            reserve.setMatchType(siteService.getById(siteId).getType());
             reserveService.create(reserve);
             map.put("reserve", reserve);
 
@@ -455,6 +451,8 @@ public class StadiumApi extends CommonController {
 
             ReserveTeam reserveTeam = new ReserveTeam();
 
+            reserveTeam.setStatus(0);
+            reserveTeam.setStadium(siteService.getById(siteId).getStadium());
             reserveTeam.setSite(siteService.getById(siteId));
             reserveTeam.setUser(userService.getById(userId));
             reserveTeam.setPrice(money);

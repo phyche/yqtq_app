@@ -32,9 +32,6 @@ public class Team extends BaseEntity{
     @Column(name = "city_id")
     private Integer cityId;
 
-    @Column(name = "area_id")
-    private Integer areaId;
-
     @Transient
     private String areaName;
 
@@ -213,14 +210,6 @@ public class Team extends BaseEntity{
 
     public void setCityId(Integer cityId) {
         this.cityId = cityId;
-    }
-
-    public Integer getAreaId() {
-        return areaId;
-    }
-
-    public void setAreaId(Integer areaId) {
-        this.areaId = areaId;
     }
 
     public String getAreaName() {

@@ -44,7 +44,7 @@ public class TeamApi extends CommonController {
     private ProvinceService provinceService;
 
     @Autowired
-    private AreaService areaService;
+    private MessageJoinService messageJoinService;
 
 
     /**
@@ -184,6 +184,52 @@ public class TeamApi extends CommonController {
         teamService.create(team);
 
         WebUtil.printApi(response, new Result(true));
+    }
+
+    /**
+     * 完成
+     *
+     * @api {post} /api/team/addFriend 邀请朋友加入球队
+     * @apiName team.addFriend
+     * @apiGroup team
+     * @apiParam {Integer} userId 用户id <必传/>
+     * @apiParam {Integer} toUserId 好友id <必传/>
+     *
+     */
+    @RequestMapping(value = "/addFriend")
+    public void addFriend(HttpServletResponse response, Integer userId, Integer toUserId) {
+
+        Team team = teamService.findListByLeaderId(userId);
+
+        MessageJoin messageJoin = new MessageJoin();
+        messageJoin.setStatus(0);
+        messageJoin.setUser(userService.getById(toUserId));
+        messageJoin.setTeam(team);
+        messageJoinService.create(messageJoin);
+
+        WebUtil.printApi(response, new Result(true).data("添加成功"));
+    }
+
+    /**
+     * 完成
+     *
+     * @api {post} /api/team/apply 申请加入球队
+     * @apiName team.apply
+     * @apiGroup team
+     * @apiParam {Integer} userId 用户id <必传/>
+     * @apiParam {Integer} teamId 球队id <必传/>
+     *
+     */
+    @RequestMapping(value = "/apply")
+    public void apply(HttpServletResponse response, Integer userId, Integer teamId) {
+
+        MessageJoin messageJoin = new MessageJoin();
+        messageJoin.setStatus(0);
+        messageJoin.setUser(userService.getById(userId));
+        messageJoin.setTeam(teamService.getById(teamId));
+        messageJoinService.create(messageJoin);
+
+        WebUtil.printApi(response, new Result(true).data("申请成功，等待球队确认"));
     }
 
     /**

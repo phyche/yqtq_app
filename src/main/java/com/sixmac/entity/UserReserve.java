@@ -20,9 +20,6 @@ public class UserReserve extends BaseEntity{
     @JoinColumn(name = "reserve_id")
     private Reserve reserve;
 
-    @Column(name = "title")
-    private String title;
-
     @Transient
     private String content;
 
@@ -49,14 +46,6 @@ public class UserReserve extends BaseEntity{
 
     public void setReserve(Reserve reserve) {
         this.reserve = reserve;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getContent() {

@@ -10,5 +10,6 @@ import java.util.List;
  */
 public interface MessageOrderBallService extends ICommonService<MessageOrderBall> {
 
+    //根据用户id查询等待用户处理的好友约球消息
     public List<MessageOrderBall> findByToUserId(Integer userId);
 }

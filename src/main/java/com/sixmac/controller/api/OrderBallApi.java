@@ -49,6 +49,9 @@ public class OrderBallApi extends CommonController {
     @Autowired
     private OrderballMessageService orderballMessageService;
 
+    @Autowired
+    private MessageOrderBallService messageOrderBallService;
+
 
     /**
      * 完成
@@ -303,6 +306,33 @@ public class OrderBallApi extends CommonController {
         WebUtil.printApi(response, result);
     }
 
+    /**
+     * 完成
+     *
+     * @api {post} /api/orderBall/order 约球邀请
+     * @apiName orderBall.order
+     * @apiGroup orderBall
+     * @apiParam {Integer} reserveId 约球id <必传/>
+     * @apiParam {Integer} userId 用户id <必传/>
+     * @apiParam {Integer} toUserId 好友id <必传/>
+     *
+     */
+    @RequestMapping(value = "/order")
+    public void order(HttpServletResponse response,
+                      Integer reserveId,
+                      Integer userId,
+                      Integer toUserId) {
+
+        MessageOrderBall messageOrderBall = new MessageOrderBall();
+
+        messageOrderBall.setStatus(0);
+        messageOrderBall.setUser(userService.getById(userId));
+        messageOrderBall.setToUser(userService.getById(toUserId));
+        messageOrderBall.setReserve(reserveService.getById(reserveId));
+
+        messageOrderBallService.create(messageOrderBall);
+        WebUtil.printApi(response, new Result(true).data(0));
+    }
 
     /**
      * 完成

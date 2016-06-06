@@ -1,13 +1,17 @@
 package com.sixmac.entity;
 
+/*
 import javax.persistence.*;
 
+*/
 /**
- * Created by Administrator on 2016/5/19 0019.
- */
+ * Created by Administrator on 2016/6/3 0003.
+ *//*
+
 @Entity
-@Table(name = "t_team_race")
-public class TeamRace extends BaseEntity{
+@Table(name = "t_message_team")
+public class MessageTeam extends BaseEntity {
+
     @ManyToOne
     @JoinColumn(name = "home_team_id")
     private Team homeTeam;
@@ -16,26 +20,14 @@ public class TeamRace extends BaseEntity{
     @JoinColumn(name = "visiting_team_id")
     private Team visitingTeam;
 
-    /*@ManyToOne
-    @JoinColumn(name = "city_id",referencedColumnName = "city_id")
-    private City city;*/
-
-    @Column(name = "city_id")
-    private Integer cityId;
-
     @Column(name = "status")
-    private Integer status = 0;
-
-    @ManyToOne
-    @JoinColumn(name = "stadium_id")
-    private Stadium stadium;
+    private Integer status;
 
     @Column(name = "start_date")
     private Long startTime;
 
     @Transient
     private String content;
-
 
     public Team getHomeTeam() {
         return homeTeam;
@@ -45,37 +37,12 @@ public class TeamRace extends BaseEntity{
         this.homeTeam = homeTeam;
     }
 
-
     public Team getVisitingTeam() {
         return visitingTeam;
     }
 
     public void setVisitingTeam(Team visitingTeam) {
         this.visitingTeam = visitingTeam;
-    }
-
-    public Integer getCityId() {
-        return cityId;
-    }
-
-    public void setCityId(Integer cityId) {
-        this.cityId = cityId;
-    }
-
-    public Stadium getStadium() {
-        return stadium;
-    }
-
-    public void setStadium(Stadium stadium) {
-        this.stadium = stadium;
-    }
-
-    public Long getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(Long startTime) {
-        this.startTime = startTime;
     }
 
     public Integer getStatus() {
@@ -93,4 +60,13 @@ public class TeamRace extends BaseEntity{
     public void setContent(String content) {
         this.content = content;
     }
+
+    public Long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Long startTime) {
+        this.startTime = startTime;
+    }
 }
+*/

@@ -37,6 +37,9 @@ public class HostRaceApi {
     @Autowired
     private ProvinceService provinceService;
 
+    @Autowired
+    private TeamService teamService;
+
     /**
      * （完成）
      *
@@ -129,7 +132,7 @@ public class HostRaceApi {
     }
 
     /**
-     *
+     * 完成
      *
      * @api {post} /api/hostRace/eventInformation 草根杯赛事资讯
      * @apiName hostRace.eventInformation
@@ -147,5 +150,36 @@ public class HostRaceApi {
         Result obj = new Result(true).data(eventInformation);
         String result = JsonUtil.obj2ApiJson(obj,"hostRace");
         WebUtil.printApi(response, result);
+    }
+
+    /**
+     * 完成
+     *
+     * @api {post} /api/hostRace/apply 草根杯报名
+     * @apiName hostRace.apply
+     * @apiGroup hostRace
+     * @apiParam {Integer} raceId 草根杯id <必传 />
+     *
+     * @apiSuccess {Object}  eventInformation 草根杯赛事资讯列表
+     * @apiSuccess {String} eventInformation.content 草根杯赛事资讯内容
+     */
+    @RequestMapping(value = "/apply")
+    public void apply(HttpServletResponse response, Integer raceId, Integer userId) {
+
+        HostRace hostRace = hostRaceService.getById(raceId);
+
+        Team team = teamService.findListByLeaderId(userId);
+
+        if (team == null) {
+            WebUtil.printApi(response, new Result(true).data("没有球队，提示创建球队"));
+        }else {
+
+            HostJoin hostJoin = new HostJoin();
+            hostJoin.setTeam(team);
+            hostJoin.setHostRace(hostRace);
+            hostRaceService.create(hostRace);
+        }
+
+        WebUtil.printApi(response, new Result(true).data("报名成功"));
     }
 }
