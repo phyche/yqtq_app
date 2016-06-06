@@ -4309,10 +4309,17 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "String",
+            "type": "Double",
             "optional": false,
-            "field": "myAdr",
-            "description": "<p>定位的地址</p>"
+            "field": "longitude",
+            "description": "<p>经度</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Double",
+            "optional": false,
+            "field": "latitude",
+            "description": "<p>纬度</p>"
           },
           {
             "group": "Parameter",
@@ -4374,7 +4381,14 @@ define({ "api": [
             "type": "Integer",
             "optional": false,
             "field": "list.park",
-            "description": "<p>是否有停车场 (0：有 1：没有)</p>"
+            "description": "<p>是否有停车场 (0:无 1:免费 2:收费)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.light",
+            "description": "<p>灯光类型</p>"
           },
           {
             "group": "Success 200",
@@ -4526,8 +4540,8 @@ define({ "api": [
             "group": "Parameter",
             "type": "Integer",
             "optional": false,
-            "field": "siteId",
-            "description": "<p>场地ID &lt;必传/&gt;</p>"
+            "field": "siteTimeId",
+            "description": "<p>预定场地ID &lt;必传/&gt;</p>"
           },
           {
             "group": "Parameter",
@@ -4833,6 +4847,138 @@ define({ "api": [
             "optional": false,
             "field": "status",
             "description": "<p>运动保险状态（0：不买  1：买） &lt;必传/&gt;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Long",
+            "optional": false,
+            "field": "time",
+            "description": "<p>时间戳  &lt;必传/&gt;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "start",
+            "description": "<p>开始时间点（0：不买  1：买） &lt;必传/&gt;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "end",
+            "description": "<p>结束时间点（0：不买  1：买） &lt;必传/&gt;</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "siteTime",
+            "description": "<p>场地预定</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "siteTime.id",
+            "description": "<p>预定id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "siteTime.site",
+            "description": "<p>预定场地</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "siteTime.site.code",
+            "description": "<p>场地编号</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "siteTime.site.type",
+            "description": "<p>场地类型</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "siteTime.startTime",
+            "description": "<p>开始时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "siteTime.endTime",
+            "description": "<p>结束时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "siteTime.site.stadium",
+            "description": "<p>预定球场</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "siteTime.site.stadium.name",
+            "description": "<p>预定球场名字</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "siteTime.area",
+            "description": "<p>预定球场地区</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/StadiumApi.java",
+    "groupTitle": "stadium",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:8080/yqtq_app/api/stadium/siteOrder"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/api/stadium/siteSelect",
+    "title": "场次选择",
+    "name": "stadium_siteSelect",
+    "group": "stadium",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "stadiumId",
+            "description": "<p>球场ID &lt;必传/&gt;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Long",
+            "optional": false,
+            "field": "time",
+            "description": "<p>当天时间戳 &lt;必传/&gt;</p>"
           }
         ]
       }
@@ -4849,31 +4995,24 @@ define({ "api": [
           },
           {
             "group": "Success 200",
-            "type": "Object",
+            "type": "String",
             "optional": false,
-            "field": "stadiumVo",
-            "description": "<p>场地</p>"
+            "field": "site.code",
+            "description": "<p>场地编号</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "stadiumVo.id",
-            "description": "<p>球场id</p>"
+            "field": "site.type",
+            "description": "<p>场地类型  N人制</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "stadiumVo.name",
-            "description": "<p>球场名称</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "optional": false,
-            "field": "stadiumVo.cityId",
-            "description": "<p>球场地区</p>"
+            "field": "list",
+            "description": "<p>预定字符串 (0：不可预定 1：可预订)</p>"
           }
         ]
       }
@@ -4883,7 +5022,7 @@ define({ "api": [
     "groupTitle": "stadium",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/stadium/siteOrder"
+        "url": "http://localhost:8080/yqtq_app/api/stadium/siteSelect"
       }
     ]
   },
@@ -4900,8 +5039,8 @@ define({ "api": [
             "group": "Parameter",
             "type": "Integer",
             "optional": false,
-            "field": "siteId",
-            "description": "<p>场地ID &lt;必传/&gt;</p>"
+            "field": "siteTimeId",
+            "description": "<p>预定场地ID &lt;必传/&gt;</p>"
           },
           {
             "group": "Parameter",

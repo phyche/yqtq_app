@@ -1,6 +1,7 @@
 package com.sixmac.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by Administrator on 2016/5/24 0024.
@@ -21,6 +22,9 @@ public class Site extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "stadium_id")
     private Stadium stadium;
+
+    @Transient
+    private List<String> list;
 
     public String getCode() {
         return code;
@@ -52,5 +56,13 @@ public class Site extends BaseEntity{
 
     public void setStadium(Stadium stadium) {
         this.stadium = stadium;
+    }
+
+    public List<String> getList() {
+        return list;
+    }
+
+    public void setList(List<String> list) {
+        this.list = list;
     }
 }

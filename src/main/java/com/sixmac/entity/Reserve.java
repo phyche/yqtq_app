@@ -48,13 +48,10 @@ public class Reserve extends BaseEntity{
     private Long startTime;
 
     @Column(name = "status")
-    private Integer status;
+    private Integer status =0;
 
     @Column(name = "title")
     private String title;
-
-    @Column(name = "information")
-    private String information;
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "reserve_id")
@@ -201,14 +198,6 @@ public class Reserve extends BaseEntity{
 
     public void setCityId(Integer cityId) {
         this.cityId = cityId;
-    }
-
-    public String getInformation() {
-        return information;
-    }
-
-    public void setInformation(String information) {
-        this.information = information;
     }
 
     public String getTitle() {

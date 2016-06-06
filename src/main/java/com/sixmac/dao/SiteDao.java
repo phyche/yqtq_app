@@ -12,6 +12,6 @@ import java.util.List;
  */
 public interface SiteDao extends JpaRepository<Site, Integer>, JpaSpecificationExecutor<Site> {
 
-    @Query("select a from GirlUser a where a.stadium.id = ?1 ")
+    @Query("select a from Site a where a.stadium.id = ?1 ")
     public List<Site> findByStadiumId(Integer stadiumId);
 }

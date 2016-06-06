@@ -45,7 +45,7 @@ public class Stadium extends BaseEntity{
     private String sodType;
 
     @Column(name = "light")
-    private Integer light;
+    private String light;
 
     @Column(name = "park")
     private Integer park;
@@ -124,11 +124,11 @@ public class Stadium extends BaseEntity{
         this.sodType = sodType;
     }
 
-    public Integer getLight() {
+    public String getLight() {
         return light;
     }
 
-    public void setLight(Integer light) {
+    public void setLight(String light) {
         this.light = light;
     }
 

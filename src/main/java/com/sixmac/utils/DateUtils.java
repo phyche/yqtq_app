@@ -41,8 +41,10 @@ public class DateUtils {
 //
 //		System.out.println(minuteCompare(date,15));
 
-		System.out.println(chinaDayOfWeekAndAM(new Date()));
+//		System.out.println(longToString(System.currentTimeMillis(),"MM月-dd日"));
 
+		System.out.println(stringToDate("2016-06-06 11:00:00","yyyy-MM-dd HH:mm:ss"));
+		System.out.println((dateToDateWithFormat(new Date(),"yyyy-MM-dd HH:mm:ss").getTime() - dateToDateWithFormat(new Date(),"yyyy-MM-dd").getTime())  / 1000 / 3600);
 	}
 
 	/**
@@ -409,5 +411,37 @@ public class DateUtils {
 		return false;
 	}
 
+	// long类型转换为String类型
+	// currentTime要转换的long类型的时间
+	// formatType要转换的string类型的时间格式
+	public static String longToString(long currentTime, String formatType)
+			throws ParseException {
+		Date date = longToDate(currentTime, formatType); // long类型转成Date类型
+		String strTime = dateToStringWithFormat(date, formatType); // date类型转成String
+		return strTime;
+	}
+
+	// string类型转换为date类型
+	// strTime要转换的string类型的时间，formatType要转换的格式yyyy-MM-dd HH:mm:ss//yyyy年MM月dd日
+	// HH时mm分ss秒，
+	// strTime的时间格式必须要与formatType的时间格式相同
+	public static Date stringToDate(String strTime, String formatType)
+			throws ParseException {
+		SimpleDateFormat formatter = new SimpleDateFormat(formatType);
+		Date date = null;
+		date = formatter.parse(strTime);
+		return date;
+	}
+
+	// long转换为Date类型
+	// currentTime要转换的long类型的时间
+	// formatType要转换的时间格式yyyy-MM-dd HH:mm:ss//yyyy年MM月dd日 HH时mm分ss秒
+	public static Date longToDate(long currentTime, String formatType)
+			throws ParseException {
+		Date dateOld = new Date(currentTime); // 根据long类型的毫秒数生命一个date类型的时间
+		String sDateTime = dateToStringWithFormat(dateOld, formatType); // 把date类型的时间转换为string
+		Date date = stringToDate(sDateTime, formatType); // 把String类型转换为Date类型
+		return date;
+	}
 
 }
