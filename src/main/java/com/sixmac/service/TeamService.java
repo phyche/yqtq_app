@@ -13,6 +13,6 @@ public interface TeamService extends ICommonService<Team> {
 
     public Page<Team> page(String name, Integer pageNum, Integer pageSize);
 
-    public Team findListByLeaderId(Integer leaderId);
+    public Team findListByLeaderId(Long leaderId);
 
 }

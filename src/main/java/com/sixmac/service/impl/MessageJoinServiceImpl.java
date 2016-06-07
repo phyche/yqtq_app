@@ -39,12 +39,12 @@ public class MessageJoinServiceImpl implements MessageJoinService {
     }
 
     @Override
-    public MessageJoin getById(int id) {
+    public MessageJoin getById(Long id) {
         return messageJoinDao.findOne(id);
     }
 
     @Override
-    public MessageJoin deleteById(int id) {
+    public MessageJoin deleteById(Long id) {
         MessageJoin messageJoin = getById(id);
         messageJoinDao.delete(messageJoin);
         return messageJoin;
@@ -62,8 +62,8 @@ public class MessageJoinServiceImpl implements MessageJoinService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }

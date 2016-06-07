@@ -38,12 +38,12 @@ public class CredibilityMessageServiceImpl implements CredibilityMessageService 
     }
 
     @Override
-    public CredibilityMessage getById(int id) {
+    public CredibilityMessage getById(Long id) {
         return credibilityMessageDao.findOne(id);
     }
 
     @Override
-    public CredibilityMessage deleteById(int id) {
+    public CredibilityMessage deleteById(Long id) {
         CredibilityMessage credibilityMessage = getById(id);
         credibilityMessageDao.delete(credibilityMessage);
         return credibilityMessage;
@@ -61,8 +61,8 @@ public class CredibilityMessageServiceImpl implements CredibilityMessageService 
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }

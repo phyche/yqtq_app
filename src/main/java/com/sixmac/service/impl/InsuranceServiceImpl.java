@@ -38,12 +38,12 @@ public class InsuranceServiceImpl implements InsuranceService {
     }
 
     @Override
-    public Insurance getById(int id) {
+    public Insurance getById(Long id) {
         return insuranceDao.findOne(id);
     }
 
     @Override
-    public Insurance deleteById(int id) {
+    public Insurance deleteById(Long id) {
         Insurance insurance = getById(id);
         insuranceDao.delete(insurance);
         return insurance;
@@ -61,8 +61,8 @@ public class InsuranceServiceImpl implements InsuranceService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }

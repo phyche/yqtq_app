@@ -48,12 +48,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getById(int id) {
+    public User getById(Long id) {
         return userDao.findOne(id);
     }
 
     @Override
-    public User deleteById(int id) {
+    public User deleteById(Long id) {
         User user = getById(id);
         userDao.delete(user);
         return user;
@@ -71,8 +71,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }
@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService {
             user = new User();
             user.setNickname(nickname);
             user.setAvater(head);
-            user.setCityId(cityDao.findOne(1).getCityId());
+            user.setCityId(cityDao.findOne(1L).getCityId());
             user.setCredibility(0);
             user.setStatus(0);
             user.setCreateDate(new Date().getTime());

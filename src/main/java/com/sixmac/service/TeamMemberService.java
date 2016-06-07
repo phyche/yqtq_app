@@ -10,6 +10,6 @@ import java.util.List;
  */
 public interface TeamMemberService extends ICommonService<TeamMember> {
 
-    public List<TeamMember> findByUserId(Integer userId);
+    public List<TeamMember> findByUserId(Long userId);
 
 }

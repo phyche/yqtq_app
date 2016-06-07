@@ -8,5 +8,5 @@ import com.sixmac.service.common.ICommonService;
  */
 public interface ProvinceService extends ICommonService<Province> {
 
-    public Province getByProvinceId(Integer provinceId);
+    public Province getByProvinceId(Long provinceId);
 }

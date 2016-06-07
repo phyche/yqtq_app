@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 /**
  * Created by Administrator on 2016/5/17 0017 下午 4:52.
  */
-public interface UserDao extends JpaRepository<User, Integer> {
+public interface UserDao extends JpaRepository<User, Long> {
 
     @Query("select a from User a where a.mobile = ?1 ")
     public User findByMobile(String mobile);

@@ -16,7 +16,7 @@ public interface TeamRaceService extends ICommonService<TeamRace> {
 
     public List<TeamRace> findByVisitingId(String visitingId);
 
-    public List<TeamRace> findHomeId(Integer homeId);
+    public List<TeamRace> findHomeId(Long homeId);
 
-    public List<TeamRace> findVisitingId(Integer visitingId);
+    public List<TeamRace> findVisitingId(Long visitingId);
 }

@@ -8,5 +8,5 @@ import com.sixmac.service.common.ICommonService;
  */
 public interface AreaService extends ICommonService<Area> {
 
-    public Area getByAreaId(Integer areaId);
+    public Area getByAreaId(Long areaId);
 }

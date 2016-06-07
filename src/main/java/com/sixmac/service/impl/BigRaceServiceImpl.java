@@ -45,12 +45,12 @@ public class BigRaceServiceImpl implements BigRaceService {
     }
 
     @Override
-    public BigRace getById(int id) {
+    public BigRace getById(Long id) {
         return bigRaceDao.findOne(id);
     }
 
     @Override
-    public BigRace deleteById(int id) {
+    public BigRace deleteById(Long id) {
         BigRace bigRace = getById(id);
         bigRaceDao.delete(bigRace);
         return bigRace;
@@ -68,8 +68,8 @@ public class BigRaceServiceImpl implements BigRaceService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }

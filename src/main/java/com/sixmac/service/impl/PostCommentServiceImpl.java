@@ -38,12 +38,12 @@ public class PostCommentServiceImpl implements PostCommentService {
     }
 
     @Override
-    public PostComment getById(int id) {
+    public PostComment getById(Long id) {
         return postCommentDao.findOne(id);
     }
 
     @Override
-    public PostComment deleteById(int id) {
+    public PostComment deleteById(Long id) {
         PostComment postComment = getById(id);
         postCommentDao.delete(postComment);
         return postComment;
@@ -61,24 +61,24 @@ public class PostCommentServiceImpl implements PostCommentService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }
 
     @Override
-    public List<PostComment> findByPostId(Integer postId) {
+    public List<PostComment> findByPostId(Long postId) {
         return postCommentDao.findByPostId(postId);
     }
 
     @Override
-    public List<PostComment> findByFuserId(Integer userId) {
+    public List<PostComment> findByFuserId(Long userId) {
         return postCommentDao.findByFuserId(userId);
     }
 
     @Override
-    public List<PostComment> findByToUserId(Integer userId) {
+    public List<PostComment> findByToUserId(Long userId) {
         return postCommentDao.findByToUserId(userId);
     }
 }

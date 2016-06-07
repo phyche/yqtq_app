@@ -10,5 +10,5 @@ import java.util.List;
  */
 public interface SiteService extends ICommonService<Site> {
 
-    public List<Site> findByStadiumId(Integer stadiumId);
+    public List<Site> findByStadiumId(Long stadiumId);
 }

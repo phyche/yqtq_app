@@ -38,12 +38,12 @@ public class GirlUserServiceImpl implements GirlUserService {
     }
 
     @Override
-    public GirlUser getById(int id) {
+    public GirlUser getById(Long id) {
         return girlUserDao.findOne(id);
     }
 
     @Override
-    public GirlUser deleteById(int id) {
+    public GirlUser deleteById(Long id) {
         GirlUser girlUser = getById(id);
         girlUserDao.delete(girlUser);
         return girlUser;
@@ -61,19 +61,19 @@ public class GirlUserServiceImpl implements GirlUserService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }
 
     @Override
-    public List<GirlUser> findByUserId(Integer userId) {
+    public List<GirlUser> findByUserId(Long userId) {
         return girlUserDao.findByUserId(userId);
     }
 
     @Override
-    public List<GirlUser> findByGirlId(Integer girlId) {
+    public List<GirlUser> findByGirlId(Long girlId) {
         return girlUserDao.findByGirlId(girlId);
     }
 

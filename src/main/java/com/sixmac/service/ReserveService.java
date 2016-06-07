@@ -12,8 +12,8 @@ import java.util.List;
  */
 public interface ReserveService extends ICommonService<Reserve> {
 
-    public List<Reserve> findByUserId(Integer userId);
+    public List<Reserve> findByUserId(Long userId);
 
-    public Page<Reserve> page(Integer timelimit, Integer type, Integer areaId, Integer pageNum, Integer pageSize);
+    public Page<Reserve> page(Integer timelimit, Integer type, Long areaId, Integer pageNum, Integer pageSize);
 
 }

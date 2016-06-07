@@ -61,7 +61,7 @@ public class TeamApi extends CommonController {
      * @apiParam {Integer} pageSize 每页显示数
      *
      * @apiSuccess {Object}  list 球队列表
-     * @apiSuccess {Integer} list.id 球队id
+     * @apiSuccess {Long} list.id 球队id
      * @apiSuccess {String} list.name 球队名称
      * @apiSuccess {String} list.avater 球队队徽
      * @apiSuccess {Integer} list.count 球队人数
@@ -101,29 +101,29 @@ public class TeamApi extends CommonController {
      * @api {post} /api/team/info 球队详情
      * @apiName team.info
      * @apiGroup team
-     * @apiParam {Integer} teamId 球队Id <必传 />
+     * @apiParam {Long} teamId 球队Id <必传 />
      *
      * @apiSuccess {Object}  team 球队
-     * @apiSuccess {Integer} team.id 球队id
+     * @apiSuccess {Long} team.id 球队id
      * @apiSuccess {String} team.name 球队名称
      * @apiSuccess {String} team.avater 球队队徽
-     * @apiSuccess {Integer} team.slogan 球队口号
+     * @apiSuccess {String} team.slogan 球队口号
      * @apiSuccess {String} team.address 球队地址
-     * @apiSuccess {Integer} team.aveAge 球队平均年龄
-     * @apiSuccess {Integer} team.aveHeight 球队平均身高
-     * @apiSuccess {Integer} team.aveWeight 球队平均体重
+     * @apiSuccess {Double} team.aveAge 球队平均年龄
+     * @apiSuccess {Double} team.aveHeight 球队平均身高
+     * @apiSuccess {Double} team.aveWeight 球队平均体重
      *
      * @apiSuccess {Object}  team.leaderUser 队长
-     * @apiSuccess {Integer} team.leaderUser.id 队长id
+     * @apiSuccess {Long} team.leaderUser.id 队长id
      * @apiSuccess {String} team.leaderUser.avater 队长头像
      *
      * @apiSuccess {Object}  userList 队员
-     * @apiSuccess {Integer} userList.id 队员id
+     * @apiSuccess {Long} userList.id 队员id
      * @apiSuccess {String} userList.avater 队员头像
      *
      */
     @RequestMapping(value = "/info")
-    public void info(HttpServletResponse response, Integer teamId) {
+    public void info(HttpServletResponse response, Long teamId) {
 
         if (null == teamId) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -167,16 +167,16 @@ public class TeamApi extends CommonController {
      * @api {post} /api/team/add 创建球队
      * @apiName team.add
      * @apiGroup team
-     * @apiParam {Integer} userId 用户Id <必传 />
+     * @apiParam {Long} userId 用户Id <必传 />
      * @apiParam {String} name 球队名称 <必传 />
-     * @apiParam {Integer} slogan 球队口号 <必传 />
-     * @apiParam {Integer} address 球队地址
+     * @apiParam {String} slogan 球队口号 <必传 />
+     * @apiParam {String} address 球队地址
      *
      *
      */
     @RequestMapping(value = "/add")
     public void add(HttpServletResponse response,
-                    Integer userId,
+                    Long userId,
                     String name,
                     String address,
                     String slogan,
@@ -211,12 +211,12 @@ public class TeamApi extends CommonController {
      * @api {post} /api/team/addFriend 邀请朋友加入球队
      * @apiName team.addFriend
      * @apiGroup team
-     * @apiParam {Integer} userId 用户id <必传/>
-     * @apiParam {Integer} toUserId 好友id <必传/>
+     * @apiParam {Long} userId 用户id <必传/>
+     * @apiParam {Long} toUserId 好友id <必传/>
      *
      */
     @RequestMapping(value = "/addFriend")
-    public void addFriend(HttpServletResponse response, Integer userId, Integer toUserId) {
+    public void addFriend(HttpServletResponse response, Long userId, Long toUserId) {
 
         if (null == userId || toUserId == null) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -241,12 +241,12 @@ public class TeamApi extends CommonController {
      * @api {post} /api/team/apply 申请加入球队
      * @apiName team.apply
      * @apiGroup team
-     * @apiParam {Integer} userId 用户id <必传/>
-     * @apiParam {Integer} teamId 球队id <必传/>
+     * @apiParam {Long} userId 用户id <必传/>
+     * @apiParam {Long} teamId 球队id <必传/>
      *
      */
     @RequestMapping(value = "/apply")
-    public void apply(HttpServletResponse response, Integer userId, Integer teamId) {
+    public void apply(HttpServletResponse response, Long userId, Long teamId) {
 
         if (null == teamId || userId == null) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -269,17 +269,17 @@ public class TeamApi extends CommonController {
      * @api {post} /api/team/order 约球队
      * @apiName team.order
      * @apiGroup team
-     * @apiParam {Integer} userId 用户Id <必传 />
-     * @apiParam {Integer} teamId 球队Id <必传 />
+     * @apiParam {Long} userId 用户Id <必传 />
+     * @apiParam {Long} teamId 球队Id <必传 />
      * @apiParam {Long} time 约球时间
-     * @apiParam {Integer} cityId 约球地址
+     * @apiParam {Long} cityId 约球地址
      */
     @RequestMapping(value = "/order")
     public void order(HttpServletResponse response,
-                      Integer userId,
-                      Integer teamId,
+                      Long userId,
+                      Long teamId,
                       Long time,
-                      Integer cityId) {
+                      Long cityId) {
 
         if (null == teamId || userId == null ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -320,13 +320,13 @@ public class TeamApi extends CommonController {
      * @apiParam {Integer} teamId 球队Id <必传 />
      *
      * @apiSuccess {Object}  userList 队员
-     * @apiSuccess {Integer} userList.id 队员id
+     * @apiSuccess {Long} userList.id 队员id
      * @apiSuccess {String} userList.name 队员昵称
      * @apiSuccess {String} userList.avater 队员头像
      *
      */
     @RequestMapping(value = "/playerList")
-    public void playerList(HttpServletResponse response, Integer teamId) {
+    public void playerList(HttpServletResponse response, Long teamId) {
 
         if (null == teamId ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -349,10 +349,10 @@ public class TeamApi extends CommonController {
      * @api {post} /api/team/schedule 日程
      * @apiName team.schedule
      * @apiGroup team
-     * @apiParam {Integer} teamId 球队Id <必传 />
+     * @apiParam {Long} teamId 球队Id <必传 />
      *
      * @apiSuccess {Object}  watchBallVos 球员所在球队为主队赛事列表
-     * @apiSuccess {Integer} watchBallVos.id 赛事id
+     * @apiSuccess {Long} watchBallVos.id 赛事id
      * @apiSuccess {String} watchBallVos.homeTeamName 主队队名
      * @apiSuccess {String} watchBallVos.homeTeamAvater 主队队徽
      * @apiSuccess {String} watchBallVos.vTeamName 客队队名
@@ -362,7 +362,7 @@ public class TeamApi extends CommonController {
      * @apiSuccess {Long} watchBallVos.startTime 开始时间
      *
      * @apiSuccess {Object}  watchBallVoList 球员所在球队为客队赛事列表
-     * @apiSuccess {Integer} watchBallVoList.id 赛事id
+     * @apiSuccess {Long} watchBallVoList.id 赛事id
      * @apiSuccess {String} watchBallVoList.homeTeamName 主队队名
      * @apiSuccess {String} watchBallVoList.homeTeamAvater 主队队徽
      * @apiSuccess {String} watchBallVoList.vTeamName 客队队名
@@ -372,7 +372,7 @@ public class TeamApi extends CommonController {
      * @apiSuccess {Long} watchBallVoList.startTime 开始时间
      */
     @RequestMapping(value = "/schedule")
-    private void schedule(HttpServletResponse response, Integer teamId) {
+    private void schedule(HttpServletResponse response, Long teamId) {
 
         if (null == teamId ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));

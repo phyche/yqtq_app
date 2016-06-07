@@ -10,6 +10,6 @@ import java.util.List;
  */
 public interface HostJoinService extends ICommonService<HostJoin> {
 
-    public List<HostJoin> findByHostRaceId(Integer raceId);
+    public List<HostJoin> findByHostRaceId(Long raceId);
 
 }

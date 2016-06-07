@@ -45,12 +45,12 @@ public class WatchingRaceServiceImpl implements WatchingRaceService {
     }
 
     @Override
-    public WatchingRace getById(int id) {
+    public WatchingRace getById(Long id) {
         return watchingRaceDao.findOne(id);
     }
 
     @Override
-    public WatchingRace deleteById(int id) {
+    public WatchingRace deleteById(Long id) {
         WatchingRace watchingRace = getById(id);
         watchingRaceDao.delete(watchingRace);
         return watchingRace;
@@ -68,8 +68,8 @@ public class WatchingRaceServiceImpl implements WatchingRaceService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }

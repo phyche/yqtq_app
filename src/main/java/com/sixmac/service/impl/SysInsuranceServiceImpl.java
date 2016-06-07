@@ -38,12 +38,12 @@ public class SysInsuranceServiceImpl implements SysInsuranceService {
     }
 
     @Override
-    public SysInsurance getById(int id) {
+    public SysInsurance getById(Long id) {
         return sysInsuranceDao.findOne(id);
     }
 
     @Override
-    public SysInsurance deleteById(int id) {
+    public SysInsurance deleteById(Long id) {
         SysInsurance insurance = getById(id);
         sysInsuranceDao.delete(insurance);
         return insurance;
@@ -61,8 +61,8 @@ public class SysInsuranceServiceImpl implements SysInsuranceService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }

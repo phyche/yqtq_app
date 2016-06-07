@@ -38,12 +38,12 @@ public class VipLevelServiceImpl implements VipLevelService {
     }
 
     @Override
-    public VipLevel getById(int id) {
+    public VipLevel getById(Long id) {
         return vipLevelDao.findOne(id);
     }
 
     @Override
-    public VipLevel deleteById(int id) {
+    public VipLevel deleteById(Long id) {
         VipLevel vipLevel = getById(id);
         vipLevelDao.delete(vipLevel);
         return vipLevel;
@@ -61,8 +61,8 @@ public class VipLevelServiceImpl implements VipLevelService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }

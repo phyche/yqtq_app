@@ -61,7 +61,7 @@ public class OrderBallApi extends CommonController {
      * @apiGroup orderBall
      * @apiParam {Integer} timelimit 时间期限
      * @apiParam {Integer} type 球赛类型 N人制 N代表数量
-     * @apiParam {Integer} areaId 区域ID
+     * @apiParam {Long} areaId 区域ID
      * @apiParam {Integer} pageNum 当前页
      * @apiParam {Integer} pageSize 每页显示数
      *
@@ -88,7 +88,7 @@ public class OrderBallApi extends CommonController {
     public void list(HttpServletResponse response,
                      Integer timelimit,
                      Integer type,
-                     Integer areaId,
+                     Long areaId,
                      Integer pageNum,
                      Integer pageSize) {
 
@@ -114,10 +114,10 @@ public class OrderBallApi extends CommonController {
      * @api {post} /api/orderBall/orderInfo 约球的详情
      * @apiName orderBall.orderInfo
      * @apiGroup orderBall
-     * @apiParam {Integer} reserveId 约球ID <必传 />
+     * @apiParam {Long} reserveId 约球ID <必传 />
      *
      * @apiSuccess {Object}  reserve 约球列表
-     * @apiSuccess {Integer} reserve.id 约球id
+     * @apiSuccess {Long} reserve.id 约球id
      * @apiSuccess {String} reserve.content 约球内容
      * @apiSuccess {Integer} reserve.matchType 赛制
      * @apiSuccess {Integer} reserve.joinCount 已报人数
@@ -126,19 +126,19 @@ public class OrderBallApi extends CommonController {
      * @apiSuccess {String} reserve.user.nickname 创建人昵称
      * @apiSuccess {String} reserve.user.avater 创建人头像
      * @apiSuccess {Object} reserve.stadium 球场
-     * @apiSuccess {Integer} reserve.stadium.id 球场id
+     * @apiSuccess {Long} reserve.stadium.id 球场id
      * @apiSuccess {String} reserve.stadium.name 球场名字
      * @apiSuccess {Double} reserve.avePrice AA制金额
      * @apiSuccess {Double} reserve.sumPrice 支付总金额
      * @apiSuccess {Object} userList 已报名球友列表
-     * @apiSuccess {Integer} userList.id 报名球友id
+     * @apiSuccess {Long} userList.id 报名球友id
      * @apiSuccess {String} userList.nickname 报名球友昵称
      * @apiSuccess {String} userList.avater 报名球友头像
      * @apiSuccess {Long} reserve.startTime 开始时间
      *
      */
     @RequestMapping(value = "/orderInfo")
-    public void orderInfo(HttpServletResponse response, Integer reserveId) {
+    public void orderInfo(HttpServletResponse response, Long reserveId) {
 
         if (null == reserveId ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -214,7 +214,7 @@ public class OrderBallApi extends CommonController {
      * * @api {post} /api/orderBall/info 球友个人资料
      * @apiName orderBall.info
      * @apiGroup orderBall
-     * @apiParam {Integer} playerId 球友ID <必传 />
+     * @apiParam {Long} playerId 球友ID <必传 />
      *
      * @apiSuccess {Object}  user 球友列表
      * @apiSuccess {String} user.avater 球友头像
@@ -233,11 +233,11 @@ public class OrderBallApi extends CommonController {
      * @apiSuccess {Integer} team.battleNum 球队应战数
      * @apiSuccess {Integer} team.count 球队总人数
      * @apiSuccess {Object} team.list 球队球员列表
-     * @apiSuccess {Integer} team.list .id 球队球员id
+     * @apiSuccess {Long} team.list .id 球队球员id
      * @apiSuccess {String} team.list.avater 球队球员头像
      */
     @RequestMapping(value = "/info")
-    public void info(HttpServletResponse response, Integer playerId) {
+    public void info(HttpServletResponse response, Long playerId) {
 
         if (null == playerId ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -270,10 +270,10 @@ public class OrderBallApi extends CommonController {
      *  @api {post} /api/orderBall/orderList 球友的约球列表
      * @apiName orderBall.orderList
      * @apiGroup orderBall
-     * @apiParam {Integer} playerId 球友ID <必传 />
+     * @apiParam {Long} playerId 球友ID <必传 />
      *
      * @apiSuccess {Object}  list 约球列表
-     * @apiSuccess {Integer} list.id 约球id
+     * @apiSuccess {Long} list.id 约球id
      * @apiSuccess {Integer} list.content 约球内容
      * @apiSuccess {Integer} list.matchType 赛制
      * @apiSuccess {Integer} list.joinCount 已报人数
@@ -287,7 +287,7 @@ public class OrderBallApi extends CommonController {
      *
      */
     @RequestMapping(value = "/orderList")
-    public void orderList(HttpServletResponse response, Integer playerId) {
+    public void orderList(HttpServletResponse response, Long playerId) {
 
         if (null == playerId ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -321,16 +321,16 @@ public class OrderBallApi extends CommonController {
      * @api {post} /api/orderBall/order 约球邀请
      * @apiName orderBall.order
      * @apiGroup orderBall
-     * @apiParam {Integer} reserveId 约球id <必传/>
-     * @apiParam {Integer} userId 用户id <必传/>
-     * @apiParam {Integer} toUserId 好友id <必传/>
+     * @apiParam {Long} reserveId 约球id <必传/>
+     * @apiParam {Long} userId 用户id <必传/>
+     * @apiParam {Long} toUserId 好友id <必传/>
      *
      */
     @RequestMapping(value = "/order")
     public void order(HttpServletResponse response,
-                      Integer reserveId,
-                      Integer userId,
-                      Integer toUserId) {
+                      Long reserveId,
+                      Long userId,
+                      Long toUserId) {
 
         if (null == userId || reserveId == null || toUserId == null) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -354,7 +354,7 @@ public class OrderBallApi extends CommonController {
      *  @api {post} /api/orderBall/raceList 球友的赛事列表
      * @apiName orderBall.raceList
      * @apiGroup orderBall
-     * @apiParam {Integer} playerId 球友ID <必传 />
+     * @apiParam {Long} playerId 球友ID <必传 />
      *
      * @apiSuccess {Object}  watchBallVos 球员所在球队为主队赛事列表
      * @apiSuccess {String} watchBallVos.homeTeamName 主队队名
@@ -375,7 +375,7 @@ public class OrderBallApi extends CommonController {
      * @apiSuccess {Long} watchBallVoList.startTime 开始时间
      */
     @RequestMapping(value = "/raceList")
-    public void raceList(HttpServletResponse response, Integer playerId) {
+    public void raceList(HttpServletResponse response, Long playerId) {
 
         if (null == playerId ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -452,8 +452,8 @@ public class OrderBallApi extends CommonController {
      * @api {post} /api/orderBall/raceInfo 球友的赛事详情
      * @apiName orderBall.raceInfo
      * @apiGroup orderBall
-     * @apiParam {Integer} userId 球友ID <必传 />
-     * @apiParam {Integer} raceId 赛事ID <必传 />
+     * @apiParam {Long} userId 球友ID <必传 />
+     * @apiParam {Long} raceId 赛事ID <必传 />
      *
      * @apiSuccess {Object}  watchBallVo 球员赛事
      * @apiSuccess {String} watchBallVo.homeTeamName 主队队名
@@ -466,7 +466,7 @@ public class OrderBallApi extends CommonController {
      * @apiSuccess {Long} mobile 手机号
      */
     @RequestMapping(value = "/raceInfo")
-    public void raceInfo(HttpServletResponse response, Integer userId, Integer raceId, String mobile) {
+    public void raceInfo(HttpServletResponse response, Long userId, Long raceId, String mobile) {
 
         if (null == userId || raceId == null) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -523,8 +523,8 @@ public class OrderBallApi extends CommonController {
      * @api {post} /api/orderBall/pay 球友的约球支付
      * @apiName orderBall.pay
      * @apiGroup orderBall
-     * @apiParam {Integer} reserveId 约球ID <必传 />
-     * @apiParam {Integer} userId 赛事ID <必传 />
+     * @apiParam {Long} reserveId 约球ID <必传 />
+     * @apiParam {Long} userId 赛事ID <必传 />
      *
      * @apiSuccess {Object} order 订单
      * @apiSuccess {String} order.userName 用户昵称
@@ -533,7 +533,7 @@ public class OrderBallApi extends CommonController {
      * @apiSuccess {Long} order.sn 订单号
      */
     @RequestMapping(value = "/pay")
-    public void pay(HttpServletResponse response, Integer reserveId, Integer userId, Double money) {
+    public void pay(HttpServletResponse response, Long reserveId, Long userId, Double money) {
 
         if (null == userId || reserveId == null) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));

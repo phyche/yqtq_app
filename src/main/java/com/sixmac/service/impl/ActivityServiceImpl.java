@@ -44,12 +44,12 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public Activity getById(int id) {
+    public Activity getById(Long id) {
         return activityDao.findOne(id);
     }
 
     @Override
-    public Activity deleteById(int id) {
+    public Activity deleteById(Long id) {
         Activity activity = getById(id);
         activityDao.delete(activity);
         return activity;
@@ -67,8 +67,8 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }

@@ -38,12 +38,12 @@ public class OrderballMessageServiceImpl implements OrderballMessageService {
     }
 
     @Override
-    public OrderballMessage getById(int id) {
+    public OrderballMessage getById(Long id) {
         return orderballMessageDao.findOne(id);
     }
 
     @Override
-    public OrderballMessage deleteById(int id) {
+    public OrderballMessage deleteById(Long id) {
         OrderballMessage orderballMessage = getById(id);
         orderballMessageDao.delete(orderballMessage);
         return orderballMessage;
@@ -61,8 +61,8 @@ public class OrderballMessageServiceImpl implements OrderballMessageService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }

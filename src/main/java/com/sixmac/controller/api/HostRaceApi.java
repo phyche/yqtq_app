@@ -49,8 +49,8 @@ public class HostRaceApi {
      * @apiGroup hostRace
      *
      * @apiSuccess {Object}  hostRace 草根杯列表
-     * @apiSuccess {Integer} hostRace.id 草根杯id
-     * @apiSuccess {Integer} hostRace.id 草根杯赛制
+     * @apiSuccess {Long} hostRace.id 草根杯id
+     * @apiSuccess {Long} hostRace.id 草根杯赛制
      * @apiSuccess {String} hostRace.name 草根杯名字
      * @apiSuccess {String} hostRace.avater 草根杯封面
      * @apiSuccess {Long} hostRace.createDate 草根杯创建时间
@@ -77,7 +77,7 @@ public class HostRaceApi {
      * @apiParam {Integer} raceId 草根杯id <必传 />
      *
      * @apiSuccess {Object}  hostRace 草根杯列表
-     * @apiSuccess {Integer} hostRace.id 草根杯id
+     * @apiSuccess {Long} hostRace.id 草根杯id
      * @apiSuccess {Integer} hostRace.type 草根杯赛制
      * @apiSuccess {String} hostRace.name 草根杯名字
      * @apiSuccess {String} hostRace.avater 草根杯封面
@@ -86,7 +86,7 @@ public class HostRaceApi {
      * @apiSuccess {String} hostRace.stadium.name 球场名称
      */
     @RequestMapping(value = "/info")
-    public void info(HttpServletResponse response, Integer raceId) {
+    public void info(HttpServletResponse response, Long raceId) {
 
         if (null == raceId ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -110,7 +110,7 @@ public class HostRaceApi {
      *
      * @apiSuccess {Object}  hostRace 草根杯列表
      * @apiSuccess {Object} hostRace.team 草根杯参赛队伍列表
-     * @apiSuccess {Integer} hostRace.team.id 球队id
+     * @apiSuccess {Long} hostRace.team.id 球队id
      * @apiSuccess {String} hostRace.team.name 球队名称
      * @apiSuccess {String} hostRace.team.avater 球队队徽
      * @apiSuccess {Integer} hostRace.team.count 球队总人数
@@ -119,7 +119,7 @@ public class HostRaceApi {
      * @apiSuccess {Integer} hostRace.team.num 球队场次
      */
     @RequestMapping(value = "/teamList")
-    public void teamList(HttpServletResponse response, Integer raceId) {
+    public void teamList(HttpServletResponse response, Long raceId) {
 
         if (null == raceId ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -148,13 +148,13 @@ public class HostRaceApi {
      * @api {post} /api/hostRace/eventInformation 草根杯赛事资讯
      * @apiName hostRace.eventInformation
      * @apiGroup hostRace
-     * @apiParam {Integer} raceId 草根杯id <必传 />
+     * @apiParam {Long} raceId 草根杯id <必传 />
      *
      * @apiSuccess {Object}  eventInformation 草根杯赛事资讯列表
      * @apiSuccess {String} eventInformation.content 草根杯赛事资讯内容
      */
     @RequestMapping(value = "/eventInformation")
-    public void eventInformation(HttpServletResponse response, Integer raceId) {
+    public void eventInformation(HttpServletResponse response, Long raceId) {
 
         if (null == raceId ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -174,14 +174,14 @@ public class HostRaceApi {
      * @api {post} /api/hostRace/apply 草根杯报名
      * @apiName hostRace.apply
      * @apiGroup hostRace
-     * @apiParam {Integer} raceId 草根杯id <必传 />
-     * @apiParam {Integer} userId 用户id <必传 />
+     * @apiParam {Long} raceId 草根杯id <必传 />
+     * @apiParam {Long} userId 用户id <必传 />
      *
      * @apiSuccess {Object}  eventInformation 草根杯赛事资讯列表
      * @apiSuccess {String} eventInformation.content 草根杯赛事资讯内容
      */
     @RequestMapping(value = "/apply")
-    public void apply(HttpServletResponse response, Integer raceId, Integer userId) {
+    public void apply(HttpServletResponse response, Long raceId, Long userId) {
 
         if (null == raceId || userId == null) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));

@@ -10,5 +10,5 @@ import java.util.List;
  */
 public interface PostImageService extends ICommonService<PostImage> {
 
-    public List<PostImage> findByPostId(Integer postId);
+    public List<PostImage> findByPostId(Long postId);
 }

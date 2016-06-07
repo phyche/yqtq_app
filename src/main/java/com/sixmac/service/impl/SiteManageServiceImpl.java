@@ -38,12 +38,12 @@ public class SiteManageServiceImpl implements SiteManageService {
     }
 
     @Override
-    public SiteManage getById(int id) {
+    public SiteManage getById(Long id) {
         return siteManageDao.findOne(id);
     }
 
     @Override
-    public SiteManage deleteById(int id) {
+    public SiteManage deleteById(Long id) {
         SiteManage siteManage = getById(id);
         siteManageDao.delete(siteManage);
         return siteManage;
@@ -61,14 +61,14 @@ public class SiteManageServiceImpl implements SiteManageService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }
 
     @Override
-    public SiteManage findBySiteAndTime(Integer siteId, Long time) {
+    public SiteManage findBySiteAndTime(Long siteId, Long time) {
         return siteManageDao.findBySiteAndTime(siteId,time);
     }
 }

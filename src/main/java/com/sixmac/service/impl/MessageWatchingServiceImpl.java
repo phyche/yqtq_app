@@ -38,12 +38,12 @@ public class MessageWatchingServiceImpl implements MessageWatchingService {
     }
 
     @Override
-    public MessageWatching getById(int id) {
+    public MessageWatching getById(Long id) {
         return messageWatchingDao.findOne(id);
     }
 
     @Override
-    public MessageWatching deleteById(int id) {
+    public MessageWatching deleteById(Long id) {
         MessageWatching messageWatching = getById(id);
         messageWatchingDao.delete(messageWatching);
         return messageWatching;
@@ -61,14 +61,14 @@ public class MessageWatchingServiceImpl implements MessageWatchingService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }
 
     @Override
-    public List<MessageWatching> findByToUserId(Integer userId) {
+    public List<MessageWatching> findByToUserId(Long userId) {
         return messageWatchingDao.findByToUserId(userId);
     }
 }

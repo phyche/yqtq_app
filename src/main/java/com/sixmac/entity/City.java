@@ -12,34 +12,42 @@ public class City {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(name = "city_id")
-    private Integer cityId;
+    private Long cityId;
 
     @Column(name = "city")
     private String city;
 
     @Column(name = "province_id")
-    private Integer provinceId;
+    private Long provinceId;
 
     @Transient
     private List<Area> list;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Integer getCityId() {
+    public Long getCityId() {
         return cityId;
     }
 
-    public void setCityId(Integer cityId) {
+    public void setCityId(Long cityId) {
         this.cityId = cityId;
+    }
+
+    public Long getProvinceId() {
+        return provinceId;
+    }
+
+    public void setProvinceId(Long provinceId) {
+        this.provinceId = provinceId;
     }
 
     public String getCity() {
@@ -48,14 +56,6 @@ public class City {
 
     public void setCity(String city) {
         this.city = city;
-    }
-
-    public Integer getProvinceId() {
-        return provinceId;
-    }
-
-    public void setProvinceId(Integer provinceId) {
-        this.provinceId = provinceId;
     }
 
     public List<Area> getList() {

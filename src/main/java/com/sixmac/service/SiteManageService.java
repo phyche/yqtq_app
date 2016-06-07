@@ -8,5 +8,5 @@ import com.sixmac.service.common.ICommonService;
  */
 public interface SiteManageService extends ICommonService<SiteManage> {
 
-    public SiteManage findBySiteAndTime(Integer siteId, Long time);
+    public SiteManage findBySiteAndTime(Long siteId, Long time);
 }

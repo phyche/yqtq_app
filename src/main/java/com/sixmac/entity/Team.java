@@ -27,10 +27,10 @@ public class Team extends BaseEntity{
     private Area area;*/
 
     @Column(name = "province_id")
-    private Integer provinceId;
+    private Long provinceId;
 
     @Column(name = "city_id")
-    private Integer cityId;
+    private Long cityId;
 
     @Transient
     private String areaName;
@@ -196,20 +196,12 @@ public class Team extends BaseEntity{
         this.num = num;
     }
 
-    public Integer getProvinceId() {
+    public Long getProvinceId() {
         return provinceId;
     }
 
-    public void setProvinceId(Integer provinceId) {
+    public void setProvinceId(Long provinceId) {
         this.provinceId = provinceId;
-    }
-
-    public Integer getCityId() {
-        return cityId;
-    }
-
-    public void setCityId(Integer cityId) {
-        this.cityId = cityId;
     }
 
     public String getAreaName() {
@@ -235,4 +227,14 @@ public class Team extends BaseEntity{
     public void setProvinceName(String provinceName) {
         this.provinceName = provinceName;
     }
+
+    public Long getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(Long cityId) {
+        this.cityId = cityId;
+    }
+
+
 }

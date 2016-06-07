@@ -44,12 +44,12 @@ public class GirlImageServiceImpl implements GirlImageService {
     }
 
     @Override
-    public GirlImage getById(int id) {
+    public GirlImage getById(Long id) {
         return girlImageDao.findOne(id);
     }
 
     @Override
-    public GirlImage deleteById(int id) {
+    public GirlImage deleteById(Long id) {
         GirlImage girlImage = getById(id);
         girlImageDao.delete(girlImage);
         return girlImage;
@@ -67,14 +67,14 @@ public class GirlImageServiceImpl implements GirlImageService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }
 
     @Override
-    public List<GirlImage> findByGirlId(Integer girlId) {
+    public List<GirlImage> findByGirlId(Long girlId) {
         return girlImageDao.findByGirlId(girlId);
     }
 

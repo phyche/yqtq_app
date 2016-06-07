@@ -45,12 +45,12 @@ public class UserReserveServiceImpl implements UserReserveService {
     }
 
     @Override
-    public UserReserve getById(int id) {
+    public UserReserve getById(Long id) {
         return userReserveDao.findOne(id);
     }
 
     @Override
-    public UserReserve deleteById(int id) {
+    public UserReserve deleteById(Long id) {
         UserReserve userReserve = getById(id);
         userReserveDao.delete(userReserve);
         return userReserve;
@@ -68,19 +68,19 @@ public class UserReserveServiceImpl implements UserReserveService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }
 
     @Override
-    public List<UserReserve> findByReserverId(Integer reserveId) {
+    public List<UserReserve> findByReserverId(Long reserveId) {
         return userReserveDao.findByReserverId(reserveId);
     }
 
     @Override
-    public List<UserReserve> findByUserId(Integer userId) {
+    public List<UserReserve> findByUserId(Long userId) {
         return userReserveDao.findByUserId(userId);
     }
 }

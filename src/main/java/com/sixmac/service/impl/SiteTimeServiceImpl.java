@@ -38,12 +38,12 @@ public class SiteTimeServiceImpl implements SiteTimeService {
     }
 
     @Override
-    public SiteTime getById(int id) {
+    public SiteTime getById(Long id) {
         return siteTimeDao.findOne(id);
     }
 
     @Override
-    public SiteTime deleteById(int id) {
+    public SiteTime deleteById(Long id) {
         SiteTime siteTime = getById(id);
         siteTimeDao.delete(siteTime);
         return siteTime;
@@ -61,19 +61,19 @@ public class SiteTimeServiceImpl implements SiteTimeService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }
 
     @Override
-    public List<SiteTime> findBySiteId(Integer siteId) {
+    public List<SiteTime> findBySiteId(Long siteId) {
         return siteTimeDao.findBySiteId(siteId);
     }
 
     @Override
-    public SiteTime findBySiteAndTime(Integer siteId, Long time) {
+    public SiteTime findBySiteAndTime(Long siteId, Long time) {
         return siteTimeDao.findBySiteAndTime(siteId,time);
     }
 }

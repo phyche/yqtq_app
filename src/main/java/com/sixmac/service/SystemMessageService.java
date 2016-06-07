@@ -10,5 +10,5 @@ import java.util.List;
  */
 public interface SystemMessageService extends ICommonService<SystemMessage> {
 
-    public List<SystemMessage> findByToUserId(Integer userId);
+    public List<SystemMessage> findByToUserId(Long userId);
 }

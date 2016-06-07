@@ -10,8 +10,8 @@ import java.util.List;
  */
 public interface GirlUserService extends ICommonService<GirlUser> {
 
-    public List<GirlUser> findByUserId(Integer userId);
+    public List<GirlUser> findByUserId(Long userId);
 
-    public List<GirlUser> findByGirlId(Integer girlId);
+    public List<GirlUser> findByGirlId(Long girlId);
 
 }

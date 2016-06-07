@@ -11,30 +11,30 @@ public class Area {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(name = "area_id")
-    private Integer areaId;
+    private Long areaId;
 
     @Column(name = "area")
     private String area;
 
     @Column(name = "city_id")
-    private Integer cityId;
+    private Long cityId;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Integer getAreaId() {
+    public Long getAreaId() {
         return areaId;
     }
 
-    public void setAreaId(Integer areaId) {
+    public void setAreaId(Long areaId) {
         this.areaId = areaId;
     }
 
@@ -46,11 +46,11 @@ public class Area {
         this.area = area;
     }
 
-    public Integer getCityId() {
+    public Long getCityId() {
         return cityId;
     }
 
-    public void setCityId(Integer cityId) {
+    public void setCityId(Long cityId) {
         this.cityId = cityId;
     }
 }

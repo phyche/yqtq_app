@@ -48,12 +48,12 @@ public class ReserveServiceImpl implements ReserveService {
     }
 
     @Override
-    public Reserve getById(int id) {
+    public Reserve getById(Long id) {
         return reserveDao.findOne(id);
     }
 
     @Override
-    public Reserve deleteById(int id) {
+    public Reserve deleteById(Long id) {
         Reserve booking = getById(id);
         reserveDao.delete(booking);
         return booking;
@@ -71,19 +71,19 @@ public class ReserveServiceImpl implements ReserveService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }
 
     @Override
-    public List<Reserve> findByUserId(Integer userId) {
+    public List<Reserve> findByUserId(Long userId) {
         return reserveDao.findByUserId(userId);
     }
 
     @Override
-    public Page<Reserve> page(final Integer timelimit, final Integer type, final Integer areaId, Integer pageNum, Integer pageSize) {
+    public Page<Reserve> page(final Integer timelimit, final Integer type, final Long areaId, Integer pageNum, Integer pageSize) {
         PageRequest pageRequest = new PageRequest(pageNum - 1, pageSize, Sort.Direction.DESC, "id");
 
         Page<Reserve> page = reserveDao.findAll(new Specification<Reserve>() {

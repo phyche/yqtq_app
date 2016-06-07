@@ -38,12 +38,12 @@ public class VipMessageServiceImpl implements VipMessageService {
     }
 
     @Override
-    public VipMessage getById(int id) {
+    public VipMessage getById(Long id) {
         return vipMessageDao.findOne(id);
     }
 
     @Override
-    public VipMessage deleteById(int id) {
+    public VipMessage deleteById(Long id) {
         VipMessage vipMessage = getById(id);
         vipMessageDao.delete(vipMessage);
         return vipMessage;
@@ -61,8 +61,8 @@ public class VipMessageServiceImpl implements VipMessageService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }

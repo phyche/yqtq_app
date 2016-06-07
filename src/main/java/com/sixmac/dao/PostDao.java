@@ -11,10 +11,10 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/5/19 0019 下午 1:43.
  */
-public interface PostDao extends JpaRepository<Post, Integer>, JpaSpecificationExecutor<Post> {
+public interface PostDao extends JpaRepository<Post, Long>, JpaSpecificationExecutor<Post> {
 
     //根据用户id筛选队赛
     @Query("select a from Post a where a.user.id = ?1 ")
-    public List<Post> findByUserId(Integer userId);
+    public List<Post> findByUserId(Long userId);
 
 }

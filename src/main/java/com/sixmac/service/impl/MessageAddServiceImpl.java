@@ -38,12 +38,12 @@ public class MessageAddServiceImpl implements MessageAddService {
     }
 
     @Override
-    public MessageAdd getById(int id) {
+    public MessageAdd getById(Long id) {
         return messageAddDao.findOne(id);
     }
 
     @Override
-    public MessageAdd deleteById(int id) {
+    public MessageAdd deleteById(Long id) {
         MessageAdd messageAdd = getById(id);
         messageAddDao.delete(messageAdd);
         return messageAdd;
@@ -61,24 +61,24 @@ public class MessageAddServiceImpl implements MessageAddService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }
 
     @Override
-    public List<MessageAdd> findByUserId(Integer userId) {
+    public List<MessageAdd> findByUserId(Long userId) {
         return messageAddDao.findByUserId(userId);
     }
 
     @Override
-    public List<MessageAdd> findByToUserId(Integer userId) {
+    public List<MessageAdd> findByToUserId(Long userId) {
         return messageAddDao.findByToUserId(userId);
     }
 
     @Override
-    public List<MessageAdd> findUserId(Integer userId) {
+    public List<MessageAdd> findUserId(Long userId) {
         return messageAddDao.findUserId(userId);
     }
 }

@@ -38,12 +38,12 @@ public class UserOtherServiceImpl implements UserOtherService {
     }
 
     @Override
-    public UserOther getById(int id) {
+    public UserOther getById(Long id) {
         return userOtherDao.findOne(id);
     }
 
     @Override
-    public UserOther deleteById(int id) {
+    public UserOther deleteById(Long id) {
         UserOther userOther = getById(id);
         userOtherDao.delete(userOther);
         return userOther;
@@ -61,8 +61,8 @@ public class UserOtherServiceImpl implements UserOtherService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }

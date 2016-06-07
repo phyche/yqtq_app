@@ -10,5 +10,5 @@ import java.util.List;
  */
 public interface GirlCommentService extends ICommonService<GirlComment> {
 
-    public List<GirlComment> findByGirlId(Integer girlId);
+    public List<GirlComment> findByGirlId(Long girlId);
 }

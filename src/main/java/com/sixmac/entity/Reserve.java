@@ -29,7 +29,7 @@ public class Reserve extends BaseEntity{
     private City city;*/
 
     @Column(name = "city_id")
-    private Integer cityId;
+    private Long cityId;
 
     @Column(name = "match_type")
     private Integer matchType =3;
@@ -192,11 +192,11 @@ public class Reserve extends BaseEntity{
         this.status = status;
     }
 
-    public Integer getCityId() {
+    public Long getCityId() {
         return cityId;
     }
 
-    public void setCityId(Integer cityId) {
+    public void setCityId(Long cityId) {
         this.cityId = cityId;
     }
 
@@ -207,4 +207,6 @@ public class Reserve extends BaseEntity{
     public void setTitle(String title) {
         this.title = title;
     }
+
+
 }

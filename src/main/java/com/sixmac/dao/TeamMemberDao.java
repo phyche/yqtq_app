@@ -10,10 +10,10 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/5/23 0023 上午 9:41.
  */
-public interface TeamMemberDao extends JpaRepository<TeamMember, Integer> {
+public interface TeamMemberDao extends JpaRepository<TeamMember, Long> {
 
     //根据用户id筛选球队成员
     @Query("select a from TeamMember a where a.user.id = ?1 ")
-    public List<TeamMember> findByUserId(Integer userId);
+    public List<TeamMember> findByUserId(Long userId);
 
 }

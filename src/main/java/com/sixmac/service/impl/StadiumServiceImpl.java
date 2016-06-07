@@ -44,12 +44,12 @@ public class StadiumServiceImpl implements StadiumService {
     }
 
     @Override
-    public Stadium getById(int id) {
+    public Stadium getById(Long id) {
         return stadiumDao.findOne(id);
     }
 
     @Override
-    public Stadium deleteById(int id) {
+    public Stadium deleteById(Long id) {
         Stadium booking = getById(id);
         stadiumDao.delete(booking);
         return booking;
@@ -67,14 +67,14 @@ public class StadiumServiceImpl implements StadiumService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }
 
     @Override
-    public Page<Stadium> page(final Integer areaId, final Integer type, Integer pageNum, Integer pageSize) {
+    public Page<Stadium> page(final Long areaId, final Integer type, Integer pageNum, Integer pageSize) {
 
         PageRequest pageRequest = new PageRequest(pageNum - 1, pageSize, Sort.Direction.DESC, "id");
 

@@ -70,7 +70,7 @@ public class WatchingApi extends CommonController {
      * @apiParam {Integer} pageSize 每页显示数
      *
      * @apiSuccess {Object}  list 直播看球列表
-     * @apiSuccess {Integer} list.id 看球id
+     * @apiSuccess {Long} list.id 看球id
      * @apiSuccess {String} list.name 看球名称
      * @apiSuccess {String} list.avater 封面
      *
@@ -97,17 +97,17 @@ public class WatchingApi extends CommonController {
      * @api {post} /api/watching/telecastInfo 直播看球详情
      * @apiName watching.telecastInfo
      * @apiGroup watching
-     * @apiParam {Integer} telecastId 看球id <必传/>
+     * @apiParam {Long} telecastId 看球id <必传/>
      *
      * @apiSuccess {Object}  list 直播看球列表
-     * @apiSuccess {Integer} list.id 看球id
+     * @apiSuccess {Long} list.id 看球id
      * @apiSuccess {String} list.name 看球名称
      * @apiSuccess {String} list.avater 看球封面
      * @apiSuccess {String} list.description 介绍
      *
      */
     @RequestMapping(value = "/telecastInfo")
-    public void telecastInfo(HttpServletResponse response, Integer telecastId) {
+    public void telecastInfo(HttpServletResponse response, Long telecastId) {
 
         if (telecastId == null ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -127,16 +127,16 @@ public class WatchingApi extends CommonController {
      * @api {post} /api/watching/telecastOrder 直播看球邀请
      * @apiName watching.telecastOrder
      * @apiGroup watching
-     * @apiParam {Integer} telecastId 看球id <必传/>
-     * @apiParam {Integer} userId 用户id <必传/>
-     * @apiParam {Integer} toUserId 好友id <必传/>
+     * @apiParam {Long} telecastId 看球id <必传/>
+     * @apiParam {Long} userId 用户id <必传/>
+     * @apiParam {Long} toUserId 好友id <必传/>
      *
      */
     @RequestMapping(value = "/telecastOrder")
     public void telecastOrder(HttpServletResponse response,
-                              Integer telecastId,
-                              Integer userId,
-                              Integer toUserId) {
+                              Long telecastId,
+                              Long userId,
+                              Long toUserId) {
 
         if (userId == null || telecastId == null || toUserId == null) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -161,12 +161,12 @@ public class WatchingApi extends CommonController {
      * @api {post} /api/watching/sceneList 现场看球列表
      * @apiName watching.sceneList
      * @apiGroup watching
-     * @apiParam {Integer} cityId 城市id <必传/>
+     * @apiParam {Long} cityId 城市id <必传/>
      * @apiParam {Integer} pageNum 当前页
      * @apiParam {Integer} pageSize 每页显示数
      *
      * @apiSuccess {Object}  list 现场看球列表
-     * @apiSuccess {Integer} list.id 看球id
+     * @apiSuccess {Long} list.id 看球id
      * @apiSuccess {String} list.team1name 球队1名称
      * @apiSuccess {String} list.avater1 球队1队徽
      * @apiSuccess {String} list.team2name 球队2名称
@@ -182,7 +182,7 @@ public class WatchingApi extends CommonController {
      */
     @RequestMapping(value = "/sceneList")
     public void sceneList(HttpServletResponse response,
-                          Integer cityId,
+                          Long cityId,
                           Integer pageNum,
                           Integer pageSize) {
 
@@ -200,10 +200,10 @@ public class WatchingApi extends CommonController {
      * @api {post} /api/watching/sceneInfo 现场看球详情
      * @apiName watching.sceneInfo
      * @apiGroup watching
-     * @apiParam {Integer} sceneId 看球id <必传/>
+     * @apiParam {Long} sceneId 看球id <必传/>
      *
      * @apiSuccess {Object}  list 现场看球列表
-     * @apiSuccess {Integer} list.id 看球id
+     * @apiSuccess {Long} list.id 看球id
      * @apiSuccess {String} list.name 看球名称
      * @apiSuccess {String} list.description 看球描述
      * @apiSuccess {String} list.team1name 球队1名称
@@ -216,7 +216,7 @@ public class WatchingApi extends CommonController {
      *
      */
     @RequestMapping(value = "/sceneInfo")
-    public void sceneInfo(HttpServletResponse response, Integer sceneId) {
+    public void sceneInfo(HttpServletResponse response, Long sceneId) {
 
         if (sceneId == null ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -236,16 +236,16 @@ public class WatchingApi extends CommonController {
      * @api {post} /api/watching/sceneOrder 现场看球邀请
      * @apiName watching.sceneOrder
      * @apiGroup watching
-     * @apiParam {Integer} sceneId 看球id <必传/>
-     * @apiParam {Integer} userId 用户id <必传/>
-     * @apiParam {Integer} toUserId 好友id <必传/>
+     * @apiParam {Long} sceneId 看球id <必传/>
+     * @apiParam {Long} userId 用户id <必传/>
+     * @apiParam {Long} toUserId 好友id <必传/>
      *
      */
     @RequestMapping(value = "/sceneOrder")
     public void sceneOrder(HttpServletResponse response,
-                              Integer sceneId,
-                              Integer userId,
-                              Integer toUserId) {
+                           Long sceneId,
+                           Long userId,
+                           Long toUserId) {
 
         if (userId == null || sceneId == null || toUserId == null) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -275,7 +275,7 @@ public class WatchingApi extends CommonController {
      *
      * @apiSuccess {Object}  list 现场看球宝贝列表
      * @apiSuccess {Object} list.girl 宝贝
-     * @apiSuccess {Integer} list.girl.id 宝贝id
+     * @apiSuccess {Long} list.girl.id 宝贝id
      * @apiSuccess {String} list.avater 宝贝封面
      *
      * @apiSuccess {Object}  page 翻页信息
@@ -325,10 +325,10 @@ public class WatchingApi extends CommonController {
      * @api {post} /api/watching/girlInfo 现场看球宝贝详情
      * @apiName watching.girlInfo
      * @apiGroup watching
-     * @apiParam {Integer} girlId 宝贝id <必传/>
+     * @apiParam {Long} girlId 宝贝id <必传/>
      *
      * @apiSuccess {Object}  girl 看球宝贝列表
-     * @apiSuccess {Integer} girl.id 宝贝id
+     * @apiSuccess {Long} girl.id 宝贝id
      * @apiSuccess {String} girl.name 宝贝昵称
      * @apiSuccess {Integer} girl.age 宝贝年龄
      * @apiSuccess {Double} girl.height 宝贝身高
@@ -346,7 +346,7 @@ public class WatchingApi extends CommonController {
      * @apiSuccess {String} girlImages.avater 宝贝相册
      */
     @RequestMapping(value = "/girlInfo")
-    public void girlInfo(HttpServletResponse response, Integer girlId) {
+    public void girlInfo(HttpServletResponse response, Long girlId) {
 
         if (girlId == null ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -383,17 +383,17 @@ public class WatchingApi extends CommonController {
      * @api {post} /api/watching/girlComment 宝贝陪看评价
      * @apiName watching.girlComment
      * @apiGroup watching
-     * @apiParam {Integer} girlId 宝贝id <必传/>
+     * @apiParam {Long} girlId 宝贝id <必传/>
      *
      * @apiSuccess {Object}  girlCommentList 宝贝陪看评价列表
-     * @apiSuccess {Integer} girlCommentList.id 评价id
+     * @apiSuccess {Long} girlCommentList.id 评价id
      * @apiSuccess {Integer} girl.name 服务打分
      * @apiSuccess {String} girl.age 评论内容
      * @apiSuccess {Long} girl.height 评论时间
      *
      */
     @RequestMapping(value = "/girlComment")
-    public void girlComment(HttpServletResponse response, Integer girlId) {
+    public void girlComment(HttpServletResponse response, Long girlId) {
 
         if (girlId == null ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -413,9 +413,9 @@ public class WatchingApi extends CommonController {
      * @api {post} /api/watching/orderGirl 约宝贝看球确认
      * @apiName watching.orderGirl
      * @apiGroup watching
-     * @apiParam {Integer} userId 用户id <必传/>
-     * @apiParam {Integer} girlId 宝贝id <必传/>
-     * @apiParam {Integer} sceneId 比赛id <必传/>
+     * @apiParam {Long} userId 用户id <必传/>
+     * @apiParam {Long} girlId 宝贝id <必传/>
+     * @apiParam {Long} sceneId 比赛id <必传/>
      *
      *
      * @apiSuccess {Object} girlUsers 用户约看列表
@@ -436,9 +436,9 @@ public class WatchingApi extends CommonController {
      */
     @RequestMapping(value = "/orderGirl")
     public void orderGirl(HttpServletResponse response,
-                          Integer userId,
-                          Integer girlId,
-                          Integer sceneId) {
+                          Long userId,
+                          Long girlId,
+                          Long sceneId) {
 
         if (userId == null || girlId == null || sceneId == null) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -475,7 +475,7 @@ public class WatchingApi extends CommonController {
      * @api {post} /api/watching/pay 约宝贝支付
      * @apiName watching.pay
      * @apiGroup watching
-     * @apiParam {Integer} girlUserId 约看id <必传/>
+     * @apiParam {Long} girlUserId 约看id <必传/>
      * @apiParam {Double} tip 红包费
      *
      * @apiSuccess {Object} girlUsers 用户约看列表
@@ -485,7 +485,7 @@ public class WatchingApi extends CommonController {
     @RequestMapping(value = "/pay")
     public void pay(HttpServletResponse response,
                     Double tip,
-                    Integer girlUserId,
+                    Long girlUserId,
                     Double money) {
 
         if (girlUserId == null ) {

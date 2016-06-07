@@ -38,12 +38,12 @@ public class SystemMessageServiceImpl implements SystemMessageService {
     }
 
     @Override
-    public SystemMessage getById(int id) {
+    public SystemMessage getById(Long id) {
         return systemMessageDao.findOne(id);
     }
 
     @Override
-    public SystemMessage deleteById(int id) {
+    public SystemMessage deleteById(Long id) {
         SystemMessage systemMessage = getById(id);
         systemMessageDao.delete(systemMessage);
         return systemMessage;
@@ -61,14 +61,14 @@ public class SystemMessageServiceImpl implements SystemMessageService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }
 
     @Override
-    public List<SystemMessage> findByToUserId(Integer userId) {
+    public List<SystemMessage> findByToUserId(Long userId) {
         return systemMessageDao.findByToUserId(userId);
     }
 }

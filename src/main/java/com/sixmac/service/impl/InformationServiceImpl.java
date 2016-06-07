@@ -44,12 +44,12 @@ public class InformationServiceImpl implements InformationService {
     }
 
     @Override
-    public Information getById(int id) {
+    public Information getById(Long id) {
         return informationDao.findOne(id);
     }
 
     @Override
-    public Information deleteById(int id) {
+    public Information deleteById(Long id) {
         Information message = getById(id);
         informationDao.delete(message);
         return message;
@@ -67,8 +67,8 @@ public class InformationServiceImpl implements InformationService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }

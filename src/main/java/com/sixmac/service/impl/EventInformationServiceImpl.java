@@ -38,12 +38,12 @@ public class EventInformationServiceImpl implements EventInformationService {
     }
 
     @Override
-    public EventInformation getById(int id) {
+    public EventInformation getById(Long id) {
         return eventInformationDao.findOne(id);
     }
 
     @Override
-    public EventInformation deleteById(int id) {
+    public EventInformation deleteById(Long id) {
         EventInformation eventInformation = getById(id);
         eventInformationDao.delete(eventInformation);
         return eventInformation;
@@ -61,14 +61,14 @@ public class EventInformationServiceImpl implements EventInformationService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }
 
     @Override
-    public EventInformation findByRaceId(Integer raceId) {
+    public EventInformation findByRaceId(Long raceId) {
         return eventInformationDao.findByRaceId(raceId);
     }
 }

@@ -16,5 +16,5 @@ public interface PostService extends ICommonService<Post> {
     public Page<Post> page(Integer pageNum, Integer pageSize);
 
     //根据用户ID查找帖子
-    public List<Post> findByUserId(Integer userId);
+    public List<Post> findByUserId(Long userId);
 }

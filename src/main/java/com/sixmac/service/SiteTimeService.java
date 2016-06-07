@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface SiteTimeService extends ICommonService<SiteTime> {
 
-    public List<SiteTime> findBySiteId(Integer siteId);
+    public List<SiteTime> findBySiteId(Long siteId);
 
-    public SiteTime findBySiteAndTime(Integer siteId, Long time);
+    public SiteTime findBySiteAndTime(Long siteId, Long time);
 }

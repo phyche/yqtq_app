@@ -10,10 +10,10 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/5/25 0025 上午 11:13.
  */
-public interface HostJoinDao extends JpaRepository<HostJoin, Integer>, JpaSpecificationExecutor<HostJoin> {
+public interface HostJoinDao extends JpaRepository<HostJoin, Long>, JpaSpecificationExecutor<HostJoin> {
 
     //根据赛事筛选报名参加的球队
     @Query("select a from HostJoin a where a.hostRace.id = ?1 ")
-    public List<HostJoin> findByHostRaceId(Integer raceId);
+    public List<HostJoin> findByHostRaceId(Long raceId);
 
 }

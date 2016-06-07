@@ -38,12 +38,12 @@ public class AreaServiceImpl implements AreaService {
     }
 
     @Override
-    public Area getById(int id) {
+    public Area getById(Long id) {
         return areaDao.findOne(id);
     }
 
     @Override
-    public Area deleteById(int id) {
+    public Area deleteById(Long id) {
         Area area = getById(id);
         areaDao.delete(area);
         return area;
@@ -61,14 +61,14 @@ public class AreaServiceImpl implements AreaService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }
 
     @Override
-    public Area getByAreaId(Integer areaId) {
+    public Area getByAreaId(Long areaId) {
         return areaDao.getByAreaId(areaId);
     }
 }

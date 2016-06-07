@@ -12,8 +12,8 @@ import java.util.List;
  */
 public interface UserReserveService extends ICommonService<UserReserve> {
 
-    public List<UserReserve> findByReserverId(Integer reserveId);
+    public List<UserReserve> findByReserverId(Long reserveId);
 
-    public List<UserReserve> findByUserId(Integer userId);
+    public List<UserReserve> findByUserId(Long userId);
 
 }

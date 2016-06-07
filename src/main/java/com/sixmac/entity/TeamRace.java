@@ -21,7 +21,7 @@ public class TeamRace extends BaseEntity{
     private City city;*/
 
     @Column(name = "city_id")
-    private Integer cityId;
+    private Long cityId;
 
     @Column(name = "status")
     private Integer status = 0;
@@ -54,11 +54,11 @@ public class TeamRace extends BaseEntity{
         this.visitingTeam = visitingTeam;
     }
 
-    public Integer getCityId() {
+    public Long getCityId() {
         return cityId;
     }
 
-    public void setCityId(Integer cityId) {
+    public void setCityId(Long cityId) {
         this.cityId = cityId;
     }
 
@@ -93,4 +93,6 @@ public class TeamRace extends BaseEntity{
     public void setContent(String content) {
         this.content = content;
     }
+
+
 }

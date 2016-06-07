@@ -38,12 +38,12 @@ public class ReserveTeamServiceImpl implements ReserveTeamService {
     }
 
     @Override
-    public ReserveTeam getById(int id) {
+    public ReserveTeam getById(Long id) {
         return reserveTeamDao.findOne(id);
     }
 
     @Override
-    public ReserveTeam deleteById(int id) {
+    public ReserveTeam deleteById(Long id) {
         ReserveTeam reserveTeam = getById(id);
         reserveTeamDao.delete(reserveTeam);
         return reserveTeam;
@@ -61,8 +61,8 @@ public class ReserveTeamServiceImpl implements ReserveTeamService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }

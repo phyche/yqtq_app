@@ -38,12 +38,12 @@ public class TeamMemberServiceImpl implements TeamMemberService {
     }
 
     @Override
-    public TeamMember getById(int id) {
+    public TeamMember getById(Long id) {
         return teamMemberDao.findOne(id);
     }
 
     @Override
-    public TeamMember deleteById(int id) {
+    public TeamMember deleteById(Long id) {
         TeamMember teamMember = getById(id);
         teamMemberDao.delete(teamMember);
         return teamMember;
@@ -61,14 +61,14 @@ public class TeamMemberServiceImpl implements TeamMemberService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }
 
     @Override
-    public List<TeamMember> findByUserId(Integer userId) {
+    public List<TeamMember> findByUserId(Long userId) {
         return teamMemberDao.findByUserId(userId);
     }
 }

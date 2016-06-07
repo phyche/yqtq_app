@@ -38,12 +38,12 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public City getById(int id) {
+    public City getById(Long id) {
         return cityDao.findOne(id);
     }
 
     @Override
-    public City deleteById(int id) {
+    public City deleteById(Long id) {
         City city = getById(id);
         cityDao.delete(city);
         return city;
@@ -61,14 +61,14 @@ public class CityServiceImpl implements CityService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }
 
     @Override
-    public City getByCityId(Integer cityId) {
+    public City getByCityId(Long cityId) {
         return cityDao.getByCityId(cityId);
     }
 }

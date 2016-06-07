@@ -38,12 +38,12 @@ public class SiteServiceImpl implements SiteService {
     }
 
     @Override
-    public Site getById(int id) {
+    public Site getById(Long id) {
         return siteDao.findOne(id);
     }
 
     @Override
-    public Site deleteById(int id) {
+    public Site deleteById(Long id) {
         Site site = getById(id);
         siteDao.delete(site);
         return site;
@@ -61,14 +61,14 @@ public class SiteServiceImpl implements SiteService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }
 
     @Override
-    public List<Site> findByStadiumId(Integer stadiumId) {
+    public List<Site> findByStadiumId(Long stadiumId) {
         return siteDao.findByStadiumId(stadiumId);
     }
 }

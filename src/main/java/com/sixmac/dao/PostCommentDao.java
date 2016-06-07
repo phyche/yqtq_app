@@ -10,16 +10,16 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/5/20 0020 下午 6:11.
  */
-public interface PostCommentDao extends JpaRepository<PostComment, Integer> {
+public interface PostCommentDao extends JpaRepository<PostComment, Long> {
 
     //根据帖子id筛选评论
     @Query("select a from PostComment a where a.post.id = ?1 ")
-    public List<PostComment> findByPostId(Integer postId);
+    public List<PostComment> findByPostId(Long postId);
 
     //根据评论人Id筛选评论
     @Query("select a from PostComment a where a.fUser.id = ?1 ")
-    public List<PostComment> findByFuserId(Integer userId);
+    public List<PostComment> findByFuserId(Long userId);
 
     @Query("select a from PostComment a where a.tUser.id = ?1 ")
-    public List<PostComment> findByToUserId(Integer userId);
+    public List<PostComment> findByToUserId(Long userId);
 }

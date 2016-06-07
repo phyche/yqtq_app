@@ -46,12 +46,12 @@ public class HostRaceServiceImpl implements HostRaceService {
     }
 
     @Override
-    public HostRace getById(int id) {
+    public HostRace getById(Long id) {
         return hostRaceDao.findOne(id);
     }
 
     @Override
-    public HostRace deleteById(int id) {
+    public HostRace deleteById(Long id) {
         HostRace hostRace = getById(id);
         hostRaceDao.delete(hostRace);
         return hostRace;
@@ -69,8 +69,8 @@ public class HostRaceServiceImpl implements HostRaceService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }

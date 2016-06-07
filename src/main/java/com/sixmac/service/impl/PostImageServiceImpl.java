@@ -38,12 +38,12 @@ public class PostImageServiceImpl implements PostImageService {
     }
 
     @Override
-    public PostImage getById(int id) {
+    public PostImage getById(Long id) {
         return postImageDao.findOne(id);
     }
 
     @Override
-    public PostImage deleteById(int id) {
+    public PostImage deleteById(Long id) {
         PostImage postImage = getById(id);
         postImageDao.delete(postImage);
         return postImage;
@@ -61,14 +61,14 @@ public class PostImageServiceImpl implements PostImageService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }
 
     @Override
-    public List<PostImage> findByPostId(Integer postId) {
+    public List<PostImage> findByPostId(Long postId) {
         return postImageDao.findByPostId(postId);
     }
 }

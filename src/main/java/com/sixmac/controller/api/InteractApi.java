@@ -61,7 +61,7 @@ public class InteractApi extends CommonController {
      * @apiSuccess {Object}  list 足球圈列表
      * @apiSuccess {String} list.content 足球圈内容
      * @apiSuccess {Object} list.user 发足球圈用户
-     * @apiSuccess {Integer} list.user.id 用户id
+     * @apiSuccess {Long} list.user.id 用户id
      * @apiSuccess {String} list.user.nickname 用户昵称
      * @apiSuccess {String} list.user.avater 用户头像
      *
@@ -70,7 +70,7 @@ public class InteractApi extends CommonController {
      *
      * @apiSuccess {Object} list.postCommentList 足球圈评论列表
      * @apiSuccess {Object} list.postCommentList.fUser 评论人
-     * @apiSuccess {Integer} list.postCommentList.fUser.id 评论人id
+     * @apiSuccess {Long} list.postCommentList.fUser.id 评论人id
      * @apiSuccess {String} list.postCommentList.fUser.nickname 评论人昵称
      * @apiSuccess {String} list.postCommentList.content 评论内容
      *
@@ -106,7 +106,7 @@ public class InteractApi extends CommonController {
      * @api {post} /api/interact/publish 发布圈子
      * @apiName interact.publish
      * @apiGroup interact
-     * @apiParam {Integer} userId 用户id <必传 />
+     * @apiParam {Long} userId 用户id <必传 />
      * @apiParam {String} content 内容 <必传 />
      * @apiParam {Object} imagesMap 图片数组Map
      *
@@ -114,7 +114,7 @@ public class InteractApi extends CommonController {
      */
     @RequestMapping(value = "/publish")
     public void publish(HttpServletResponse response,
-                        Integer userId,
+                        Long userId,
                         String content,
                         MultipartHttpServletRequest multipartRequest) {
 
@@ -164,29 +164,29 @@ public class InteractApi extends CommonController {
      * @api {post} /api/interact/postInfo 足球圈详情
      * @apiName interact.postInfo
      * @apiGroup interact
-     * @apiParam {Integer} postId 足球圈id <必传 />
+     * @apiParam {Long} postId 足球圈id <必传 />
      *
      * @apiSuccess {Object} post 帖子
      * @apiSuccess {Integer} post.content 帖子内容
      * @apiSuccess {Long} post.createDate 帖子创建时间
      *
      * @apiSuccess {Object} post.user 用户列表
-     * @apiSuccess {Integer} post.user.id 用户id
+     * @apiSuccess {Long} post.user.id 用户id
      * @apiSuccess {String} post.user.nickname 用户昵称
      *
      * @apiSuccess {Object} postImages 帖子图片列表
      * @apiSuccess {String} postImages.avater 帖子图片
      *
      * @apiSuccess {Object} postComments 帖子评论列表
-     * @apiSuccess {Integer} postComments.content 帖子内容
+     * @apiSuccess {String} postComments.content 帖子内容
      * @apiSuccess {Long} postComments.createDate 帖子创建时间
      * @apiSuccess {Object} postComments.fUser 帖子评论人
-     * @apiSuccess {Integer} postComments.fUser.id 帖子评论人id
+     * @apiSuccess {Long} postComments.fUser.id 帖子评论人id
      * @apiSuccess {String} postComments.fUser.avater 帖子评论人头像
      * @apiSuccess {String} postComments.fUser.nickname 帖子评论人昵称
      */
     @RequestMapping(value = "/postInfo")
-    public void postInfo(HttpServletResponse response, Integer postId) {
+    public void postInfo(HttpServletResponse response, Long postId) {
 
         if (null == postId ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -213,16 +213,16 @@ public class InteractApi extends CommonController {
      * @api {post} /api/interact/comment 评论回复
      * @apiName interact.comment
      * @apiGroup interact
-     * @apiParam {Integer} postId 足球圈id <必传 />
-     * @apiParam {Integer} userId 评论人id <必传 />
-     * @apiParam {Integer} touserId 被评论人id <必传 />
+     * @apiParam {Long} postId 足球圈id <必传 />
+     * @apiParam {Long} userId 评论人id <必传 />
+     * @apiParam {Long} touserId 被评论人id <必传 />
      * @apiParam {String} content 内容
      */
     @RequestMapping(value = "/comment")
     public void comment(HttpServletResponse response,
-                        Integer postId,
-                        Integer userId,
-                        Integer touserId,
+                        Long postId,
+                        Long userId,
+                        Long touserId,
                         String content) {
 
         if (null == userId || postId == null || touserId == null|| content == null|| content == " ") {
@@ -246,7 +246,7 @@ public class InteractApi extends CommonController {
      * @api {post} /api/interact/addressBook 通讯录
      * @apiName interact.addressBook
      * @apiGroup interact
-     * @apiParam {Integer} userId 用户id <必传/>
+     * @apiParam {Long} userId 用户id <必传/>
      *
      * @apiSuccess {Object}  messageAddList 通讯录列表
      * @apiSuccess {Integer} messageAddList.id 通讯录id
@@ -257,7 +257,7 @@ public class InteractApi extends CommonController {
      *
      */
     @RequestMapping(value = "/addressBook")
-    public void addressBook(HttpServletResponse response, Integer userId) {
+    public void addressBook(HttpServletResponse response, Long userId) {
 
         if (null == userId ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -277,12 +277,12 @@ public class InteractApi extends CommonController {
      * @api {post} /api/interact/addFriend 添加好友
      * @apiName interact.addFriend
      * @apiGroup interact
-     * @apiParam {Integer} userId 用户id <必传/>
+     * @apiParam {Long} userId 用户id <必传/>
      * @apiParam {String} mobile 好友手机号（账号） <必传/>
      *
      */
     @RequestMapping(value = "/addFriend")
-    public void addFriend(HttpServletResponse response, Integer userId, String mobile) {
+    public void addFriend(HttpServletResponse response, Long userId, String mobile) {
 
         if (null == userId || mobile == null || mobile == " ") {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -311,7 +311,7 @@ public class InteractApi extends CommonController {
      * @apiParam {Integer} pageSize 每页显示数
      *
      * @apiSuccess {Object}  list 资讯列表
-     * @apiSuccess {Integer} list.id 资讯id
+     * @apiSuccess {Long} list.id 资讯id
      * @apiSuccess {String} list.title 资讯标题
      * @apiSuccess {String} list.avater 资讯封面
      * @apiSuccess {String} list.introduction 资讯简介
@@ -341,7 +341,7 @@ public class InteractApi extends CommonController {
      * @api {post} /api/interact/messageInfo 资讯详情
      * @apiName interact.messageInfo
      * @apiGroup interact
-     * @apiParam {Integer} messageId 资讯id <必传 />
+     * @apiParam {Long} messageId 资讯id <必传 />
      *
      * @apiSuccess {Object}  information 资讯列表
      * @apiSuccess {Integer} information.id 资讯id
@@ -352,7 +352,7 @@ public class InteractApi extends CommonController {
      * @apiSuccess {Long} information.createDate 资讯创建时间
      */
     @RequestMapping(value = "/messageInfo")
-    public void messageInfo(HttpServletResponse response, Integer messageId) {
+    public void messageInfo(HttpServletResponse response, Long messageId) {
 
         if (null == messageId ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -406,7 +406,7 @@ public class InteractApi extends CommonController {
      * @api {post} /api/interact/activityInfo 活动详情
      * @apiName interact.activityInfo
      * @apiGroup interact
-     * @apiParam {Integer} activityId 活动id <必传 />
+     * @apiParam {Long} activityId 活动id <必传 />
      *
      * @apiSuccess {Object}  activity 活动列表
      * @apiSuccess {Integer} activity.id 活动id
@@ -417,7 +417,7 @@ public class InteractApi extends CommonController {
      * @apiSuccess {Long} activity.createDate 活动创建时间
      */
     @RequestMapping(value = "/activityInfo")
-    public void activityInfo(HttpServletResponse response, Integer activityId) {
+    public void activityInfo(HttpServletResponse response, Long activityId) {
 
         if (null == activityId ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));

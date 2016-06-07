@@ -11,11 +11,11 @@ import java.util.List;
 public interface MessageAddService extends ICommonService<MessageAdd> {
 
     //根据用户id查询用户添加成功或者失败的好友消息
-    public List<MessageAdd> findByUserId(Integer userId);
+    public List<MessageAdd> findByUserId(Long userId);
 
     //根据用户id查询等待用户处理的好友添加消息
-    public List<MessageAdd> findByToUserId(Integer userId);
+    public List<MessageAdd> findByToUserId(Long userId);
 
     //根据用户id查询用户添加成功的好友消息
-    public List<MessageAdd> findUserId(Integer userId);
+    public List<MessageAdd> findUserId(Long userId);
 }

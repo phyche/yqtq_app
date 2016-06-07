@@ -38,12 +38,12 @@ public class GirlCommentServiceImpl implements GirlCommentService {
     }
 
     @Override
-    public GirlComment getById(int id) {
+    public GirlComment getById(Long id) {
         return girlCommentDao.findOne(id);
     }
 
     @Override
-    public GirlComment deleteById(int id) {
+    public GirlComment deleteById(Long id) {
         GirlComment girlComment = getById(id);
         girlCommentDao.delete(girlComment);
         return girlComment;
@@ -61,14 +61,14 @@ public class GirlCommentServiceImpl implements GirlCommentService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }
 
     @Override
-    public List<GirlComment> findByGirlId(Integer girlId) {
+    public List<GirlComment> findByGirlId(Long girlId) {
         return girlCommentDao.findByGirlId(girlId);
     }
 }

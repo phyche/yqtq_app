@@ -18,10 +18,10 @@ public class Stadium extends BaseEntity{
     private Area area;*/
 
     @Column(name = "city_id")
-    private Integer cityId;
+    private Long cityId;
 
     @Column(name = "area_id")
-    private Integer areaId;
+    private Long areaId;
 
     @Transient
     private String cityName;
@@ -172,19 +172,19 @@ public class Stadium extends BaseEntity{
         this.distance = distance;
     }
 
-    public Integer getCityId() {
+    public Long getCityId() {
         return cityId;
     }
 
-    public void setCityId(Integer cityId) {
+    public void setCityId(Long cityId) {
         this.cityId = cityId;
     }
 
-    public Integer getAreaId() {
+    public Long getAreaId() {
         return areaId;
     }
 
-    public void setAreaId(Integer areaId) {
+    public void setAreaId(Long areaId) {
         this.areaId = areaId;
     }
 
@@ -203,4 +203,6 @@ public class Stadium extends BaseEntity{
     public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
+
+
 }

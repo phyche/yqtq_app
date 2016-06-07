@@ -10,5 +10,5 @@ import java.util.List;
  */
 public interface EventInformationService extends ICommonService<EventInformation> {
 
-    public EventInformation findByRaceId(Integer raceId);
+    public EventInformation findByRaceId(Long raceId);
 }

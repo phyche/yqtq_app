@@ -5,7 +5,7 @@ package com.sixmac.entity.vo;
  */
 public class WatchBallVo {
 
-    private Integer id;
+    private Long id;
 
     private String homeTeamName;
 
@@ -23,11 +23,11 @@ public class WatchBallVo {
 
     private Integer addressId;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

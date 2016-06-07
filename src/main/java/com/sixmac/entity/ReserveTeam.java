@@ -22,7 +22,7 @@ public class ReserveTeam extends BaseEntity{
     private City city;*/
 
     @Column(name = "city_id")
-    private Integer cityId;
+    private Long cityId;
 
     @Column(name = "price")
     private double price;
@@ -54,11 +54,11 @@ public class ReserveTeam extends BaseEntity{
         this.site = site;
     }
 
-    public Integer getCityId() {
+    public Long getCityId() {
         return cityId;
     }
 
-    public void setCityId(Integer cityId) {
+    public void setCityId(Long cityId) {
         this.cityId = cityId;
     }
 
@@ -93,4 +93,6 @@ public class ReserveTeam extends BaseEntity{
     public void setStadium(Stadium stadium) {
         this.stadium = stadium;
     }
+
+
 }

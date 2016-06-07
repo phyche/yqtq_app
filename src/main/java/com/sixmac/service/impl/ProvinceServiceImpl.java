@@ -38,12 +38,12 @@ public class ProvinceServiceImpl implements ProvinceService {
     }
 
     @Override
-    public Province getById(int id) {
+    public Province getById(Long id) {
         return provinceDao.findOne(id);
     }
 
     @Override
-    public Province deleteById(int id) {
+    public Province deleteById(Long id) {
         Province province = getById(id);
         provinceDao.delete(province);
         return province;
@@ -61,14 +61,14 @@ public class ProvinceServiceImpl implements ProvinceService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }
 
     @Override
-    public Province getByProvinceId(Integer provinceId) {
+    public Province getByProvinceId(Long provinceId) {
         return provinceDao.getByProvinceId(provinceId);
     }
 }

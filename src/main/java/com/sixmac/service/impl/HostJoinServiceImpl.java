@@ -38,12 +38,12 @@ public class HostJoinServiceImpl implements HostJoinService {
     }
 
     @Override
-    public HostJoin getById(int id) {
+    public HostJoin getById(Long id) {
         return hostJoinDao.findOne(id);
     }
 
     @Override
-    public HostJoin deleteById(int id) {
+    public HostJoin deleteById(Long id) {
         HostJoin hostJoin = getById(id);
         hostJoinDao.delete(hostJoin);
         return hostJoin;
@@ -61,14 +61,14 @@ public class HostJoinServiceImpl implements HostJoinService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }
 
     @Override
-    public List<HostJoin> findByHostRaceId(Integer raceId) {
+    public List<HostJoin> findByHostRaceId(Long raceId) {
         return hostJoinDao.findByHostRaceId(raceId);
     }
 }

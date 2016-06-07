@@ -10,8 +10,8 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/5/24 0024 下午 3:51.
  */
-public interface SiteDao extends JpaRepository<Site, Integer>, JpaSpecificationExecutor<Site> {
+public interface SiteDao extends JpaRepository<Site, Long>, JpaSpecificationExecutor<Site> {
 
     @Query("select a from Site a where a.stadium.id = ?1 ")
-    public List<Site> findByStadiumId(Integer stadiumId);
+    public List<Site> findByStadiumId(Long stadiumId);
 }

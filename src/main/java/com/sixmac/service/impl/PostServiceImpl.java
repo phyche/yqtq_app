@@ -44,12 +44,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post getById(int id) {
+    public Post getById(Long id) {
         return postDao.findOne(id);
     }
 
     @Override
-    public Post deleteById(int id) {
+    public Post deleteById(Long id) {
         Post post = getById(id);
         postDao.delete(post);
         return post;
@@ -67,8 +67,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }
@@ -99,7 +99,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> findByUserId(Integer userId) {
+    public List<Post> findByUserId(Long userId) {
         return postDao.findByUserId(userId);
     }
 }

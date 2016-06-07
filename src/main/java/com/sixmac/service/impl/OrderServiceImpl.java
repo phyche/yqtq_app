@@ -42,12 +42,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order getById(int id) {
+    public Order getById(Long id) {
         return orderDao.findOne(id);
     }
 
     @Override
-    public Order deleteById(int id) {
+    public Order deleteById(Long id) {
         Order order = getById(id);
         orderDao.delete(order);
         return order;
@@ -65,8 +65,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }

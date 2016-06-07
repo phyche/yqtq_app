@@ -8,5 +8,5 @@ import com.sixmac.service.common.ICommonService;
  */
 public interface CityService extends ICommonService<City> {
 
-    public City getByCityId(Integer cityId);
+    public City getByCityId(Long cityId);
 }

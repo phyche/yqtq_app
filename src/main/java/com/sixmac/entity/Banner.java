@@ -18,7 +18,7 @@ public class Banner extends BaseEntity{
     private Integer type;
 
     @Column(name = "to_id")
-    private Integer toId;
+    private Long toId;
 
     public String getAvater() {
         return avater;
@@ -36,11 +36,11 @@ public class Banner extends BaseEntity{
         this.type = type;
     }
 
-    public Integer getToId() {
+    public Long getToId() {
         return toId;
     }
 
-    public void setToId(Integer toId) {
+    public void setToId(Long toId) {
         this.toId = toId;
     }
 }

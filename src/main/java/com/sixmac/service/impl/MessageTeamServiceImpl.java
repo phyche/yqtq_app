@@ -39,12 +39,12 @@ public class MessageTeamServiceImpl implements MessageTeamService {
     }
 
     @Override
-    public MessageTeam getById(int id) {
+    public MessageTeam getById(Long id) {
         return messageTeamDao.findOne(id);
     }
 
     @Override
-    public MessageTeam deleteById(int id) {
+    public MessageTeam deleteById(Long id) {
         MessageTeam messageTeam = getById(id);
         messageTeamDao.delete(messageTeam);
         return messageTeam;
@@ -62,14 +62,14 @@ public class MessageTeamServiceImpl implements MessageTeamService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }
 
     @Override
-    public List<MessageTeam> findByToUserId(Integer userId) {
+    public List<MessageTeam> findByToUserId(Long userId) {
         return messageTeamDao.findByToUserId(userId);
     }
 

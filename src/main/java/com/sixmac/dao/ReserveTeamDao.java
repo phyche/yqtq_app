@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 /**
  * Created by Administrator on 2016/5/24 0024 下午 6:30.
  */
-public interface ReserveTeamDao extends JpaRepository<ReserveTeam, Integer>, JpaSpecificationExecutor<ReserveTeam> {
+public interface ReserveTeamDao extends JpaRepository<ReserveTeam, Long>, JpaSpecificationExecutor<ReserveTeam> {
 
 }

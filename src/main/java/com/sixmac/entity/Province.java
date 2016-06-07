@@ -12,10 +12,10 @@ public class Province {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(name = "province_id")
-    private Integer provinceId;
+    private Long provinceId;
 
     @Column(name = "province")
     private String province;
@@ -31,20 +31,12 @@ public class Province {
         this.list = list;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
-    }
-
-    public Integer getProvinceId() {
-        return provinceId;
-    }
-
-    public void setProvinceId(Integer provinceId) {
-        this.provinceId = provinceId;
     }
 
     public String getProvince() {
@@ -53,5 +45,13 @@ public class Province {
 
     public void setProvince(String province) {
         this.province = province;
+    }
+
+    public Long getProvinceId() {
+        return provinceId;
+    }
+
+    public void setProvinceId(Long provinceId) {
+        this.provinceId = provinceId;
     }
 }

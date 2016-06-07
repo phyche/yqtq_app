@@ -76,29 +76,29 @@ public class UserApi extends CommonController {
      * @apiSuccess {Integer} user.credibility 用户信誉评分
      *
      * @apiSuccess {Object}  teamList 我加入的球队列表
-     * @apiSuccess {Integer} teamList.id 球队id
+     * @apiSuccess {Long} teamList.id 球队id
      * @apiSuccess {String} teamList.name 球队名称
      * @apiSuccess {String} teamList.avater 球队队徽
      * @apiSuccess {Integer} teamList.count 球员总数
      * @apiSuccess {Integer} teamList.battleNum 球队应战数
      * @apiSuccess {Integer} teamList.declareNum 球队宣战数
      * @apiSuccess {Object} teamList.list 我加入的球队的球员列表
-     * @apiSuccess {Integer} teamList.list.id 球员id
+     * @apiSuccess {Long} teamList.list.id 球员id
      * @apiSuccess {String} teamList.list.avater 球员头像
      *
      * @apiSuccess {Object}  myTeam 我的球队
-     * @apiSuccess {Integer} myTeam.id 球队id
+     * @apiSuccess {Long} myTeam.id 球队id
      * @apiSuccess {String} myTeam.name 球队名称
      * @apiSuccess {String} myTeam.avater 球队队徽
      * @apiSuccess {Integer} myTeam.count 球员总数
      * @apiSuccess {Integer} myTeam.battleNum 球队应战数
      * @apiSuccess {Integer} myTeam.declareNum 球队宣战数
      * @apiSuccess {Object} myTeam.list 我的球队的球员列表
-     * @apiSuccess {Integer} myTeam.list.id 球员id
+     * @apiSuccess {Long} myTeam.list.id 球员id
      * @apiSuccess {String} myTeam.list.avater 球员头像
      */
     @RequestMapping(value = "/homePage")
-    public void homePage(HttpServletResponse response, Integer userId) {
+    public void homePage(HttpServletResponse response, Long userId) {
 
         if (userId == null ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -181,7 +181,7 @@ public class UserApi extends CommonController {
      * @apiGroup user
      *
      * @apiSuccess {Object} user 用户
-     * @apiSuccess {Integer} user.id 用户id
+     * @apiSuccess {Long} user.id 用户id
      * @apiSuccess {String} user.avater 用户头像
      * @apiSuccess {String} user.nickname 用户昵称
      * @apiSuccess {Integer} user.gender 用户性别（0：男 1：女）
@@ -193,7 +193,7 @@ public class UserApi extends CommonController {
      *
      */
     @RequestMapping(value = "/info")
-    public void info(HttpServletResponse response, Integer userId) {
+    public void info(HttpServletResponse response, Long userId) {
 
         if (userId == null ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -213,7 +213,7 @@ public class UserApi extends CommonController {
      * @api {post} /api/user/edit 编辑个人资料
      * @apiName user.edit
      * @apiGroup user
-     * @apiParam {Integer} userId 用户id <必传 />
+     * @apiParam {Long} userId 用户id <必传 />
      * @apiParam {String} avater 用户头像
      * @apiParam {String} nickname 用户昵称
      * @apiParam {Integer} gender 用户性别（0：男 1：女）
@@ -227,7 +227,7 @@ public class UserApi extends CommonController {
      */
     @RequestMapping(value = "/edit")
     public void edit(HttpServletResponse response,
-                     Integer userId,
+                     Long userId,
                      String nickname,
                      Integer gender,
                      Long birthday,
@@ -314,10 +314,10 @@ public class UserApi extends CommonController {
      * @api {post} /api/user/commentList 我的评论
      * @apiName user.commentList
      * @apiGroup user
-     * @apiParam {Integer} userId 用户id <必传 />
+     * @apiParam {Long} userId 用户id <必传 />
      *
      * @apiSuccess {Object} tUser 被评论用户
-     * @apiSuccess {Integer} tUser.id 被评论用户id
+     * @apiSuccess {Long} tUser.id 被评论用户id
      * @apiSuccess {String} tUser.nickname 被评论用户昵称
      * @apiSuccess {String} content 帖子内容
      * @apiSuccess {String} createDate 评论时间
@@ -325,7 +325,7 @@ public class UserApi extends CommonController {
      *
      */
     @RequestMapping(value = "/commentList")
-    public void commentList(HttpServletResponse response, Integer userId) {
+    public void commentList(HttpServletResponse response, Long userId) {
 
         if (userId == null ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -345,7 +345,7 @@ public class UserApi extends CommonController {
      * @api {post} /api/user/postList 我的帖子
      * @apiName user.postList
      * @apiGroup user
-     * @apiParam {Integer} userId 用户id <必传 />
+     * @apiParam {Long} userId 用户id <必传 />
      *
      * @apiSuccess {Object} postList 帖子
      * @apiSuccess {Object} postList.user 用户
@@ -358,7 +358,7 @@ public class UserApi extends CommonController {
      * @apiSuccess {Long} postList.createDate 创建时间
      */
     @RequestMapping(value = "/postList")
-    public void postList(HttpServletResponse response, Integer userId) {
+    public void postList(HttpServletResponse response, Long userId) {
 
         if (userId == null ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -383,30 +383,30 @@ public class UserApi extends CommonController {
      * @api {post} /api/user/postInfo 我的帖子详情
      * @apiName user.postInfo
      * @apiGroup user
-     * @apiParam {Integer} postId 帖子id <必传 />
+     * @apiParam {Long} postId 帖子id <必传 />
      *
      * @apiSuccess {Object} post 帖子
-     * @apiSuccess {Integer} post.content 帖子内容
+     * @apiSuccess {String} post.content 帖子内容
      * @apiSuccess {Long} post.createDate 帖子创建时间
      *
      * @apiSuccess {Object} post.user 用户列表
-     * @apiSuccess {Integer} post.user.id 用户id
+     * @apiSuccess {Long} post.user.id 用户id
      * @apiSuccess {String} post.user.nickname 用户昵称
      *
      * @apiSuccess {Object} postImages 帖子图片列表
      * @apiSuccess {String} postImages.avater 帖子图片
      *
      * @apiSuccess {Object} postComments 帖子评论列表
-     * @apiSuccess {Integer} postComments.content 帖子内容
+     * @apiSuccess {String} postComments.content 帖子内容
      * @apiSuccess {Long} postComments.createDate 帖子创建时间
      * @apiSuccess {Object} postComments.fUser 帖子评论人
-     * @apiSuccess {Integer} postComments.fUser.id 帖子评论人id
+     * @apiSuccess {Long} postComments.fUser.id 帖子评论人id
      * @apiSuccess {String} postComments.fUser.avater 帖子评论人头像
      * @apiSuccess {String} postComments.fUser.nickname 帖子评论人昵称
      *
      */
     @RequestMapping(value = "/postInfo")
-    public void postInfo(HttpServletResponse response, Integer postId) {
+    public void postInfo(HttpServletResponse response, Long postId) {
 
         if (postId == null ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -437,11 +437,10 @@ public class UserApi extends CommonController {
      *  @api {post} /api/user/watchingList 我的看球列表
      * @apiName user.watchingList
      * @apiGroup user
-     * @apiParam {Integer} userId 用户id <必传 />
+     * @apiParam {Long} userId 用户id <必传 />
      *
      * @apiSuccess {Object} girlUserList 用户约看列表
-     * @apiSuccess {Integer} girlUserList.id 约看id
-     * @apiSuccess {Integer} girlUserList.duration 时长
+     * @apiSuccess {Long} girlUserList.id 约看id
      * @apiSuccess {Double} girlUserList.tip 红包（小费）
      * @apiSuccess {Long} girlUserList.startDate 预约时间
      *
@@ -451,13 +450,13 @@ public class UserApi extends CommonController {
      * @apiSuccess {Double} girlUserList.girl.price 宝贝价格
      *
      * @apiSuccess {Object} girlUserList.bigRace 赛事
-     * @apiSuccess {Integer} girlUserList.bigRace.id 赛事id
+     * @apiSuccess {Long} girlUserList.bigRace.id 赛事id
      * @apiSuccess {Long} girlUserList.bigRace.team1name 球队1的名字
      * @apiSuccess {Object} girlUserList.bigRace.team2name 球队2的名字
      *
      */
     @RequestMapping(value = "/watchingList")
-    public void watchingList(HttpServletResponse response, Integer userId) {
+    public void watchingList(HttpServletResponse response, Long userId) {
 
         if (userId == null ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -477,7 +476,7 @@ public class UserApi extends CommonController {
      * @api {post} /api/user/watchingInfo 我的约看详情
      * @apiName user.watchingInfo
      * @apiGroup user
-     * @apiParam {Integer} girlUserId 约看id <必传 />
+     * @apiParam {Long} girlUserId 约看id <必传 />
      *
      * @apiSuccess {Object} girlUsers 用户约看列表
      * @apiSuccess {Double} girlUsers.tip 红包（小费）
@@ -491,13 +490,13 @@ public class UserApi extends CommonController {
      * @apiSuccess {Double} girlUsers.tip 宝贝体重
      *
      * @apiSuccess {Object} girlUsers.bigRace 赛事
-     * @apiSuccess {Integer} girlUsers.bigRace.id 赛事id
+     * @apiSuccess {Long} girlUsers.bigRace.id 赛事id
      * @apiSuccess {Long} girlUsers.bigRace.team1name 球队1的名字
      * @apiSuccess {Object} girlUsers.bigRace.team2name 球队2的名字
      *
      */
     @RequestMapping(value = "/watchingInfo")
-    public void watchingInfo(HttpServletResponse response, Integer girlUserId) {
+    public void watchingInfo(HttpServletResponse response, Long girlUserId) {
 
         if (girlUserId == null ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -517,11 +516,11 @@ public class UserApi extends CommonController {
      * @api {post} /api/user/confirm 我的看球确认
      * @apiName user.confirm
      * @apiGroup user
-     * @apiParam {Integer} watchingId 约看id
+     * @apiParam {Long} watchingId 约看id
      *
      */
     @RequestMapping(value = "/confirm")
-    public void confirm(HttpServletResponse response, Integer watchingId) {
+    public void confirm(HttpServletResponse response, Long watchingId) {
 
         if (watchingId == null ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -542,13 +541,13 @@ public class UserApi extends CommonController {
      * @api {post} /api/user/comment 我的看球评价
      * @apiName user.comment
      * @apiGroup user
-     * @apiParam {Integer} watchingId 约看id <必传 />
+     * @apiParam {Long} watchingId 约看id <必传 />
      * @apiParam {Integer} star 服务打分 <必传 />
      * @apiParam {String} content 评论内容 <必传 />
      *
      */
     @RequestMapping(value = "/comment")
-    public void comment(HttpServletResponse response, Integer star, String content, Integer watchingId) {
+    public void comment(HttpServletResponse response, Integer star, String content, Long watchingId) {
 
         if (watchingId == null || star == null || content == null || content == " ") {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));

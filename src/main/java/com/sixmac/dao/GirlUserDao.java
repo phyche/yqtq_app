@@ -10,12 +10,12 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/5/23 0023 下午 2:29.
  */
-public interface GirlUserDao extends JpaRepository<GirlUser, Integer>, JpaSpecificationExecutor<GirlUser> {
+public interface GirlUserDao extends JpaRepository<GirlUser, Long>, JpaSpecificationExecutor<GirlUser> {
 
     @Query("select a from GirlUser a where a.user.id = ?1 ")
-    public List<GirlUser> findByUserId(Integer userId);
+    public List<GirlUser> findByUserId(Long userId);
 
     @Query("select a from GirlUser a where a.girl.id = ?1 ")
-    public List<GirlUser> findByGirlId(Integer girlId);
+    public List<GirlUser> findByGirlId(Long girlId);
 
 }

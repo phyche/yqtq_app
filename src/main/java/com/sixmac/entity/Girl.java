@@ -13,7 +13,7 @@ public class Girl extends BaseEntity{
     @JoinColumn(name = "city_id",referencedColumnName = "city_id")
     private City city;*/
     @Column(name = "city_id")
-    private Integer cityId;
+    private Long cityId;
 
     @Transient
     private String cityName;
@@ -56,11 +56,11 @@ public class Girl extends BaseEntity{
         this.cityName = cityName;
     }
 
-    public Integer getCityId() {
+    public Long getCityId() {
         return cityId;
     }
 
-    public void setCityId(Integer cityId) {
+    public void setCityId(Long cityId) {
         this.cityId = cityId;
     }
 

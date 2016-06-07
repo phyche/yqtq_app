@@ -9,5 +9,5 @@ import org.springframework.data.domain.Page;
  */
 public interface BigRaceService extends ICommonService<BigRace> {
 
-    public Page<BigRace> page(Integer cityId, Integer pageNum, Integer pageSize);
+    public Page<BigRace> page(Long cityId, Integer pageNum, Integer pageSize);
 }

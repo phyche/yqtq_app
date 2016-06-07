@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface GirlImageService extends ICommonService<GirlImage> {
 
-    public List<GirlImage> findByGirlId(Integer girlId);
+    public List<GirlImage> findByGirlId(Long girlId);
 
     public List<GirlImage> findByType(Integer type);
 

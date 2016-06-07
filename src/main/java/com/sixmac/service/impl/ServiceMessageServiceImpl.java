@@ -38,12 +38,12 @@ public class ServiceMessageServiceImpl implements ServiceMessageService {
     }
 
     @Override
-    public ServiceMessage getById(int id) {
+    public ServiceMessage getById(Long id) {
         return serviceMessageDao.findOne(id);
     }
 
     @Override
-    public ServiceMessage deleteById(int id) {
+    public ServiceMessage deleteById(Long id) {
         ServiceMessage serviceMessage = getById(id);
         serviceMessageDao.delete(serviceMessage);
         return serviceMessage;
@@ -61,8 +61,8 @@ public class ServiceMessageServiceImpl implements ServiceMessageService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }

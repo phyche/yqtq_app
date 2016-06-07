@@ -46,12 +46,12 @@ public class TeamRaceServiceImpl implements TeamRaceService {
     }
 
     @Override
-    public TeamRace getById(int id) {
+    public TeamRace getById(Long id) {
         return teamRaceDao.findOne(id);
     }
 
     @Override
-    public TeamRace deleteById(int id) {
+    public TeamRace deleteById(Long id) {
         TeamRace teamRace = getById(id);
         teamRaceDao.delete(teamRace);
         return teamRace;
@@ -70,8 +70,8 @@ public class TeamRaceServiceImpl implements TeamRaceService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }
@@ -99,12 +99,12 @@ public class TeamRaceServiceImpl implements TeamRaceService {
     }
 
     @Override
-    public List<TeamRace> findHomeId(Integer homeId) {
+    public List<TeamRace> findHomeId(Long homeId) {
         return teamRaceDao.findHomeId(homeId);
     }
 
     @Override
-    public List<TeamRace> findVisitingId(Integer visitingId) {
+    public List<TeamRace> findVisitingId(Long visitingId) {
         return teamRaceDao.findVisitingId(visitingId);
     }
 

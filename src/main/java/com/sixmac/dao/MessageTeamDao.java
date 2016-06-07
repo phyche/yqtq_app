@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 
-public interface MessageTeamDao extends JpaRepository<MessageTeam, Integer> {
+public interface MessageTeamDao extends JpaRepository<MessageTeam, Long> {
 
     //根据球队查询邀请加入球队的消息
     @Query("select a from MessageTeam a where a.team = ?1 and a.status != 0")
@@ -18,6 +18,6 @@ public interface MessageTeamDao extends JpaRepository<MessageTeam, Integer> {
 
     //根据用户id查询被邀请加入球队的消息
     @Query("select a from MessageTeam a where a.toUser.id = ?1 and a.status = 0")
-    public List<MessageTeam> findByToUserId(Integer userId);
+    public List<MessageTeam> findByToUserId(Long userId);
 
 }

@@ -38,12 +38,12 @@ public class BannerServiceImpl implements BannerService {
     }
 
     @Override
-    public Banner getById(int id) {
+    public Banner getById(Long id) {
         return bannerDao.findOne(id);
     }
 
     @Override
-    public Banner deleteById(int id) {
+    public Banner deleteById(Long id) {
         Banner banner = getById(id);
         bannerDao.delete(banner);
         return banner;
@@ -61,8 +61,8 @@ public class BannerServiceImpl implements BannerService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }

@@ -10,9 +10,9 @@ import java.util.List;
  */
 public interface PostCommentService extends ICommonService<PostComment> {
 
-    public List<PostComment> findByPostId(Integer postId);
+    public List<PostComment> findByPostId(Long postId);
 
-    public List<PostComment> findByFuserId(Integer userId);
+    public List<PostComment> findByFuserId(Long userId);
 
-    public List<PostComment> findByToUserId(Integer userId);
+    public List<PostComment> findByToUserId(Long userId);
 }
