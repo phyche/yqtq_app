@@ -511,9 +511,7 @@ public class WatchingApi extends CommonController {
         order.setSn(sn);
         orderService.create(order);
 
-        money = order.getPrice();
-
-        Result obj = new Result(true).data(money);
+        Result obj = new Result(true).data(order);
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }

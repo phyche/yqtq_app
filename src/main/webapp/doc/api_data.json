@@ -1245,10 +1245,10 @@
           },
           {
             "group": "Parameter",
-            "type": "String",
+            "type": "Object",
             "optional": false,
-            "field": "image",
-            "description": "<p>图片 &lt;必传 /&gt;</p>"
+            "field": "imagesMap",
+            "description": "<p>图片数组Map</p>"
           }
         ]
       }
@@ -5613,13 +5613,6 @@
           },
           {
             "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "avater",
-            "description": "<p>球队队徽 &lt;必传 /&gt;</p>"
-          },
-          {
-            "group": "Parameter",
             "type": "Integer",
             "optional": false,
             "field": "slogan",
@@ -6512,82 +6505,6 @@
         ]
       }
     },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "user",
-            "description": "<p>用户</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "optional": false,
-            "field": "user.id",
-            "description": "<p>用户id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "user.avater",
-            "description": "<p>用户头像</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "user.nickname",
-            "description": "<p>用户昵称</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "optional": false,
-            "field": "user.gender",
-            "description": "<p>用户性别（0：男 1：女）</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "user.birthday",
-            "description": "<p>用户出生日期</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "optional": false,
-            "field": "user.cityId",
-            "description": "<p>用户城市</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Double",
-            "optional": false,
-            "field": "user.height",
-            "description": "<p>身高</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Double",
-            "optional": false,
-            "field": "user.weight",
-            "description": "<p>体重</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "optional": false,
-            "field": "user.position",
-            "description": "<p>位置（0：前 1：中 2：后 3：守）</p>"
-          }
-        ]
-      }
-    },
     "version": "0.0.0",
     "filename": "src/main/java/com/sixmac/controller/api/UserApi.java",
     "groupTitle": "user",
@@ -6599,9 +6516,9 @@
   },
   {
     "type": "post",
-    "url": "/api/user/info",
-    "title": "用户个人资料",
-    "name": "user_info",
+    "url": "/api/user/homePage",
+    "title": "用户个人首页",
+    "name": "user_homePage",
     "group": "user",
     "parameter": {
       "fields": {
@@ -6793,6 +6710,97 @@
             "optional": false,
             "field": "myTeam.list.avater",
             "description": "<p>球员头像</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/UserApi.java",
+    "groupTitle": "user",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:8080/yqtq_app/api/user/homePage"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/api/user/info",
+    "title": "用户个人资料",
+    "name": "user_info",
+    "group": "user",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "user",
+            "description": "<p>用户</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "user.id",
+            "description": "<p>用户id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "user.avater",
+            "description": "<p>用户头像</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "user.nickname",
+            "description": "<p>用户昵称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "user.gender",
+            "description": "<p>用户性别（0：男 1：女）</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "user.birthday",
+            "description": "<p>用户出生日期</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "user.cityId",
+            "description": "<p>用户城市</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "user.height",
+            "description": "<p>身高</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "user.weight",
+            "description": "<p>体重</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "user.position",
+            "description": "<p>位置（0：前 1：中 2：后 3：守）</p>"
           }
         ]
       }

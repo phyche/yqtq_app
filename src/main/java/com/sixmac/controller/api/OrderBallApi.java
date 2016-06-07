@@ -575,8 +575,7 @@ public class OrderBallApi extends CommonController {
         userReserve.setUser(userService.getById(userId));
         userReserve.setReserve(reserve);
         userReserve.setStatus(0);
-        userReserveService.create(userReserve);;
-
+        userReserveService.create(userReserve);
 
     }
 }

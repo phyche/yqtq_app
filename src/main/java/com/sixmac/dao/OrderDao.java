@@ -12,5 +12,6 @@ import java.util.List;
  */
 public interface OrderDao extends JpaRepository<Order, Integer>, JpaSpecificationExecutor<Order> {
 
-
+    @Query("select a from Order a where a.sn= ?1")
+    public Order iFindOneByOrderNum(String orderNum);
 }

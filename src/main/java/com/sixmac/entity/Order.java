@@ -26,6 +26,12 @@ public class Order extends BaseEntity{
     @Column(name = "status")
     private Integer status = 0;
 
+    @Column(name = "pay_date")
+    private Long payTime;
+
+    @Column(name = "type")
+    private Integer type;
+
     public String getUsername() {
         return username;
     }
@@ -64,5 +70,21 @@ public class Order extends BaseEntity{
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Long getPayTime() {
+        return payTime;
+    }
+
+    public void setPayTime(Long payTime) {
+        this.payTime = payTime;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 }

@@ -3,6 +3,7 @@ package com.sixmac.service.impl;
 import com.sixmac.core.Constant;
 import com.sixmac.dao.OrderDao;
 import com.sixmac.entity.Order;
+import com.sixmac.pay.excute.PayRequest;
 import com.sixmac.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,7 +12,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2016/5/24 0024 下午 5:54.
@@ -67,4 +71,22 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    @Override
+    public Map<String, Object> getPayInfo(HttpServletRequest request, HttpServletResponse response, String orderNum) {
+        Order orders = orderDao.iFindOneByOrderNum(orderNum);
+
+        // 微信
+        String prepayid = null; //预支付款ID
+        request.setAttribute("fee", orders.getPrice());
+        request.setAttribute("sn", orderNum);
+        request.setAttribute("prepayid", prepayid);
+        Map<String, Object> params = PayRequest.pay(request, response);
+
+        return params;
+    }
+
+    @Override
+    public Order iFindOneByOrderNum(String orderNum) {
+        return orderDao.iFindOneByOrderNum(orderNum);
+    }
 }
