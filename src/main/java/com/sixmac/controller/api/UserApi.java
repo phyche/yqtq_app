@@ -1,16 +1,20 @@
 package com.sixmac.controller.api;
 
 import com.sixmac.controller.common.CommonController;
+import com.sixmac.core.ErrorCode;
 import com.sixmac.core.bean.Result;
 import com.sixmac.entity.*;
 import com.sixmac.entity.vo.TeamVo;
 import com.sixmac.entity.vo.UserVo;
 import com.sixmac.service.*;
 import com.sixmac.utils.JsonUtil;
+import com.sixmac.utils.QiNiuUploadImgUtil;
 import com.sixmac.utils.WebUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartRequest;
 
 import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
@@ -60,8 +64,8 @@ public class UserApi extends CommonController {
     /**
      * 完成
      *
-     *  @api {post} /api/user/info 用户个人资料
-     * @apiName user.info
+     *  @api {post} /api/user/homePage 用户个人首页
+     * @apiName user.homePage
      * @apiGroup user
      * @apiParam {Integer} userId 用户id <必传 />
      *
@@ -93,8 +97,14 @@ public class UserApi extends CommonController {
      * @apiSuccess {Integer} myTeam.list.id 球员id
      * @apiSuccess {String} myTeam.list.avater 球员头像
      */
-    @RequestMapping(value = "/info")
-    public void info(HttpServletResponse response, Integer userId) {
+    @RequestMapping(value = "/homePage")
+    public void homePage(HttpServletResponse response, Integer userId) {
+
+        if (userId == null ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
         Map<String, Object> map = new HashMap<String, Object>();
 
         User user = userService.getById(userId);
@@ -166,6 +176,40 @@ public class UserApi extends CommonController {
     /**
      * 完成
      *
+     * @api {post} /api/user/info 用户个人资料
+     * @apiName user.info
+     * @apiGroup user
+     *
+     * @apiSuccess {Object} user 用户
+     * @apiSuccess {Integer} user.id 用户id
+     * @apiSuccess {String} user.avater 用户头像
+     * @apiSuccess {String} user.nickname 用户昵称
+     * @apiSuccess {Integer} user.gender 用户性别（0：男 1：女）
+     * @apiSuccess {Long} user.birthday 用户出生日期
+     * @apiSuccess {Integer} user.cityId 用户城市
+     * @apiSuccess {Double} user.height 身高
+     * @apiSuccess {Double} user.weight 体重
+     * @apiSuccess {Integer} user.position 位置（0：前 1：中 2：后 3：守）
+     *
+     */
+    @RequestMapping(value = "/info")
+    public void info(HttpServletResponse response, Integer userId) {
+
+        if (userId == null ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
+        User user = userService.getById(userId);
+
+        Result obj = new Result(true).data(user);
+        String result = JsonUtil.obj2ApiJson(obj);
+        WebUtil.printApi(response, result);
+    }
+
+    /**
+     * 完成
+     *
      * @api {post} /api/user/edit 编辑个人资料
      * @apiName user.edit
      * @apiGroup user
@@ -180,22 +224,10 @@ public class UserApi extends CommonController {
      * @apiParam {Double} weight 体重
      * @apiParam {Integer} position 位置（0：前 1：中 2：后 3：守）
      *
-     * @apiSuccess {Object} user 用户
-     * @apiSuccess {Integer} user.id 用户id
-     * @apiSuccess {String} user.avater 用户头像
-     * @apiSuccess {String} user.nickname 用户昵称
-     * @apiSuccess {Integer} user.gender 用户性别（0：男 1：女）
-     * @apiSuccess {Long} user.birthday 用户出生日期
-     * @apiSuccess {Integer} user.cityId 用户城市
-     * @apiSuccess {Double} user.height 身高
-     * @apiSuccess {Double} user.weight 体重
-     * @apiSuccess {Integer} user.position 位置（0：前 1：中 2：后 3：守）
-     *
      */
     @RequestMapping(value = "/edit")
     public void edit(HttpServletResponse response,
                      Integer userId,
-                     String avater,
                      String nickname,
                      Integer gender,
                      Long birthday,
@@ -203,7 +235,13 @@ public class UserApi extends CommonController {
                      Integer cityId,
                      Double height,
                      Double weight,
-                     Integer position) {
+                     Integer position,
+                     MultipartRequest multipartRequest) {
+
+        if (userId == null ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         User user = userService.getById(userId);
 
@@ -227,8 +265,12 @@ public class UserApi extends CommonController {
         if (this_month.compareTo(birth_month) < 0) age -= 1;
         if (age < 0) age = 0;
 
-
-        user.setAvater(avater);
+        MultipartFile multipartFile = multipartRequest.getFile("mainImage");
+        if (null != multipartFile) {
+            String url = QiNiuUploadImgUtil.upload(multipartFile);
+            //magazine.setCover(url);
+            user.setAvater(url);
+        }
         user.setNickname(nickname);
         user.setGender(gender);
         user.setBirthday(birthday);
@@ -285,6 +327,11 @@ public class UserApi extends CommonController {
     @RequestMapping(value = "/commentList")
     public void commentList(HttpServletResponse response, Integer userId) {
 
+        if (userId == null ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
         List<PostComment> postComments = postCommentService.findByFuserId(userId);
 
         Result obj = new Result(true).data(postComments);
@@ -312,6 +359,12 @@ public class UserApi extends CommonController {
      */
     @RequestMapping(value = "/postList")
     public void postList(HttpServletResponse response, Integer userId) {
+
+        if (userId == null ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
         List<Post> postList = postService.findByUserId(userId);
         for (Post post : postList) {
             post.setCommentNum(postCommentService.findByPostId(post.getId()).size());
@@ -354,6 +407,11 @@ public class UserApi extends CommonController {
      */
     @RequestMapping(value = "/postInfo")
     public void postInfo(HttpServletResponse response, Integer postId) {
+
+        if (postId == null ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         Map<String, Object> map = new HashMap<String, Object>();
 
@@ -401,6 +459,11 @@ public class UserApi extends CommonController {
     @RequestMapping(value = "/watchingList")
     public void watchingList(HttpServletResponse response, Integer userId) {
 
+        if (userId == null ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
         List<GirlUser> girlUserList = girlUserService.findByUserId(userId);
 
         Result obj = new Result(true).data(girlUserList);
@@ -436,6 +499,11 @@ public class UserApi extends CommonController {
     @RequestMapping(value = "/watchingInfo")
     public void watchingInfo(HttpServletResponse response, Integer girlUserId) {
 
+        if (girlUserId == null ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
         GirlUser girlUsers = girlUserService.getById(girlUserId);
 
         Result obj = new Result(true).data(girlUsers);
@@ -454,6 +522,11 @@ public class UserApi extends CommonController {
      */
     @RequestMapping(value = "/confirm")
     public void confirm(HttpServletResponse response, Integer watchingId) {
+
+        if (watchingId == null ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         GirlUser girlUser = girlUserService.getById(watchingId);
 
@@ -476,6 +549,11 @@ public class UserApi extends CommonController {
      */
     @RequestMapping(value = "/comment")
     public void comment(HttpServletResponse response, Integer star, String content, Integer watchingId) {
+
+        if (watchingId == null || star == null || content == null || content == " ") {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         GirlUser girlUser = girlUserService.getById(watchingId);
 

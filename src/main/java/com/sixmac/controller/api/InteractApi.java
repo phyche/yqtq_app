@@ -2,21 +2,24 @@ package com.sixmac.controller.api;
 
 import com.sixmac.common.DataTableFactory;
 import com.sixmac.controller.common.CommonController;
+import com.sixmac.core.Constant;
+import com.sixmac.core.ErrorCode;
 import com.sixmac.core.bean.Result;
 import com.sixmac.entity.*;
 import com.sixmac.service.*;
 import com.sixmac.utils.APIFactory;
 import com.sixmac.utils.JsonUtil;
+import com.sixmac.utils.QiNiuUploadImgUtil;
 import com.sixmac.utils.WebUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Administrator on 2016/5/19 0019.
@@ -104,8 +107,8 @@ public class InteractApi extends CommonController {
      * @apiName interact.publish
      * @apiGroup interact
      * @apiParam {Integer} userId 用户id <必传 />
-     * @apiParam {String} content 内容
-     * @apiParam {String} image 图片
+     * @apiParam {String} content 内容 <必传 />
+     * @apiParam {Object} imagesMap 图片数组Map
      *
      *
      */
@@ -113,7 +116,12 @@ public class InteractApi extends CommonController {
     public void publish(HttpServletResponse response,
                         Integer userId,
                         String content,
-                        String image) {
+                        MultipartHttpServletRequest multipartRequest) {
+
+        if (null == userId || content == null || content == " ") {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         User user = userService.getById(userId);
         Post post = new Post();
@@ -122,11 +130,30 @@ public class InteractApi extends CommonController {
         post.setStatus(0);
         postService.create(post);
 
-        PostImage postImage = new PostImage();
-        postImage.setPost(post);
-        postImage.setAvater(image);
-        postImage.setStatus(0);
-        postImageService.create(postImage);
+        try {
+            // 保存圈子图片集合
+            PostImage postImage = new PostImage();
+
+            // 获取图片集合
+            Iterator<String> fileList = multipartRequest.getFileNames();
+            while (fileList.hasNext()) {
+                String fileName = fileList.next();
+                MultipartFile file = multipartRequest.getFile(fileName);
+                if (null != file) {
+                    postImage = new PostImage();
+                    postImage.setPost(post);
+                    postImage.setStatus(0);
+                    postImage.setAvater(QiNiuUploadImgUtil.upload2(file));
+
+                    postImageService.create(postImage);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            WebUtil.printApi(response, new Result(false).msg(ErrorCode.ERROR_CODE_0001));
+        }
+
+
 
         WebUtil.printApi(response, new Result(true));
     }
@@ -161,6 +188,10 @@ public class InteractApi extends CommonController {
     @RequestMapping(value = "/postInfo")
     public void postInfo(HttpServletResponse response, Integer postId) {
 
+        if (null == postId ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
         Map<String,Object> map = new HashMap<String,Object>();
 
         Post post = postService.getById(postId);
@@ -194,6 +225,11 @@ public class InteractApi extends CommonController {
                         Integer touserId,
                         String content) {
 
+        if (null == userId || postId == null || touserId == null|| content == null|| content == " ") {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
         PostComment postComment = new PostComment();
         postComment.setPost(postService.getById(postId));
         postComment.setfUser(userService.getById(userId));
@@ -223,6 +259,11 @@ public class InteractApi extends CommonController {
     @RequestMapping(value = "/addressBook")
     public void addressBook(HttpServletResponse response, Integer userId) {
 
+        if (null == userId ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
         List<MessageAdd> messageAddList = messageAddService.findUserId(userId);
 
         Result obj = new Result(true).data(messageAddList);
@@ -242,6 +283,11 @@ public class InteractApi extends CommonController {
      */
     @RequestMapping(value = "/addFriend")
     public void addFriend(HttpServletResponse response, Integer userId, String mobile) {
+
+        if (null == userId || mobile == null || mobile == " ") {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         User user = userService.findByMobile(mobile);
 
@@ -308,6 +354,11 @@ public class InteractApi extends CommonController {
     @RequestMapping(value = "/messageInfo")
     public void messageInfo(HttpServletResponse response, Integer messageId) {
 
+        if (null == messageId ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
         Information information = informationService.getById(messageId);
 
         Result obj = new Result(true).data(information);
@@ -367,6 +418,11 @@ public class InteractApi extends CommonController {
      */
     @RequestMapping(value = "/activityInfo")
     public void activityInfo(HttpServletResponse response, Integer activityId) {
+
+        if (null == activityId ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         Activity activity = activityService.getById(activityId);
 

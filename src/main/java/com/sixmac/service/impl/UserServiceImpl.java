@@ -1,8 +1,11 @@
 package com.sixmac.service.impl;
 
 import com.sixmac.core.Constant;
+import com.sixmac.dao.CityDao;
 import com.sixmac.dao.UserDao;
+import com.sixmac.dao.UserOtherDao;
 import com.sixmac.entity.User;
+import com.sixmac.entity.UserOther;
 import com.sixmac.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,6 +25,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private UserOtherDao userOtherDao;
+
+    @Autowired
+    private CityDao cityDao;
 
     @Override
     public List<User> findAll() {
@@ -73,7 +83,34 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByName(String nickname) {
-        return userDao.findByName(nickname);
+    public User iTLogin(Integer type, String openId, String head, String nickname) {
+        UserOther userOther = userDao.iTLogin(openId, type);
+        User user = null;
+        // 如果第三方用户信息不存在，则执行注册操作
+        if (null == userOther) {
+            // 此处执行注册操作
+            user = new User();
+            user.setNickname(nickname);
+            user.setAvater(head);
+            user.setCityId(cityDao.findOne(1).getCityId());
+            user.setCredibility(0);
+            user.setStatus(0);
+            user.setCreateDate(new Date().getTime());
+
+            userDao.save(user);
+
+            // 注册完毕后，添加该用户的第三方信息
+            UserOther others = new UserOther();
+            others.setType(type);
+            others.setOpenId(openId);
+            others.setUser(user);
+
+            userOtherDao.save(others);
+        } else {
+            user = userOther.getUser();
+        }
+
+        return user;
     }
+
 }

@@ -1,4 +1,3 @@
-/*
 package com.sixmac.dao;
 
 import com.sixmac.entity.MessageJoin;
@@ -10,18 +9,15 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-*/
-/**
- * Created by Administrator on 2016/6/3 0003 下午 2:31.
- *//*
 
 public interface MessageTeamDao extends JpaRepository<MessageTeam, Integer> {
 
-    //根据主队查询球队约战消息
-    @Query("select a from MessageTeam a where a.homeTeam = ?1 ")
-    public List<MessageTeam> findByHomeTeam(Team team);
+    //根据球队查询邀请加入球队的消息
+    @Query("select a from MessageTeam a where a.team = ?1 and a.status != 0")
+    public List<MessageTeam> findByTeam(Team team);
 
-    //根据客队查询球队约战消息
-    @Query("select a from MessageTeam a where a.visitingTeam = ?1 ")
-    public List<MessageTeam> findByVisitingTeam(Team team);
-}*/
+    //根据用户id查询被邀请加入球队的消息
+    @Query("select a from MessageTeam a where a.toUser.id = ?1 and a.status = 0")
+    public List<MessageTeam> findByToUserId(Integer userId);
+
+}

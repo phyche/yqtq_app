@@ -1,6 +1,7 @@
 package com.sixmac.controller.api;
 
 import com.sixmac.controller.common.CommonController;
+import com.sixmac.core.ErrorCode;
 import com.sixmac.core.bean.Result;
 import com.sixmac.entity.*;
 import com.sixmac.utils.DateUtils;
@@ -56,6 +57,9 @@ public class MessageApi extends CommonController {
     @Autowired
     private TeamMemberService teamMemberService;
 
+    @Autowired
+    private MessageTeamService messageTeamService;
+
     /**
      * 完成
      *
@@ -81,6 +85,11 @@ public class MessageApi extends CommonController {
      */
     @RequestMapping(value = "/orderBall")
     public void orderBall(HttpServletResponse response, Integer userId) {
+
+        if (null == userId ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         List<MessageOrderBall> messageOrderBallList = messageOrderBallService.findByToUserId(userId);
         for (MessageOrderBall messageOrderBall : messageOrderBallList) {
@@ -119,6 +128,11 @@ public class MessageApi extends CommonController {
      */
     @RequestMapping(value = "/addOrder")
     public void addOrder(HttpServletResponse response, Integer userId) {
+
+        if (null == userId ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         List<Reserve> reserveList = reserveService.findByUserId(userId);
         List<UserReserve> userReserveList = new ArrayList<UserReserve>();
@@ -159,6 +173,11 @@ public class MessageApi extends CommonController {
     @RequestMapping(value = "/myOrder")
     public void myOrder(HttpServletResponse response, Integer userId) {
 
+        if (null == userId ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
         List<UserReserve> userReserveList = userReserveService.findByUserId(userId);
 
         for (UserReserve userReserve : userReserveList) {
@@ -179,7 +198,7 @@ public class MessageApi extends CommonController {
     }
 
     /**
-     *
+     * 完成
      *
      * @api {post} /api/message/doOrder 处理好友约球消息
      * @apiName message.doOrder
@@ -190,6 +209,11 @@ public class MessageApi extends CommonController {
      */
     @RequestMapping(value = "/doOrder")
     public void doOrder(HttpServletResponse response, Integer messageOrderBallId, Integer status) {
+
+        if (null == messageOrderBallId || status == null ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         MessageOrderBall messageOrderBall = messageOrderBallService.getById(messageOrderBallId);
         messageOrderBall.setStatus(status);
@@ -236,6 +260,11 @@ public class MessageApi extends CommonController {
     @RequestMapping(value = "/watching")
     public void watching(HttpServletResponse response, Integer userId) {
 
+        if (null == userId ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
         List<MessageWatching> messageWatchingList = messageWatchingService.findByToUserId(userId);
         for (MessageWatching messageWatching : messageWatchingList) {
 
@@ -271,6 +300,11 @@ public class MessageApi extends CommonController {
     @RequestMapping(value = "/post")
     public void post(HttpServletResponse response, Integer userId) {
 
+        if (null == userId ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
         List<PostComment> postCommentList = postCommentService.findByToUserId(userId);
         for (PostComment postComment : postCommentList) {
             postComment.setTitle("user" + "评论了您的" + "post");
@@ -299,6 +333,11 @@ public class MessageApi extends CommonController {
     @RequestMapping(value = "/system")
     public void system(HttpServletResponse response, Integer userId) {
 
+        if (null == userId ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
         List<SystemMessage> messageList = systemMessageService.findByToUserId(userId);
 
         Result obj = new Result(true).data(messageList);
@@ -324,6 +363,11 @@ public class MessageApi extends CommonController {
      */
     @RequestMapping(value = "/systemInfo")
     public void systemInfo(HttpServletResponse response, Integer systemId) {
+
+        if (null == systemId ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         SystemMessage message = systemMessageService.getById(systemId);
 
@@ -351,6 +395,11 @@ public class MessageApi extends CommonController {
      */
     @RequestMapping(value = "/toAdd")
     public void toAdd(HttpServletResponse response, Integer userId) {
+
+        if (null == userId ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         List<MessageAdd> messageAddList = messageAddService.findByUserId(userId);
 
@@ -389,6 +438,11 @@ public class MessageApi extends CommonController {
     @RequestMapping(value = "/beAdd")
     public void beAdd(HttpServletResponse response, Integer userId) {
 
+        if (null == userId ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
         List<MessageAdd> messageAddList = messageAddService.findByToUserId(userId);
 
         for (MessageAdd messageAdd : messageAddList) {
@@ -414,6 +468,11 @@ public class MessageApi extends CommonController {
      */
     @RequestMapping(value = "/doAdd")
     public void doAdd(HttpServletResponse response, Integer messageAddId, Integer status) {
+
+        if (null == messageAddId || status == null ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         MessageAdd messageAdd = messageAddService.getById(messageAddId);
         messageAdd.setStatus(status);
@@ -441,6 +500,11 @@ public class MessageApi extends CommonController {
      */
     @RequestMapping(value = "joinTeam")
     public void joinTeam(HttpServletResponse response, Integer userId) {
+
+        if (null == userId ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         Team team = teamService.findListByLeaderId(userId);
 
@@ -472,6 +536,11 @@ public class MessageApi extends CommonController {
     @RequestMapping(value = "/doJoinTeam")
     public void doJoinTeam(HttpServletResponse response, Integer messageJoinId, Integer status) {
 
+        if (null == messageJoinId || status == null ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
         MessageJoin messageJoin = messageJoinService.getById(messageJoinId);
         messageJoin.setStatus(status);
         messageJoinService.update(messageJoin);
@@ -484,6 +553,133 @@ public class MessageApi extends CommonController {
         }
 
         WebUtil.printApi(response, new Result(true).data(0));
+    }
+
+    /**
+     * 完成
+     *
+     * @api {post} /api/message/beJoinTeam 被邀请加入球队消息
+     * @apiName message.beJoinTeam
+     * @apiGroup message
+     * @apiParam {Integer} userId 用户id <必传/>
+     *
+     * @apiSuccess {Object}  messageTeamList 消息列表
+     * @apiSuccess {Integer} messageTeamList.id 消息id
+     * @apiSuccess {String} messageTeamList.content 消息内容
+     * @apiSuccess {Object} messageTeamList.user 邀请加入球队的用户
+     * @apiSuccess {Integer} messageTeamList.user.id 用户id
+     * @apiSuccess {String} messageTeamList.user.nickname 用户昵称
+     * @apiSuccess {Object} messageTeamList.team 邀请加入的球队
+     * @apiSuccess {Integer} messageTeamList.team.id 球队id
+     * @apiSuccess {String} messageTeamList.team.name 球队名称
+     * @apiSuccess {Long} messageTeamList.createDate 消息时间
+     *
+     */
+    @RequestMapping(value = "/beJoinTeam")
+    public void beJoinTeam(HttpServletResponse response, Integer userId) {
+
+        if (null == userId ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
+        List<MessageTeam> messageTeamList = messageTeamService.findByToUserId(userId);
+
+
+        for (MessageTeam messageTeam : messageTeamList) {
+            messageTeam.setContent("user" + "邀请您加入" + "team");
+        }
+
+        Result obj = new Result(true).data(messageTeamList);
+        String result = JsonUtil.obj2ApiJson(obj,"list","leaderUser","toUser");
+        WebUtil.printApi(response, result);
+
+    }
+
+    /**
+     * 完成
+     *
+     * @api {post} /api/message/doBeJoinTeam 处理被邀请加入球队消息
+     * @apiName message.doBeJoinTeam
+     * @apiGroup message
+     * @apiParam {Integer} messageTeamId 消息id <必传/>
+     * @apiParam {Integer} status 状态（1：同意，2：拒绝） <必传 />
+     *
+     */
+    @RequestMapping(value = "/doBeJoinTeam")
+    public void doBeJoinTeam(HttpServletResponse response, Integer messageTeamId, Integer status) {
+
+        if (null == messageTeamId || status == null ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
+        MessageTeam messageTeam = messageTeamService.getById(messageTeamId);
+        messageTeam.setStatus(status);
+        messageTeamService.update(messageTeam);
+
+        if (status == 1) {
+            TeamMember teamMember = new TeamMember();
+            teamMember.setUser(messageTeam.getToUser());
+            teamMember.setTeam(messageTeam.getTeam());
+            teamMemberService.create(teamMember);
+        }
+
+        WebUtil.printApi(response, new Result(true).data(0));
+    }
+
+    /**
+     * 完成
+     *
+     * @api {post} /api/message/Join 邀请加入球队消息
+     * @apiName message.Join
+     * @apiGroup message
+     * @apiParam {Integer} userId 用户id <必传/>
+     *
+     * @apiSuccess {Object}  messageTeamList 消息列表
+     * @apiSuccess {Integer} messageTeamList.id 消息id
+     * @apiSuccess {String} messageTeamList.content 消息内容
+     * @apiSuccess {Object} messageTeamList.toUser 邀请加入球队的用户
+     * @apiSuccess {Integer} messageTeamList.toUser.id 用户id
+     * @apiSuccess {String} messageTeamList.toUser.nickname 用户昵称
+     * @apiSuccess {Object} messageTeamList.team 邀请加入的球队
+     * @apiSuccess {Integer} messageTeamList.team.id 球队id
+     * @apiSuccess {String} messageTeamList.team.name 球队名称
+     * @apiSuccess {Long} messageTeamList.createDate 消息时间
+     *
+     */
+    @RequestMapping(value = "/Join")
+    public void Join(HttpServletResponse response, Integer userId) {
+
+        if (null == userId ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
+        Team team = teamService.findListByLeaderId(userId);
+
+        if (team == null) {
+
+            WebUtil.printApi(response, new Result(true).data("不是队长，不能查看被邀请加入球队消息"));
+        }else {
+
+            List<MessageTeam> messageTeamList = messageTeamService.findByTeam(team);
+
+            for (MessageTeam messageTeam : messageTeamList) {
+                if (messageTeam.getStatus() == 1) {
+
+                    messageTeam.setContent("user" + "同意加入您的球队");
+                } else if (messageTeam.getStatus() == 2) {
+
+                    messageTeam.setContent("user" + "拒绝加入您的球队");
+                }
+
+            }
+
+            Result obj = new Result(true).data(messageTeamList);
+            String result = JsonUtil.obj2ApiJson(obj,"list","leaderUser","user");
+            WebUtil.printApi(response, result);
+        }
     }
 
     /**
@@ -511,6 +707,11 @@ public class MessageApi extends CommonController {
      */
     @RequestMapping(value = "/teamOrder")
     public void teamOrder(HttpServletResponse response, Integer userId) {
+
+        if (null == userId ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         List<Team> teamList = new ArrayList<Team>();
         List<TeamMember> teamMemberList = teamMemberService.findByUserId(userId);
@@ -569,6 +770,11 @@ public class MessageApi extends CommonController {
      */
     @RequestMapping(value = "/doTeamOrder")
     public void doTeamOrder(HttpServletResponse response, Integer teamRaceId, Integer status) {
+
+        if (null == teamRaceId || status == null ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         TeamRace teamRace = teamRaceService.getById(teamRaceId);
         teamRace.setStatus(status);

@@ -1,4 +1,3 @@
-/*
 package com.sixmac.service.impl;
 
 import com.sixmac.core.Constant;
@@ -15,11 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-*/
 /**
- * Created by Administrator on 2016/6/3 0003 下午 2:31.
- *//*
-
+ * Created by Administrator on 2016/6/7 0007 上午 9:57.
+ */
 @Service
 public class MessageTeamServiceImpl implements MessageTeamService {
 
@@ -72,12 +69,12 @@ public class MessageTeamServiceImpl implements MessageTeamService {
     }
 
     @Override
-    public List<MessageTeam> findByHomeTeam(Team team) {
-        return messageTeamDao.findByHomeTeam(team);
+    public List<MessageTeam> findByToUserId(Integer userId) {
+        return messageTeamDao.findByToUserId(userId);
     }
 
     @Override
-    public List<MessageTeam> findByVisitingTeam(Team team) {
-        return messageTeamDao.findByVisitingTeam(team);
+    public List<MessageTeam> findByTeam(Team team) {
+        return messageTeamDao.findByTeam(team);
     }
-}*/
+}

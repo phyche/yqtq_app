@@ -2,6 +2,7 @@ package com.sixmac.controller.api;
 
 import com.sixmac.common.DataTableFactory;
 import com.sixmac.controller.common.CommonController;
+import com.sixmac.core.ErrorCode;
 import com.sixmac.core.bean.Result;
 import com.sixmac.entity.*;
 import com.sixmac.service.*;
@@ -108,6 +109,11 @@ public class WatchingApi extends CommonController {
     @RequestMapping(value = "/telecastInfo")
     public void telecastInfo(HttpServletResponse response, Integer telecastId) {
 
+        if (telecastId == null ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
         WatchingRace watchingRace = watchingRaceService.getById(telecastId);
 
         Result obj = new Result(true).data(watchingRace);
@@ -131,6 +137,11 @@ public class WatchingApi extends CommonController {
                               Integer telecastId,
                               Integer userId,
                               Integer toUserId) {
+
+        if (userId == null || telecastId == null || toUserId == null) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         MessageWatching messageWatching = new MessageWatching();
 
@@ -207,6 +218,11 @@ public class WatchingApi extends CommonController {
     @RequestMapping(value = "/sceneInfo")
     public void sceneInfo(HttpServletResponse response, Integer sceneId) {
 
+        if (sceneId == null ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
         BigRace bigRace = bigRaceService.getById(sceneId);
 
         Result obj = new Result(true).data(bigRace);
@@ -230,6 +246,11 @@ public class WatchingApi extends CommonController {
                               Integer sceneId,
                               Integer userId,
                               Integer toUserId) {
+
+        if (userId == null || sceneId == null || toUserId == null) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         MessageWatching messageWatching = new MessageWatching();
 
@@ -326,6 +347,12 @@ public class WatchingApi extends CommonController {
      */
     @RequestMapping(value = "/girlInfo")
     public void girlInfo(HttpServletResponse response, Integer girlId) {
+
+        if (girlId == null ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
         Map<String,Object> map = new HashMap<String,Object>();
         //宝贝个人信息
         Girl girl = girlService.getById(girlId);
@@ -368,6 +395,11 @@ public class WatchingApi extends CommonController {
     @RequestMapping(value = "/girlComment")
     public void girlComment(HttpServletResponse response, Integer girlId) {
 
+        if (girlId == null ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
         List<GirlComment> girlCommentList = girlCommentService.findByGirlId(girlId);
 
         Result obj = new Result(true).data(girlCommentList);
@@ -407,6 +439,11 @@ public class WatchingApi extends CommonController {
                           Integer userId,
                           Integer girlId,
                           Integer sceneId) {
+
+        if (userId == null || girlId == null || sceneId == null) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         Map<String,Object> map = new HashMap<String,Object>();
 
@@ -450,6 +487,11 @@ public class WatchingApi extends CommonController {
                     Double tip,
                     Integer girlUserId,
                     Double money) {
+
+        if (girlUserId == null ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         GirlUser girlUser = girlUserService.getById(girlUserId);
         if (tip == null) {

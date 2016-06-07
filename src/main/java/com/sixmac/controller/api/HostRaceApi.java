@@ -1,5 +1,6 @@
 package com.sixmac.controller.api;
 
+import com.sixmac.core.ErrorCode;
 import com.sixmac.core.bean.Result;
 import com.sixmac.entity.*;
 import com.sixmac.service.*;
@@ -87,6 +88,11 @@ public class HostRaceApi {
     @RequestMapping(value = "/info")
     public void info(HttpServletResponse response, Integer raceId) {
 
+        if (null == raceId ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
         HostRace hostRace = hostRaceService.getById(raceId);
 
         Result obj = new Result(true).data(hostRace);
@@ -114,6 +120,11 @@ public class HostRaceApi {
      */
     @RequestMapping(value = "/teamList")
     public void teamList(HttpServletResponse response, Integer raceId) {
+
+        if (null == raceId ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         List<Team> teams = new ArrayList<Team>();
 
@@ -145,6 +156,11 @@ public class HostRaceApi {
     @RequestMapping(value = "/eventInformation")
     public void eventInformation(HttpServletResponse response, Integer raceId) {
 
+        if (null == raceId ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
         EventInformation eventInformation = eventInformationService.findByRaceId(raceId);
 
         Result obj = new Result(true).data(eventInformation);
@@ -159,12 +175,18 @@ public class HostRaceApi {
      * @apiName hostRace.apply
      * @apiGroup hostRace
      * @apiParam {Integer} raceId 草根杯id <必传 />
+     * @apiParam {Integer} userId 用户id <必传 />
      *
      * @apiSuccess {Object}  eventInformation 草根杯赛事资讯列表
      * @apiSuccess {String} eventInformation.content 草根杯赛事资讯内容
      */
     @RequestMapping(value = "/apply")
     public void apply(HttpServletResponse response, Integer raceId, Integer userId) {
+
+        if (null == raceId || userId == null) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         HostRace hostRace = hostRaceService.getById(raceId);
 

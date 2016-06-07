@@ -9,8 +9,12 @@ import com.sixmac.service.common.ICommonService;
  */
 public interface UserService extends ICommonService<User> {
 
+    //根据手机号（账号）查询用户
     public User findByMobile(String mobile);
 
-    public User findByName(String nickname);
+
+    // 移动端用户第三方登录
+    public User iTLogin(Integer type, String openId, String head, String nickname);
+
 
 }

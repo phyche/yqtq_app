@@ -1,48 +1,54 @@
 package com.sixmac.entity;
 
-/*
 import javax.persistence.*;
 
-*/
 /**
- * Created by Administrator on 2016/6/3 0003.
- *//*
-
+ * Created by Administrator on 2016/6/7 0007.
+ */
 @Entity
 @Table(name = "t_message_team")
 public class MessageTeam extends BaseEntity {
 
     @ManyToOne
-    @JoinColumn(name = "home_team_id")
-    private Team homeTeam;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToOne
-    @JoinColumn(name = "visiting_team_id")
-    private Team visitingTeam;
+    @JoinColumn(name = "to_user_id")
+    private User toUser;
+
+    @ManyToOne
+    @JoinColumn(name = "team_id")
+    private Team team;
 
     @Column(name = "status")
     private Integer status;
 
-    @Column(name = "start_date")
-    private Long startTime;
-
     @Transient
     private String content;
 
-    public Team getHomeTeam() {
-        return homeTeam;
+    public User getUser() {
+        return user;
     }
 
-    public void setHomeTeam(Team homeTeam) {
-        this.homeTeam = homeTeam;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public Team getVisitingTeam() {
-        return visitingTeam;
+    public User getToUser() {
+        return toUser;
     }
 
-    public void setVisitingTeam(Team visitingTeam) {
-        this.visitingTeam = visitingTeam;
+    public void setToUser(User toUser) {
+        this.toUser = toUser;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
     }
 
     public Integer getStatus() {
@@ -60,13 +66,4 @@ public class MessageTeam extends BaseEntity {
     public void setContent(String content) {
         this.content = content;
     }
-
-    public Long getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(Long startTime) {
-        this.startTime = startTime;
-    }
 }
-*/

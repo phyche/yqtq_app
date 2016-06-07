@@ -1,6 +1,7 @@
 package com.sixmac.controller.api;
 
 import com.sixmac.controller.common.CommonController;
+import com.sixmac.core.ErrorCode;
 import com.sixmac.core.bean.Result;
 import com.sixmac.entity.*;
 import com.sixmac.service.*;
@@ -67,6 +68,11 @@ public class PlayIndexApi extends CommonController {
      */
     @RequestMapping(value = "orderballList")
     public void orderballList(HttpServletResponse response, Integer userId) {
+
+        if (null == userId ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         Map<String, Object> map = new HashMap<String, Object>();
 
@@ -161,6 +167,11 @@ public class PlayIndexApi extends CommonController {
     @RequestMapping(value = "/jump")
     public void jump(HttpServletResponse response, Integer bannerId) {
 
+        if (null == bannerId ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
         Map<String, Object> map = new HashMap<String, Object>();
 
         Banner banner = bannerService.getById(bannerId);
@@ -208,6 +219,11 @@ public class PlayIndexApi extends CommonController {
      */
     @RequestMapping(value = "/teamRace")
     public void teamRace(HttpServletResponse response, Integer userId) {
+
+        if (null == userId ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         List<Team> teams = new ArrayList<Team>();
 

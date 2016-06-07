@@ -2,6 +2,7 @@ package com.sixmac.controller.api;
 
 import com.sixmac.common.DataTableFactory;
 import com.sixmac.controller.common.CommonController;
+import com.sixmac.core.ErrorCode;
 import com.sixmac.core.bean.Result;
 import com.sixmac.entity.*;
 import com.sixmac.entity.vo.StadiumVo;
@@ -54,9 +55,6 @@ public class StadiumApi extends CommonController {
     private UserReserveService userReserveService;
 
     @Autowired
-    private CityService cityService;
-
-    @Autowired
     private AreaService areaService;
 
     @Autowired
@@ -72,8 +70,8 @@ public class StadiumApi extends CommonController {
      * @apiName stadium.list
      * @apiGroup stadium
      * @apiParam {Integer} type 球赛类型 N人制 N代表数量
-     * @apiParam {Double} longitude 经度
-     * @apiParam {Double} latitude 纬度
+     * @apiParam {Double} longitude 经度  <必传/>
+     * @apiParam {Double} latitude 纬度  <必传/>
      * @apiParam {Integer} areaId 区域ID
      * @apiParam {Integer} pageNum 当前页
      * @apiParam {Integer} pageSize 每页显示数
@@ -100,6 +98,11 @@ public class StadiumApi extends CommonController {
                      Integer type,
                      Integer pageNum,
                      Integer pageSize) throws IOException {
+
+        if (null == latitude || longitude == null ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         Page<Stadium> page = stadiumService.page(areaId, type, pageNum, pageSize);
         List<Stadium> stadiumList = page.getContent();
@@ -139,6 +142,11 @@ public class StadiumApi extends CommonController {
      */
     @RequestMapping(value = "/info")
     public void info(HttpServletResponse response, Integer stadiumId) throws ParseException {
+
+        if (null == stadiumId ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         Map<String, Object> map = new HashMap<String, Object>();
 
@@ -191,6 +199,11 @@ public class StadiumApi extends CommonController {
     @RequestMapping(value = "/order")
     public void order(HttpServletResponse response, Integer stadiumId) {
 
+        if (null == stadiumId ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
         Stadium stadium = stadiumService.getById(stadiumId);
         stadium.setAreaName(areaService.getByAreaId(stadium.getAreaId()).getArea());
 
@@ -209,6 +222,7 @@ public class StadiumApi extends CommonController {
      * @apiParam {Integer} userId 用户ID <必传/>
      * @apiParam {String} title 标题  <必传/>
      * @apiParam {Long} time 约球时间 <必传/>
+     *
      * @apiSuccess {Object}  stadium 球场
      * @apiSuccess {Integer} stadium.id 球场id
      * @apiSuccess {String} stadium.name 球场名称
@@ -221,6 +235,11 @@ public class StadiumApi extends CommonController {
                         Integer stadiumId,
                         String title,
                         Long time) {
+
+        if (null == userId || stadiumId == null || title == null || title == " " || time == null) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         User user = userService.getById(userId);
         Stadium stadium = stadiumService.getById(stadiumId);
@@ -248,6 +267,7 @@ public class StadiumApi extends CommonController {
      * @apiGroup stadium
      * @apiParam {Integer} stadiumId 球场ID <必传/>
      * @apiParam {Long} time 当天时间戳 <必传/>
+     *
      * @apiSuccess {Object}  site 场地
      * @apiSuccess {String}  site.code 场地编号
      * @apiSuccess {Integer} site.type 场地类型  N人制
@@ -255,6 +275,11 @@ public class StadiumApi extends CommonController {
      */
     @RequestMapping(value = "/siteSelect")
     public void siteSelect(HttpServletResponse response, Long time, Integer stadiumId) {
+
+        if (null == stadiumId || time == null ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         Map<String, Object> map = new HashMap<String, Object>();
         List<String> list = new ArrayList<String>();
@@ -294,8 +319,8 @@ public class StadiumApi extends CommonController {
      * @apiParam {Integer} siteId 场地ID <必传/>
      * @apiParam {Integer} status 运动保险状态（0：不买  1：买） <必传/>
      * @apiParam {Long} time 时间戳  <必传/>
-     * @apiParam {Integer} start 开始时间点（0：不买  1：买） <必传/>
-     * @apiParam {Integer} end 结束时间点（0：不买  1：买） <必传/>
+     * @apiParam {Integer} start 开始时间点  <必传/>
+     * @apiParam {Integer} end 结束时间点  <必传/>
      *
      * @apiSuccess {Object}  siteTime 场地预定
      * @apiSuccess {Integer} siteTime.id 预定id
@@ -314,8 +339,13 @@ public class StadiumApi extends CommonController {
                           Integer siteId,
                           Integer status,
                           Long time,
-                          int start,
-                          int end) {
+                          Integer start,
+                          Integer end) {
+
+        if (null == siteId || status == null || time == null || start == null || end == null ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         Map<String, Object> map = new HashMap<String, Object>();
 
@@ -349,9 +379,10 @@ public class StadiumApi extends CommonController {
      * @apiName stadium.pay
      * @apiGroup stadium
      * @apiParam {Integer} siteTimeId 预定场地ID <必传/>
-     * @apiParam {Integer} userId 用户ID（0：不买  1：买） <必传/>
+     * @apiParam {Integer} userId 用户ID <必传/>
      * @apiParam {Integer} insuranceId 保险ID
      * @apiParam {Integer} num 购买保险数
+     *
      * @apiSuccess {Object}  site 场地
      * @apiSuccess {Object}  sysInsurance 保险
      * @apiSuccess {Integer} sysInsurance.id 保险id
@@ -372,6 +403,11 @@ public class StadiumApi extends CommonController {
                     Integer num,
                     Double preferente,
                     Double money) {
+
+        if (null == userId || siteTimeId == null) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         Map<String, Object> map = new HashMap<String, Object>();
 
@@ -457,6 +493,11 @@ public class StadiumApi extends CommonController {
     @RequestMapping(value = "/payConfirm")
     public void payConfirm(HttpServletResponse response, Integer reserveId, Integer type, Double money) {
 
+        if (null == reserveId || type == null ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
         Reserve reserve = reserveService.getById(reserveId);
 
         String sn = CommonUtils.generateSn(); // 订单号
@@ -490,7 +531,7 @@ public class StadiumApi extends CommonController {
      * @apiName stadium.teamPay
      * @apiGroup stadium
      * @apiParam {Integer} siteTimeId 预定场地ID <必传/>
-     * @apiParam {Integer} userId 用户ID（0：不买  1：买） <必传/>
+     * @apiParam {Integer} userId 用户ID <必传/>
      * @apiParam {Integer} insuranceId 保险ID
      * @apiParam {Integer} num 购买保险数
      * @apiSuccess {Object}  site 场地
@@ -512,6 +553,11 @@ public class StadiumApi extends CommonController {
                         Integer num,
                         Double preferente,
                         Double money) {
+
+        if (null == userId || siteTimeId == null) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         Map<String, Object> map = new HashMap<String, Object>();
 
@@ -584,6 +630,10 @@ public class StadiumApi extends CommonController {
     @RequestMapping(value = "/teamPayConfirm")
     public void teamPayConfirm(HttpServletResponse response, Integer reserveTeamId, Double money) {
 
+        if (null == reserveTeamId ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
         ReserveTeam reserveTeam = reserveTeamService.getById(reserveTeamId);
 
         String sn = CommonUtils.generateSn(); // 订单号

@@ -2,20 +2,20 @@ package com.sixmac.controller.api;
 
 import com.sixmac.common.DataTableFactory;
 import com.sixmac.controller.common.CommonController;
+import com.sixmac.core.ErrorCode;
 import com.sixmac.core.bean.Result;
 import com.sixmac.entity.*;
 import com.sixmac.entity.vo.UserVo;
 import com.sixmac.entity.vo.WatchBallVo;
 import com.sixmac.service.*;
-import com.sixmac.utils.APIFactory;
-import com.sixmac.utils.DateUtils;
-import com.sixmac.utils.JsonUtil;
-import com.sixmac.utils.WebUtil;
+import com.sixmac.utils.*;
 import org.springframework.beans.factory.NamedBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartRequest;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
@@ -45,6 +45,9 @@ public class TeamApi extends CommonController {
 
     @Autowired
     private MessageJoinService messageJoinService;
+
+    @Autowired
+    private MessageTeamService messageTeamService;
 
 
     /**
@@ -122,6 +125,11 @@ public class TeamApi extends CommonController {
     @RequestMapping(value = "/info")
     public void info(HttpServletResponse response, Integer teamId) {
 
+        if (null == teamId) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
         Map<String, Object> map = new HashMap<String, Object>();
 
         Integer sum = 0;
@@ -161,7 +169,6 @@ public class TeamApi extends CommonController {
      * @apiGroup team
      * @apiParam {Integer} userId 用户Id <必传 />
      * @apiParam {String} name 球队名称 <必传 />
-     * @apiParam {String} avater 球队队徽 <必传 />
      * @apiParam {Integer} slogan 球队口号 <必传 />
      * @apiParam {Integer} address 球队地址
      *
@@ -170,13 +177,25 @@ public class TeamApi extends CommonController {
     @RequestMapping(value = "/add")
     public void add(HttpServletResponse response,
                     Integer userId,
-                    String cover,
                     String name,
                     String address,
-                    String slogan) {
+                    String slogan,
+                    MultipartRequest multipartRequest) {
+
+        if (null == userId || name == null || name == " " || address == null || address == " " || slogan == null || slogan == " ") {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         Team team = new Team();
-        team.setAvater(cover);
+
+        MultipartFile multipartFile = multipartRequest.getFile("mainImage");
+        if (null != multipartFile) {
+            String url = QiNiuUploadImgUtil.upload(multipartFile);
+            //magazine.setCover(url);
+            team.setAvater(url);
+        }
+
         team.setName(name);
         team.setAddress(address);
         team.setSlogan(slogan);
@@ -199,13 +218,19 @@ public class TeamApi extends CommonController {
     @RequestMapping(value = "/addFriend")
     public void addFriend(HttpServletResponse response, Integer userId, Integer toUserId) {
 
+        if (null == userId || toUserId == null) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
         Team team = teamService.findListByLeaderId(userId);
 
-        MessageJoin messageJoin = new MessageJoin();
-        messageJoin.setStatus(0);
-        messageJoin.setUser(userService.getById(toUserId));
-        messageJoin.setTeam(team);
-        messageJoinService.create(messageJoin);
+        MessageTeam messageTeam = new MessageTeam();
+        messageTeam.setUser(userService.getById(userId));
+        messageTeam.setToUser(userService.getById(toUserId));
+        messageTeam.setTeam(team);
+        messageTeam.setStatus(0);
+        messageTeamService.create(messageTeam);
 
         WebUtil.printApi(response, new Result(true).data("添加成功"));
     }
@@ -222,6 +247,11 @@ public class TeamApi extends CommonController {
      */
     @RequestMapping(value = "/apply")
     public void apply(HttpServletResponse response, Integer userId, Integer teamId) {
+
+        if (null == teamId || userId == null) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         MessageJoin messageJoin = new MessageJoin();
         messageJoin.setStatus(0);
@@ -242,7 +272,7 @@ public class TeamApi extends CommonController {
      * @apiParam {Integer} userId 用户Id <必传 />
      * @apiParam {Integer} teamId 球队Id <必传 />
      * @apiParam {Long} time 约球时间
-     * @apiParam {Integer} address 约球地址
+     * @apiParam {Integer} cityId 约球地址
      */
     @RequestMapping(value = "/order")
     public void order(HttpServletResponse response,
@@ -250,6 +280,11 @@ public class TeamApi extends CommonController {
                       Integer teamId,
                       Long time,
                       Integer cityId) {
+
+        if (null == teamId || userId == null ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         Map<String, Object> map = new HashMap<String, Object>();
 
@@ -263,6 +298,7 @@ public class TeamApi extends CommonController {
             TeamRace teamRace = new TeamRace();
             teamRace.setHomeTeam(team2);
             teamRace.setVisitingTeam(team1);
+            teamRace.setStartTime(time);
             teamRace.setStartTime(time);
             teamRace.setCityId(cityId);
             team2.setDeclareNum(team2.getDeclareNum() + 1);
@@ -291,6 +327,11 @@ public class TeamApi extends CommonController {
      */
     @RequestMapping(value = "/playerList")
     public void playerList(HttpServletResponse response, Integer teamId) {
+
+        if (null == teamId ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         //根据球队id会自动查询用户列表
         Team team = teamService.getById(teamId);
@@ -332,6 +373,11 @@ public class TeamApi extends CommonController {
      */
     @RequestMapping(value = "/schedule")
     private void schedule(HttpServletResponse response, Integer teamId) {
+
+        if (null == teamId ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         Map<String, Object> map = new HashMap<String, Object>();
 

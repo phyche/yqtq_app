@@ -140,6 +140,11 @@ public class OrderBallApi extends CommonController {
     @RequestMapping(value = "/orderInfo")
     public void orderInfo(HttpServletResponse response, Integer reserveId) {
 
+        if (null == reserveId ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
         try {
             Map<String, Object> map = new HashMap<String, Object>();
             if (null == reserveId) {
@@ -157,8 +162,6 @@ public class OrderBallApi extends CommonController {
                 return;
             }
 
-            User user = reserveService.getById(reserveId).getUser();
-
             //已报名该预定的用户
             List<User> userList = new ArrayList<User>();
             List<UserReserve> userReserves = userReserveService.findByReserverId(reserveId);
@@ -173,12 +176,6 @@ public class OrderBallApi extends CommonController {
             reserve.setAvePrice(reserve.getPrice() / reserve.getMatchType());
             reserve.setSumPrice(reserve.getAvePrice() + reserve.getInsurance().getPrice());
             reserveService.update(reserve);
-
-            /*Insurance insurance = new Insurance();
-            insurance.setReserve(reserve);
-            insurance.setUser(userService.getById(userId));
-            insurance.setMoney(reserve.getInsurance().getPrice());
-            insuranceService.create(insurance);*/
 
             map.put("userList", userList);
             map.put("reserve", reserve);
@@ -241,6 +238,12 @@ public class OrderBallApi extends CommonController {
      */
     @RequestMapping(value = "/info")
     public void info(HttpServletResponse response, Integer playerId) {
+
+        if (null == playerId ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
         Map<String, Object> map = new HashMap<String, Object>();
 
         User user = userService.getById(playerId);
@@ -285,6 +288,12 @@ public class OrderBallApi extends CommonController {
      */
     @RequestMapping(value = "/orderList")
     public void orderList(HttpServletResponse response, Integer playerId) {
+
+        if (null == playerId ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
         Map<String, Object> map = new HashMap<String, Object>();
 
         List<Reserve> reserveList = new ArrayList<Reserve>();
@@ -322,6 +331,11 @@ public class OrderBallApi extends CommonController {
                       Integer reserveId,
                       Integer userId,
                       Integer toUserId) {
+
+        if (null == userId || reserveId == null || toUserId == null) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         MessageOrderBall messageOrderBall = new MessageOrderBall();
 
@@ -362,6 +376,11 @@ public class OrderBallApi extends CommonController {
      */
     @RequestMapping(value = "/raceList")
     public void raceList(HttpServletResponse response, Integer playerId) {
+
+        if (null == playerId ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         Map<String, Object> map = new HashMap<String, Object>();
 
@@ -449,6 +468,11 @@ public class OrderBallApi extends CommonController {
     @RequestMapping(value = "/raceInfo")
     public void raceInfo(HttpServletResponse response, Integer userId, Integer raceId, String mobile) {
 
+        if (null == userId || raceId == null) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
         Map<String, Object> map = new HashMap<String, Object>();
 
         TeamRace teamRace = teamRaceService.getById(raceId);
@@ -510,6 +534,11 @@ public class OrderBallApi extends CommonController {
      */
     @RequestMapping(value = "/pay")
     public void pay(HttpServletResponse response, Integer reserveId, Integer userId, Double money) {
+
+        if (null == userId || reserveId == null) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         Reserve reserve = reserveService.getById(reserveId);
 
