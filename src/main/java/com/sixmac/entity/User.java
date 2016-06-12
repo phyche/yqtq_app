@@ -62,10 +62,10 @@ public class User extends BaseEntity{
     private City city;*/
 
     @Column(name = "province_id")
-    private Integer provinceId;
+    private Long provinceId;
 
     @Column(name = "city_id")
-    private Integer cityId;
+    private Long cityId;
 
     @Column(name = "status")
     private Integer status = 0;
@@ -180,19 +180,19 @@ public class User extends BaseEntity{
         this.endDate = endDate;
     }
 
-    public Integer getProvinceId() {
+    public Long getProvinceId() {
         return provinceId;
     }
 
-    public void setProvinceId(Integer provinceId) {
+    public void setProvinceId(Long provinceId) {
         this.provinceId = provinceId;
     }
 
-    public Integer getCityId() {
+    public Long getCityId() {
         return cityId;
     }
 
-    public void setCityId(Integer cityId) {
+    public void setCityId(Long cityId) {
         this.cityId = cityId;
     }
 

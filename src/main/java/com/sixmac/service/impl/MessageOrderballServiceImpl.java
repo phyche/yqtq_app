@@ -38,12 +38,12 @@ public class MessageOrderBallServiceImpl implements MessageOrderBallService {
     }
 
     @Override
-    public MessageOrderBall getById(int id) {
+    public MessageOrderBall getById(Long id) {
         return messageOrderBallDao.findOne(id);
     }
 
     @Override
-    public MessageOrderBall deleteById(int id) {
+    public MessageOrderBall deleteById(Long id) {
         MessageOrderBall messageOrderBall = getById(id);
         messageOrderBallDao.delete(messageOrderBall);
         return messageOrderBall;
@@ -61,14 +61,14 @@ public class MessageOrderBallServiceImpl implements MessageOrderBallService {
 
     @Override
     @Transactional
-    public void deleteAll(int[] ids) {
-        for (int id : ids) {
+    public void deleteAll(Long[] ids) {
+        for (Long id : ids) {
             deleteById(id);
         }
     }
 
     @Override
-    public List<MessageOrderBall> findByToUserId(Integer userId) {
+    public List<MessageOrderBall> findByToUserId(Long userId) {
         return messageOrderBallDao.findByToUserId(userId);
     }
 }

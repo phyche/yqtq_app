@@ -51,11 +51,11 @@ public class PlayIndexApi extends CommonController {
      * @api {post} /api/playIndex/orderballList 我的赛事列表
      * @apiName playIndex.orderballList
      * @apiGroup playIndex
-     * @apiParam {Integer} userId 用户id <必传 />
+     * @apiParam {Long} userId 用户id <必传 />
      *
      * @apiSuccess {Object}  reserves 约球列表
-     * @apiSuccess {Integer} reserves.id 约球id
-     * @apiSuccess {Integer} reserves.content 约球内容
+     * @apiSuccess {Long} reserves.id 约球id
+     * @apiSuccess {String} reserves.content 约球内容
      * @apiSuccess {Integer} reserves.matchType 赛制
      * @apiSuccess {Integer} reserves.joinCount 已报人数
      * @apiSuccess {Integer} reserves.lackCount 剩余人数
@@ -67,7 +67,7 @@ public class PlayIndexApi extends CommonController {
      * @apiSuccess {Long} reserves.startTime 开始时间
      */
     @RequestMapping(value = "orderballList")
-    public void orderballList(HttpServletResponse response, Integer userId) {
+    public void orderballList(HttpServletResponse response, Long userId) {
 
         if (null == userId ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -114,10 +114,10 @@ public class PlayIndexApi extends CommonController {
      * @apiGroup playIndex
      *
      * @apiSuccess {Object}  bannerList 系统banner图列表
-     * @apiSuccess {Integer} bannerList.id banner图id
-     * @apiSuccess {Integer} bannerList.avater banner图
+     * @apiSuccess {Long} bannerList.id banner图id
+     * @apiSuccess {String} bannerList.avater banner图
      * @apiSuccess {Integer} bannerList.type banner图类型
-     * @apiSuccess {Integer} bannerList.toId banner图跳转目的Id
+     * @apiSuccess {Long} bannerList.toId banner图跳转目的Id
      *
      */
     @RequestMapping(value = "/banner")
@@ -136,10 +136,10 @@ public class PlayIndexApi extends CommonController {
      * @api {post} /api/playIndex/jump 系统banner图跳转
      * @apiName playIndex.jump
      * @apiGroup playIndex
-     * @apiParam {Integer} bannerId banner图id <必传 />
+     * @apiParam {Long} bannerId banner图id <必传 />
      *
      * @apiSuccess {Object}  activity 活动
-     * @apiSuccess {Integer} list.id 活动id
+     * @apiSuccess {Long} list.id 活动id
      * @apiSuccess {String} activity.title 活动标题
      * @apiSuccess {String} activity.avater 活动封面
      * @apiSuccess {String} activity.introduction 活动简介
@@ -147,7 +147,7 @@ public class PlayIndexApi extends CommonController {
      * @apiSuccess {Long} activity.createDate 活动创建时间
      *
      * @apiSuccess {Object}  hostRace 草根杯
-     * @apiSuccess {Integer} hostRace.id 草根杯id
+     * @apiSuccess {Long} hostRace.id 草根杯id
      * @apiSuccess {Integer} hostRace.type 草根杯赛制
      * @apiSuccess {String} hostRace.name 草根杯名字
      * @apiSuccess {String} hostRace.avater 草根杯封面
@@ -156,7 +156,7 @@ public class PlayIndexApi extends CommonController {
      * @apiSuccess {String} hostRace.stadium.name 球场名称
      *
      * @apiSuccess {Object}  information 资讯列表
-     * @apiSuccess {Integer} information.id 资讯id
+     * @apiSuccess {Long} information.id 资讯id
      * @apiSuccess {String} information.title 资讯标题
      * @apiSuccess {String} information.avater 资讯封面
      * @apiSuccess {String} information.introduction 资讯简介
@@ -165,7 +165,7 @@ public class PlayIndexApi extends CommonController {
      *
      */
     @RequestMapping(value = "/jump")
-    public void jump(HttpServletResponse response, Integer bannerId) {
+    public void jump(HttpServletResponse response, Long bannerId) {
 
         if (null == bannerId ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -204,21 +204,21 @@ public class PlayIndexApi extends CommonController {
      * @api {post} /api/playIndex/teamRace 球队约战
      * @apiName playIndex.teamRace
      * @apiGroup playIndex
-     * @apiParam {Integer} userId 用户id <必传 />
+     * @apiParam {Long} userId 用户id <必传 />
      *
      * @apiSuccess {Object}  teamList 球队约战列表
-     * @apiSuccess {Integer} teamList.id 球队id
+     * @apiSuccess {Long} teamList.id 球队id
      * @apiSuccess {String} teamList.name 球队名字
      * @apiSuccess {String} teamList.avater 球队队徽
      * @apiSuccess {Integer} teamList.declareNum 球队宣战数
      * @apiSuccess {Integer} teamList.battleNum 球队应战数
      * @apiSuccess {Object} teamList.list 球队球员列表
-     * @apiSuccess {Integer} teamList.list.id 球队球员id
+     * @apiSuccess {Long} teamList.list.id 球队球员id
      * @apiSuccess {String} teamList.list.avater 球队球员头像
      *
      */
     @RequestMapping(value = "/teamRace")
-    public void teamRace(HttpServletResponse response, Integer userId) {
+    public void teamRace(HttpServletResponse response, Long userId) {
 
         if (null == userId ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));

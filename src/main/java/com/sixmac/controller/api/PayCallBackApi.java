@@ -4,7 +4,10 @@ import com.sixmac.controller.common.CommonController;
 import com.sixmac.core.Constant;
 import com.sixmac.core.bean.Result;
 import com.sixmac.entity.Order;
+import com.sixmac.entity.User;
 import com.sixmac.service.OrderService;
+import com.sixmac.service.SysCredibilityService;
+import com.sixmac.service.SysExperienceService;
 import com.sixmac.service.UserService;
 import com.sixmac.utils.JsonUtil;
 import com.sixmac.utils.WebUtil;
@@ -37,6 +40,12 @@ public class PayCallBackApi extends CommonController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private SysExperienceService sysExperienceService;
+
+    @Autowired
+    private SysCredibilityService sysCredibilityService;
 
     /**
      * @api {post} /api/pay/getPayInfo 拼接微信支付参数
@@ -204,8 +213,11 @@ public class PayCallBackApi extends CommonController {
             orders.setStatus(Constant.ORDERS_STATUS_001);
             orders.setType(type);
             orders.setPayTime(new Date().getTime());
-
             orderService.update(orders);
+
+            User user = orders.getUser();
+            user.setCredibility(user.getCredibility() + sysCredibilityService.findByAction(orders.getAction()).getCredibility());
+            user.setExperience(user.getExperience() + sysExperienceService.findByAction(orders.getAction()).getExperience());
 
             WebUtil.printApi(response, new Result(true));
         } catch (Exception e) {

@@ -503,9 +503,10 @@ public class StadiumApi extends CommonController {
         String sn = CommonUtils.generateSn(); // 订单号
 
         Order order = new Order();
-        order.setUsername(reserve.getUser().getNickname());
+        order.setUser(reserve.getUser());
         order.setStadiumname(reserve.getSite().getStadium().getName());
         order.setPrice(reserve.getPrice());
+        order.setAction(2);
         order.setSn(sn);
         orderService.create(order);
 
@@ -639,10 +640,11 @@ public class StadiumApi extends CommonController {
         String sn = CommonUtils.generateSn(); // 订单号
 
         Order order = new Order();
-        order.setUsername(reserveTeam.getUser().getNickname());
+        order.setUser(reserveTeam.getUser());
         order.setStadiumname(reserveTeam.getSite().getStadium().getName());
         order.setPrice(reserveTeam.getPrice());
         order.setSn(sn);
+        order.setAction(2);
         orderService.create(order);
 
         money = order.getPrice();

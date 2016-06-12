@@ -505,10 +505,11 @@ public class WatchingApi extends CommonController {
         String sn = CommonUtils.generateSn(); // 订单号
 
         Order order = new Order();
-        order.setUsername(girlUser.getUser().getNickname());
+        order.setUser(girlUser.getUser());
         order.setStadiumname(girlUser.getStadium().getName());
         order.setPrice(girlUser.getPrice() + girlUser.getTip());
         order.setSn(sn);
+        order.setAction(3);
         orderService.create(order);
 
         Result obj = new Result(true).data(order);

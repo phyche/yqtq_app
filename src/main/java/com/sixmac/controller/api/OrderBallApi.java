@@ -559,9 +559,10 @@ public class OrderBallApi extends CommonController {
 
             String sn = CommonUtils.generateSn(); // 订单号
             Order order = new Order();
-            order.setUsername(userService.getById(userId).getNickname());
+            order.setUser(userService.getById(userId));
             order.setStadiumname(reserve.getStadium().getName());
             order.setPrice(money);
+            order.setAction(1);
             order.setSn(sn);
             orderService.create(order);
 

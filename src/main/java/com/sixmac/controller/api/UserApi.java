@@ -7,9 +7,7 @@ import com.sixmac.entity.*;
 import com.sixmac.entity.vo.TeamVo;
 import com.sixmac.entity.vo.UserVo;
 import com.sixmac.service.*;
-import com.sixmac.utils.JsonUtil;
-import com.sixmac.utils.QiNiuUploadImgUtil;
-import com.sixmac.utils.WebUtil;
+import com.sixmac.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 
 import javax.servlet.http.HttpServletResponse;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -53,13 +52,19 @@ public class UserApi extends CommonController {
     private GirlCommentService girlCommentService;
 
     @Autowired
-    private CityService cityService;
+    private UserVipService userVipService;
 
     @Autowired
     private CredibilityMessageService credibilityMessageService;
 
     @Autowired
     private VipMessageService vipMessageService;
+
+    @Autowired
+    private VipLevelService vipLevelService;
+
+    @Autowired
+    private OrderService orderService;
 
     /**
      * 完成
@@ -231,8 +236,8 @@ public class UserApi extends CommonController {
                      String nickname,
                      Integer gender,
                      Long birthday,
-                     Integer provinceId,
-                     Integer cityId,
+                     Long provinceId,
+                     Long cityId,
                      Double height,
                      Double weight,
                      Integer position,
@@ -289,12 +294,116 @@ public class UserApi extends CommonController {
     }
 
     /**
-     * 会员操作
+     * 计算几年后时间戳有问题
+     *
+     * @api {post} /api/user/operation 会员操作
+     * @apiName user.operation
+     * @apiGroup user
+     * @apiParam {Long} userId 用户id <必传 />
+     * @apiParam {Integer} num 会员时长（1：一年 2：两年 3：三年 默认为1）
+     *
+     * @apiSuccess {String} status 会员状态
+     * @apiSuccess {Integer} level 会员等级
+     * @apiSuccess {String} endDate 会员时间
+     * @apiSuccess {Double} price 价格
+     *
      */
     @RequestMapping(value = "/operation")
-    public void operation(HttpServletResponse response, Integer userId) {
+    public void operation(HttpServletResponse response, Long userId, Integer num) throws ParseException {
 
+        Map<String, Object> map = new HashMap<String, Object>();
+        Integer level = 0;
+        String endDate = null;
+        String status = null;
+        UserVip userVip = userVipService.findByUserId(userId);
 
+        if (userVip == null || userVip.getEndDate() < System.currentTimeMillis()) {
+            level = 1;
+            status = "您不是会员";
+            //userVip.setStatus("您不是会员");
+            if (num == 1) {
+
+                endDate = DateUtils.longToString(System.currentTimeMillis() + 1000 * 3600 * 365,"yyyy年-MM月-dd日 HH:mm:ss");
+            }else if (num == 2) {
+                endDate = DateUtils.longToString(System.currentTimeMillis() + 2 * 1000 * 3600 * 365,"yyyy年-MM月-dd日 HH:mm:ss");
+            }else if (num == 3) {
+                endDate = DateUtils.longToString(System.currentTimeMillis() + 3 * 1000 * 3600 * 365,"yyyy年-MM月-dd日 HH:mm:ss");
+            }
+        }else {
+            level = userService.getById(userId).getVipNum();
+            status = "会员到期时间" + DateUtils.longToString(userVip.getEndDate(),"yyyy年-MM月-dd日 HH:mm:ss");
+            //userVip.setStatus("会员到期时间" + DateUtils.longToString(userVip.getEndDate(),"yyyy年-MM月-dd日 HH:mm:ss"));
+            if (num == 1) {
+                endDate = DateUtils.longToString(userVip.getEndDate() + 1000 * 3600 * 365,"yyyy年-MM月-dd日 HH:mm:ss");
+            }else if (num == 2) {
+                endDate = DateUtils.longToString(userVip.getEndDate() + 2 * 1000 * 3600 * 365,"yyyy年-MM月-dd日 HH:mm:ss");
+            }else if (num == 3) {
+                endDate = DateUtils.longToString(userVip.getEndDate() + 3 * 1000 * 3600 * 365,"yyyy年-MM月-dd日 HH:mm:ss");
+            }
+        }
+
+        Double price = vipLevelService.findBylevel(level).getSysVip().getPrice();
+
+        map.put("level",level);
+        map.put("endDate",endDate);
+        map.put("price",price);
+        map.put("status",status);
+
+        Result obj = new Result(true).data(map);
+        String result = JsonUtil.obj2ApiJson(obj);
+        WebUtil.printApi(response, result);
+    }
+
+    /**
+     * 计算几年后时间戳有问题
+     *
+     * @api {post} /api/user/operation 会员付款
+     * @apiName user.operation
+     * @apiGroup user
+     * @apiParam {Long} userId 用户id <必传 />
+     * @apiParam {Integer} num 会员时长（1：一年 2：两年 3：三年 默认为1）
+     * @apiSuccess {Integer} level 会员等级
+     * @apiParam {String} endDate 会员时间
+     * @apiParam {Double} price 价格
+     *
+     */
+    @RequestMapping(value = "/pay")
+    public void pay(HttpServletResponse response,
+                    Long userId,
+                    Integer num,
+                    Integer level,
+                    String endDate,
+                    Double price) throws ParseException {
+
+        UserVip userVip = new UserVip();
+        userVip.setUser(userService.getById(userId));
+        userVip.setDuration(num);
+        userVip.setEndDate(DateUtils.stringToDate(endDate,"yyyy-MM-dd HH:mm:ss").getTime());
+
+        User user = userService.getById(userId);
+        user.setVipNum(level);
+        if (num == 1) {
+
+            user.setExperience(user.getExperience() + 30);
+        }else if (num == 2) {
+
+            user.setExperience(user.getExperience() + 100);
+        }else if (num == 3) {
+
+            user.setExperience(user.getExperience() + 500);
+        }
+        userService.update(user);
+
+        String sn = CommonUtils.generateSn(); // 订单号
+        Order order = new Order();
+        order.setUser(userService.getById(userId));
+        order.setPrice(price * num);
+        order.setSn(sn);
+        orderService.create(order);
+
+        Result obj = new Result(true).data(order);
+        String result = JsonUtil.obj2ApiJson(obj);
+        WebUtil.printApi(response, result);
     }
 
     /**

@@ -75,7 +75,7 @@ public class BigRaceServiceImpl implements BigRaceService {
     }
 
     @Override
-    public Page<BigRace> page(final Integer cityId, Integer pageNum, Integer pageSize) {
+    public Page<BigRace> page(final Long cityId, Integer pageNum, Integer pageSize) {
         PageRequest pageRequest = new PageRequest(pageNum - 1, pageSize, Sort.Direction.DESC, "id");
 
         Page<BigRace> page = bigRaceDao.findAll(new Specification<BigRace>() {

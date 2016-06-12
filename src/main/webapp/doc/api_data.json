@@ -10,14 +10,14 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "raceId",
             "description": "<p>草根杯id &lt;必传 /&gt;</p>"
           },
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>用户id &lt;必传 /&gt;</p>"
@@ -65,7 +65,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "raceId",
             "description": "<p>草根杯id &lt;必传 /&gt;</p>"
@@ -133,7 +133,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "hostRace.id",
             "description": "<p>草根杯id</p>"
@@ -210,7 +210,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "hostRace.id",
             "description": "<p>草根杯id</p>"
@@ -300,7 +300,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "hostRace.team.id",
             "description": "<p>球队id</p>"
@@ -370,7 +370,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "activityId",
             "description": "<p>活动id &lt;必传 /&gt;</p>"
@@ -453,7 +453,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>用户id &lt;必传/&gt;</p>"
@@ -488,7 +488,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>用户id &lt;必传/&gt;</p>"
@@ -564,21 +564,21 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "postId",
             "description": "<p>足球圈id &lt;必传 /&gt;</p>"
           },
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>评论人id &lt;必传 /&gt;</p>"
           },
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "touserId",
             "description": "<p>被评论人id &lt;必传 /&gt;</p>"
@@ -758,7 +758,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "list.id",
             "description": "<p>资讯id</p>"
@@ -890,7 +890,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "list.user.id",
             "description": "<p>用户id</p>"
@@ -939,7 +939,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "list.postCommentList.fUser.id",
             "description": "<p>评论人id</p>"
@@ -1009,7 +1009,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "messageId",
             "description": "<p>资讯id &lt;必传 /&gt;</p>"
@@ -1092,7 +1092,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "postId",
             "description": "<p>足球圈id &lt;必传 /&gt;</p>"
@@ -1133,7 +1133,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "post.user.id",
             "description": "<p>用户id</p>"
@@ -1168,7 +1168,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "String",
             "optional": false,
             "field": "postComments.content",
             "description": "<p>帖子内容</p>"
@@ -1189,7 +1189,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "postComments.fUser.id",
             "description": "<p>帖子评论人id</p>"
@@ -1231,7 +1231,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>用户id &lt;必传 /&gt;</p>"
@@ -1586,7 +1586,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>用户id &lt;必传/&gt;</p>"
@@ -1606,7 +1606,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "messageTeamList.id",
             "description": "<p>消息id</p>"
@@ -1627,7 +1627,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "messageTeamList.toUser.id",
             "description": "<p>用户id</p>"
@@ -1648,7 +1648,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "messageTeamList.team.id",
             "description": "<p>球队id</p>"
@@ -1690,7 +1690,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>用户id &lt;必传 /&gt;</p>"
@@ -1710,7 +1710,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userReserveList.id",
             "description": "<p>加入约球id</p>"
@@ -1731,7 +1731,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userReserveList.user.id",
             "description": "<p>加入约球人id</p>"
@@ -1752,7 +1752,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userReserveList.reserve.id",
             "description": "<p>加入约球预约id</p>"
@@ -1808,7 +1808,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>用户id &lt;必传/&gt;</p>"
@@ -1828,7 +1828,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "messageAddList.id",
             "description": "<p>消息id</p>"
@@ -1849,7 +1849,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "messageAddList.user.id",
             "description": "<p>好友id</p>"
@@ -1891,7 +1891,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>用户id &lt;必传/&gt;</p>"
@@ -1911,7 +1911,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "messageTeamList.id",
             "description": "<p>消息id</p>"
@@ -1932,7 +1932,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "messageTeamList.user.id",
             "description": "<p>用户id</p>"
@@ -1953,7 +1953,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "messageTeamList.team.id",
             "description": "<p>球队id</p>"
@@ -1995,7 +1995,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "messageAddId",
             "description": "<p>添加消息id &lt;必传 /&gt;</p>"
@@ -2030,7 +2030,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "messageTeamId",
             "description": "<p>消息id &lt;必传/&gt;</p>"
@@ -2065,7 +2065,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "messageJoinId",
             "description": "<p>消息id &lt;必传/&gt;</p>"
@@ -2100,7 +2100,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "messageOrderBallId",
             "description": "<p>约球消息id &lt;必传 /&gt;</p>"
@@ -2135,7 +2135,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "messageTeamId",
             "description": "<p>消息id &lt;必传/&gt;</p>"
@@ -2170,7 +2170,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>用户id &lt;必传/&gt;</p>"
@@ -2190,7 +2190,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "messageJoinList.id",
             "description": "<p>消息id</p>"
@@ -2211,7 +2211,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "messageJoinList.user.id",
             "description": "<p>用户id</p>"
@@ -2253,7 +2253,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>用户id &lt;必传 /&gt;</p>"
@@ -2273,7 +2273,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userReserveList.id",
             "description": "<p>约球id</p>"
@@ -2301,7 +2301,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userReserveList.reserve.id",
             "description": "<p>约球预约id</p>"
@@ -2377,7 +2377,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "messageOrderBallList.id",
             "description": "<p>消息id</p>"
@@ -2398,7 +2398,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "messageOrderBallList.user.id",
             "description": "<p>好友d</p>"
@@ -2419,7 +2419,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "messageOrderBallList.reserve.id",
             "description": "<p>约球d</p>"
@@ -2475,7 +2475,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>用户id &lt;必传 /&gt;</p>"
@@ -2495,7 +2495,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "postCommentList.id",
             "description": "<p>消息id</p>"
@@ -2516,7 +2516,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "postCommentList.fUser.id",
             "description": "<p>好友id</p>"
@@ -2537,7 +2537,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "postCommentList.post.id",
             "description": "<p>帖子id</p>"
@@ -2579,7 +2579,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>用户id &lt;必传/&gt;</p>"
@@ -2599,7 +2599,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "messageList.id",
             "description": "<p>消息id</p>"
@@ -2641,7 +2641,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "systemId",
             "description": "<p>系统消息id &lt;必传/&gt;</p>"
@@ -2661,7 +2661,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "message.id",
             "description": "<p>消息id</p>"
@@ -2710,7 +2710,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>用户id &lt;必传/&gt;</p>"
@@ -2730,7 +2730,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "messageJoinList.id",
             "description": "<p>消息id</p>"
@@ -2751,7 +2751,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "messageJoinList.visitingTeam.id",
             "description": "<p>主队id</p>"
@@ -2779,7 +2779,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "messageJoinList.homeTeam.id",
             "description": "<p>客队id</p>"
@@ -2835,7 +2835,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>用户id &lt;必传/&gt;</p>"
@@ -2855,7 +2855,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "messageAddList.id",
             "description": "<p>消息id</p>"
@@ -2876,7 +2876,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "messageAddList.toUser.id",
             "description": "<p>好友id</p>"
@@ -2918,7 +2918,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>用户id &lt;必传 /&gt;</p>"
@@ -2938,7 +2938,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "messageWatchingList.id",
             "description": "<p>约看id</p>"
@@ -2952,7 +2952,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "messageWatchingList.user.id",
             "description": "<p>好友id</p>"
@@ -2973,7 +2973,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "messageWatchingList.bigRace.id",
             "description": "<p>现场看球id</p>"
@@ -3001,7 +3001,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "messageWatchingList.watchingRace.id",
             "description": "<p>直播看球id</p>"
@@ -3057,7 +3057,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "playerId",
             "description": "<p>球友ID &lt;必传 /&gt;</p>"
@@ -3266,7 +3266,7 @@
           },
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "areaId",
             "description": "<p>区域ID</p>"
@@ -3433,21 +3433,21 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "reserveId",
             "description": "<p>约球id &lt;必传/&gt;</p>"
           },
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>用户id &lt;必传/&gt;</p>"
           },
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "toUserId",
             "description": "<p>好友id &lt;必传/&gt;</p>"
@@ -3475,7 +3475,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "reserveId",
             "description": "<p>约球ID &lt;必传 /&gt;</p>"
@@ -3495,7 +3495,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "reserve.id",
             "description": "<p>约球id</p>"
@@ -3558,7 +3558,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "reserve.stadium.id",
             "description": "<p>球场id</p>"
@@ -3593,7 +3593,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userList.id",
             "description": "<p>报名球友id</p>"
@@ -3642,7 +3642,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "playerId",
             "description": "<p>球友ID &lt;必传 /&gt;</p>"
@@ -3662,7 +3662,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "list.id",
             "description": "<p>约球id</p>"
@@ -3760,14 +3760,14 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "reserveId",
             "description": "<p>约球ID &lt;必传 /&gt;</p>"
           },
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>赛事ID &lt;必传 /&gt;</p>"
@@ -3836,14 +3836,14 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>球友ID &lt;必传 /&gt;</p>"
           },
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "raceId",
             "description": "<p>赛事ID &lt;必传 /&gt;</p>"
@@ -3940,7 +3940,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "playerId",
             "description": "<p>球友ID &lt;必传 /&gt;</p>"
@@ -4077,6 +4077,96 @@
   },
   {
     "type": "post",
+    "url": "/api/pay/getPayInfo",
+    "title": "拼接微信支付参数",
+    "name": "pay_getPayInfo",
+    "group": "pay",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "orderNum",
+            "description": "<p>订单流水号       &lt;必传 /&gt;</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "payInfo",
+            "description": "<p>微信支付信息</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "payInfo.appid",
+            "description": "<p>应用APPID</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "payInfo.packages",
+            "description": "<p>商户包信息</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "payInfo.prepayid",
+            "description": "<p>预支付交易会话标识</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "payInfo.noncestr",
+            "description": "<p>随机字符串</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "payInfo.partnerid",
+            "description": "<p>商户号</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "payInfo.timestamp",
+            "description": "<p>时间字符串</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "payInfo.sign",
+            "description": "<p>签名</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/PayCallBackApi.java",
+    "groupTitle": "pay",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:8080/yqtq_app/api/pay/getPayInfo"
+      }
+    ]
+  },
+  {
+    "type": "post",
     "url": "/api/playIndex/banner",
     "title": "系统banner图列表",
     "name": "playIndex_banner",
@@ -4093,14 +4183,14 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "bannerList.id",
             "description": "<p>banner图id</p>"
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "String",
             "optional": false,
             "field": "bannerList.avater",
             "description": "<p>banner图</p>"
@@ -4114,7 +4204,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "bannerList.toId",
             "description": "<p>banner图跳转目的Id</p>"
@@ -4142,7 +4232,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "bannerId",
             "description": "<p>banner图id &lt;必传 /&gt;</p>"
@@ -4162,7 +4252,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "list.id",
             "description": "<p>活动id</p>"
@@ -4211,7 +4301,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "hostRace.id",
             "description": "<p>草根杯id</p>"
@@ -4267,7 +4357,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "information.id",
             "description": "<p>资讯id</p>"
@@ -4330,7 +4420,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>用户id &lt;必传 /&gt;</p>"
@@ -4350,14 +4440,14 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "reserves.id",
             "description": "<p>约球id</p>"
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "String",
             "optional": false,
             "field": "reserves.content",
             "description": "<p>约球内容</p>"
@@ -4448,7 +4538,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>用户id &lt;必传 /&gt;</p>"
@@ -4468,7 +4558,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "teamList.id",
             "description": "<p>球队id</p>"
@@ -4510,7 +4600,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "teamList.list.id",
             "description": "<p>球队球员id</p>"
@@ -4545,7 +4635,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "stadiumId",
             "description": "<p>球场ID  &lt;必传/&gt;</p>"
@@ -4565,7 +4655,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "stadium.id",
             "description": "<p>球场id</p>"
@@ -4614,10 +4704,10 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "String",
             "optional": false,
             "field": "stadium.light",
-            "description": "<p>灯光(0：有灯光 1：没有灯光)</p>"
+            "description": "<p>灯光</p>"
           },
           {
             "group": "Success 200",
@@ -4691,7 +4781,7 @@
           },
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "areaId",
             "description": "<p>区域ID</p>"
@@ -4837,7 +4927,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "stadiumId",
             "description": "<p>球场ID &lt;必传/&gt;</p>"
@@ -4857,7 +4947,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "stadium.id",
             "description": "<p>球场id</p>"
@@ -4906,21 +4996,21 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "siteTimeId",
             "description": "<p>预定场地ID &lt;必传/&gt;</p>"
           },
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>用户ID &lt;必传/&gt;</p>"
           },
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "insuranceId",
             "description": "<p>保险ID</p>"
@@ -4954,7 +5044,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "sysInsurance.id",
             "description": "<p>保险id</p>"
@@ -5010,7 +5100,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "reserve.id",
             "description": "<p>预定id</p>"
@@ -5038,7 +5128,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "reserveId",
             "description": "<p>预定ID &lt;必传/&gt;</p>"
@@ -5114,14 +5204,14 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "stadiumId",
             "description": "<p>球场ID &lt;必传/&gt;</p>"
           },
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>用户ID &lt;必传/&gt;</p>"
@@ -5155,7 +5245,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "stadium.id",
             "description": "<p>球场id</p>"
@@ -5169,7 +5259,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "stadium.cityId",
             "description": "<p>球场地区</p>"
@@ -5204,7 +5294,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "siteId",
             "description": "<p>场地ID &lt;必传/&gt;</p>"
@@ -5252,7 +5342,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "siteTime.id",
             "description": "<p>预定id</p>"
@@ -5336,7 +5426,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "stadiumId",
             "description": "<p>球场ID &lt;必传/&gt;</p>"
@@ -5405,21 +5495,21 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "siteTimeId",
             "description": "<p>预定场地ID &lt;必传/&gt;</p>"
           },
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>用户ID &lt;必传/&gt;</p>"
           },
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "insuranceId",
             "description": "<p>保险ID</p>"
@@ -5453,42 +5543,42 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "String",
             "optional": false,
             "field": "sysInsurance.name",
             "description": "<p>保险名称</p>"
           },
           {
             "group": "Success 200",
-            "type": "String",
+            "type": "Double",
             "optional": false,
             "field": "sysInsurance.price",
             "description": "<p>保险金额</p>"
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Double",
             "optional": false,
             "field": "siteMoney",
             "description": "<p>场地费</p>"
           },
           {
             "group": "Success 200",
-            "type": "Object",
+            "type": "Integer",
             "optional": false,
             "field": "vipNum",
             "description": "<p>会员等级</p>"
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Double",
             "optional": false,
             "field": "preferente",
             "description": "<p>会员折扣</p>"
           },
           {
             "group": "Success 200",
-            "type": "String",
+            "type": "Double",
             "optional": false,
             "field": "money",
             "description": "<p>总金额</p>"
@@ -5502,7 +5592,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "reserveTeam.id",
             "description": "<p>预定id</p>"
@@ -5530,7 +5620,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "reserveTeamId",
             "description": "<p>预定ID &lt;必传/&gt;</p>"
@@ -5599,7 +5689,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>用户Id &lt;必传 /&gt;</p>"
@@ -5613,14 +5703,14 @@
           },
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "String",
             "optional": false,
             "field": "slogan",
             "description": "<p>球队口号 &lt;必传 /&gt;</p>"
           },
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "String",
             "optional": false,
             "field": "address",
             "description": "<p>球队地址</p>"
@@ -5648,14 +5738,14 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>用户id &lt;必传/&gt;</p>"
           },
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "toUserId",
             "description": "<p>好友id &lt;必传/&gt;</p>"
@@ -5683,14 +5773,14 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>用户id &lt;必传/&gt;</p>"
           },
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "teamId",
             "description": "<p>球队id &lt;必传/&gt;</p>"
@@ -5718,7 +5808,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "teamId",
             "description": "<p>球队Id &lt;必传 /&gt;</p>"
@@ -5738,7 +5828,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "team.id",
             "description": "<p>球队id</p>"
@@ -5759,7 +5849,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "String",
             "optional": false,
             "field": "team.slogan",
             "description": "<p>球队口号</p>"
@@ -5773,21 +5863,21 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Double",
             "optional": false,
             "field": "team.aveAge",
             "description": "<p>球队平均年龄</p>"
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Double",
             "optional": false,
             "field": "team.aveHeight",
             "description": "<p>球队平均身高</p>"
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Double",
             "optional": false,
             "field": "team.aveWeight",
             "description": "<p>球队平均体重</p>"
@@ -5801,7 +5891,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "team.leaderUser.id",
             "description": "<p>队长id</p>"
@@ -5822,7 +5912,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userList.id",
             "description": "<p>队员id</p>"
@@ -5891,7 +5981,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "list.id",
             "description": "<p>球队id</p>"
@@ -5989,14 +6079,14 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>用户Id &lt;必传 /&gt;</p>"
           },
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "teamId",
             "description": "<p>球队Id &lt;必传 /&gt;</p>"
@@ -6010,7 +6100,7 @@
           },
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "cityId",
             "description": "<p>约球地址</p>"
@@ -6058,7 +6148,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userList.id",
             "description": "<p>队员id</p>"
@@ -6100,7 +6190,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "teamId",
             "description": "<p>球队Id &lt;必传 /&gt;</p>"
@@ -6120,7 +6210,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "watchBallVos.id",
             "description": "<p>赛事id</p>"
@@ -6183,7 +6273,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "watchBallVoList.id",
             "description": "<p>赛事id</p>"
@@ -6260,7 +6350,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "watchingId",
             "description": "<p>约看id &lt;必传 /&gt;</p>"
@@ -6302,7 +6392,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>用户id &lt;必传 /&gt;</p>"
@@ -6322,7 +6412,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "tUser.id",
             "description": "<p>被评论用户id</p>"
@@ -6371,7 +6461,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "watchingId",
             "description": "<p>约看id</p>"
@@ -6434,7 +6524,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>用户id &lt;必传 /&gt;</p>"
@@ -6580,7 +6670,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "teamList.id",
             "description": "<p>球队id</p>"
@@ -6629,7 +6719,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "teamList.list.id",
             "description": "<p>球员id</p>"
@@ -6650,7 +6740,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "myTeam.id",
             "description": "<p>球队id</p>"
@@ -6699,7 +6789,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "myTeam.list.id",
             "description": "<p>球员id</p>"
@@ -6741,7 +6831,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "user.id",
             "description": "<p>用户id</p>"
@@ -6816,6 +6906,82 @@
   },
   {
     "type": "post",
+    "url": "/api/user/operation",
+    "title": "会员操作",
+    "name": "user_operation",
+    "group": "user",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Long",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>用户id &lt;必传 /&gt;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "num",
+            "description": "<p>会员时长（1：一年 2：两年 3：三年 默认为1）</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "userVip",
+            "description": "<p>用户昵称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "userVip.status",
+            "description": "<p>会员状态</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "level",
+            "description": "<p>会员等级</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "endDate",
+            "description": "<p>会员时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "price",
+            "description": "<p>价格</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/UserApi.java",
+    "groupTitle": "user",
+    "sampleRequest": [
+      {
+        "url": "http://localhost:8080/yqtq_app/api/user/operation"
+      }
+    ]
+  },
+  {
+    "type": "post",
     "url": "/api/user/postInfo",
     "title": "我的帖子详情",
     "name": "user_postInfo",
@@ -6825,7 +6991,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "postId",
             "description": "<p>帖子id &lt;必传 /&gt;</p>"
@@ -6845,7 +7011,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "String",
             "optional": false,
             "field": "post.content",
             "description": "<p>帖子内容</p>"
@@ -6866,7 +7032,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "post.user.id",
             "description": "<p>用户id</p>"
@@ -6901,7 +7067,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "String",
             "optional": false,
             "field": "postComments.content",
             "description": "<p>帖子内容</p>"
@@ -6922,7 +7088,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "postComments.fUser.id",
             "description": "<p>帖子评论人id</p>"
@@ -6964,7 +7130,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>用户id &lt;必传 /&gt;</p>"
@@ -7096,7 +7262,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "girlUserId",
             "description": "<p>约看id &lt;必传 /&gt;</p>"
@@ -7158,7 +7324,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "girlUsers.bigRace.id",
             "description": "<p>赛事id</p>"
@@ -7200,7 +7366,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>用户id &lt;必传 /&gt;</p>"
@@ -7220,17 +7386,10 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "girlUserList.id",
             "description": "<p>约看id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "optional": false,
-            "field": "girlUserList.duration",
-            "description": "<p>时长</p>"
           },
           {
             "group": "Success 200",
@@ -7276,7 +7435,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "girlUserList.bigRace.id",
             "description": "<p>赛事id</p>"
@@ -7318,7 +7477,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "girlId",
             "description": "<p>宝贝id &lt;必传/&gt;</p>"
@@ -7338,7 +7497,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "girlCommentList.id",
             "description": "<p>评价id</p>"
@@ -7387,7 +7546,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "girlId",
             "description": "<p>宝贝id &lt;必传/&gt;</p>"
@@ -7407,7 +7566,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "girl.id",
             "description": "<p>宝贝id</p>"
@@ -7567,7 +7726,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "list.girl.id",
             "description": "<p>宝贝id</p>"
@@ -7665,21 +7824,21 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>用户id &lt;必传/&gt;</p>"
           },
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "girlId",
             "description": "<p>宝贝id &lt;必传/&gt;</p>"
           },
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "sceneId",
             "description": "<p>比赛id &lt;必传/&gt;</p>"
@@ -7783,7 +7942,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "girlUserId",
             "description": "<p>约看id &lt;必传/&gt;</p>"
@@ -7845,7 +8004,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "sceneId",
             "description": "<p>看球id &lt;必传/&gt;</p>"
@@ -7865,7 +8024,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "list.id",
             "description": "<p>看球id</p>"
@@ -7956,7 +8115,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "cityId",
             "description": "<p>城市id &lt;必传/&gt;</p>"
@@ -7990,7 +8149,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "list.id",
             "description": "<p>看球id</p>"
@@ -8095,21 +8254,21 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "sceneId",
             "description": "<p>看球id &lt;必传/&gt;</p>"
           },
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>用户id &lt;必传/&gt;</p>"
           },
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "toUserId",
             "description": "<p>好友id &lt;必传/&gt;</p>"
@@ -8137,7 +8296,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "telecastId",
             "description": "<p>看球id &lt;必传/&gt;</p>"
@@ -8157,7 +8316,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "list.id",
             "description": "<p>看球id</p>"
@@ -8233,7 +8392,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "list.id",
             "description": "<p>看球id</p>"
@@ -8303,21 +8462,21 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "telecastId",
             "description": "<p>看球id &lt;必传/&gt;</p>"
           },
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "userId",
             "description": "<p>用户id &lt;必传/&gt;</p>"
           },
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "toUserId",
             "description": "<p>好友id &lt;必传/&gt;</p>"

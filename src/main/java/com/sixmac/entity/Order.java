@@ -1,8 +1,6 @@
 package com.sixmac.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by Administrator on 2016/5/24 0024.
@@ -11,8 +9,9 @@ import javax.persistence.Table;
 @Table(name = "t_order")
 public class Order extends BaseEntity{
 
-    @Column(name = "username")
-    private String username;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(name = "stadiumname")
     private String stadiumname;
@@ -32,12 +31,15 @@ public class Order extends BaseEntity{
     @Column(name = "type")
     private Integer type;
 
-    public String getUsername() {
-        return username;
+    @Column(name = "action")
+    private Integer action;
+
+    public User getUser() {
+        return user;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getStadiumname() {
@@ -86,5 +88,13 @@ public class Order extends BaseEntity{
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public Integer getAction() {
+        return action;
+    }
+
+    public void setAction(Integer action) {
+        this.action = action;
     }
 }
