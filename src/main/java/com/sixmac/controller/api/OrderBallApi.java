@@ -64,7 +64,6 @@ public class OrderBallApi extends CommonController {
      * @apiParam {Long} areaId 区域ID
      * @apiParam {Integer} pageNum 当前页
      * @apiParam {Integer} pageSize 每页显示数
-     *
      * @apiSuccess {Object}  list 约球列表
      * @apiSuccess {Integer} list.id 约球id
      * @apiSuccess {String} list.content 约球内容
@@ -78,7 +77,6 @@ public class OrderBallApi extends CommonController {
      * @apiSuccess {String} list.stadium.name 球场名字
      * @apiSuccess {Integer} list.stadium.type 球场类型 (0:私人球场 1:公共球场)
      * @apiSuccess {Long} list.startTime 开始时间
-     *
      * @apiSuccess {Object}  page 翻页信息
      * @apiSuccess {Integer} page.totalNum 总记录数
      * @apiSuccess {Integer} page.totalPage 总页数
@@ -92,7 +90,7 @@ public class OrderBallApi extends CommonController {
                      Integer pageNum,
                      Integer pageSize) {
 
-        initPageable(pageNum,pageSize);
+        initPageable(pageNum, pageSize);
         //球场、时间筛选有问题
         Page<Reserve> page = reserveService.page(timelimit, type, areaId, pageNum, pageSize);
         List<Reserve> list = page.getContent();
@@ -103,7 +101,7 @@ public class OrderBallApi extends CommonController {
         }
 
         Map<String, Object> dataMap = APIFactory.fitting(page);
-        String result = JsonUtil.obj2ApiJson(dataMap,"set","insurance","site","list");
+        String result = JsonUtil.obj2ApiJson(dataMap, "set", "insurance", "site", "list");
         WebUtil.printApi(response, result);
     }
 
@@ -115,7 +113,6 @@ public class OrderBallApi extends CommonController {
      * @apiName orderBall.orderInfo
      * @apiGroup orderBall
      * @apiParam {Long} reserveId 约球ID <必传 />
-     *
      * @apiSuccess {Object}  reserve 约球列表
      * @apiSuccess {Long} reserve.id 约球id
      * @apiSuccess {String} reserve.content 约球内容
@@ -135,12 +132,11 @@ public class OrderBallApi extends CommonController {
      * @apiSuccess {String} userList.nickname 报名球友昵称
      * @apiSuccess {String} userList.avater 报名球友头像
      * @apiSuccess {Long} reserve.startTime 开始时间
-     *
      */
     @RequestMapping(value = "/orderInfo")
     public void orderInfo(HttpServletResponse response, Long reserveId) {
 
-        if (null == reserveId ) {
+        if (null == reserveId) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
@@ -181,7 +177,7 @@ public class OrderBallApi extends CommonController {
             map.put("reserve", reserve);
 
             Result obj = new Result(true).data(map);
-            String result = JsonUtil.obj2ApiJson(obj,"set","site","list");
+            String result = JsonUtil.obj2ApiJson(obj, "set", "site", "list");
             WebUtil.printApi(response, result);
         } catch (Exception e) {
             e.printStackTrace();
@@ -194,17 +190,18 @@ public class OrderBallApi extends CommonController {
      * @api {post} /api/orderBall/information 约球须知
      * @apiName orderBall.information
      * @apiGroup orderBall
-     *
-     * @apiSuccess {Object} orderballMessage 约球须知
-     * @apiSuccess {String} orderballMessage.content 约球须知内容
-     *
+     * @apiSuccess {String} content 约球须知内容
      */
     @RequestMapping(value = "/information")
     public void information(HttpServletResponse response) {
+        OrderballMessage orderballMessage = orderballMessageService.getById(1L);
 
-        List<OrderballMessage> orderballMessage = orderballMessageService.findAll();
+        String description = orderballMessage.getContent();
+        String others = "<html><head><style type='text/css'>body{overflow-x:hidden;margin:0;padding:0;background:#fff;color:#000;font-size:18px;font-family:Arial,'microsoft yahei',Verdana}body,div,fieldset,form,h1,h2,h3,h4,h5,h6,html,p,span{-webkit-text-size-adjust:none}h1,h2,h3,h4,h5,h6{font-weight:normal}applet,dd,div,dl,dt,h1,h2,h3,h4,h5,h6,html,iframe,img,object,p,span{margin:0;padding:0;border:0}img{margin:0;padding:0;border:0;vertical-align:top}li,ul{margin:0;padding:0;list-style:none outside none}input[type=text],select{margin:0;padding:0;border:0;background:0;text-indent:3px;font-size:14px;font-family:Arial,'microsoft yahei',Verdana;-webkit-appearance:none;-moz-appearance:none}.wrapper{box-sizing:border-box;padding:10px;width:100%}p{color:#666;line-height:1.6em}.wrapper img{width:auto!important;height:auto!important;max-width:100%}p,span,p span{font-size:18px!important}</head></style>";
+        description = description.format("<body><div class='wrapper'>%s</div></body></html>", description);
+        description = others + description;
 
-        Result obj = new Result(true).data(orderballMessage);
+        Result obj = new Result(true).data(createMap("content", description));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
@@ -212,10 +209,10 @@ public class OrderBallApi extends CommonController {
     /**
      * 完成
      * * @api {post} /api/orderBall/info 球友个人资料
+     *
      * @apiName orderBall.info
      * @apiGroup orderBall
      * @apiParam {Long} playerId 球友ID <必传 />
-     *
      * @apiSuccess {Object}  user 球友列表
      * @apiSuccess {String} user.avater 球友头像
      * @apiSuccess {String} user.nickname 球友昵称
@@ -239,7 +236,7 @@ public class OrderBallApi extends CommonController {
     @RequestMapping(value = "/info")
     public void info(HttpServletResponse response, Long playerId) {
 
-        if (null == playerId ) {
+        if (null == playerId) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
@@ -267,11 +264,10 @@ public class OrderBallApi extends CommonController {
     /**
      * 完成
      *
-     *  @api {post} /api/orderBall/orderList 球友的约球列表
+     * @api {post} /api/orderBall/orderList 球友的约球列表
      * @apiName orderBall.orderList
      * @apiGroup orderBall
      * @apiParam {Long} playerId 球友ID <必传 />
-     *
      * @apiSuccess {Object}  list 约球列表
      * @apiSuccess {Long} list.id 约球id
      * @apiSuccess {Integer} list.content 约球内容
@@ -284,12 +280,11 @@ public class OrderBallApi extends CommonController {
      * @apiSuccess {Object} list.stadium 球场
      * @apiSuccess {String} list.stadium.name 球场名字
      * @apiSuccess {Long} list.startTime 开始时间
-     *
      */
     @RequestMapping(value = "/orderList")
     public void orderList(HttpServletResponse response, Long playerId) {
 
-        if (null == playerId ) {
+        if (null == playerId) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
@@ -311,7 +306,7 @@ public class OrderBallApi extends CommonController {
         map.put("reserveList", reserveList);
 
         Result obj = new Result(true).data(map);
-        String result = JsonUtil.obj2ApiJson(obj,"set","insurance","site","list");
+        String result = JsonUtil.obj2ApiJson(obj, "set", "insurance", "site", "list");
         WebUtil.printApi(response, result);
     }
 
@@ -324,7 +319,6 @@ public class OrderBallApi extends CommonController {
      * @apiParam {Long} reserveId 约球id <必传/>
      * @apiParam {Long} userId 用户id <必传/>
      * @apiParam {Long} toUserId 好友id <必传/>
-     *
      */
     @RequestMapping(value = "/order")
     public void order(HttpServletResponse response,
@@ -351,11 +345,10 @@ public class OrderBallApi extends CommonController {
     /**
      * 完成
      *
-     *  @api {post} /api/orderBall/raceList 球友的赛事列表
+     * @api {post} /api/orderBall/raceList 球友的赛事列表
      * @apiName orderBall.raceList
      * @apiGroup orderBall
      * @apiParam {Long} playerId 球友ID <必传 />
-     *
      * @apiSuccess {Object}  watchBallVos 球员所在球队为主队赛事列表
      * @apiSuccess {String} watchBallVos.homeTeamName 主队队名
      * @apiSuccess {String} watchBallVos.homeTeamAvater 主队队徽
@@ -364,7 +357,6 @@ public class OrderBallApi extends CommonController {
      * @apiSuccess {Integer} watchBallVos.status 赛事状态 （0：等待同意，1：约赛成功，2：约赛失败）
      * @apiSuccess {String} watchBallVos.stadiumName 球场名称
      * @apiSuccess {Long} watchBallVos.startTime 开始时间
-     *
      * @apiSuccess {Object}  watchBallVoList 球员所在球队为客队赛事列表
      * @apiSuccess {String} watchBallVoList.homeTeamName 主队队名
      * @apiSuccess {String} watchBallVoList.homeTeamAvater 主队队徽
@@ -377,7 +369,7 @@ public class OrderBallApi extends CommonController {
     @RequestMapping(value = "/raceList")
     public void raceList(HttpServletResponse response, Long playerId) {
 
-        if (null == playerId ) {
+        if (null == playerId) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
@@ -454,7 +446,6 @@ public class OrderBallApi extends CommonController {
      * @apiGroup orderBall
      * @apiParam {Long} userId 球友ID <必传 />
      * @apiParam {Long} raceId 赛事ID <必传 />
-     *
      * @apiSuccess {Object}  watchBallVo 球员赛事
      * @apiSuccess {String} watchBallVo.homeTeamName 主队队名
      * @apiSuccess {String} watchBallVo.homeTeamAvater 主队队徽
@@ -463,7 +454,7 @@ public class OrderBallApi extends CommonController {
      * @apiSuccess {Integer} watchBallVo.status 赛事状态 （0：等待同意，1：约赛成功，2：约赛失败）
      * @apiSuccess {String} watchBallVo.stadiumName 球场名称
      * @apiSuccess {Long} watchBallVo.startTime 开始时间
-     * @apiSuccess {Long} mobile 手机号
+     * @apiSuccess {String} mobile 手机号
      */
     @RequestMapping(value = "/raceInfo")
     public void raceInfo(HttpServletResponse response, Long userId, Long raceId, String mobile) {
@@ -525,7 +516,6 @@ public class OrderBallApi extends CommonController {
      * @apiGroup orderBall
      * @apiParam {Long} reserveId 约球ID <必传 />
      * @apiParam {Long} userId 赛事ID <必传 />
-     *
      * @apiSuccess {Object} order 订单
      * @apiSuccess {String} order.userName 用户昵称
      * @apiSuccess {String} order.stadiumName 球场名称

@@ -75,7 +75,7 @@ public class BigRaceServiceImpl implements BigRaceService {
     }
 
     @Override
-    public Page<BigRace> page(final Long cityId, Integer pageNum, Integer pageSize) {
+    public Page<BigRace> page(final Long cityId, final Integer status, Integer pageNum, Integer pageSize) {
         PageRequest pageRequest = new PageRequest(pageNum - 1, pageSize, Sort.Direction.DESC, "id");
 
         Page<BigRace> page = bigRaceDao.findAll(new Specification<BigRace>() {
@@ -86,6 +86,11 @@ public class BigRaceServiceImpl implements BigRaceService {
 
                 if (cityId != null) {
                     Predicate pre = cb.equal(root.get("stadium").get("cityId").as(Integer.class), cityId);
+                    predicateList.add(pre);
+                }
+
+                if (status != null) {
+                    Predicate pre = cb.equal(root.get("status").as(Integer.class), status);
                     predicateList.add(pre);
                 }
 

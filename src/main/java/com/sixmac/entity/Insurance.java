@@ -17,6 +17,17 @@ public class Insurance extends BaseEntity{
     @JoinColumn(name = "reserve_id")
     private Reserve reserve;
 
+    @ManyToOne
+    @JoinColumn(name = "reserve_team_id")
+    private ReserveTeam reserveTeam;
+
+    @ManyToOne
+    @JoinColumn(name = "insurance_id")
+    private SysInsurance sysInsurance;
+
+    @Column(name = "num")
+    private Integer num;
+
     @Column(name = "money")
     private Double money;
 
@@ -42,5 +53,29 @@ public class Insurance extends BaseEntity{
 
     public void setMoney(Double money) {
         this.money = money;
+    }
+
+    public SysInsurance getSysInsurance() {
+        return sysInsurance;
+    }
+
+    public void setSysInsurance(SysInsurance sysInsurance) {
+        this.sysInsurance = sysInsurance;
+    }
+
+    public Integer getNum() {
+        return num;
+    }
+
+    public void setNum(Integer num) {
+        this.num = num;
+    }
+
+    public ReserveTeam getReserveTeam() {
+        return reserveTeam;
+    }
+
+    public void setReserveTeam(ReserveTeam reserveTeam) {
+        this.reserveTeam = reserveTeam;
     }
 }

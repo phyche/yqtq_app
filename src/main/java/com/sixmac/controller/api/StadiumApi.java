@@ -63,6 +63,9 @@ public class StadiumApi extends CommonController {
     @Autowired
     private SiteManageService siteManageService;
 
+    @Autowired
+    private InsuranceService insuranceService;
+
     /**
      * 完成
      *
@@ -375,6 +378,30 @@ public class StadiumApi extends CommonController {
     /**
      * 完成
      *
+     * @api {post} /api/stadium/insurance 保险说明
+     * @apiName stadium.insurance
+     * @apiGroup stadium
+     * @apiParam {Long} insuranceId 保险ID
+     *
+     * @apiSuccess {String} content 保险说明内容
+     */
+    @RequestMapping(value = "/insurance")
+    public void insurance(HttpServletResponse response, Long insuranceId) {
+
+        SysInsurance sysInsurance = sysInsuranceService.getById(insuranceId);
+
+        String description = sysInsurance.getContent();
+        String others = "<html><head><style type='text/css'>body{overflow-x:hidden;margin:0;padding:0;background:#fff;color:#000;font-size:18px;font-family:Arial,'microsoft yahei',Verdana}body,div,fieldset,form,h1,h2,h3,h4,h5,h6,html,p,span{-webkit-text-size-adjust:none}h1,h2,h3,h4,h5,h6{font-weight:normal}applet,dd,div,dl,dt,h1,h2,h3,h4,h5,h6,html,iframe,img,object,p,span{margin:0;padding:0;border:0}img{margin:0;padding:0;border:0;vertical-align:top}li,ul{margin:0;padding:0;list-style:none outside none}input[type=text],select{margin:0;padding:0;border:0;background:0;text-indent:3px;font-size:14px;font-family:Arial,'microsoft yahei',Verdana;-webkit-appearance:none;-moz-appearance:none}.wrapper{box-sizing:border-box;padding:10px;width:100%}p{color:#666;line-height:1.6em}.wrapper img{width:auto!important;height:auto!important;max-width:100%}p,span,p span{font-size:18px!important}</head></style>";
+        description = description.format("<body><div class='wrapper'>%s</div></body></html>", description);
+        description = others + description;
+
+        Result obj = new Result(true).data(createMap("content", description));
+        String result = JsonUtil.obj2ApiJson(obj);
+        WebUtil.printApi(response, result);
+    }
+    /**
+     * 完成
+     *
      * @api {post} /api/stadium/pay 散客支付订单
      * @apiName stadium.pay
      * @apiGroup stadium
@@ -462,6 +489,13 @@ public class StadiumApi extends CommonController {
             userReserve.setReserve(reserve);
             userReserve.setStatus(1);
             userReserveService.create(userReserve);
+
+            Insurance insurance = new Insurance();
+            insurance.setUser(userService.getById(userId));
+            insurance.setReserve(reserve);
+            insurance.setSysInsurance(sysInsurance);
+            insurance.setMoney(sysInsurance.getPrice() * num * preferente);
+            insuranceService.create(insurance);
 
             map.put("sysInsurance", sysInsurance);
         }
@@ -600,6 +634,13 @@ public class StadiumApi extends CommonController {
             reserveTeam.setInsurance(sysInsurance);
             reserveTeam.setPrice(money);
             reserveTeamService.create(reserveTeam);
+
+            Insurance insurance = new Insurance();
+            insurance.setUser(userService.getById(userId));
+            insurance.setReserveTeam(reserveTeam);
+            insurance.setSysInsurance(sysInsurance);
+            insurance.setMoney(sysInsurance.getPrice() * num * preferente);
+            insuranceService.create(insurance);
 
             map.put("reserveTeam", reserveTeam);
             map.put("sysInsurance", sysInsurance);

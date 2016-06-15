@@ -20,6 +20,9 @@ public class SysInsurance extends BaseEntity{
     @Column(name = "status")
     private Integer status;
 
+    @Column(name = "content")
+    private String content;
+
     public String getName() {
         return name;
     }
@@ -42,5 +45,13 @@ public class SysInsurance extends BaseEntity{
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

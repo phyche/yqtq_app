@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,7 +85,7 @@ public class WatchingApi extends CommonController {
                              Integer pageNum,
                              Integer pageSize) {
 
-        Page<WatchingRace> page = watchingRaceService.page(pageNum, pageSize);
+        Page<WatchingRace> page = watchingRaceService.page(0, pageNum, pageSize);
 
         Map<String, Object> dataMap = APIFactory.fitting(page);
         String result = JsonUtil.obj2ApiJson(dataMap,"cityId","description");
@@ -186,7 +187,7 @@ public class WatchingApi extends CommonController {
                           Integer pageNum,
                           Integer pageSize) {
 
-        Page<BigRace> page = bigRaceService.page(cityId, pageNum, pageSize);
+        Page<BigRace> page = bigRaceService.page(cityId, 0, pageNum, pageSize);
 
         Map<String, Object> dataMap = APIFactory.fitting(page);
         String result = JsonUtil.obj2ApiJson(dataMap);
@@ -273,10 +274,10 @@ public class WatchingApi extends CommonController {
      * @apiParam {Integer} pageNum 当前页
      * @apiParam {Integer} pageSize 每页显示数
      *
-     * @apiSuccess {Object}  list 现场看球宝贝列表
-     * @apiSuccess {Object} list.girl 宝贝
-     * @apiSuccess {Long} list.girl.id 宝贝id
-     * @apiSuccess {String} list.avater 宝贝封面
+     * @apiSuccess {Object}  girlImageList 现场看球宝贝列表
+     * @apiSuccess {Object} girlImageList.girl 宝贝
+     * @apiSuccess {Long} girlImageList.girl.id 宝贝id
+     * @apiSuccess {String} girlImageList.avater 宝贝封面
      *
      * @apiSuccess {Object}  page 翻页信息
      * @apiSuccess {Integer} page.totalNum 总记录数
@@ -291,8 +292,16 @@ public class WatchingApi extends CommonController {
 
         Page<GirlImage> page = girlImageService.page(0, pageNum, pageSize);
 
-        Map<String, Object> dataMap = APIFactory.fitting(page);
-        String result = JsonUtil.obj2ApiJson(dataMap,"girl");
+        List<GirlImage> list = page.getContent();
+        List<GirlImage> girlImageList = new ArrayList<GirlImage>();
+        for (GirlImage girlImage : list) {
+            if (girlImage.getGirl().getStatus() == 1) {
+                girlImageList.add(girlImage);
+            }
+        }
+
+        Result obj = new Result(true).data(createMap("girlImageList", girlImageList));
+        String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
 
     }
@@ -304,16 +313,20 @@ public class WatchingApi extends CommonController {
      * @apiName watching.information
      * @apiGroup watching
      *
-     * @apiSuccess {Object}  girlServiceMessage 足球宝贝服务说明
-     * @apiSuccess {String} girlServiceMessage.content 足球宝贝服务说明内容
+     * @apiSuccess {String} content 足球宝贝服务说明内容
      *
      */
     @RequestMapping(value = "/information")
     public void information(HttpServletResponse response) {
 
-        List<GirlServiceMessage> girlServiceMessage = girlServiceMessageService.findAll();
+        GirlServiceMessage girlServiceMessage = girlServiceMessageService.getById(1l);
 
-        Result obj = new Result(true).data(girlServiceMessage);
+        String description = girlServiceMessage.getContent();
+        String others = "<html><head><style type='text/css'>body{overflow-x:hidden;margin:0;padding:0;background:#fff;color:#000;font-size:18px;font-family:Arial,'microsoft yahei',Verdana}body,div,fieldset,form,h1,h2,h3,h4,h5,h6,html,p,span{-webkit-text-size-adjust:none}h1,h2,h3,h4,h5,h6{font-weight:normal}applet,dd,div,dl,dt,h1,h2,h3,h4,h5,h6,html,iframe,img,object,p,span{margin:0;padding:0;border:0}img{margin:0;padding:0;border:0;vertical-align:top}li,ul{margin:0;padding:0;list-style:none outside none}input[type=text],select{margin:0;padding:0;border:0;background:0;text-indent:3px;font-size:14px;font-family:Arial,'microsoft yahei',Verdana;-webkit-appearance:none;-moz-appearance:none}.wrapper{box-sizing:border-box;padding:10px;width:100%}p{color:#666;line-height:1.6em}.wrapper img{width:auto!important;height:auto!important;max-width:100%}p,span,p span{font-size:18px!important}</head></style>";
+        description = description.format("<body><div class='wrapper'>%s</div></body></html>", description);
+        description = others + description;
+
+        Result obj = new Result(true).data(createMap("content", description));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
 

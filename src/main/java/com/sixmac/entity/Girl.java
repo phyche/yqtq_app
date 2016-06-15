@@ -48,6 +48,9 @@ public class Girl extends BaseEntity{
     @Transient
     private Integer orderNum;
 
+    @Column
+    private Integer status;
+
     public String getCityName() {
         return cityName;
     }
@@ -142,5 +145,13 @@ public class Girl extends BaseEntity{
 
     public void setOrderNum(Integer orderNum) {
         this.orderNum = orderNum;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

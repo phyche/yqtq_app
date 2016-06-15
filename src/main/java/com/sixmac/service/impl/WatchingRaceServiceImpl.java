@@ -75,7 +75,7 @@ public class WatchingRaceServiceImpl implements WatchingRaceService {
     }
 
     @Override
-    public Page<WatchingRace> page(Integer pageNum, Integer pageSize) {
+    public Page<WatchingRace> page(final Integer status, Integer pageNum, Integer pageSize) {
         PageRequest pageRequest = new PageRequest(pageNum - 1, pageSize, Sort.Direction.DESC, "id");
 
         Page<WatchingRace> page = watchingRaceDao.findAll(new Specification<WatchingRace>() {
@@ -83,6 +83,11 @@ public class WatchingRaceServiceImpl implements WatchingRaceService {
             public Predicate toPredicate(Root<WatchingRace> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 Predicate result = null;
                 List<Predicate> predicateList = new ArrayList<Predicate>();
+
+                if (status != null) {
+                    Predicate pre = cb.equal(root.get("status").as(Integer.class), status);
+                    predicateList.add(pre);
+                }
 
                 if (predicateList.size() > 0) {
                     result = cb.and(predicateList.toArray(new Predicate[]{}));

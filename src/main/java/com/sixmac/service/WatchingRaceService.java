@@ -9,5 +9,5 @@ import org.springframework.data.domain.Page;
  */
 public interface WatchingRaceService extends ICommonService<WatchingRace> {
 
-    public Page<WatchingRace> page(Integer pageNum, Integer pageSize);
+    public Page<WatchingRace> page(Integer status, Integer pageNum, Integer pageSize);
 }
