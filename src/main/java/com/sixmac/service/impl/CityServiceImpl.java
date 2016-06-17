@@ -71,4 +71,9 @@ public class CityServiceImpl implements CityService {
     public City getByCityId(Long cityId) {
         return cityDao.getByCityId(cityId);
     }
+
+    @Override
+    public List<City> getByProvinceId(Long provinceId) {
+        return cityDao.getByProvinceId(provinceId);
+    }
 }

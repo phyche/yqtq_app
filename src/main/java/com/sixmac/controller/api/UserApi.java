@@ -11,6 +11,7 @@ import com.sixmac.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 
@@ -69,6 +70,12 @@ public class UserApi extends CommonController {
 
     @Autowired
     private VipLevelMessageService vipLevelMessageService;
+
+    @Autowired
+    private ProvinceService provinceService;
+
+    @Autowired
+    private CityService cityService;
 
     /**
      * 完成
@@ -248,6 +255,53 @@ public class UserApi extends CommonController {
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
+
+    /**
+     *
+     * @api {post} /api/user/provinceList 查询省份列表
+     * @apiName user.provinceList
+     * @apiGroup user
+     *
+     * @apiSuccess {Object} provinceList 省份列表
+     * @apiSuccess {Object} province 省份
+     * @apiSuccess {Long} province.provinceId 省份id
+     * @apiSuccess {String} province.province 省份名字
+     *
+     */
+    @RequestMapping(value = "/provinceList")
+    public void provinceList(HttpServletResponse response) {
+
+        List<Province> provinceList = provinceService.findAll();
+
+        Result obj = new Result(true).data(provinceList);
+        String result = JsonUtil.obj2ApiJson(obj);
+        WebUtil.printApi(response, result);
+
+    }
+
+    /**
+     *
+     * @api {post} /api/user/provinceList 查询城市列表
+     * @apiName user.provinceList
+     * @apiGroup user
+     * @apiParam {Long} provinceId 省份id <必传 />
+     *
+     * @apiSuccess {Object} cityList 城市列表
+     * @apiSuccess {Object} city 城市
+     * @apiSuccess {Long} city.id 城市id
+     * @apiSuccess {String} city.city 城市名字
+     */
+    @RequestMapping(value = "/cityList")
+    public void cityList(HttpServletResponse response, Long provinceId) {
+
+        List<City> cityList = cityService.getByProvinceId(provinceId);
+
+        Result obj = new Result(true).data(cityList);
+        String result = JsonUtil.obj2ApiJson(obj);
+        WebUtil.printApi(response, result);
+
+    }
+
 
     /**
      * 完成
