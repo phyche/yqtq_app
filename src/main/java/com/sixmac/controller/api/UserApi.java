@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -277,7 +278,7 @@ public class UserApi extends CommonController {
                      Double height,
                      Double weight,
                      Integer position,
-                     MultipartRequest multipartRequest) {
+                     MultipartRequest multipartRequest) throws IOException {
 
         if (userId == null ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -306,12 +307,19 @@ public class UserApi extends CommonController {
         if (this_month.compareTo(birth_month) < 0) age -= 1;
         if (age < 0) age = 0;
 
-        MultipartFile multipartFile = multipartRequest.getFile("mainImage");
+        MultipartFile multipartFile = multipartRequest.getFile("imageFile");
+        if (null != multipartFile) {
+            FileBo fileBo = FileUtil.save(multipartFile);
+            user.setAvater(fileBo.getPath());
+        }
+
+        /*MultipartFile multipartFile = multipartRequest.getFile("mainImage");
         if (null != multipartFile) {
             String url = QiNiuUploadImgUtil.upload(multipartFile);
             //magazine.setCover(url);
             user.setAvater(url);
-        }
+        }*/
+
         user.setNickname(nickname);
         user.setGender(gender);
         user.setBirthday(birthday);

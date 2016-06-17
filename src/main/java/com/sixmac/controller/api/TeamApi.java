@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -180,7 +181,7 @@ public class TeamApi extends CommonController {
                     String name,
                     String address,
                     String slogan,
-                    MultipartRequest multipartRequest) {
+                    MultipartRequest multipartRequest) throws IOException {
 
         if (null == userId || name == null || name == " " || address == null || address == " " || slogan == null || slogan == " ") {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -189,11 +190,17 @@ public class TeamApi extends CommonController {
 
         Team team = new Team();
 
-        MultipartFile multipartFile = multipartRequest.getFile("mainImage");
+        /*MultipartFile multipartFile = multipartRequest.getFile("mainImage");
         if (null != multipartFile) {
             String url = QiNiuUploadImgUtil.upload(multipartFile);
             //magazine.setCover(url);
             team.setAvater(url);
+        }*/
+
+        MultipartFile multipartFile = multipartRequest.getFile("imageFile");
+        if (null != multipartFile) {
+            FileBo fileBo = FileUtil.save(multipartFile);
+            team.setAvater(fileBo.getPath());
         }
 
         team.setName(name);

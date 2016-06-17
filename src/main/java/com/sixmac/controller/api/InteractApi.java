@@ -7,16 +7,15 @@ import com.sixmac.core.ErrorCode;
 import com.sixmac.core.bean.Result;
 import com.sixmac.entity.*;
 import com.sixmac.service.*;
-import com.sixmac.utils.APIFactory;
-import com.sixmac.utils.JsonUtil;
-import com.sixmac.utils.QiNiuUploadImgUtil;
-import com.sixmac.utils.WebUtil;
+import com.sixmac.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.MultipartRequest;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
@@ -143,7 +142,7 @@ public class InteractApi extends CommonController {
                     postImage = new PostImage();
                     postImage.setPost(post);
                     postImage.setStatus(0);
-                    postImage.setAvater(QiNiuUploadImgUtil.upload2(file));
+                    postImage.setAvater(FileUtil.save(file).getPath());
 
                     postImageService.create(postImage);
                 }
