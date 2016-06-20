@@ -778,6 +778,10 @@ public class MessageApi extends CommonController {
 
         TeamRace teamRace = teamRaceService.getById(teamRaceId);
         teamRace.setStatus(status);
+        if (status == 1) {
+            teamRace.getVisitingTeam().setBattleNum(teamRace.getVisitingTeam().getBattleNum() + 1);
+            teamRace.getHomeTeam().setDeclareNum(teamRace.getHomeTeam().getDeclareNum() + 1);
+        }
         teamRaceService.update(teamRace);
 
         WebUtil.printApi(response, new Result(true).data(0));

@@ -71,6 +71,10 @@ public class LoginApi extends CommonController {
             return;
         }
 
+        if (user.getStatus() == 1) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0028));
+        }
+
         WebUtil.printJson(response, new Result(true));
     }
 

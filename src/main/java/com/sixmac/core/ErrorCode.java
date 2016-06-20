@@ -85,4 +85,7 @@ public class ErrorCode {
 
     // 密码不正确
     public static final String ERROR_CODE_0027 = "error_0027";
+
+    // 用户被封禁
+    public static final String ERROR_CODE_0028 = "error_0028";
 }
