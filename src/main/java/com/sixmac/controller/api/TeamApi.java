@@ -92,7 +92,8 @@ public class TeamApi extends CommonController {
         }
 
         Map<String, Object> dataMap = APIFactory.fitting(page);
-        String result = JsonUtil.obj2ApiJson(dataMap,"list","leaderUser","slogan","aveage","aveweight","aveheight","sum");
+        Result obj = new Result(true).data(dataMap);
+        String result = JsonUtil.obj2ApiJson(obj,"list","leaderUser","slogan","aveage","aveweight","aveheight","sum");
         WebUtil.printApi(response, result);
     }
 

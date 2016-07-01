@@ -104,9 +104,10 @@ public class LoginApi extends CommonController {
             if (SmsSend.send(mobile, code)) {
                 codeMap.put(mobile, code);
 
-                Result obj = new Result(true).data(createMap("codeMap", codeMap));
+                /*Result obj = new Result(true).data(createMap("codeMap", codeMap));
                 String result = JsonUtil.obj2ApiJson(obj);
-                WebUtil.printApi(response, result);
+                WebUtil.printApi(response, result);*/
+                WebUtil.printJson(response, new Result(true));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -181,7 +182,6 @@ public class LoginApi extends CommonController {
      * @apiGroup login
      * @apiParam {String} mobile 手机号  <必传 />
      * @apiParam {String} password 登录密码  <必传 />
-     * @apiParam {String} password2 确认密码  <必传 />
      */
     @RequestMapping(value = "/findPassword")
     public void findPassword(HttpServletResponse response, String password, String password2, String mobile) {
@@ -192,24 +192,20 @@ public class LoginApi extends CommonController {
         }
         User user = userService.findByMobile(mobile);
 
-        if (!password.equals(password2)) {
-            WebUtil.printJson(response, new Result(true).data("登录密码与确认密码不一致，提示重新输入"));
+        if (user != null) {
+            user.setPassword(password);
+            userService.update(user);
         }else {
-
-            if (user != null) {
-                user.setPassword(password);
-                userService.update(user);
-            }else {
-                user = new User();
-                user.setMobile(mobile);
-                user.setPassword(password);
-                userService.create(user);
-            }
-
-            Result obj = new Result(true).data(createMap("password", password));
-            String result = JsonUtil.obj2ApiJson(obj);
-            WebUtil.printApi(response, result);
+            user = new User();
+            user.setMobile(mobile);
+            user.setPassword(password);
+            userService.create(user);
         }
+
+        Result obj = new Result(true).data(createMap("password", password));
+        String result = JsonUtil.obj2ApiJson(obj);
+        WebUtil.printApi(response, result);
+
     }
 
     /**

@@ -94,7 +94,9 @@ public class InteractApi extends CommonController {
         }
 
         Map<String, Object> dataMap = APIFactory.fitting(page);
-        String result = JsonUtil.obj2ApiJson(dataMap,"mobile", "password", "age", "height", "weight", "position", "credibility", "vipNum", "integral", "experience", "proviceId", "endDate", "cityId", "status", "gender", "birthday");
+
+        Result obj = new Result(true).data(dataMap);
+        String result = JsonUtil.obj2ApiJson(obj,"mobile", "password", "age", "height", "weight", "position", "credibility", "vipNum", "integral", "experience", "proviceId", "endDate", "cityId", "status", "gender", "birthday");
         WebUtil.printApi(response, result);
 
     }
@@ -330,7 +332,9 @@ public class InteractApi extends CommonController {
         Page<Information> page = informationService.page(pageNum, pageSize);
 
         Map<String, Object> dataMap = APIFactory.fitting(page);
-        String result = JsonUtil.obj2ApiJson(dataMap);
+
+        Result obj = new Result(true).data(dataMap);
+        String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
 
@@ -395,7 +399,8 @@ public class InteractApi extends CommonController {
         Page<Activity> page = activityService.page(pageNum, pageSize);
 
         Map<String, Object> dataMap = APIFactory.fitting(page);
-        String result = JsonUtil.obj2ApiJson(dataMap);
+        Result obj = new Result(true).data(dataMap);
+        String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
 

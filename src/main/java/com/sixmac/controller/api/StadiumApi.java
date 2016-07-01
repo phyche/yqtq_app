@@ -118,7 +118,8 @@ public class StadiumApi extends CommonController {
         }
 
         Map<String, Object> dataMap = APIFactory.fitting(page);
-        String result = JsonUtil.obj2ApiJson(dataMap, "description", "siteType", "sodType");
+        Result obj = new Result(true).data(dataMap);
+        String result = JsonUtil.obj2ApiJson(obj, "description", "siteType", "sodType");
         WebUtil.printApi(response, result);
     }
 

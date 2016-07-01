@@ -88,7 +88,9 @@ public class WatchingApi extends CommonController {
         Page<WatchingRace> page = watchingRaceService.page(0, pageNum, pageSize);
 
         Map<String, Object> dataMap = APIFactory.fitting(page);
-        String result = JsonUtil.obj2ApiJson(dataMap,"cityId","description");
+
+        Result obj = new Result(true).data(dataMap);
+        String result = JsonUtil.obj2ApiJson(obj,"cityId","description");
         WebUtil.printApi(response, result);
     }
 
@@ -190,7 +192,9 @@ public class WatchingApi extends CommonController {
         Page<BigRace> page = bigRaceService.page(cityId, 0, pageNum, pageSize);
 
         Map<String, Object> dataMap = APIFactory.fitting(page);
-        String result = JsonUtil.obj2ApiJson(dataMap);
+
+        Result obj = new Result(true).data(dataMap);
+        String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
 
     }

@@ -101,7 +101,9 @@ public class OrderBallApi extends CommonController {
         }
 
         Map<String, Object> dataMap = APIFactory.fitting(page);
-        String result = JsonUtil.obj2ApiJson(dataMap, "set", "insurance", "site", "list");
+
+        Result obj = new Result(true).data(dataMap);
+        String result = JsonUtil.obj2ApiJson(obj, "set", "insurance", "site", "list");
         WebUtil.printApi(response, result);
     }
 
