@@ -50,7 +50,7 @@ define({ "api": [
     "groupTitle": "hostRace",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/hostRace/apply"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/hostRace/apply"
       }
     ]
   },
@@ -98,7 +98,7 @@ define({ "api": [
     "groupTitle": "hostRace",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/hostRace/eventInformation"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/hostRace/eventInformation"
       }
     ]
   },
@@ -188,7 +188,7 @@ define({ "api": [
     "groupTitle": "hostRace",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/hostRace/info"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/hostRace/info"
       }
     ]
   },
@@ -258,7 +258,7 @@ define({ "api": [
     "groupTitle": "hostRace",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/hostRace/list"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/hostRace/list"
       }
     ]
   },
@@ -355,7 +355,7 @@ define({ "api": [
     "groupTitle": "hostRace",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/hostRace/teamList"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/hostRace/teamList"
       }
     ]
   },
@@ -438,7 +438,7 @@ define({ "api": [
     "groupTitle": "interact",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/interact/activityInfo"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/interact/activityInfo"
       }
     ]
   },
@@ -473,7 +473,7 @@ define({ "api": [
     "groupTitle": "interact",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/interact/addFriend"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/interact/addFriend"
       }
     ]
   },
@@ -549,7 +549,7 @@ define({ "api": [
     "groupTitle": "interact",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/interact/addressBook"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/interact/addressBook"
       }
     ]
   },
@@ -598,7 +598,7 @@ define({ "api": [
     "groupTitle": "interact",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/interact/comment"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/interact/comment"
       }
     ]
   },
@@ -716,7 +716,7 @@ define({ "api": [
     "groupTitle": "interact",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/interact/listActivity"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/interact/listActivity"
       }
     ]
   },
@@ -834,7 +834,7 @@ define({ "api": [
     "groupTitle": "interact",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/interact/listInformation"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/interact/listInformation"
       }
     ]
   },
@@ -994,7 +994,7 @@ define({ "api": [
     "groupTitle": "interact",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/interact/listPost"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/interact/listPost"
       }
     ]
   },
@@ -1077,7 +1077,7 @@ define({ "api": [
     "groupTitle": "interact",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/interact/messageInfo"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/interact/messageInfo"
       }
     ]
   },
@@ -1216,7 +1216,7 @@ define({ "api": [
     "groupTitle": "interact",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/interact/postInfo"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/interact/postInfo"
       }
     ]
   },
@@ -1258,7 +1258,7 @@ define({ "api": [
     "groupTitle": "interact",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/interact/publish"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/interact/publish"
       }
     ]
   },
@@ -1293,7 +1293,7 @@ define({ "api": [
     "groupTitle": "login",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/login/checkLogin"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/login/checkLogin"
       }
     ]
   },
@@ -1328,7 +1328,7 @@ define({ "api": [
     "groupTitle": "login",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/login/confirmCode"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/login/confirmCode"
       }
     ]
   },
@@ -1354,13 +1354,6 @@ define({ "api": [
             "optional": false,
             "field": "password",
             "description": "<p>登录密码  &lt;必传 /&gt;</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "password2",
-            "description": "<p>确认密码  &lt;必传 /&gt;</p>"
           }
         ]
       }
@@ -1370,7 +1363,7 @@ define({ "api": [
     "groupTitle": "login",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/login/findPassword"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/login/findPassword"
       }
     ]
   },
@@ -1385,16 +1378,9 @@ define({ "api": [
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "serviceMessage",
-            "description": "<p>服务条款说明</p>"
-          },
-          {
-            "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "serviceMessage.content",
+            "field": "content",
             "description": "<p>服务条款说明内容</p>"
           }
         ]
@@ -1405,7 +1391,7 @@ define({ "api": [
     "groupTitle": "login",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/login/information"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/login/information"
       }
     ]
   },
@@ -1460,7 +1446,7 @@ define({ "api": [
     "groupTitle": "login",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/login/sendCode"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/login/sendCode"
       }
     ]
   },
@@ -1571,7 +1557,7 @@ define({ "api": [
     "groupTitle": "login",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/login/tLogin"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/login/tLogin"
       }
     ]
   },
@@ -1675,7 +1661,7 @@ define({ "api": [
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/message/Join"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/message/Join"
       }
     ]
   },
@@ -1793,7 +1779,7 @@ define({ "api": [
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/message/addOrder"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/message/addOrder"
       }
     ]
   },
@@ -1876,7 +1862,7 @@ define({ "api": [
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/message/beAdd"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/message/beAdd"
       }
     ]
   },
@@ -1980,7 +1966,7 @@ define({ "api": [
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/message/beJoinTeam"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/message/beJoinTeam"
       }
     ]
   },
@@ -2015,7 +2001,7 @@ define({ "api": [
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/message/doAdd"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/message/doAdd"
       }
     ]
   },
@@ -2050,7 +2036,7 @@ define({ "api": [
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/message/doBeJoinTeam"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/message/doBeJoinTeam"
       }
     ]
   },
@@ -2085,7 +2071,7 @@ define({ "api": [
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/message/doJoinTeam"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/message/doJoinTeam"
       }
     ]
   },
@@ -2120,7 +2106,7 @@ define({ "api": [
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/message/doOrder"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/message/doOrder"
       }
     ]
   },
@@ -2155,7 +2141,7 @@ define({ "api": [
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/message/doTeamOrder"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/message/doTeamOrder"
       }
     ]
   },
@@ -2238,7 +2224,7 @@ define({ "api": [
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/message/joinTeam"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/message/joinTeam"
       }
     ]
   },
@@ -2342,7 +2328,7 @@ define({ "api": [
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/message/myOrder"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/message/myOrder"
       }
     ]
   },
@@ -2460,7 +2446,7 @@ define({ "api": [
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/message/orderBall"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/message/orderBall"
       }
     ]
   },
@@ -2564,7 +2550,7 @@ define({ "api": [
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/message/post"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/message/post"
       }
     ]
   },
@@ -2626,7 +2612,7 @@ define({ "api": [
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/message/system"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/message/system"
       }
     ]
   },
@@ -2695,7 +2681,7 @@ define({ "api": [
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/message/systemInfo"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/message/systemInfo"
       }
     ]
   },
@@ -2820,7 +2806,7 @@ define({ "api": [
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/message/teamOrder"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/message/teamOrder"
       }
     ]
   },
@@ -2903,7 +2889,7 @@ define({ "api": [
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/message/toAdd"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/message/toAdd"
       }
     ]
   },
@@ -3042,7 +3028,7 @@ define({ "api": [
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/message/watching"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/message/watching"
       }
     ]
   },
@@ -3202,7 +3188,7 @@ define({ "api": [
     "groupTitle": "orderBall",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/orderBall/info"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/orderBall/info"
       }
     ]
   },
@@ -3217,16 +3203,9 @@ define({ "api": [
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "orderballMessage",
-            "description": "<p>约球须知</p>"
-          },
-          {
-            "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "orderballMessage.content",
+            "field": "content",
             "description": "<p>约球须知内容</p>"
           }
         ]
@@ -3237,7 +3216,7 @@ define({ "api": [
     "groupTitle": "orderBall",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/orderBall/information"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/orderBall/information"
       }
     ]
   },
@@ -3418,7 +3397,7 @@ define({ "api": [
     "groupTitle": "orderBall",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/orderBall/list"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/orderBall/list"
       }
     ]
   },
@@ -3460,7 +3439,7 @@ define({ "api": [
     "groupTitle": "orderBall",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/orderBall/order"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/orderBall/order"
       }
     ]
   },
@@ -3627,7 +3606,7 @@ define({ "api": [
     "groupTitle": "orderBall",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/orderBall/orderInfo"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/orderBall/orderInfo"
       }
     ]
   },
@@ -3745,7 +3724,7 @@ define({ "api": [
     "groupTitle": "orderBall",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/orderBall/orderList"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/orderBall/orderList"
       }
     ]
   },
@@ -3821,7 +3800,7 @@ define({ "api": [
     "groupTitle": "orderBall",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/orderBall/pay"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/orderBall/pay"
       }
     ]
   },
@@ -3912,7 +3891,7 @@ define({ "api": [
           },
           {
             "group": "Success 200",
-            "type": "Long",
+            "type": "String",
             "optional": false,
             "field": "mobile",
             "description": "<p>手机号</p>"
@@ -3925,7 +3904,7 @@ define({ "api": [
     "groupTitle": "orderBall",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/orderBall/raceInfo"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/orderBall/raceInfo"
       }
     ]
   },
@@ -4071,7 +4050,7 @@ define({ "api": [
     "groupTitle": "orderBall",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/orderBall/raceList"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/orderBall/raceList"
       }
     ]
   },
@@ -4161,7 +4140,7 @@ define({ "api": [
     "groupTitle": "pay",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/pay/getPayInfo"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/pay/getPayInfo"
       }
     ]
   },
@@ -4217,7 +4196,7 @@ define({ "api": [
     "groupTitle": "playIndex",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/playIndex/banner"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/playIndex/banner"
       }
     ]
   },
@@ -4405,7 +4384,7 @@ define({ "api": [
     "groupTitle": "playIndex",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/playIndex/jump"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/playIndex/jump"
       }
     ]
   },
@@ -4523,7 +4502,7 @@ define({ "api": [
     "groupTitle": "playIndex",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/playIndex/orderballList"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/playIndex/orderballList"
       }
     ]
   },
@@ -4620,7 +4599,7 @@ define({ "api": [
     "groupTitle": "playIndex",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/playIndex/teamRace"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/playIndex/teamRace"
       }
     ]
   },
@@ -4745,7 +4724,48 @@ define({ "api": [
     "groupTitle": "stadium",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/stadium/info"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/stadium/info"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/api/stadium/insurance",
+    "title": "保险说明",
+    "name": "stadium_insurance",
+    "group": "stadium",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Long",
+            "optional": false,
+            "field": "insuranceId",
+            "description": "<p>保险ID</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "content",
+            "description": "<p>保险说明内容</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/StadiumApi.java",
+    "groupTitle": "stadium",
+    "sampleRequest": [
+      {
+        "url": "http://4.16.2.59:8080/yqtq_app/api/stadium/insurance"
       }
     ]
   },
@@ -4912,7 +4932,7 @@ define({ "api": [
     "groupTitle": "stadium",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/stadium/list"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/stadium/list"
       }
     ]
   },
@@ -4981,7 +5001,7 @@ define({ "api": [
     "groupTitle": "stadium",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/stadium/order"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/stadium/order"
       }
     ]
   },
@@ -5113,7 +5133,7 @@ define({ "api": [
     "groupTitle": "stadium",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/stadium/pay"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/stadium/pay"
       }
     ]
   },
@@ -5189,7 +5209,7 @@ define({ "api": [
     "groupTitle": "stadium",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/stadium/payConfirm"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/stadium/payConfirm"
       }
     ]
   },
@@ -5279,7 +5299,7 @@ define({ "api": [
     "groupTitle": "stadium",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/stadium/publish"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/stadium/publish"
       }
     ]
   },
@@ -5411,7 +5431,7 @@ define({ "api": [
     "groupTitle": "stadium",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/stadium/siteOrder"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/stadium/siteOrder"
       }
     ]
   },
@@ -5480,7 +5500,7 @@ define({ "api": [
     "groupTitle": "stadium",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/stadium/siteSelect"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/stadium/siteSelect"
       }
     ]
   },
@@ -5605,7 +5625,7 @@ define({ "api": [
     "groupTitle": "stadium",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/stadium/teamPay"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/stadium/teamPay"
       }
     ]
   },
@@ -5674,7 +5694,7 @@ define({ "api": [
     "groupTitle": "stadium",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/stadium/teamPayConfirm"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/stadium/teamPayConfirm"
       }
     ]
   },
@@ -5723,7 +5743,7 @@ define({ "api": [
     "groupTitle": "team",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/team/add"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/team/add"
       }
     ]
   },
@@ -5758,7 +5778,7 @@ define({ "api": [
     "groupTitle": "team",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/team/addFriend"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/team/addFriend"
       }
     ]
   },
@@ -5793,7 +5813,7 @@ define({ "api": [
     "groupTitle": "team",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/team/apply"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/team/apply"
       }
     ]
   },
@@ -5932,7 +5952,7 @@ define({ "api": [
     "groupTitle": "team",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/team/info"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/team/info"
       }
     ]
   },
@@ -6064,7 +6084,7 @@ define({ "api": [
     "groupTitle": "team",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/team/list"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/team/list"
       }
     ]
   },
@@ -6113,7 +6133,7 @@ define({ "api": [
     "groupTitle": "team",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/team/order"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/team/order"
       }
     ]
   },
@@ -6175,7 +6195,7 @@ define({ "api": [
     "groupTitle": "team",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/team/playerList"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/team/playerList"
       }
     ]
   },
@@ -6335,7 +6355,7 @@ define({ "api": [
     "groupTitle": "team",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/team/schedule"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/team/schedule"
       }
     ]
   },
@@ -6377,7 +6397,7 @@ define({ "api": [
     "groupTitle": "user",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/user/comment"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/user/comment"
       }
     ]
   },
@@ -6446,7 +6466,7 @@ define({ "api": [
     "groupTitle": "user",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/user/commentList"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/user/commentList"
       }
     ]
   },
@@ -6474,7 +6494,7 @@ define({ "api": [
     "groupTitle": "user",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/user/confirm"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/user/confirm"
       }
     ]
   },
@@ -6489,16 +6509,9 @@ define({ "api": [
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "credibilityMessage",
-            "description": "<p>信誉评分</p>"
-          },
-          {
-            "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "credibilityMessage.content",
+            "field": "content",
             "description": "<p>信誉评分内容</p>"
           }
         ]
@@ -6509,7 +6522,7 @@ define({ "api": [
     "groupTitle": "user",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/user/credibilityMessage"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/user/credibilityMessage"
       }
     ]
   },
@@ -6600,7 +6613,7 @@ define({ "api": [
     "groupTitle": "user",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/user/edit"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/user/edit"
       }
     ]
   },
@@ -6809,7 +6822,7 @@ define({ "api": [
     "groupTitle": "user",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/user/homePage"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/user/homePage"
       }
     ]
   },
@@ -6900,7 +6913,7 @@ define({ "api": [
     "groupTitle": "user",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/user/info"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/user/info"
       }
     ]
   },
@@ -6935,16 +6948,9 @@ define({ "api": [
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "userVip",
-            "description": "<p>用户昵称</p>"
-          },
-          {
-            "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "userVip.status",
+            "field": "status",
             "description": "<p>会员状态</p>"
           },
           {
@@ -6976,7 +6982,69 @@ define({ "api": [
     "groupTitle": "user",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/user/operation"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/user/operation"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/api/user/operation",
+    "title": "会员付款",
+    "name": "user_operation",
+    "group": "user",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Long",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>用户id &lt;必传 /&gt;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "num",
+            "description": "<p>会员时长（1：一年 2：两年 3：三年 默认为1）</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "endDate",
+            "description": "<p>会员时间</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Double",
+            "optional": false,
+            "field": "price",
+            "description": "<p>价格</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "level",
+            "description": "<p>会员等级</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/UserApi.java",
+    "groupTitle": "user",
+    "sampleRequest": [
+      {
+        "url": "http://4.16.2.59:8080/yqtq_app/api/user/operation"
       }
     ]
   },
@@ -7115,7 +7183,7 @@ define({ "api": [
     "groupTitle": "user",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/user/postInfo"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/user/postInfo"
       }
     ]
   },
@@ -7212,16 +7280,29 @@ define({ "api": [
     "groupTitle": "user",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/user/postList"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/user/postList"
       }
     ]
   },
   {
     "type": "post",
-    "url": "/api/user/vipMessage",
-    "title": "会员说明",
-    "name": "user_vipMessage",
+    "url": "/api/user/provinceList",
+    "title": "查询城市列表",
+    "name": "user_provinceList",
     "group": "user",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Long",
+            "optional": false,
+            "field": "provinceId",
+            "description": "<p>省份id &lt;必传 /&gt;</p>"
+          }
+        ]
+      }
+    },
     "success": {
       "fields": {
         "Success 200": [
@@ -7229,15 +7310,29 @@ define({ "api": [
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "vipMessage",
-            "description": "<p>会员说明</p>"
+            "field": "cityList",
+            "description": "<p>城市列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "city",
+            "description": "<p>城市</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "city.id",
+            "description": "<p>城市id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "vipMessage.content",
-            "description": "<p>会员说明内容</p>"
+            "field": "city.city",
+            "description": "<p>城市名字</p>"
           }
         ]
       }
@@ -7247,7 +7342,112 @@ define({ "api": [
     "groupTitle": "user",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/user/vipMessage"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/user/provinceList"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/api/user/provinceList",
+    "title": "查询省份列表",
+    "name": "user_provinceList",
+    "group": "user",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "provinceList",
+            "description": "<p>省份列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "province",
+            "description": "<p>省份</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "province.provinceId",
+            "description": "<p>省份id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "province.province",
+            "description": "<p>省份名字</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/UserApi.java",
+    "groupTitle": "user",
+    "sampleRequest": [
+      {
+        "url": "http://4.16.2.59:8080/yqtq_app/api/user/provinceList"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/api/user/vipLevelMessage",
+    "title": "会员等级说明",
+    "name": "user_vipLevelMessage",
+    "group": "user",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "content",
+            "description": "<p>会员等级说明内容</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/UserApi.java",
+    "groupTitle": "user",
+    "sampleRequest": [
+      {
+        "url": "http://4.16.2.59:8080/yqtq_app/api/user/vipLevelMessage"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/api/user/vipMessage",
+    "title": "会员优惠说明",
+    "name": "user_vipMessage",
+    "group": "user",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "content",
+            "description": "<p>会员优惠说明内容</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/UserApi.java",
+    "groupTitle": "user",
+    "sampleRequest": [
+      {
+        "url": "http://4.16.2.59:8080/yqtq_app/api/user/vipMessage"
       }
     ]
   },
@@ -7351,7 +7551,7 @@ define({ "api": [
     "groupTitle": "user",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/user/watchingInfo"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/user/watchingInfo"
       }
     ]
   },
@@ -7462,7 +7662,7 @@ define({ "api": [
     "groupTitle": "user",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/user/watchingList"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/user/watchingList"
       }
     ]
   },
@@ -7531,7 +7731,7 @@ define({ "api": [
     "groupTitle": "watching",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/watching/girlComment"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/watching/girlComment"
       }
     ]
   },
@@ -7677,7 +7877,7 @@ define({ "api": [
     "groupTitle": "watching",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/watching/girlInfo"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/watching/girlInfo"
       }
     ]
   },
@@ -7714,28 +7914,28 @@ define({ "api": [
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "list",
+            "field": "girlImageList",
             "description": "<p>现场看球宝贝列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "list.girl",
+            "field": "girlImageList.girl",
             "description": "<p>宝贝</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "list.girl.id",
+            "field": "girlImageList.girl.id",
             "description": "<p>宝贝id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.avater",
+            "field": "girlImageList.avater",
             "description": "<p>宝贝封面</p>"
           },
           {
@@ -7774,7 +7974,7 @@ define({ "api": [
     "groupTitle": "watching",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/watching/girlList"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/watching/girlList"
       }
     ]
   },
@@ -7789,16 +7989,9 @@ define({ "api": [
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "girlServiceMessage",
-            "description": "<p>足球宝贝服务说明</p>"
-          },
-          {
-            "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "girlServiceMessage.content",
+            "field": "content",
             "description": "<p>足球宝贝服务说明内容</p>"
           }
         ]
@@ -7809,7 +8002,7 @@ define({ "api": [
     "groupTitle": "watching",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/watching/information"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/watching/information"
       }
     ]
   },
@@ -7927,7 +8120,7 @@ define({ "api": [
     "groupTitle": "watching",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/watching/orderGirl"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/watching/orderGirl"
       }
     ]
   },
@@ -7989,7 +8182,7 @@ define({ "api": [
     "groupTitle": "watching",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/watching/pay"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/watching/pay"
       }
     ]
   },
@@ -8100,7 +8293,7 @@ define({ "api": [
     "groupTitle": "watching",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/watching/sceneInfo"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/watching/sceneInfo"
       }
     ]
   },
@@ -8239,7 +8432,7 @@ define({ "api": [
     "groupTitle": "watching",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/watching/sceneList"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/watching/sceneList"
       }
     ]
   },
@@ -8281,7 +8474,7 @@ define({ "api": [
     "groupTitle": "watching",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/watching/sceneOrder"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/watching/sceneOrder"
       }
     ]
   },
@@ -8350,7 +8543,7 @@ define({ "api": [
     "groupTitle": "watching",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/watching/telecastInfo"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/watching/telecastInfo"
       }
     ]
   },
@@ -8447,7 +8640,7 @@ define({ "api": [
     "groupTitle": "watching",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/watching/telecastList"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/watching/telecastList"
       }
     ]
   },
@@ -8489,7 +8682,7 @@ define({ "api": [
     "groupTitle": "watching",
     "sampleRequest": [
       {
-        "url": "http://localhost:8080/yqtq_app/api/watching/telecastOrder"
+        "url": "http://4.16.2.59:8080/yqtq_app/api/watching/telecastOrder"
       }
     ]
   }

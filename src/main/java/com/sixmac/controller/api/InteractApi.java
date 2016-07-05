@@ -401,6 +401,7 @@ public class InteractApi extends CommonController {
         Map<String, Object> dataMap = APIFactory.fitting(page);
         Result obj = new Result(true).data(dataMap);
         String result = JsonUtil.obj2ApiJson(obj);
+        System.out.println("result:" + result);
         WebUtil.printApi(response, result);
     }
 

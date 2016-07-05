@@ -186,7 +186,7 @@ public class LoginApi extends CommonController {
     @RequestMapping(value = "/findPassword")
     public void findPassword(HttpServletResponse response, String password, String password2, String mobile) {
 
-        if (null == password || password == "" || null == password2 || password2 == "" || null == mobile || mobile == "" ) {
+        if (null == password || password == "" || null == mobile || mobile == "" ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
