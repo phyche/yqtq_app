@@ -90,7 +90,7 @@ public class LoginApi extends CommonController {
      * @apiSuccess {String} codeMap.mobile 发送验证码的手机号
      * @apiSuccess {String} codeMap.code 验证码
      */
-    @RequestMapping(value = "/sendCode")
+    /*@RequestMapping(value = "/sendCode")
     public void sendCode(HttpServletResponse response, String mobile) {
 
         if ( mobile == null || mobile == " ") {
@@ -104,15 +104,15 @@ public class LoginApi extends CommonController {
             if (SmsSend.send(mobile, code)) {
                 codeMap.put(mobile, code);
 
-                /*Result obj = new Result(true).data(createMap("codeMap", codeMap));
+                *//*Result obj = new Result(true).data(createMap("codeMap", codeMap));
                 String result = JsonUtil.obj2ApiJson(obj);
-                WebUtil.printApi(response, result);*/
+                WebUtil.printApi(response, result);*//*
                 WebUtil.printJson(response, new Result(true));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     /**
      * 完成
@@ -157,7 +157,7 @@ public class LoginApi extends CommonController {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
-        String code = codeMap.get(mobile);
+        /*String code = codeMap.get(mobile);
 
         if (StringUtils.isBlank(requestCode)) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0003));
@@ -167,7 +167,7 @@ public class LoginApi extends CommonController {
         if (!requestCode.equals(code)) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0004));
             return;
-        }
+        }*/
 
         Result obj = new Result(true);
         String result = JsonUtil.obj2ApiJson(obj);
