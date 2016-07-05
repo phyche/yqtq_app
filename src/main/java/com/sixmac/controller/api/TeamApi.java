@@ -172,6 +172,7 @@ public class TeamApi extends CommonController {
      * @apiParam {Long} userId 用户Id <必传 />
      * @apiParam {String} name 球队名称 <必传 />
      * @apiParam {String} slogan 球队口号 <必传 />
+     * @apiParam {Stream} avater 队徽
      * @apiParam {String} address 球队地址
      *
      *
@@ -198,7 +199,7 @@ public class TeamApi extends CommonController {
             team.setAvater(url);
         }*/
 
-        MultipartFile multipartFile = multipartRequest.getFile("imageFile");
+        MultipartFile multipartFile = multipartRequest.getFile("avater");
         if (null != multipartFile) {
             FileBo fileBo = FileUtil.save(multipartFile);
             team.setAvater(fileBo.getPath());

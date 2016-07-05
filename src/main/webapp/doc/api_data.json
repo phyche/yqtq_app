@@ -1288,6 +1288,152 @@
         ]
       }
     },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "userInfo",
+            "description": ""
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "userInfo.id",
+            "description": "<p>用户id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "userInfo.mobile",
+            "description": "<p>手机号</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "userInfo.password",
+            "description": "<p>密码</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "userInfo.nickname",
+            "description": "<p>昵称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "userInfo.age",
+            "description": "<p>年龄</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "userInfo.height",
+            "description": "<p>身高</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "userInfo.weight",
+            "description": "<p>体重</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "userInfo.position",
+            "description": "<p>位置（0：前 1：中 2：后 3：守）</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "userInfo.credibility",
+            "description": "<p>信誉度</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "userInfo.vipNum",
+            "description": "<p>vip等级</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "userInfo.integral",
+            "description": "<p>积分</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "userInfo.experience",
+            "description": "<p>经验值</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "userInfo.avater",
+            "description": "<p>头像</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "userInfo.endDate",
+            "description": "<p>会员截止日期</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "userInfo.status",
+            "description": "<p>状态 （0：男 1：女）</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "userInfo.gender",
+            "description": "<p>性别（0：正常 1：冻结）</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "userInfo.birthday",
+            "description": "<p>出生年月</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "userInfo.provinceId",
+            "description": "<p>省份</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "userInfo.cityId",
+            "description": "<p>城市</p>"
+          }
+        ]
+      }
+    },
     "version": "0.0.0",
     "filename": "src/main/java/com/sixmac/controller/api/LoginApi.java",
     "groupTitle": "login",
@@ -5730,6 +5876,13 @@
           },
           {
             "group": "Parameter",
+            "type": "Stream",
+            "optional": false,
+            "field": "avater",
+            "description": "<p>队徽</p>"
+          },
+          {
+            "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "address",
@@ -6544,7 +6697,7 @@
           },
           {
             "group": "Parameter",
-            "type": "String",
+            "type": "Stream",
             "optional": false,
             "field": "avater",
             "description": "<p>用户头像</p>"
@@ -6572,14 +6725,14 @@
           },
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "provinceId",
             "description": "<p>用户省份</p>"
           },
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "cityId",
             "description": "<p>用户城市</p>"
@@ -6879,7 +7032,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "user.cityId",
             "description": "<p>用户城市</p>"

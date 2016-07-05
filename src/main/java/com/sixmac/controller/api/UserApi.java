@@ -235,7 +235,7 @@ public class UserApi extends CommonController {
      * @apiSuccess {String} user.nickname 用户昵称
      * @apiSuccess {Integer} user.gender 用户性别（0：男 1：女）
      * @apiSuccess {Long} user.birthday 用户出生日期
-     * @apiSuccess {Integer} user.cityId 用户城市
+     * @apiSuccess {Long} user.cityId 用户城市
      * @apiSuccess {Double} user.height 身高
      * @apiSuccess {Double} user.weight 体重
      * @apiSuccess {Integer} user.position 位置（0：前 1：中 2：后 3：守）
@@ -310,12 +310,12 @@ public class UserApi extends CommonController {
      * @apiName user.edit
      * @apiGroup user
      * @apiParam {Long} userId 用户id <必传 />
-     * @apiParam {String} avater 用户头像
+     * @apiParam {Stream} avater 用户头像
      * @apiParam {String} nickname 用户昵称
      * @apiParam {Integer} gender 用户性别（0：男 1：女）
      * @apiParam {Long} birthday 用户出生日期
-     * @apiParam {Integer} provinceId 用户省份
-     * @apiParam {Integer} cityId 用户城市
+     * @apiParam {Long} provinceId 用户省份
+     * @apiParam {Long} cityId 用户城市
      * @apiParam {Double} height 身高
      * @apiParam {Double} weight 体重
      * @apiParam {Integer} position 位置（0：前 1：中 2：后 3：守）
@@ -361,7 +361,7 @@ public class UserApi extends CommonController {
         if (this_month.compareTo(birth_month) < 0) age -= 1;
         if (age < 0) age = 0;
 
-        MultipartFile multipartFile = multipartRequest.getFile("imageFile");
+        MultipartFile multipartFile = multipartRequest.getFile("avater");
         if (null != multipartFile) {
             FileBo fileBo = FileUtil.save(multipartFile);
             user.setAvater(fileBo.getPath());
