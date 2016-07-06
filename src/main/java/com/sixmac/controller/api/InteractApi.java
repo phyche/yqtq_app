@@ -59,6 +59,10 @@ public class InteractApi extends CommonController {
      *
      * @apiSuccess {Object}  list 足球圈列表
      * @apiSuccess {String} list.content 足球圈内容
+     *
+     * @apiSuccess {Integer} list.shareNum 分享数
+     * @apiSuccess {Integer} list.commentNum 评论数
+     *
      * @apiSuccess {Object} list.user 发足球圈用户
      * @apiSuccess {Long} list.user.id 用户id
      * @apiSuccess {String} list.user.nickname 用户昵称
@@ -88,9 +92,10 @@ public class InteractApi extends CommonController {
         for (Post post : postList) {
             post.setPostImages(postImageService.findByPostId(post.getId()));
             post.setPostCommentList(postCommentService.findByPostId(post.getId()));
-            for (int i = 0; i<2; i++) {
+            post.setCommentNum(post.getPostCommentList().size());
+            /*for (int i = 0; i<2; i++) {
                 post.setPostCommentList(post.getPostCommentList());
-            }
+            }*/
         }
 
         Map<String, Object> dataMap = APIFactory.fitting(page);
@@ -171,6 +176,9 @@ public class InteractApi extends CommonController {
      * @apiSuccess {Integer} post.content 帖子内容
      * @apiSuccess {Long} post.createDate 帖子创建时间
      *
+     * @apiSuccess {Integer} post.shareNum 分享数
+     * @apiSuccess {Integer} post.commentNum 评论数
+     *
      * @apiSuccess {Object} post.user 用户列表
      * @apiSuccess {Long} post.user.id 用户id
      * @apiSuccess {String} post.user.nickname 用户昵称
@@ -197,6 +205,7 @@ public class InteractApi extends CommonController {
 
         Post post = postService.getById(postId);
         List<PostComment> postComments = postCommentService.findByPostId(postId);
+        post.setCommentNum(postComments.size());
         List<PostImage> postImages = postImageService.findByPostId(postId);
 
         map.put("post",post);

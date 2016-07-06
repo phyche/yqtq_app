@@ -883,6 +883,20 @@
           },
           {
             "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "list.shareNum",
+            "description": "<p>分享数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "list.commentNum",
+            "description": "<p>评论数</p>"
+          },
+          {
+            "group": "Success 200",
             "type": "Object",
             "optional": false,
             "field": "list.user",
@@ -1123,6 +1137,20 @@
             "optional": false,
             "field": "post.createDate",
             "description": "<p>帖子创建时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "post.shareNum",
+            "description": "<p>分享数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "post.commentNum",
+            "description": "<p>评论数</p>"
           },
           {
             "group": "Success 200",
