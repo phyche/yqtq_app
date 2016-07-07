@@ -4,6 +4,7 @@ import com.sixmac.core.ErrorCode;
 import com.sixmac.core.bean.Result;
 import com.sixmac.entity.*;
 import com.sixmac.service.*;
+import com.sixmac.utils.ConfigUtil;
 import com.sixmac.utils.JsonUtil;
 import com.sixmac.utils.WebUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +64,8 @@ public class HostRaceApi {
         List<HostRace> hostRaceList = hostRaceService.findAll();
         HostRace hostRace = hostRaceList.get(hostRaceList.size()-1);
 
+        hostRace.setAvater(ConfigUtil.getString("base.url") + hostRace.getAvater());
+
         Result obj = new Result(true).data(hostRace);
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
@@ -94,6 +97,8 @@ public class HostRaceApi {
         }
 
         HostRace hostRace = hostRaceService.getById(raceId);
+
+        hostRace.setAvater(ConfigUtil.getString("base.url") + hostRace.getAvater());
 
         Result obj = new Result(true).data(hostRace);
         String result = JsonUtil.obj2ApiJson(obj);
@@ -134,6 +139,9 @@ public class HostRaceApi {
             hostJoin.getTeam().setCount(hostJoin.getTeam().getList().size());
             hostJoin.getTeam().setCityName(cityService.getByCityId(hostJoin.getTeam().getCityId()).getCity());
             hostJoin.getTeam().setProvinceName(provinceService.getByProvinceId(hostJoin.getTeam().getProvinceId()).getProvince());
+
+            hostJoin.getTeam().setAvater(ConfigUtil.getString("base.url") + hostJoin.getTeam().getAvater());
+
             teams.add(hostJoin.getTeam());
         }
 

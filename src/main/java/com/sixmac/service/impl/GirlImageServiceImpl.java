@@ -84,6 +84,11 @@ public class GirlImageServiceImpl implements GirlImageService {
     }
 
     @Override
+    public List<GirlImage> find(Long girlId, Integer type) {
+        return girlImageDao.find(girlId, type);
+    }
+
+    @Override
     public Page<GirlImage> page(final Integer type, Integer pageNum, Integer pageSize) {
         PageRequest pageRequest = new PageRequest(pageNum - 1, pageSize, Sort.Direction.DESC, "id");
 

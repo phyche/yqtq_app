@@ -11,10 +11,14 @@ import com.sixmac.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.ParseException;
@@ -52,6 +56,9 @@ public class UserApi extends CommonController {
 
     @Autowired
     private GirlCommentService girlCommentService;
+
+    @Autowired
+    private GirlImageService girlImageService;
 
     @Autowired
     private UserVipService userVipService;
@@ -124,11 +131,14 @@ public class UserApi extends CommonController {
         Map<String, Object> map = new HashMap<String, Object>();
 
         User user = userService.getById(userId);
+        user.setAvater(ConfigUtil.getString("base.url") + user.getAvater());
 
         //我加入的球队
         List<Team> teamList = new ArrayList<Team>();
         List<TeamMember> teamMemberList = teamMemberService.findByUserId(userId);
         for (TeamMember teamMember : teamMemberList) {
+
+            teamMember.getUser().setAvater(ConfigUtil.getString("base.url") + teamMember.getUser().getAvater());
             teamList.add(teamMember.getTeam());
         }
 
@@ -137,6 +147,7 @@ public class UserApi extends CommonController {
         //我的球队
         if (teamService.findListByLeaderId(userId) != null) {
             Team myTeam = teamService.findListByLeaderId(userId);
+            myTeam.setAvater(ConfigUtil.getString("base.url") + myTeam.getAvater());
             map.put("myTeam", myTeam);
         }
 
@@ -250,6 +261,7 @@ public class UserApi extends CommonController {
         }
 
         User user = userService.getById(userId);
+        user.setAvater(ConfigUtil.getString("base.url") + user.getAvater());
 
         Result obj = new Result(true).data(user);
         String result = JsonUtil.obj2ApiJson(obj);
@@ -310,7 +322,6 @@ public class UserApi extends CommonController {
      * @apiName user.edit
      * @apiGroup user
      * @apiParam {Long} userId 用户id <必传 />
-     * @apiParam {Stream} avater 用户头像
      * @apiParam {String} nickname 用户昵称
      * @apiParam {Integer} gender 用户性别（0：男 1：女）
      * @apiParam {Long} birthday 用户出生日期
@@ -321,8 +332,9 @@ public class UserApi extends CommonController {
      * @apiParam {Integer} position 位置（0：前 1：中 2：后 3：守）
      *
      */
-    @RequestMapping(value = "/edit")
-    public void edit(HttpServletResponse response,
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
+    public void edit(HttpServletRequest request ,
+                     HttpServletResponse response,
                      Long userId,
                      String nickname,
                      Integer gender,
@@ -331,8 +343,15 @@ public class UserApi extends CommonController {
                      Long cityId,
                      Double height,
                      Double weight,
-                     Integer position,
-                     MultipartRequest multipartRequest) throws IOException {
+                     Integer position) {
+
+        MultipartFile multipartFile = null;
+        MultipartRequest multipartRequest = null;
+
+        if(request instanceof MultipartRequest) {
+            multipartRequest = (MultipartRequest) request;
+
+        }
 
         if (userId == null ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -345,26 +364,35 @@ public class UserApi extends CommonController {
 
         Date now = new Date();
 
-        SimpleDateFormat format_y = new SimpleDateFormat("yyyy");
-        SimpleDateFormat format_M = new SimpleDateFormat("MM");
+        if (birthday != null) {
+            SimpleDateFormat format_y = new SimpleDateFormat("yyyy");
+            SimpleDateFormat format_M = new SimpleDateFormat("MM");
 
-        String birth_year = format_y.format(birthday);
-        String this_year = format_y.format(now);
+            String birth_year = format_y.format(birthday);
+            String this_year = format_y.format(now);
 
-        String birth_month = format_M.format(birthday);
-        String this_month = format_M.format(now);
+            String birth_month = format_M.format(birthday);
+            String this_month = format_M.format(now);
 
-        // 初步，估算
-        age = Integer.parseInt(this_year) - Integer.parseInt(birth_year);
+            // 初步，估算
+            age = Integer.parseInt(this_year) - Integer.parseInt(birth_year);
 
-        // 如果未到出生月份，则age - 1
-        if (this_month.compareTo(birth_month) < 0) age -= 1;
-        if (age < 0) age = 0;
+            // 如果未到出生月份，则age - 1
+            if (this_month.compareTo(birth_month) < 0) age -= 1;
+            if (age < 0) age = 0;
+        }
 
-        MultipartFile multipartFile = multipartRequest.getFile("avater");
-        if (null != multipartFile) {
-            FileBo fileBo = FileUtil.save(multipartFile);
-            user.setAvater(fileBo.getPath());
+        if(multipartRequest != null) {
+            multipartFile = multipartRequest.getFile("avater");
+            if (null != multipartFile) {
+                FileBo fileBo = null;
+                try {
+                    fileBo = FileUtil.save(multipartFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                user.setAvater(fileBo.getPath());
+            }
         }
 
         /*MultipartFile multipartFile = multipartRequest.getFile("mainImage");
@@ -540,6 +568,9 @@ public class UserApi extends CommonController {
         }
 
         List<PostComment> postComments = postCommentService.findByFuserId(userId);
+        for (PostComment postComment : postComments) {
+            postComment.gettUser().setAvater(postComment.gettUser().getAvater());
+        }
 
         Result obj = new Result(true).data(postComments);
         String result = JsonUtil.obj2ApiJson(obj,"fUser","user","mobile", "password", "age", "height", "weight", "position", "credibility", "vipNum", "integral", "experience", "proviceId", "endDate", "cityId", "status", "gender", "birthday");
@@ -576,6 +607,10 @@ public class UserApi extends CommonController {
         for (Post post : postList) {
             post.setCommentNum(postCommentService.findByPostId(post.getId()).size());
             post.setPostImages(postImageService.findByPostId(post.getId()));
+            for (PostImage postImage : postImageService.findByPostId(post.getId())) {
+                postImage.setAvater(ConfigUtil.getString("base.url") + postImage.getAvater());
+            }
+            post.getUser().setAvater(ConfigUtil.getString("base.url") + post.getUser().getAvater());
         }
 
         Result obj = new Result(true).data(postList);
@@ -626,8 +661,15 @@ public class UserApi extends CommonController {
         Post post = postService.getById(postId);
         //我的帖子图片列表
         List<PostImage> postImages = postImageService.findByPostId(postId);
+        for (PostImage postImage : postImages) {
+            postImage.setAvater(ConfigUtil.getString("base.url") + postImage.getAvater());
+        }
         //我的帖子评论列表
         List<PostComment> postComments = postCommentService.findByPostId(postId);
+        for (PostComment postComment : postComments) {
+            postComment.gettUser().setAvater(postComment.gettUser().getAvater());
+            postComment.getfUser().setAvater(postComment.getfUser().getAvater());
+        }
 
         map.put("post",post);
         map.put("postImages", postImages);
@@ -671,6 +713,11 @@ public class UserApi extends CommonController {
         }
 
         List<GirlUser> girlUserList = girlUserService.findByUserId(userId);
+        for (GirlUser girlUser : girlUserList) {
+            for (GirlImage girlImage : girlImageService.find(girlUser.getGirl().getId(), 0)) {
+                girlImage.setUrl(ConfigUtil.getString("base.url") + girlImage.getUrl());
+            }
+        }
 
         Result obj = new Result(true).data(girlUserList);
         String result = JsonUtil.obj2ApiJson(obj,"user","stadium");
@@ -711,6 +758,9 @@ public class UserApi extends CommonController {
         }
 
         GirlUser girlUsers = girlUserService.getById(girlUserId);
+        for (GirlImage girlImage : girlImageService.find(girlUsers.getGirl().getId(), 0)) {
+            girlImage.setUrl(ConfigUtil.getString("base.url") + girlImage.getUrl());
+        }
 
         Result obj = new Result(true).data(girlUsers);
         String result = JsonUtil.obj2ApiJson(obj,"user","stadium");

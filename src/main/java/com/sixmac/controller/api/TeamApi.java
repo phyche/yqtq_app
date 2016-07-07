@@ -89,6 +89,7 @@ public class TeamApi extends CommonController {
             team.setNum(team.getBattleNum() + team.getDeclareNum());
             team.setProvinceName(provinceService.getByProvinceId(team.getProvinceId()).getProvince());
             team.setCityName(cityService.getByCityId(team.getCityId()).getCity());
+            team.setAvater(ConfigUtil.getString("base.url") + team.getAvater());
         }
 
         Map<String, Object> dataMap = APIFactory.fitting(page);
@@ -140,6 +141,8 @@ public class TeamApi extends CommonController {
         double sumHeight = 0.0;
 
         Team team = teamService.getById(teamId);
+        team.setAvater(ConfigUtil.getString("base.url") + team.getAvater());
+        team.getLeaderUser().setAvater(team.getLeaderUser().getAvater());
 
         for (sum = 0; sum < team.getList().size(); sum++) {
             sumAge += team.getList().get(sum).getAge();
@@ -153,6 +156,9 @@ public class TeamApi extends CommonController {
 
         //球员列表
         List<User> userList = team.getList();
+        for (User user : userList) {
+            user.setAvater(ConfigUtil.getString("base.url") + user.getAvater());
+        }
         team.setCount(userList.size());
 
         map.put("team", team);
@@ -345,6 +351,9 @@ public class TeamApi extends CommonController {
         //根据球队id会自动查询用户列表
         Team team = teamService.getById(teamId);
         List<User> userList = team.getList();
+        for (User user : userList) {
+            user.setAvater(ConfigUtil.getString("base.url") + user.getAvater());
+        }
 
         Result obj = new Result(true).data(userList);
         String result = JsonUtil.obj2ApiJson(obj);
@@ -401,9 +410,9 @@ public class TeamApi extends CommonController {
             watchBallVo1.setStadiumName(teamRace.getStadium().getName());
             watchBallVo1.setStartTime(teamRace.getStartTime());
             watchBallVo1.setHomeTeamName(teamRace.getHomeTeam().getName());
-            watchBallVo1.setHomeTeamAvater(teamRace.getHomeTeam().getAvater());
+            watchBallVo1.setHomeTeamAvater(ConfigUtil.getString("base.url") + teamRace.getHomeTeam().getAvater());
             watchBallVo1.setvTeamName(teamRace.getVisitingTeam().getName());
-            watchBallVo1.setvTeamAvater(teamRace.getVisitingTeam().getAvater());
+            watchBallVo1.setvTeamAvater(ConfigUtil.getString("base.url") + teamRace.getVisitingTeam().getAvater());
             watchBallVo1.setStatus(teamRace.getStatus());
             watchBallVos.add(watchBallVo1);
         }
@@ -418,9 +427,9 @@ public class TeamApi extends CommonController {
             watchBallVo2.setStadiumName(teamRace.getStadium().getName());
             watchBallVo2.setStartTime(teamRace.getStartTime());
             watchBallVo2.setHomeTeamName(teamRace.getHomeTeam().getName());
-            watchBallVo2.setHomeTeamAvater(teamRace.getHomeTeam().getAvater());
+            watchBallVo2.setHomeTeamAvater(ConfigUtil.getString("base.url") + teamRace.getHomeTeam().getAvater());
             watchBallVo2.setvTeamName(teamRace.getVisitingTeam().getName());
-            watchBallVo2.setvTeamAvater(teamRace.getVisitingTeam().getAvater());
+            watchBallVo2.setvTeamAvater(ConfigUtil.getString("base.url") + teamRace.getVisitingTeam().getAvater());
             watchBallVo2.setStatus(teamRace.getStatus());
             watchBallVoList.add(watchBallVo2);
         }

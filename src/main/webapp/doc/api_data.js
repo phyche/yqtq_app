@@ -6725,13 +6725,6 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "Stream",
-            "optional": false,
-            "field": "avater",
-            "description": "<p>用户头像</p>"
-          },
-          {
-            "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "nickname",

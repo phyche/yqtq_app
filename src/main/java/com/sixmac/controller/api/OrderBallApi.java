@@ -98,6 +98,8 @@ public class OrderBallApi extends CommonController {
             reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
             reserve.setJoinCount(reserve.getList() != null ? reserve.getList().size() : 0);
             reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
+
+            reserve.getUser().setAvater(ConfigUtil.getString("base.url") + reserve.getUser().getAvater());
         }
 
         Map<String, Object> dataMap = APIFactory.fitting(page);
@@ -155,6 +157,8 @@ public class OrderBallApi extends CommonController {
             reserve.setJoinCount(reserve.getList() != null ? reserve.getList().size() : 0);
             reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
 
+            reserve.getUser().setAvater(ConfigUtil.getString("base.url") + reserve.getUser().getAvater());
+
             if (null == reserve) {
                 WebUtil.printApi(response, new Result(false).msg(ErrorCode.ERROR_CODE_0003));
                 return;
@@ -164,6 +168,8 @@ public class OrderBallApi extends CommonController {
             List<User> userList = new ArrayList<User>();
             List<UserReserve> userReserves = userReserveService.findByReserverId(reserveId);
             for (UserReserve userReserve : userReserves) {
+
+                userReserve.getUser().setAvater(ConfigUtil.getString("base.url") + userReserve.getUser().getAvater());
                 userList.add(userReserve.getUser());
             }
 
@@ -246,11 +252,13 @@ public class OrderBallApi extends CommonController {
         Map<String, Object> map = new HashMap<String, Object>();
 
         User user = userService.getById(playerId);
+        user.setAvater(ConfigUtil.getString("base.url") + user.getAvater());
 
         //查询用户所属球队
         List<Team> team = new ArrayList<Team>();
         List<TeamMember> teamMemberList = teamMemberService.findByUserId(user.getId());
         for (TeamMember teamMember : teamMemberList) {
+            teamMember.getUser().setAvater(ConfigUtil.getString("base.url") + teamMember.getUser().getAvater());
             team.add(teamMember.getTeam());
         }
 
@@ -297,12 +305,15 @@ public class OrderBallApi extends CommonController {
         List<UserReserve> userReserves = userReserveService.findByUserId(playerId);
         for (UserReserve userReserve : userReserves) {
 
+            userReserve.getUser().setAvater(userReserve.getUser().getAvater());
             reserveList.add(userReserve.getReserve());
         }
         for (Reserve reserve : reserveList) {
             reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
             reserve.setJoinCount(reserve.getList() != null ? reserve.getList().size() : 0);
             reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
+
+            reserve.getUser().setAvater(ConfigUtil.getString("base.url") + reserve.getUser().getAvater());
         }
 
         map.put("reserveList", reserveList);
@@ -381,6 +392,7 @@ public class OrderBallApi extends CommonController {
         List<Team> teams = new ArrayList<Team>();
         List<TeamMember> teamMemberList = teamMemberService.findByUserId(playerId);
         for (TeamMember teamMember : teamMemberList) {
+            teamMember.getUser().setAvater(ConfigUtil.getString("base.url") + teamMember.getUser().getAvater());
             teams.add(teamMember.getTeam());
         }
 
@@ -402,9 +414,9 @@ public class OrderBallApi extends CommonController {
             watchBallVo1.setStadiumName(teamRace.getStadium().getName());
             watchBallVo1.setStartTime(teamRace.getStartTime());
             watchBallVo1.setHomeTeamName(teamRace.getHomeTeam().getName());
-            watchBallVo1.setHomeTeamAvater(teamRace.getHomeTeam().getAvater());
+            watchBallVo1.setHomeTeamAvater(ConfigUtil.getString("base.url") + teamRace.getHomeTeam().getAvater());
             watchBallVo1.setvTeamName(teamRace.getVisitingTeam().getName());
-            watchBallVo1.setvTeamAvater(teamRace.getVisitingTeam().getAvater());
+            watchBallVo1.setvTeamAvater(ConfigUtil.getString("base.url") + teamRace.getVisitingTeam().getAvater());
             watchBallVo1.setStatus(teamRace.getStatus());
             watchBallVos.add(watchBallVo1);
         }
@@ -417,9 +429,9 @@ public class OrderBallApi extends CommonController {
             watchBallVo2.setStadiumName(teamRace.getStadium().getName());
             watchBallVo2.setStartTime(teamRace.getStartTime());
             watchBallVo2.setHomeTeamName(teamRace.getHomeTeam().getName());
-            watchBallVo2.setHomeTeamAvater(teamRace.getHomeTeam().getAvater());
+            watchBallVo2.setHomeTeamAvater(ConfigUtil.getString("base.url") + teamRace.getHomeTeam().getAvater());
             watchBallVo2.setvTeamName(teamRace.getVisitingTeam().getName());
-            watchBallVo2.setvTeamAvater(teamRace.getVisitingTeam().getAvater());
+            watchBallVo2.setvTeamAvater(ConfigUtil.getString("base.url") + teamRace.getVisitingTeam().getAvater());
             watchBallVo2.setStatus(teamRace.getStatus());
 
             if (watchBallVos.getClass().equals(watchBallVo2)) return;
@@ -488,9 +500,9 @@ public class OrderBallApi extends CommonController {
         WatchBallVo watchBallVo = new WatchBallVo();
         watchBallVo.setId(teamRace.getId());
         watchBallVo.setHomeTeamName(homeTeam.getName());
-        watchBallVo.setHomeTeamAvater(homeTeam.getAvater());
+        watchBallVo.setHomeTeamAvater(ConfigUtil.getString("base.url") + homeTeam.getAvater());
         watchBallVo.setvTeamName(visitingTeam.getName());
-        watchBallVo.setvTeamAvater(visitingTeam.getAvater());
+        watchBallVo.setvTeamAvater(ConfigUtil.getString("base.url") + visitingTeam.getAvater());
         watchBallVo.setStatus(teamRace.getStatus());
         watchBallVo.setStartTime(teamRace.getStartTime());
         watchBallVo.setStadiumName(teamRace.getStadium().getName());

@@ -90,7 +90,12 @@ public class InteractApi extends CommonController {
         Page<Post> page = postService.page(pageNum, pageSize);
         List<Post> postList = page.getContent();
         for (Post post : postList) {
+
+            post.getUser().setAvater(ConfigUtil.getString("base.url") + post.getUser().getAvater());
             post.setPostImages(postImageService.findByPostId(post.getId()));
+            for (PostImage postImage : postImageService.findByPostId(post.getId())) {
+                postImage.setAvater(ConfigUtil.getString("base.url") + postImage.getAvater());
+            }
             post.setPostCommentList(postCommentService.findByPostId(post.getId()));
             post.setCommentNum(post.getPostCommentList().size());
             /*for (int i = 0; i<2; i++) {
@@ -208,6 +213,15 @@ public class InteractApi extends CommonController {
         post.setCommentNum(postComments.size());
         List<PostImage> postImages = postImageService.findByPostId(postId);
 
+        post.getUser().setAvater(ConfigUtil.getString("base.url") + post.getUser().getAvater());
+        for (PostComment postComment : postComments) {
+            postComment.getfUser().setAvater(ConfigUtil.getString("base.url") + postComment.getfUser().getAvater());
+            postComment.gettUser().setAvater(ConfigUtil.getString("base.url") + postComment.gettUser().getAvater());
+        }
+        for (PostImage postImage : postImages) {
+            postImage.setAvater(ConfigUtil.getString("base.url") + postImage.getAvater());
+        }
+
         map.put("post",post);
         map.put("postComments",postComments);
         map.put("postImages",postImages);
@@ -276,6 +290,10 @@ public class InteractApi extends CommonController {
 
         List<MessageAdd> messageAddList = messageAddService.findUserId(userId);
 
+        for (MessageAdd messageAdd : messageAddList) {
+            messageAdd.getToUser().setAvater(ConfigUtil.getString("base.url") + messageAdd.getToUser().getAvater());
+        }
+
         Result obj = new Result(true).data(messageAddList);
         String result = JsonUtil.obj2ApiJson(obj,"user","content","status");
         WebUtil.printApi(response, result);
@@ -340,8 +358,11 @@ public class InteractApi extends CommonController {
 
         Page<Information> page = informationService.page(pageNum, pageSize);
 
-        Map<String, Object> dataMap = APIFactory.fitting(page);
+        for (Information information : page.getContent()) {
+            information.setAvater(ConfigUtil.getString("base.url") + information.getAvater());
+        }
 
+        Map<String, Object> dataMap = APIFactory.fitting(page);
         Result obj = new Result(true).data(dataMap);
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
@@ -372,6 +393,7 @@ public class InteractApi extends CommonController {
         }
 
         Information information = informationService.getById(messageId);
+        information.setAvater(ConfigUtil.getString("base.url") + information.getAvater());
 
         Result obj = new Result(true).data(information);
         String result = JsonUtil.obj2ApiJson(obj);
@@ -407,10 +429,12 @@ public class InteractApi extends CommonController {
 
         Page<Activity> page = activityService.page(pageNum, pageSize);
 
+        for (Activity activity : page.getContent()) {
+            activity.setAvater(ConfigUtil.getString("base.url") + activity.getAvater());
+        }
         Map<String, Object> dataMap = APIFactory.fitting(page);
         Result obj = new Result(true).data(dataMap);
         String result = JsonUtil.obj2ApiJson(obj);
-        System.out.println("result:" + result);
         WebUtil.printApi(response, result);
     }
 
@@ -439,6 +463,7 @@ public class InteractApi extends CommonController {
         }
 
         Activity activity = activityService.getById(activityId);
+        activity.setAvater(ConfigUtil.getString("base.url") + activity.getAvater());
 
         Result obj = new Result(true).data(createMap("activity",activity));
         String result = JsonUtil.obj2ApiJson(obj);

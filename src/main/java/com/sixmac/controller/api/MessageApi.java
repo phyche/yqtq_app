@@ -4,6 +4,7 @@ import com.sixmac.controller.common.CommonController;
 import com.sixmac.core.ErrorCode;
 import com.sixmac.core.bean.Result;
 import com.sixmac.entity.*;
+import com.sixmac.utils.ConfigUtil;
 import com.sixmac.utils.DateUtils;
 import com.sixmac.utils.JsonUtil;
 import com.sixmac.service.*;
@@ -269,6 +270,7 @@ public class MessageApi extends CommonController {
         for (MessageWatching messageWatching : messageWatchingList) {
 
             messageWatching.setContent("user" + "约您看球");
+            messageWatching.getWatchingRace().setAvater(messageWatching.getWatchingRace().getAvater());
         }
 
         Result obj = new Result(true).data(messageWatchingList);
@@ -659,7 +661,6 @@ public class MessageApi extends CommonController {
         Team team = teamService.findListByLeaderId(userId);
 
         if (team == null) {
-
             WebUtil.printApi(response, new Result(true).data("不是队长，不能查看被邀请加入球队消息"));
         }else {
 
@@ -716,6 +717,9 @@ public class MessageApi extends CommonController {
         List<Team> teamList = new ArrayList<Team>();
         List<TeamMember> teamMemberList = teamMemberService.findByUserId(userId);
         for (TeamMember teamMember : teamMemberList) {
+
+            teamMember.getUser().setAvater(ConfigUtil.getString("base.url") + teamMember.getUser().getAvater());
+
             teamList.add(teamMember.getTeam());
         }
 
@@ -725,6 +729,10 @@ public class MessageApi extends CommonController {
             for (TeamRace teamRace : teamRaceList1) {
                 if (teamRace.getStatus() == 1) {
                     teamRace.setContent("您的队伍和" + "visitingTeam" + "约战成功");
+
+                    teamRace.getHomeTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getHomeTeam().getAvater());
+                    teamRace.getVisitingTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getVisitingTeam().getAvater());
+
                     teamRaceList.add(teamRace);
                 }
             }
@@ -732,6 +740,10 @@ public class MessageApi extends CommonController {
             for (TeamRace teamRace : teamRaceList2) {
                 if (teamRace.getStatus() == 1) {
                     teamRace.setContent("您的队伍和" + "homeTeam" + "约战成功");
+
+                    teamRace.getHomeTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getHomeTeam().getAvater());
+                    teamRace.getVisitingTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getVisitingTeam().getAvater());
+
                     teamRaceList.add(teamRace);
                 }
             }
@@ -742,6 +754,10 @@ public class MessageApi extends CommonController {
         for (TeamRace teamRace : teamRaceList1) {
             if (teamRace.getStatus() == 2) {
                 teamRace.setContent("visitingTeam" + "拒绝了和您约战");
+
+                teamRace.getHomeTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getHomeTeam().getAvater());
+                teamRace.getVisitingTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getVisitingTeam().getAvater());
+
                 teamRaceList.add(teamRace);
             }
         }
@@ -749,6 +765,10 @@ public class MessageApi extends CommonController {
         for (TeamRace teamRace : teamRaceList2) {
             if (teamRace.getStatus() == 0) {
                 teamRace.setContent("visitingTeam" + "约您对战");
+
+                teamRace.getHomeTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getHomeTeam().getAvater());
+                teamRace.getVisitingTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getVisitingTeam().getAvater());
+
                 teamRaceList.add(teamRace);
             }
         }
