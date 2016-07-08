@@ -89,7 +89,7 @@ public class GirlImageServiceImpl implements GirlImageService {
     }
 
     @Override
-    public Page<GirlImage> page(final Integer type, Integer pageNum, Integer pageSize) {
+    public Page<GirlImage> page(final Integer type, final Integer status, Integer pageNum, Integer pageSize) {
         PageRequest pageRequest = new PageRequest(pageNum - 1, pageSize, Sort.Direction.DESC, "id");
 
         Page<GirlImage> page = girlImageDao.findAll(new Specification<GirlImage>() {
@@ -100,6 +100,11 @@ public class GirlImageServiceImpl implements GirlImageService {
 
                 if (type != null) {
                     Predicate pre = cb.equal(root.get("type").as(Integer.class), type);
+                    predicateList.add(pre);
+                }
+
+                if (status != null) {
+                    Predicate pre = cb.equal(root.get("girl").get("status").as(Integer.class), status);
                     predicateList.add(pre);
                 }
 

@@ -50,7 +50,7 @@
     "groupTitle": "hostRace",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/hostRace/apply"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/hostRace/apply"
       }
     ]
   },
@@ -98,7 +98,7 @@
     "groupTitle": "hostRace",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/hostRace/eventInformation"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/hostRace/eventInformation"
       }
     ]
   },
@@ -129,7 +129,7 @@
             "type": "Object",
             "optional": false,
             "field": "hostRace",
-            "description": "<p>草根杯列表</p>"
+            "description": "<p>草根杯</p>"
           },
           {
             "group": "Success 200",
@@ -188,7 +188,7 @@
     "groupTitle": "hostRace",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/hostRace/info"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/hostRace/info"
       }
     ]
   },
@@ -206,7 +206,7 @@
             "type": "Object",
             "optional": false,
             "field": "hostRace",
-            "description": "<p>草根杯列表</p>"
+            "description": "<p>草根杯</p>"
           },
           {
             "group": "Success 200",
@@ -214,6 +214,13 @@
             "optional": false,
             "field": "hostRace.id",
             "description": "<p>草根杯id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "hostRace.type",
+            "description": "<p>草根杯赛制</p>"
           },
           {
             "group": "Success 200",
@@ -258,7 +265,7 @@
     "groupTitle": "hostRace",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/hostRace/list"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/hostRace/list"
       }
     ]
   },
@@ -288,63 +295,63 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "hostRace",
+            "field": "list",
             "description": "<p>草根杯列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "hostRace.team",
+            "field": "list.team",
             "description": "<p>草根杯参赛队伍列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "hostRace.team.id",
+            "field": "list.team.id",
             "description": "<p>球队id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "hostRace.team.name",
+            "field": "list.team.name",
             "description": "<p>球队名称</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "hostRace.team.avater",
+            "field": "list.team.avater",
             "description": "<p>球队队徽</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "hostRace.team.count",
+            "field": "list.team.count",
             "description": "<p>球队总人数</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "hostRace.team.provinceName",
+            "field": "list.team.provinceName",
             "description": "<p>球队所在地的省份</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "hostRace.team.cityName",
+            "field": "list.team.cityName",
             "description": "<p>球队所在地的城市</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "hostRace.team.num",
+            "field": "list.team.num",
             "description": "<p>球队场次</p>"
           }
         ]
@@ -355,7 +362,7 @@
     "groupTitle": "hostRace",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/hostRace/teamList"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/hostRace/teamList"
       }
     ]
   },
@@ -386,11 +393,11 @@
             "type": "Object",
             "optional": false,
             "field": "activity",
-            "description": "<p>活动列表</p>"
+            "description": "<p>活动</p>"
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "activity.id",
             "description": "<p>活动id</p>"
@@ -438,7 +445,7 @@
     "groupTitle": "interact",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/interact/activityInfo"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/interact/activityInfo"
       }
     ]
   },
@@ -473,7 +480,7 @@
     "groupTitle": "interact",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/interact/addFriend"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/interact/addFriend"
       }
     ]
   },
@@ -503,42 +510,42 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "messageAddList",
+            "field": "list",
             "description": "<p>通讯录列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "messageAddList.id",
+            "field": "list.id",
             "description": "<p>通讯录id</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "messageAddList.toUser",
+            "field": "list.toUser",
             "description": "<p>通讯录好友</p>"
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
-            "field": "messageAddList.toUser.id",
+            "field": "list.toUser.id",
             "description": "<p>好友id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "messageAddList.toUser.nickname",
+            "field": "list.toUser.nickname",
             "description": "<p>好友昵称</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "messageAddList.toUser.avater",
+            "field": "list.toUser.avater",
             "description": "<p>好友头像</p>"
           }
         ]
@@ -549,7 +556,7 @@
     "groupTitle": "interact",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/interact/addressBook"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/interact/addressBook"
       }
     ]
   },
@@ -598,7 +605,7 @@
     "groupTitle": "interact",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/interact/comment"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/interact/comment"
       }
     ]
   },
@@ -716,7 +723,7 @@
     "groupTitle": "interact",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/interact/listActivity"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/interact/listActivity"
       }
     ]
   },
@@ -760,7 +767,7 @@
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "list.id",
+            "field": "list.Information.id",
             "description": "<p>资讯id</p>"
           },
           {
@@ -834,7 +841,7 @@
     "groupTitle": "interact",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/interact/listInformation"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/interact/listInformation"
       }
     ]
   },
@@ -1008,7 +1015,7 @@
     "groupTitle": "interact",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/interact/listPost"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/interact/listPost"
       }
     ]
   },
@@ -1043,7 +1050,7 @@
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "information.id",
             "description": "<p>资讯id</p>"
@@ -1091,7 +1098,7 @@
     "groupTitle": "interact",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/interact/messageInfo"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/interact/messageInfo"
       }
     ]
   },
@@ -1121,119 +1128,119 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "post",
+            "field": "postInfo.post",
             "description": "<p>帖子</p>"
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "String",
             "optional": false,
-            "field": "post.content",
+            "field": "postInfo.post.content",
             "description": "<p>帖子内容</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "post.createDate",
+            "field": "postInfo.post.createDate",
             "description": "<p>帖子创建时间</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "post.shareNum",
+            "field": "postInfo.post.shareNum",
             "description": "<p>分享数</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "post.commentNum",
+            "field": "postInfo.post.commentNum",
             "description": "<p>评论数</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "post.user",
+            "field": "postInfo.post.user",
             "description": "<p>用户列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "post.user.id",
+            "field": "postInfo.post.user.id",
             "description": "<p>用户id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "post.user.nickname",
+            "field": "postInfo.post.user.nickname",
             "description": "<p>用户昵称</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "postImages",
+            "field": "postInfo.postImages",
             "description": "<p>帖子图片列表</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "postImages.avater",
+            "field": "postInfo.postImages.avater",
             "description": "<p>帖子图片</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "postComments",
+            "field": "postInfo.postComments",
             "description": "<p>帖子评论列表</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "postComments.content",
+            "field": "postInfo.postComments.content",
             "description": "<p>帖子内容</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "postComments.createDate",
+            "field": "postInfo.postComments.createDate",
             "description": "<p>帖子创建时间</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "postComments.fUser",
+            "field": "postInfo.postComments.fUser",
             "description": "<p>帖子评论人</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "postComments.fUser.id",
+            "field": "postInfo.postComments.fUser.id",
             "description": "<p>帖子评论人id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "postComments.fUser.avater",
+            "field": "postInfo.postComments.fUser.avater",
             "description": "<p>帖子评论人头像</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "postComments.fUser.nickname",
+            "field": "postInfo.postComments.fUser.nickname",
             "description": "<p>帖子评论人昵称</p>"
           }
         ]
@@ -1244,7 +1251,7 @@
     "groupTitle": "interact",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/interact/postInfo"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/interact/postInfo"
       }
     ]
   },
@@ -1286,7 +1293,7 @@
     "groupTitle": "interact",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/interact/publish"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/interact/publish"
       }
     ]
   },
@@ -1467,7 +1474,7 @@
     "groupTitle": "login",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/login/checkLogin"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/login/checkLogin"
       }
     ]
   },
@@ -1502,7 +1509,7 @@
     "groupTitle": "login",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/login/confirmCode"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/login/confirmCode"
       }
     ]
   },
@@ -1537,7 +1544,7 @@
     "groupTitle": "login",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/login/findPassword"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/login/findPassword"
       }
     ]
   },
@@ -1565,7 +1572,7 @@
     "groupTitle": "login",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/login/information"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/login/information"
       }
     ]
   },
@@ -1620,7 +1627,7 @@
     "groupTitle": "login",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/login/sendCode"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/login/sendCode"
       }
     ]
   },
@@ -1731,7 +1738,7 @@
     "groupTitle": "login",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/login/tLogin"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/login/tLogin"
       }
     ]
   },
@@ -1761,70 +1768,70 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "messageTeamList",
+            "field": "list",
             "description": "<p>消息列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageTeamList.id",
+            "field": "list.id",
             "description": "<p>消息id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "messageTeamList.content",
+            "field": "list.content",
             "description": "<p>消息内容</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "messageTeamList.toUser",
+            "field": "list.toUser",
             "description": "<p>邀请加入球队的用户</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageTeamList.toUser.id",
+            "field": "list.toUser.id",
             "description": "<p>用户id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "messageTeamList.toUser.nickname",
+            "field": "list.toUser.nickname",
             "description": "<p>用户昵称</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "messageTeamList.team",
+            "field": "list.team",
             "description": "<p>邀请加入的球队</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageTeamList.team.id",
+            "field": "list.team.id",
             "description": "<p>球队id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "messageTeamList.team.name",
+            "field": "list.team.name",
             "description": "<p>球队名称</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageTeamList.createDate",
+            "field": "list.createDate",
             "description": "<p>消息时间</p>"
           }
         ]
@@ -1835,7 +1842,7 @@
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/message/Join"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/message/Join"
       }
     ]
   },
@@ -1865,84 +1872,84 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "userReserveList",
+            "field": "list",
             "description": "<p>加入约球消息列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "userReserveList.id",
+            "field": "list.id",
             "description": "<p>加入约球id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "userReserveList.content",
+            "field": "list.content",
             "description": "<p>约球内容</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "userReserveList.user",
+            "field": "list.user",
             "description": "<p>加入约球人</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "userReserveList.user.id",
+            "field": "list.user.id",
             "description": "<p>加入约球人id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "userReserveList.user.nickname",
+            "field": "list.user.nickname",
             "description": "<p>加入约球人昵称</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "userReserveList.reserve",
+            "field": "list.reserve",
             "description": "<p>加入约球预约</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "userReserveList.reserve.id",
+            "field": "list.reserve.id",
             "description": "<p>加入约球预约id</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "userReserveList.reserve.stadium",
+            "field": "list.reserve.stadium",
             "description": "<p>约球球场</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "userReserveList.reserve.stadium.name",
+            "field": "list.reserve.stadium.name",
             "description": "<p>约球球场名字</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "userReserveList.reserve.startTime",
+            "field": "list.reserve.startTime",
             "description": "<p>开始时间</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "userReserveList.createDate",
+            "field": "list.createDate",
             "description": "<p>记录生成时间</p>"
           }
         ]
@@ -1953,7 +1960,7 @@
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/message/addOrder"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/message/addOrder"
       }
     ]
   },
@@ -1983,49 +1990,49 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "messageAddList",
+            "field": "list",
             "description": "<p>消息列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageAddList.id",
+            "field": "list.id",
             "description": "<p>消息id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "messageAddList.content",
+            "field": "list.content",
             "description": "<p>消息内容</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "messageAddList.user",
+            "field": "list.user",
             "description": "<p>好友</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageAddList.user.id",
+            "field": "list.user.id",
             "description": "<p>好友id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "messageAddList.user.nickname",
+            "field": "list.user.nickname",
             "description": "<p>好友昵称</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageAddList.createDate",
+            "field": "list.createDate",
             "description": "<p>消息时间</p>"
           }
         ]
@@ -2036,7 +2043,7 @@
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/message/beAdd"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/message/beAdd"
       }
     ]
   },
@@ -2066,70 +2073,70 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "messageTeamList",
+            "field": "list",
             "description": "<p>消息列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageTeamList.id",
+            "field": "list.id",
             "description": "<p>消息id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "messageTeamList.content",
+            "field": "list.content",
             "description": "<p>消息内容</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "messageTeamList.user",
+            "field": "list.user",
             "description": "<p>邀请加入球队的用户</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageTeamList.user.id",
+            "field": "list.user.id",
             "description": "<p>用户id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "messageTeamList.user.nickname",
+            "field": "list.user.nickname",
             "description": "<p>用户昵称</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "messageTeamList.team",
+            "field": "list.team",
             "description": "<p>邀请加入的球队</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageTeamList.team.id",
+            "field": "list.team.id",
             "description": "<p>球队id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "messageTeamList.team.name",
+            "field": "list.team.name",
             "description": "<p>球队名称</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageTeamList.createDate",
+            "field": "list.createDate",
             "description": "<p>消息时间</p>"
           }
         ]
@@ -2140,7 +2147,7 @@
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/message/beJoinTeam"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/message/beJoinTeam"
       }
     ]
   },
@@ -2175,7 +2182,7 @@
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/message/doAdd"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/message/doAdd"
       }
     ]
   },
@@ -2210,7 +2217,7 @@
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/message/doBeJoinTeam"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/message/doBeJoinTeam"
       }
     ]
   },
@@ -2245,7 +2252,7 @@
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/message/doJoinTeam"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/message/doJoinTeam"
       }
     ]
   },
@@ -2280,7 +2287,7 @@
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/message/doOrder"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/message/doOrder"
       }
     ]
   },
@@ -2315,7 +2322,7 @@
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/message/doTeamOrder"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/message/doTeamOrder"
       }
     ]
   },
@@ -2345,49 +2352,49 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "messageJoinList",
+            "field": "list",
             "description": "<p>消息列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageJoinList.id",
+            "field": "list.id",
             "description": "<p>消息id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "messageJoinList.content",
+            "field": "list.content",
             "description": "<p>消息内容</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "messageJoinList.user",
+            "field": "list.user",
             "description": "<p>申请加入球队的用户</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageJoinList.user.id",
+            "field": "list.user.id",
             "description": "<p>用户id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "messageJoinList.user.nickname",
+            "field": "list.user.nickname",
             "description": "<p>用户昵称</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageJoinList.createDate",
+            "field": "list.createDate",
             "description": "<p>消息时间</p>"
           }
         ]
@@ -2398,7 +2405,7 @@
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/message/joinTeam"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/message/joinTeam"
       }
     ]
   },
@@ -2428,70 +2435,70 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "userReserveList",
+            "field": "list",
             "description": "<p>约球列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "userReserveList.id",
+            "field": "list.id",
             "description": "<p>约球id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "userReserveList.content",
+            "field": "list.content",
             "description": "<p>约球内容</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "userReserveList.status",
+            "field": "list.status",
             "description": "<p>约球状态（1:组队成功2:组队失败）</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "userReserveList.reserve",
+            "field": "list.reserve",
             "description": "<p>约球预约</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "userReserveList.reserve.id",
+            "field": "list.reserve.id",
             "description": "<p>约球预约id</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "userReserveList.reserve.stadium",
+            "field": "list.reserve.stadium",
             "description": "<p>约球球场</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "userReserveList.reserve.stadium.name",
+            "field": "list.reserve.stadium.name",
             "description": "<p>约球球场名字</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "userReserveList.reserve.startTime",
+            "field": "list.reserve.startTime",
             "description": "<p>开始时间</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "userReserveList.createDate",
+            "field": "list.createDate",
             "description": "<p>记录生成时间</p>"
           }
         ]
@@ -2502,7 +2509,7 @@
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/message/myOrder"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/message/myOrder"
       }
     ]
   },
@@ -2532,77 +2539,77 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "messageOrderBallList",
+            "field": "list",
             "description": "<p>好友约球消息列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageOrderBallList.id",
+            "field": "list.id",
             "description": "<p>消息id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "messageOrderBallList.content",
+            "field": "list.content",
             "description": "<p>消息内容</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "messageOrderBallList.user",
+            "field": "list.user",
             "description": "<p>好友</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageOrderBallList.user.id",
+            "field": "list.user.id",
             "description": "<p>好友d</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "messageOrderBallList.user.nickname",
+            "field": "list.user.nickname",
             "description": "<p>好友昵称</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "messageOrderBallList.reserve",
+            "field": "list.reserve",
             "description": "<p>约球</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageOrderBallList.reserve.id",
+            "field": "list.reserve.id",
             "description": "<p>约球d</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "messageOrderBallList.reserve.stadium",
+            "field": "list.reserve.stadium",
             "description": "<p>约球球场</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "messageOrderBallList.reserve.stadium.name",
+            "field": "list.reserve.stadium.name",
             "description": "<p>约球球场名字</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageOrderBallList.reserve.startTime",
+            "field": "list.reserve.startTime",
             "description": "<p>开始时间</p>"
           },
           {
@@ -2620,7 +2627,7 @@
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/message/orderBall"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/message/orderBall"
       }
     ]
   },
@@ -2650,70 +2657,70 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "postCommentList",
+            "field": "list",
             "description": "<p>帖子消息列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "postCommentList.id",
+            "field": "list.id",
             "description": "<p>消息id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "postCommentList.title",
+            "field": "list.title",
             "description": "<p>消息标题</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "postCommentList.fUser",
+            "field": "list.fUser",
             "description": "<p>好友</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "postCommentList.fUser.id",
+            "field": "list.fUser.id",
             "description": "<p>好友id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "postCommentList.fUser.nickname",
+            "field": "list.fUser.nickname",
             "description": "<p>好友昵称</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "postCommentList.post",
+            "field": "list.post",
             "description": "<p>帖子</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "postCommentList.post.id",
+            "field": "list.post.id",
             "description": "<p>帖子id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "postCommentList.post.content",
+            "field": "list.post.content",
             "description": "<p>帖子内容</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "postCommentList.createDate",
+            "field": "list.createDate",
             "description": "<p>评论时间</p>"
           }
         ]
@@ -2724,7 +2731,7 @@
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/message/post"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/message/post"
       }
     ]
   },
@@ -2754,28 +2761,28 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "messageList",
+            "field": "list",
             "description": "<p>系统消息列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageList.id",
+            "field": "list.id",
             "description": "<p>消息id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "messageList.title",
+            "field": "list.title",
             "description": "<p>消息标题</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageList.createDate",
+            "field": "list.createDate",
             "description": "<p>消息时间</p>"
           }
         ]
@@ -2786,7 +2793,7 @@
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/message/system"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/message/system"
       }
     ]
   },
@@ -2855,7 +2862,7 @@
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/message/systemInfo"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/message/systemInfo"
       }
     ]
   },
@@ -2885,91 +2892,91 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "messageJoinList",
+            "field": "list",
             "description": "<p>消息列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageJoinList.id",
+            "field": "list.id",
             "description": "<p>消息id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "messageJoinList.content",
+            "field": "list.content",
             "description": "<p>消息内容</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "messageJoinList.visitingTeam",
+            "field": "list.visitingTeam",
             "description": "<p>约战主队</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageJoinList.visitingTeam.id",
+            "field": "list.visitingTeam.id",
             "description": "<p>主队id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "messageJoinList.visitingTeam.name",
+            "field": "list.visitingTeam.name",
             "description": "<p>主队名称</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "messageJoinList.visitingTeam.avater",
+            "field": "list.visitingTeam.avater",
             "description": "<p>主队队徽</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "messageJoinList.homeTeam",
+            "field": "list.homeTeam",
             "description": "<p>约战客队</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageJoinList.homeTeam.id",
+            "field": "list.homeTeam.id",
             "description": "<p>客队id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "messageJoinList.homeTeam.name",
+            "field": "list.homeTeam.name",
             "description": "<p>客队名称</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "messageJoinList.homeTeam.avater",
+            "field": "list.homeTeam.avater",
             "description": "<p>客队队徽</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageJoinList.startTime",
+            "field": "list.startTime",
             "description": "<p>约战时间</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageJoinList.createDate",
+            "field": "list.createDate",
             "description": "<p>消息时间</p>"
           }
         ]
@@ -2980,7 +2987,7 @@
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/message/teamOrder"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/message/teamOrder"
       }
     ]
   },
@@ -3010,49 +3017,49 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "messageAddList",
+            "field": "list",
             "description": "<p>消息列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageAddList.id",
+            "field": "list.id",
             "description": "<p>消息id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "messageAddList.content",
+            "field": "list.content",
             "description": "<p>消息内容</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "messageAddList.toUser",
+            "field": "list.toUser",
             "description": "<p>好友</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageAddList.toUser.id",
+            "field": "list.toUser.id",
             "description": "<p>好友id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "messageAddList.toUser.nickname",
+            "field": "list.toUser.nickname",
             "description": "<p>好友昵称</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageAddList.createDate",
+            "field": "list.createDate",
             "description": "<p>消息时间</p>"
           }
         ]
@@ -3063,7 +3070,7 @@
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/message/toAdd"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/message/toAdd"
       }
     ]
   },
@@ -3093,105 +3100,105 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "messageWatchingList",
+            "field": "list",
             "description": "<p>约看列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageWatchingList.id",
+            "field": "list.id",
             "description": "<p>约看id</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "messageWatchingList.user",
+            "field": "list.user",
             "description": "<p>好友</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageWatchingList.user.id",
+            "field": "list.user.id",
             "description": "<p>好友id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "messageWatchingList.user.nickname",
+            "field": "list.user.nickname",
             "description": "<p>好友昵称</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "messageWatchingList.bigRace",
+            "field": "list.bigRace",
             "description": "<p>现场看球</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageWatchingList.bigRace.id",
+            "field": "list.bigRace.id",
             "description": "<p>现场看球id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "messageWatchingList.bigRace.stadium.name",
+            "field": "list.bigRace.stadium.name",
             "description": "<p>现场看球球场名字</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageWatchingList.bigRace.startTime",
+            "field": "list.bigRace.startTime",
             "description": "<p>现场看球开始时间</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "messageWatchingList.watchingRace",
+            "field": "list.watchingRace",
             "description": "<p>直播看球</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageWatchingList.watchingRace.id",
+            "field": "list.watchingRace.id",
             "description": "<p>直播看球id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "messageWatchingList.watchingRace.name",
+            "field": "list.watchingRace.name",
             "description": "<p>直播看球球馆名字</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "messageWatchingList.watchingRace.avater",
+            "field": "list.watchingRace.avater",
             "description": "<p>直播看球球馆封面</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageWatchingList.watchingRace.startTime",
+            "field": "list.watchingRace.startTime",
             "description": "<p>直播看球开始时间</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageWatchingList.createDate",
+            "field": "list.createDate",
             "description": "<p>记录生成时间</p>"
           }
         ]
@@ -3202,7 +3209,7 @@
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/message/watching"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/message/watching"
       }
     ]
   },
@@ -3232,126 +3239,126 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "user",
-            "description": "<p>球友列表</p>"
+            "field": "player.user",
+            "description": "<p>球友</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "user.avater",
+            "field": "player.user.avater",
             "description": "<p>球友头像</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "user.nickname",
+            "field": "player.user.nickname",
             "description": "<p>球友昵称</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "user.vipNum",
+            "field": "player.user.vipNum",
             "description": "<p>球友会员等级</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "user.credibility",
+            "field": "player.user.credibility",
             "description": "<p>球友信誉评分</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "user.age",
+            "field": "player.user.age",
             "description": "<p>球友年龄</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "user.gender",
+            "field": "player.user.gender",
             "description": "<p>球友性别 0:男 1：女</p>"
           },
           {
             "group": "Success 200",
             "type": "Double",
             "optional": false,
-            "field": "user.height",
+            "field": "player.user.height",
             "description": "<p>球友身高</p>"
           },
           {
             "group": "Success 200",
             "type": "Double",
             "optional": false,
-            "field": "user.weight",
+            "field": "player.user.weight",
             "description": "<p>球友体重</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "user.position",
+            "field": "player.user.position",
             "description": "<p>球友位置 0：前 1：中 2：后 3：守</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "team",
+            "field": "player.team",
             "description": "<p>球友的球队</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "team.avater",
+            "field": "player.team.avater",
             "description": "<p>球队队徽</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "team.name",
+            "field": "player.team.name",
             "description": "<p>球队名称</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "team.declareNum",
+            "field": "player.team.declareNum",
             "description": "<p>球队宣战数</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "team.battleNum",
+            "field": "player.team.battleNum",
             "description": "<p>球队应战数</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "team.count",
+            "field": "player.team.count",
             "description": "<p>球队总人数</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "team.list",
+            "field": "player.team.list",
             "description": "<p>球队球员列表</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "team.list.avater",
+            "field": "player.team.list.avater",
             "description": "<p>球队球员头像</p>"
           }
         ]
@@ -3362,7 +3369,7 @@
     "groupTitle": "orderBall",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/orderBall/info"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/orderBall/info"
       }
     ]
   },
@@ -3390,7 +3397,7 @@
     "groupTitle": "orderBall",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/orderBall/information"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/orderBall/information"
       }
     ]
   },
@@ -3571,7 +3578,7 @@
     "groupTitle": "orderBall",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/orderBall/list"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/orderBall/list"
       }
     ]
   },
@@ -3613,7 +3620,7 @@
     "groupTitle": "orderBall",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/orderBall/order"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/orderBall/order"
       }
     ]
   },
@@ -3643,133 +3650,133 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "reserve",
+            "field": "reserve.reserve",
             "description": "<p>约球列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "reserve.id",
+            "field": "reserve.reserve.id",
             "description": "<p>约球id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "reserve.content",
+            "field": "reserve.reserve.content",
             "description": "<p>约球内容</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "reserve.matchType",
+            "field": "reserve.reserve.matchType",
             "description": "<p>赛制</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "reserve.joinCount",
+            "field": "reserve.reserve.joinCount",
             "description": "<p>已报人数</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "reserve.lackCount",
+            "field": "reserve.reserve.lackCount",
             "description": "<p>剩余人数</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "reserve.user",
+            "field": "reserve.reserve.user",
             "description": "<p>创建人</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "reserve.user.nickname",
+            "field": "reserve.reserve.user.nickname",
             "description": "<p>创建人昵称</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "reserve.user.avater",
+            "field": "reserve.reserve.user.avater",
             "description": "<p>创建人头像</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "reserve.stadium",
+            "field": "reserve.reserve.stadium",
             "description": "<p>球场</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "reserve.stadium.id",
+            "field": "reserve.reserve.stadium.id",
             "description": "<p>球场id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "reserve.stadium.name",
+            "field": "reserve.reserve.stadium.name",
             "description": "<p>球场名字</p>"
           },
           {
             "group": "Success 200",
             "type": "Double",
             "optional": false,
-            "field": "reserve.avePrice",
+            "field": "reserve.reserve.avePrice",
             "description": "<p>AA制金额</p>"
           },
           {
             "group": "Success 200",
             "type": "Double",
             "optional": false,
-            "field": "reserve.sumPrice",
+            "field": "reserve.reserve.sumPrice",
             "description": "<p>支付总金额</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "userList",
+            "field": "reserve.userList",
             "description": "<p>已报名球友列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "userList.id",
+            "field": "reserve.userList.id",
             "description": "<p>报名球友id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "userList.nickname",
+            "field": "reserve.userList.nickname",
             "description": "<p>报名球友昵称</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "userList.avater",
+            "field": "reserve.userList.avater",
             "description": "<p>报名球友头像</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "reserve.startTime",
+            "field": "reserve.reserve.startTime",
             "description": "<p>开始时间</p>"
           }
         ]
@@ -3780,7 +3787,7 @@
     "groupTitle": "orderBall",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/orderBall/orderInfo"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/orderBall/orderInfo"
       }
     ]
   },
@@ -3898,7 +3905,7 @@
     "groupTitle": "orderBall",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/orderBall/orderList"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/orderBall/orderList"
       }
     ]
   },
@@ -3974,7 +3981,7 @@
     "groupTitle": "orderBall",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/orderBall/pay"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/orderBall/pay"
       }
     ]
   },
@@ -4078,7 +4085,7 @@
     "groupTitle": "orderBall",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/orderBall/raceInfo"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/orderBall/raceInfo"
       }
     ]
   },
@@ -4108,112 +4115,112 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "watchBallVos",
+            "field": "list.watchBallVos",
             "description": "<p>球员所在球队为主队赛事列表</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "watchBallVos.homeTeamName",
+            "field": "list.watchBallVos.homeTeamName",
             "description": "<p>主队队名</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "watchBallVos.homeTeamAvater",
+            "field": "list.watchBallVos.homeTeamAvater",
             "description": "<p>主队队徽</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "watchBallVos.vTeamName",
+            "field": "list.watchBallVos.vTeamName",
             "description": "<p>客队队名</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "watchBallVos.vTeamAvater",
+            "field": "list.watchBallVos.vTeamAvater",
             "description": "<p>客队队徽</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "watchBallVos.status",
+            "field": "list.watchBallVos.status",
             "description": "<p>赛事状态 （0：等待同意，1：约赛成功，2：约赛失败）</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "watchBallVos.stadiumName",
+            "field": "list.watchBallVos.stadiumName",
             "description": "<p>球场名称</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "watchBallVos.startTime",
+            "field": "list.watchBallVos.startTime",
             "description": "<p>开始时间</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "watchBallVoList",
+            "field": "list.watchBallVoList",
             "description": "<p>球员所在球队为客队赛事列表</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "watchBallVoList.homeTeamName",
+            "field": "list.watchBallVoList.homeTeamName",
             "description": "<p>主队队名</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "watchBallVoList.homeTeamAvater",
+            "field": "list.watchBallVoList.homeTeamAvater",
             "description": "<p>主队队徽</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "watchBallVoList.vTeamName",
+            "field": "list.watchBallVoList.vTeamName",
             "description": "<p>客队队名</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "watchBallVoList.vTeamAvater",
+            "field": "list.watchBallVoList.vTeamAvater",
             "description": "<p>客队队徽</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "watchBallVoList.status",
+            "field": "list.watchBallVoList.status",
             "description": "<p>赛事状态 （0：等待同意，1：约赛成功，2：约赛失败）</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "watchBallVoList.stadiumName",
+            "field": "list.watchBallVoList.stadiumName",
             "description": "<p>球场名称</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "watchBallVoList.startTime",
+            "field": "list.watchBallVoList.startTime",
             "description": "<p>开始时间</p>"
           }
         ]
@@ -4224,7 +4231,7 @@
     "groupTitle": "orderBall",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/orderBall/raceList"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/orderBall/raceList"
       }
     ]
   },
@@ -4314,7 +4321,7 @@
     "groupTitle": "pay",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/pay/getPayInfo"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/pay/getPayInfo"
       }
     ]
   },
@@ -4331,35 +4338,35 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "bannerList",
+            "field": "list",
             "description": "<p>系统banner图列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "bannerList.id",
+            "field": "list.id",
             "description": "<p>banner图id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "bannerList.avater",
+            "field": "list.avater",
             "description": "<p>banner图</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "bannerList.type",
+            "field": "list.type",
             "description": "<p>banner图类型</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "bannerList.toId",
+            "field": "list.toId",
             "description": "<p>banner图跳转目的Id</p>"
           }
         ]
@@ -4370,7 +4377,7 @@
     "groupTitle": "playIndex",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/playIndex/banner"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/playIndex/banner"
       }
     ]
   },
@@ -4400,154 +4407,154 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "activity",
+            "field": "banner.activity",
             "description": "<p>活动</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "list.id",
+            "field": "banner.activity.id",
             "description": "<p>活动id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "activity.title",
+            "field": "banner.activity.title",
             "description": "<p>活动标题</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "activity.avater",
+            "field": "banner.activity.avater",
             "description": "<p>活动封面</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "activity.introduction",
+            "field": "banner.activity.introduction",
             "description": "<p>活动简介</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "activity.description",
+            "field": "banner.activity.description",
             "description": "<p>活动介绍</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "activity.createDate",
+            "field": "banner.activity.createDate",
             "description": "<p>活动创建时间</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "hostRace",
+            "field": "banner.hostRace",
             "description": "<p>草根杯</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "hostRace.id",
+            "field": "banner.hostRace.id",
             "description": "<p>草根杯id</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "hostRace.type",
+            "field": "banner.hostRace.type",
             "description": "<p>草根杯赛制</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "hostRace.name",
+            "field": "banner.hostRace.name",
             "description": "<p>草根杯名字</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "hostRace.avater",
+            "field": "banner.hostRace.avater",
             "description": "<p>草根杯封面</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "hostRace.description",
+            "field": "banner.hostRace.description",
             "description": "<p>草根杯介绍</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "hostRace.stadium",
+            "field": "banner.hostRace.stadium",
             "description": "<p>球场</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "hostRace.stadium.name",
+            "field": "banner.hostRace.stadium.name",
             "description": "<p>球场名称</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "information",
+            "field": "banner.information",
             "description": "<p>资讯列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "information.id",
+            "field": "banner.information.id",
             "description": "<p>资讯id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "information.title",
+            "field": "banner.information.title",
             "description": "<p>资讯标题</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "information.avater",
+            "field": "banner.information.avater",
             "description": "<p>资讯封面</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "information.introduction",
+            "field": "banner.information.introduction",
             "description": "<p>资讯简介</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "information.description",
+            "field": "banner.information.description",
             "description": "<p>资讯介绍</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "information.createDate",
+            "field": "banner.information.createDate",
             "description": "<p>资讯创建时间</p>"
           }
         ]
@@ -4558,7 +4565,49 @@
     "groupTitle": "playIndex",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/playIndex/jump"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/playIndex/jump"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/api/playIndex/notice",
+    "title": "通知",
+    "name": "playIndex_notice",
+    "group": "playIndex",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list",
+            "description": "<p>约球列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.id",
+            "description": "<p>约球id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.content",
+            "description": "<p>约球内容</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/PlayIndexApi.java",
+    "groupTitle": "playIndex",
+    "sampleRequest": [
+      {
+        "url": "http://4.16.1.158:8080/yqtq_app/api/playIndex/notice"
       }
     ]
   },
@@ -4588,84 +4637,84 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "reserves",
+            "field": "list",
             "description": "<p>约球列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "reserves.id",
+            "field": "list.id",
             "description": "<p>约球id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "reserves.content",
+            "field": "list.content",
             "description": "<p>约球内容</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "reserves.matchType",
+            "field": "list.matchType",
             "description": "<p>赛制</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "reserves.joinCount",
+            "field": "list.joinCount",
             "description": "<p>已报人数</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "reserves.lackCount",
+            "field": "list.lackCount",
             "description": "<p>剩余人数</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "reserves.user",
+            "field": "list.user",
             "description": "<p>创建人</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "reserves.user.nickname",
+            "field": "list.user.nickname",
             "description": "<p>创建人昵称</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "reserves.user.avater",
+            "field": "list.user.avater",
             "description": "<p>创建人头像</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "reserves.stadium",
+            "field": "list.stadium",
             "description": "<p>球场</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "reserves.stadium.name",
+            "field": "list.stadium.name",
             "description": "<p>球场名字</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "reserves.startTime",
+            "field": "list.startTime",
             "description": "<p>开始时间</p>"
           }
         ]
@@ -4676,7 +4725,7 @@
     "groupTitle": "playIndex",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/playIndex/orderballList"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/playIndex/orderballList"
       }
     ]
   },
@@ -4706,63 +4755,63 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "teamList",
+            "field": "list",
             "description": "<p>球队约战列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "teamList.id",
+            "field": "list.id",
             "description": "<p>球队id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "teamList.name",
+            "field": "list.name",
             "description": "<p>球队名字</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "teamList.avater",
+            "field": "list.avater",
             "description": "<p>球队队徽</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "teamList.declareNum",
+            "field": "list.declareNum",
             "description": "<p>球队宣战数</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "teamList.battleNum",
+            "field": "list.battleNum",
             "description": "<p>球队应战数</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "teamList.list",
+            "field": "list.list",
             "description": "<p>球队球员列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "teamList.list.id",
+            "field": "list.list.id",
             "description": "<p>球队球员id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "teamList.list.avater",
+            "field": "list.list.avater",
             "description": "<p>球队球员头像</p>"
           }
         ]
@@ -4773,7 +4822,7 @@
     "groupTitle": "playIndex",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/playIndex/teamRace"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/playIndex/teamRace"
       }
     ]
   },
@@ -4803,92 +4852,113 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "stadium",
+            "field": "info.stadium",
             "description": "<p>球场</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "stadium.id",
+            "field": "info.stadium.id",
             "description": "<p>球场id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "stadium.name",
+            "field": "info.stadium.name",
             "description": "<p>球场名称</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "stadium.areaName",
+            "field": "info.stadium.areaName",
             "description": "<p>球场地区名字</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "stadium.address",
+            "field": "info.stadium.address",
             "description": "<p>球场地址</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "stadium.avater",
+            "field": "info.stadium.avater",
             "description": "<p>球场封面</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "stadium.siteType",
+            "field": "info.stadium.siteType",
             "description": "<p>场地类型</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "stadium.sodType",
+            "field": "info.stadium.sodType",
             "description": "<p>草皮类型</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "stadium.light",
+            "field": "info.stadium.light",
             "description": "<p>灯光</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "stadium.park",
+            "field": "info.stadium.park",
             "description": "<p>停车场（0：有停车场 1；没有停车场）</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "stadium.giving",
+            "field": "info.stadium.giving",
             "description": "<p>赠送</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "stadium.description",
+            "field": "info.stadium.description",
             "description": "<p>球场简介</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "sites",
-            "description": "<p>球场场地</p>"
+            "field": "info.time",
+            "description": "<p>时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "info.time.week",
+            "description": "<p>星期</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "info.time.date",
+            "description": "<p>日期</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "info.time.time",
+            "description": "<p>具体时间</p>"
           }
         ]
       }
@@ -4898,7 +4968,7 @@
     "groupTitle": "stadium",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/stadium/info"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/stadium/info"
       }
     ]
   },
@@ -4939,7 +5009,7 @@
     "groupTitle": "stadium",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/stadium/insurance"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/stadium/insurance"
       }
     ]
   },
@@ -5106,7 +5176,7 @@
     "groupTitle": "stadium",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/stadium/list"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/stadium/list"
       }
     ]
   },
@@ -5175,7 +5245,7 @@
     "groupTitle": "stadium",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/stadium/order"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/stadium/order"
       }
     ]
   },
@@ -5307,7 +5377,7 @@
     "groupTitle": "stadium",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/stadium/pay"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/stadium/pay"
       }
     ]
   },
@@ -5383,7 +5453,7 @@
     "groupTitle": "stadium",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/stadium/payConfirm"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/stadium/payConfirm"
       }
     ]
   },
@@ -5473,7 +5543,7 @@
     "groupTitle": "stadium",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/stadium/publish"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/stadium/publish"
       }
     ]
   },
@@ -5605,7 +5675,7 @@
     "groupTitle": "stadium",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/stadium/siteOrder"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/stadium/siteOrder"
       }
     ]
   },
@@ -5674,7 +5744,7 @@
     "groupTitle": "stadium",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/stadium/siteSelect"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/stadium/siteSelect"
       }
     ]
   },
@@ -5799,7 +5869,7 @@
     "groupTitle": "stadium",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/stadium/teamPay"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/stadium/teamPay"
       }
     ]
   },
@@ -5868,7 +5938,7 @@
     "groupTitle": "stadium",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/stadium/teamPayConfirm"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/stadium/teamPayConfirm"
       }
     ]
   },
@@ -5924,7 +5994,7 @@
     "groupTitle": "team",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/team/add"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/team/add"
       }
     ]
   },
@@ -5959,7 +6029,7 @@
     "groupTitle": "team",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/team/addFriend"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/team/addFriend"
       }
     ]
   },
@@ -5994,7 +6064,7 @@
     "groupTitle": "team",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/team/apply"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/team/apply"
       }
     ]
   },
@@ -6024,105 +6094,105 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "team",
+            "field": "teamInfo.team",
             "description": "<p>球队</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "team.id",
+            "field": "teamInfo.team.id",
             "description": "<p>球队id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "team.name",
+            "field": "teamInfo.team.name",
             "description": "<p>球队名称</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "team.avater",
+            "field": "teamInfo.team.avater",
             "description": "<p>球队队徽</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "team.slogan",
+            "field": "teamInfo.team.slogan",
             "description": "<p>球队口号</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "team.address",
+            "field": "teamInfo.team.address",
             "description": "<p>球队地址</p>"
           },
           {
             "group": "Success 200",
             "type": "Double",
             "optional": false,
-            "field": "team.aveAge",
+            "field": "teamInfo.team.aveAge",
             "description": "<p>球队平均年龄</p>"
           },
           {
             "group": "Success 200",
             "type": "Double",
             "optional": false,
-            "field": "team.aveHeight",
+            "field": "teamInfo.team.aveHeight",
             "description": "<p>球队平均身高</p>"
           },
           {
             "group": "Success 200",
             "type": "Double",
             "optional": false,
-            "field": "team.aveWeight",
+            "field": "teamInfo.team.aveWeight",
             "description": "<p>球队平均体重</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "team.leaderUser",
+            "field": "teamInfo.team.leaderUser",
             "description": "<p>队长</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "team.leaderUser.id",
+            "field": "teamInfo.team.leaderUser.id",
             "description": "<p>队长id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "team.leaderUser.avater",
+            "field": "teamInfo.team.leaderUser.avater",
             "description": "<p>队长头像</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "userList",
+            "field": "teamInfo.userList",
             "description": "<p>队员</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "userList.id",
+            "field": "teamInfo.userList.id",
             "description": "<p>队员id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "userList.avater",
+            "field": "teamInfo.userList.avater",
             "description": "<p>队员头像</p>"
           }
         ]
@@ -6133,7 +6203,7 @@
     "groupTitle": "team",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/team/info"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/team/info"
       }
     ]
   },
@@ -6265,7 +6335,7 @@
     "groupTitle": "team",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/team/list"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/team/list"
       }
     ]
   },
@@ -6314,7 +6384,7 @@
     "groupTitle": "team",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/team/order"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/team/order"
       }
     ]
   },
@@ -6344,28 +6414,28 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "userList",
+            "field": "list",
             "description": "<p>队员</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "userList.id",
+            "field": "list.user.id",
             "description": "<p>队员id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "userList.name",
+            "field": "list.user.name",
             "description": "<p>队员昵称</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "userList.avater",
+            "field": "list.user.avater",
             "description": "<p>队员头像</p>"
           }
         ]
@@ -6376,7 +6446,7 @@
     "groupTitle": "team",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/team/playerList"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/team/playerList"
       }
     ]
   },
@@ -6406,126 +6476,133 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "watchBallVos",
+            "field": "list",
+            "description": "<p>赛事列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list.watchBallVos",
             "description": "<p>球员所在球队为主队赛事列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "watchBallVos.id",
+            "field": "list.watchBallVos.id",
             "description": "<p>赛事id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "watchBallVos.homeTeamName",
+            "field": "list.watchBallVos.homeTeamName",
             "description": "<p>主队队名</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "watchBallVos.homeTeamAvater",
+            "field": "list.watchBallVos.homeTeamAvater",
             "description": "<p>主队队徽</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "watchBallVos.vTeamName",
+            "field": "list.watchBallVos.vTeamName",
             "description": "<p>客队队名</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "watchBallVos.vTeamAvater",
+            "field": "list.watchBallVos.vTeamAvater",
             "description": "<p>客队队徽</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "watchBallVos.status",
+            "field": "list.watchBallVos.status",
             "description": "<p>赛事状态 （0：等待同意，1：约赛成功，2：约赛失败）</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "watchBallVos.stadiumName",
+            "field": "list.watchBallVos.stadiumName",
             "description": "<p>球场名称</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "watchBallVos.startTime",
+            "field": "list.watchBallVos.startTime",
             "description": "<p>开始时间</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "watchBallVoList",
+            "field": "list.watchBallVoList",
             "description": "<p>球员所在球队为客队赛事列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "watchBallVoList.id",
+            "field": "list.watchBallVoList.id",
             "description": "<p>赛事id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "watchBallVoList.homeTeamName",
+            "field": "list.watchBallVoList.homeTeamName",
             "description": "<p>主队队名</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "watchBallVoList.homeTeamAvater",
+            "field": "list.watchBallVoList.homeTeamAvater",
             "description": "<p>主队队徽</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "watchBallVoList.vTeamName",
+            "field": "list.watchBallVoList.vTeamName",
             "description": "<p>客队队名</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "watchBallVoList.vTeamAvater",
+            "field": "list.watchBallVoList.vTeamAvater",
             "description": "<p>客队队徽</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "watchBallVoList.status",
+            "field": "list.watchBallVoList.status",
             "description": "<p>赛事状态 （0：等待同意，1：约赛成功，2：约赛失败）</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "watchBallVoList.stadiumName",
+            "field": "list.watchBallVoList.stadiumName",
             "description": "<p>球场名称</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "watchBallVoList.startTime",
+            "field": "list.watchBallVoList.startTime",
             "description": "<p>开始时间</p>"
           }
         ]
@@ -6536,7 +6613,7 @@
     "groupTitle": "team",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/team/schedule"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/team/schedule"
       }
     ]
   },
@@ -6578,7 +6655,7 @@
     "groupTitle": "user",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/user/comment"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/user/comment"
       }
     ]
   },
@@ -6608,35 +6685,42 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "tUser",
+            "field": "list",
+            "description": "<p>评论</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list.tUser",
             "description": "<p>被评论用户</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "tUser.id",
+            "field": "list.tUser.id",
             "description": "<p>被评论用户id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "tUser.nickname",
+            "field": "list.tUser.nickname",
             "description": "<p>被评论用户昵称</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "content",
+            "field": "list.content",
             "description": "<p>帖子内容</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "createDate",
+            "field": "list.createDate",
             "description": "<p>评论时间</p>"
           }
         ]
@@ -6647,7 +6731,7 @@
     "groupTitle": "user",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/user/commentList"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/user/commentList"
       }
     ]
   },
@@ -6675,7 +6759,7 @@
     "groupTitle": "user",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/user/confirm"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/user/confirm"
       }
     ]
   },
@@ -6703,7 +6787,7 @@
     "groupTitle": "user",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/user/credibilityMessage"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/user/credibilityMessage"
       }
     ]
   },
@@ -6787,7 +6871,7 @@
     "groupTitle": "user",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/user/edit"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/user/edit"
       }
     ]
   },
@@ -6817,175 +6901,182 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "user",
+            "field": "userInfo",
+            "description": "<p>用户</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "userInfo.user",
             "description": "<p>用户</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "user.nickname",
+            "field": "userInfo.user.nickname",
             "description": "<p>用户昵称</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "user.avater",
+            "field": "userInfo.user.avater",
             "description": "<p>用户头像</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "user.vipNum",
+            "field": "userInfo.user.vipNum",
             "description": "<p>用户会员等级</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "user.credibility",
+            "field": "userInfo.user.credibility",
             "description": "<p>用户信誉评分</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "teamList",
+            "field": "userInfo.teamList",
             "description": "<p>我加入的球队列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "teamList.id",
+            "field": "userInfo.teamList.id",
             "description": "<p>球队id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "teamList.name",
+            "field": "userInfo.teamList.name",
             "description": "<p>球队名称</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "teamList.avater",
+            "field": "userInfo.teamList.avater",
             "description": "<p>球队队徽</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "teamList.count",
+            "field": "userInfo.teamList.count",
             "description": "<p>球员总数</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "teamList.battleNum",
+            "field": "userInfo.teamList.battleNum",
             "description": "<p>球队应战数</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "teamList.declareNum",
+            "field": "userInfo.teamList.declareNum",
             "description": "<p>球队宣战数</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "teamList.list",
+            "field": "userInfo.teamList.list",
             "description": "<p>我加入的球队的球员列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "teamList.list.id",
+            "field": "userInfo.teamList.list.id",
             "description": "<p>球员id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "teamList.list.avater",
+            "field": "userInfo.teamList.list.avater",
             "description": "<p>球员头像</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "myTeam",
+            "field": "userInfo.myTeam",
             "description": "<p>我的球队</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "myTeam.id",
+            "field": "userInfo.myTeam.id",
             "description": "<p>球队id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "myTeam.name",
+            "field": "userInfo.myTeam.name",
             "description": "<p>球队名称</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "myTeam.avater",
+            "field": "userInfo.myTeam.avater",
             "description": "<p>球队队徽</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "myTeam.count",
+            "field": "userInfo.myTeam.count",
             "description": "<p>球员总数</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "myTeam.battleNum",
+            "field": "userInfo.myTeam.battleNum",
             "description": "<p>球队应战数</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "myTeam.declareNum",
+            "field": "userInfo.myTeam.declareNum",
             "description": "<p>球队宣战数</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "myTeam.list",
+            "field": "userInfo.myTeam.list",
             "description": "<p>我的球队的球员列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "myTeam.list.id",
+            "field": "userInfo.myTeam.list.id",
             "description": "<p>球员id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "myTeam.list.avater",
+            "field": "userInfo.myTeam.list.avater",
             "description": "<p>球员头像</p>"
           }
         ]
@@ -6996,7 +7087,7 @@
     "groupTitle": "user",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/user/homePage"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/user/homePage"
       }
     ]
   },
@@ -7087,7 +7178,7 @@
     "groupTitle": "user",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/user/info"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/user/info"
       }
     ]
   },
@@ -7156,7 +7247,7 @@
     "groupTitle": "user",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/user/operation"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/user/operation"
       }
     ]
   },
@@ -7218,7 +7309,7 @@
     "groupTitle": "user",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/user/operation"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/user/operation"
       }
     ]
   },
@@ -7248,105 +7339,112 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "post",
+            "field": "postInfo",
+            "description": "<p>帖子</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "postInfo.post",
             "description": "<p>帖子</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "post.content",
+            "field": "postInfo.post.content",
             "description": "<p>帖子内容</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "post.createDate",
+            "field": "postInfo.post.createDate",
             "description": "<p>帖子创建时间</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "post.user",
+            "field": "postInfo.post.user",
             "description": "<p>用户列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "post.user.id",
+            "field": "postInfo.post.user.id",
             "description": "<p>用户id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "post.user.nickname",
+            "field": "postInfo.post.user.nickname",
             "description": "<p>用户昵称</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "postImages",
+            "field": "postInfo.postImages",
             "description": "<p>帖子图片列表</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "postImages.avater",
+            "field": "postInfo.postImages.avater",
             "description": "<p>帖子图片</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "postComments",
+            "field": "postInfo.postComments",
             "description": "<p>帖子评论列表</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "postComments.content",
+            "field": "postInfo.postComments.content",
             "description": "<p>帖子内容</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "postComments.createDate",
+            "field": "postInfo.postComments.createDate",
             "description": "<p>帖子创建时间</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "postComments.fUser",
+            "field": "postInfo.postComments.fUser",
             "description": "<p>帖子评论人</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "postComments.fUser.id",
+            "field": "postInfo.postComments.fUser.id",
             "description": "<p>帖子评论人id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "postComments.fUser.avater",
+            "field": "postInfo.postComments.fUser.avater",
             "description": "<p>帖子评论人头像</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "postComments.fUser.nickname",
+            "field": "postInfo.postComments.fUser.nickname",
             "description": "<p>帖子评论人昵称</p>"
           }
         ]
@@ -7357,7 +7455,7 @@
     "groupTitle": "user",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/user/postInfo"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/user/postInfo"
       }
     ]
   },
@@ -7387,63 +7485,63 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "postList",
+            "field": "list",
             "description": "<p>帖子</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "postList.user",
+            "field": "list.user",
             "description": "<p>用户</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "postList.user.avater",
+            "field": "list.user.avater",
             "description": "<p>用户头像</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "postList.user.nickname",
+            "field": "list.user.nickname",
             "description": "<p>用户昵称</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "postList.postImage",
+            "field": "list.postImage",
             "description": "<p>帖子图片列表</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "postList.postImage.avater",
+            "field": "list.postImage.avater",
             "description": "<p>帖子图片</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "postList.content",
+            "field": "list.content",
             "description": "<p>帖子内容</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "postList.commentNum",
+            "field": "list.commentNum",
             "description": "<p>帖子评论数</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "postList.createDate",
+            "field": "list.createDate",
             "description": "<p>创建时间</p>"
           }
         ]
@@ -7454,7 +7552,7 @@
     "groupTitle": "user",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/user/postList"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/user/postList"
       }
     ]
   },
@@ -7484,28 +7582,28 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "cityList",
+            "field": "list",
             "description": "<p>城市列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "city",
+            "field": "list.city",
             "description": "<p>城市</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "city.id",
+            "field": "list.city.id",
             "description": "<p>城市id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "city.city",
+            "field": "list.city.city",
             "description": "<p>城市名字</p>"
           }
         ]
@@ -7516,7 +7614,7 @@
     "groupTitle": "user",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/user/provinceList"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/user/provinceList"
       }
     ]
   },
@@ -7533,28 +7631,28 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "provinceList",
+            "field": "list",
             "description": "<p>省份列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "province",
+            "field": "list.province",
             "description": "<p>省份</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "province.provinceId",
+            "field": "list.province.provinceId",
             "description": "<p>省份id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "province.province",
+            "field": "list.province.province",
             "description": "<p>省份名字</p>"
           }
         ]
@@ -7565,7 +7663,7 @@
     "groupTitle": "user",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/user/provinceList"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/user/provinceList"
       }
     ]
   },
@@ -7607,7 +7705,7 @@
     "groupTitle": "user",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/user/report"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/user/report"
       }
     ]
   },
@@ -7635,7 +7733,7 @@
     "groupTitle": "user",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/user/vipLevelMessage"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/user/vipLevelMessage"
       }
     ]
   },
@@ -7663,7 +7761,7 @@
     "groupTitle": "user",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/user/vipMessage"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/user/vipMessage"
       }
     ]
   },
@@ -7767,7 +7865,7 @@
     "groupTitle": "user",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/user/watchingInfo"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/user/watchingInfo"
       }
     ]
   },
@@ -7797,77 +7895,77 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "girlUserList",
+            "field": "list",
             "description": "<p>用户约看列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "girlUserList.id",
+            "field": "list.id",
             "description": "<p>约看id</p>"
           },
           {
             "group": "Success 200",
             "type": "Double",
             "optional": false,
-            "field": "girlUserList.tip",
+            "field": "list.tip",
             "description": "<p>红包（小费）</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "girlUserList.startDate",
+            "field": "list.startDate",
             "description": "<p>预约时间</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "girlUserList.girl",
+            "field": "list.girl",
             "description": "<p>宝贝</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "girlUserList.girl.avater",
+            "field": "list.girl.avater",
             "description": "<p>宝贝头像</p>"
           },
           {
             "group": "Success 200",
             "type": "Double",
             "optional": false,
-            "field": "girlUserList.girl.price",
+            "field": "list.girl.price",
             "description": "<p>宝贝价格</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "girlUserList.bigRace",
+            "field": "list.bigRace",
             "description": "<p>赛事</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "girlUserList.bigRace.id",
+            "field": "list.bigRace.id",
             "description": "<p>赛事id</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "girlUserList.bigRace.team1name",
+            "field": "list.bigRace.team1name",
             "description": "<p>球队1的名字</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "girlUserList.bigRace.team2name",
+            "field": "list.bigRace.team2name",
             "description": "<p>球队2的名字</p>"
           }
         ]
@@ -7878,7 +7976,7 @@
     "groupTitle": "user",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/user/watchingList"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/user/watchingList"
       }
     ]
   },
@@ -7908,35 +8006,42 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "girlCommentList",
+            "field": "list",
+            "description": "<p>宝贝陪看评价列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list.GirlComment",
             "description": "<p>宝贝陪看评价列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "girlCommentList.id",
+            "field": "list.GirlComment.id",
             "description": "<p>评价id</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "girl.name",
+            "field": "list.GirlComment.star",
             "description": "<p>服务打分</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "girl.age",
+            "field": "list.GirlComment.content",
             "description": "<p>评论内容</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "girl.height",
+            "field": "list.GirlComment.createDate",
             "description": "<p>评论时间</p>"
           }
         ]
@@ -7947,7 +8052,7 @@
     "groupTitle": "watching",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/watching/girlComment"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/watching/girlComment"
       }
     ]
   },
@@ -7977,112 +8082,112 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "girl",
+            "field": "girlInfo.girl",
             "description": "<p>看球宝贝列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "girl.id",
+            "field": "girlInfo.girl.id",
             "description": "<p>宝贝id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "girl.name",
+            "field": "girlInfo.girl.name",
             "description": "<p>宝贝昵称</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "girl.age",
+            "field": "girlInfo.girl.age",
             "description": "<p>宝贝年龄</p>"
           },
           {
             "group": "Success 200",
             "type": "Double",
             "optional": false,
-            "field": "girl.height",
+            "field": "girlInfo.girl.height",
             "description": "<p>宝贝身高</p>"
           },
           {
             "group": "Success 200",
             "type": "Double",
             "optional": false,
-            "field": "girl.weight",
+            "field": "girlInfo.girl.weight",
             "description": "<p>宝贝体重</p>"
           },
           {
             "group": "Success 200",
             "type": "Double",
             "optional": false,
-            "field": "girl.price",
+            "field": "girlInfo.girl.price",
             "description": "<p>宝贝价格</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "girl.orderNum",
+            "field": "girlInfo.girl.orderNum",
             "description": "<p>宝贝预约次数</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "girl.interest",
+            "field": "girlInfo.girl.interest",
             "description": "<p>宝贝兴趣</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "girl.profession",
+            "field": "girlInfo.girl.profession",
             "description": "<p>宝贝职业</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "girl.favoriteTeam",
+            "field": "girlInfo.girl.favoriteTeam",
             "description": "<p>宝贝喜欢球队</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "girl.label",
+            "field": "girlInfo.girl.label",
             "description": "<p>宝贝签名</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "girl.cityId",
+            "field": "girlInfo.girl.cityId",
             "description": "<p>宝贝陪看区域</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "girlImages",
+            "field": "girlInfo.girlImages",
             "description": "<p>宝贝相册列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "girlImages.id",
+            "field": "girlInfo.girlImages.id",
             "description": "<p>宝贝相册id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "girlImages.avater",
+            "field": "girlInfo.girlImages.avater",
             "description": "<p>宝贝相册</p>"
           }
         ]
@@ -8093,7 +8198,7 @@
     "groupTitle": "watching",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/watching/girlInfo"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/watching/girlInfo"
       }
     ]
   },
@@ -8130,28 +8235,21 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "girlImageList",
-            "description": "<p>现场看球宝贝列表</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "girlImageList.girl",
+            "field": "list.girl",
             "description": "<p>宝贝</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "girlImageList.girl.id",
+            "field": "list.girl.id",
             "description": "<p>宝贝id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "girlImageList.avater",
+            "field": "list.url",
             "description": "<p>宝贝封面</p>"
           },
           {
@@ -8190,7 +8288,7 @@
     "groupTitle": "watching",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/watching/girlList"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/watching/girlList"
       }
     ]
   },
@@ -8218,7 +8316,7 @@
     "groupTitle": "watching",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/watching/information"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/watching/information"
       }
     ]
   },
@@ -8336,7 +8434,7 @@
     "groupTitle": "watching",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/watching/orderGirl"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/watching/orderGirl"
       }
     ]
   },
@@ -8398,7 +8496,7 @@
     "groupTitle": "watching",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/watching/pay"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/watching/pay"
       }
     ]
   },
@@ -8428,77 +8526,77 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "list",
+            "field": "bigRace",
             "description": "<p>现场看球列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "list.id",
+            "field": "bigRace.id",
             "description": "<p>看球id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.name",
+            "field": "bigRace.name",
             "description": "<p>看球名称</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.description",
+            "field": "bigRace.description",
             "description": "<p>看球描述</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.team1name",
+            "field": "bigRace.team1name",
             "description": "<p>球队1名称</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.avater1",
+            "field": "bigRace.avater1",
             "description": "<p>球队1队徽</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.team2name",
+            "field": "bigRace.team2name",
             "description": "<p>球队2名称</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.avater2",
+            "field": "bigRace.avater2",
             "description": "<p>球队2队徽</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "list.startDate",
+            "field": "bigRace.startDate",
             "description": "<p>开始时间</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "list.stadium",
+            "field": "bigRace.stadium",
             "description": "<p>现场看球球场</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.stadium.name",
+            "field": "bigRace.stadium.name",
             "description": "<p>球场名字</p>"
           }
         ]
@@ -8509,7 +8607,7 @@
     "groupTitle": "watching",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/watching/sceneInfo"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/watching/sceneInfo"
       }
     ]
   },
@@ -8648,7 +8746,7 @@
     "groupTitle": "watching",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/watching/sceneList"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/watching/sceneList"
       }
     ]
   },
@@ -8690,7 +8788,7 @@
     "groupTitle": "watching",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/watching/sceneOrder"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/watching/sceneOrder"
       }
     ]
   },
@@ -8720,35 +8818,35 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "list",
+            "field": "watchingRace",
             "description": "<p>直播看球列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "list.id",
+            "field": "watchingRace.id",
             "description": "<p>看球id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.name",
+            "field": "watchingRace.name",
             "description": "<p>看球名称</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.avater",
+            "field": "watchingRace.avater",
             "description": "<p>看球封面</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.description",
+            "field": "watchingRace.description",
             "description": "<p>介绍</p>"
           }
         ]
@@ -8759,7 +8857,7 @@
     "groupTitle": "watching",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/watching/telecastInfo"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/watching/telecastInfo"
       }
     ]
   },
@@ -8856,7 +8954,7 @@
     "groupTitle": "watching",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/watching/telecastList"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/watching/telecastList"
       }
     ]
   },
@@ -8898,7 +8996,7 @@
     "groupTitle": "watching",
     "sampleRequest": [
       {
-        "url": "http://4.16.2.59:8080/yqtq_app/api/watching/telecastOrder"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/watching/telecastOrder"
       }
     ]
   }

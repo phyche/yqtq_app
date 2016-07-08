@@ -9,6 +9,7 @@ import com.sixmac.utils.DateUtils;
 import com.sixmac.utils.JsonUtil;
 import com.sixmac.service.*;
 import com.sixmac.utils.WebUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,17 +70,17 @@ public class MessageApi extends CommonController {
      * @apiGroup message
      * @apiParam {Integer} userId 用户id <必传 />
      *
-     * @apiSuccess {Object}  messageOrderBallList 好友约球消息列表
-     * @apiSuccess {Long} messageOrderBallList.id 消息id
-     * @apiSuccess {String} messageOrderBallList.content 消息内容
-     * @apiSuccess {Object} messageOrderBallList.user 好友
-     * @apiSuccess {Long} messageOrderBallList.user.id 好友d
-     * @apiSuccess {String} messageOrderBallList.user.nickname 好友昵称
-     * @apiSuccess {Object} messageOrderBallList.reserve 约球
-     * @apiSuccess {Long} messageOrderBallList.reserve.id 约球d
-     * @apiSuccess {Object} messageOrderBallList.reserve.stadium 约球球场
-     * @apiSuccess {String} messageOrderBallList.reserve.stadium.name 约球球场名字
-     * @apiSuccess {Long} messageOrderBallList.reserve.startTime 开始时间
+     * @apiSuccess {Object}  list 好友约球消息列表
+     * @apiSuccess {Long} list.id 消息id
+     * @apiSuccess {String} list.content 消息内容
+     * @apiSuccess {Object} list.user 好友
+     * @apiSuccess {Long} list.user.id 好友d
+     * @apiSuccess {String} list.user.nickname 好友昵称
+     * @apiSuccess {Object} list.reserve 约球
+     * @apiSuccess {Long} list.reserve.id 约球d
+     * @apiSuccess {Object} list.reserve.stadium 约球球场
+     * @apiSuccess {String} list.reserve.stadium.name 约球球场名字
+     * @apiSuccess {Long} list.reserve.startTime 开始时间
      *
      * @apiSuccess {Long} messageOrderBallList.createDate 记录生成时间
      *
@@ -92,14 +93,14 @@ public class MessageApi extends CommonController {
             return;
         }
 
-        List<MessageOrderBall> messageOrderBallList = messageOrderBallService.findByToUserId(userId);
-        for (MessageOrderBall messageOrderBall : messageOrderBallList) {
+        List<MessageOrderBall> list = messageOrderBallService.findByToUserId(userId);
+        for (MessageOrderBall messageOrderBall : list) {
 
             messageOrderBall.setContent("您的好友" + "user" + "约您去踢球啦！");
 
         }
 
-        Result obj = new Result(true).data(messageOrderBallList);
+        Result obj = new Result(true).data(createMap("list",list));
         String result = JsonUtil.obj2ApiJson(obj,"set","site","list","insurance","toUser");
         WebUtil.printApi(response, result);
     }
@@ -112,19 +113,19 @@ public class MessageApi extends CommonController {
      * @apiGroup message
      * @apiParam {Long} userId 用户id <必传 />
      *
-     * @apiSuccess {Object}  userReserveList 加入约球消息列表
-     * @apiSuccess {Long} userReserveList.id 加入约球id
-     * @apiSuccess {String} userReserveList.content 约球内容
-     * @apiSuccess {Object} userReserveList.user 加入约球人
-     * @apiSuccess {Long} userReserveList.user.id 加入约球人id
-     * @apiSuccess {String} userReserveList.user.nickname 加入约球人昵称
-     * @apiSuccess {Object} userReserveList.reserve 加入约球预约
-     * @apiSuccess {Long} userReserveList.reserve.id 加入约球预约id
-     * @apiSuccess {Object} userReserveList.reserve.stadium 约球球场
-     * @apiSuccess {String} userReserveList.reserve.stadium.name 约球球场名字
-     * @apiSuccess {Long} userReserveList.reserve.startTime 开始时间
+     * @apiSuccess {Object}  list 加入约球消息列表
+     * @apiSuccess {Long} list.id 加入约球id
+     * @apiSuccess {String} list.content 约球内容
+     * @apiSuccess {Object} list.user 加入约球人
+     * @apiSuccess {Long} list.user.id 加入约球人id
+     * @apiSuccess {String} list.user.nickname 加入约球人昵称
+     * @apiSuccess {Object} list.reserve 加入约球预约
+     * @apiSuccess {Long} list.reserve.id 加入约球预约id
+     * @apiSuccess {Object} list.reserve.stadium 约球球场
+     * @apiSuccess {String} list.reserve.stadium.name 约球球场名字
+     * @apiSuccess {Long} list.reserve.startTime 开始时间
      *
-     * @apiSuccess {Long} userReserveList.createDate 记录生成时间
+     * @apiSuccess {Long} list.createDate 记录生成时间
      *
      */
     @RequestMapping(value = "/addOrder")
@@ -136,16 +137,16 @@ public class MessageApi extends CommonController {
         }
 
         List<Reserve> reserveList = reserveService.findByUserId(userId);
-        List<UserReserve> userReserveList = new ArrayList<UserReserve>();
+        List<UserReserve> list = new ArrayList<UserReserve>();
         for (Reserve reserve : reserveList) {
             for (UserReserve userReserve : userReserveService.findByReserverId(reserve.getId())){
 
                 userReserve.setContent("user" + "加入了您的约球");
-                userReserveList.add(userReserve);
+                list.add(userReserve);
             }
         }
 
-        Result obj = new Result(true).data(userReserveList);
+        Result obj = new Result(true).data(createMap("list",list));
         String result = JsonUtil.obj2ApiJson(obj,"site","list","insurance");
         WebUtil.printApi(response, result);
     }
@@ -158,17 +159,17 @@ public class MessageApi extends CommonController {
      * @apiGroup message
      * @apiParam {Long} userId 用户id <必传 />
      *
-     * @apiSuccess {Object}  userReserveList 约球列表
-     * @apiSuccess {Long} userReserveList.id 约球id
-     * @apiSuccess {String} userReserveList.content 约球内容
-     * @apiSuccess {Integer} userReserveList.status 约球状态（1:组队成功2:组队失败）
-     * @apiSuccess {Object} userReserveList.reserve 约球预约
-     * @apiSuccess {Long} userReserveList.reserve.id 约球预约id
-     * @apiSuccess {Object} userReserveList.reserve.stadium 约球球场
-     * @apiSuccess {String} userReserveList.reserve.stadium.name 约球球场名字
-     * @apiSuccess {Long} userReserveList.reserve.startTime 开始时间
+     * @apiSuccess {Object}  list 约球列表
+     * @apiSuccess {Long} list.id 约球id
+     * @apiSuccess {String} list.content 约球内容
+     * @apiSuccess {Integer} list.status 约球状态（1:组队成功2:组队失败）
+     * @apiSuccess {Object} list.reserve 约球预约
+     * @apiSuccess {Long} list.reserve.id 约球预约id
+     * @apiSuccess {Object} list.reserve.stadium 约球球场
+     * @apiSuccess {String} list.reserve.stadium.name 约球球场名字
+     * @apiSuccess {Long} list.reserve.startTime 开始时间
      *
-     * @apiSuccess {Long} userReserveList.createDate 记录生成时间
+     * @apiSuccess {Long} list.createDate 记录生成时间
      *
      */
     @RequestMapping(value = "/myOrder")
@@ -179,16 +180,19 @@ public class MessageApi extends CommonController {
             return;
         }
 
-        List<UserReserve> userReserveList = userReserveService.findByUserId(userId);
+        List<UserReserve> list = userReserveService.findByUserId(userId);
 
-        for (UserReserve userReserve : userReserveList) {
-            if (userReserve.getReserve().getStatus() == 1 || userReserve.getReserve().getStatus() == 2) {
 
-                userReserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + userReserve.getReserve().getStadium().getName() + "约球了");
-                userReserve.setStatus(userReserve.getReserve().getStatus());
+        for (UserReserve userReserve : list) {
+
+            Reserve reserve = reserveService.getById(userReserve.getReserveId());
+            if (reserve.getStatus() == 1 || reserve.getStatus() == 2) {
+
+                userReserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
+                userReserve.setStatus(reserve.getStatus());
                 userReserveService.update(userReserve);
 
-                Result obj = new Result(true).data(userReserveList);
+                Result obj = new Result(true).data(createMap("list",list));
                 String result = JsonUtil.obj2ApiJson(obj,"site","list","insurance");
                 WebUtil.printApi(response, result);
             }else {
@@ -223,7 +227,9 @@ public class MessageApi extends CommonController {
         if (status == 1) {
             UserReserve userReserve = new UserReserve();
             userReserve.setUser(messageOrderBall.getToUser());
-            userReserve.setReserve(messageOrderBall.getReserve());
+
+            userReserve.setReserveId(messageOrderBall.getReserve().getId());
+            //userReserve.setReserve(messageOrderBall.getReserve());
 
             userReserveService.create(userReserve);
         }
@@ -239,23 +245,23 @@ public class MessageApi extends CommonController {
      * @apiGroup message
      * @apiParam {Long} userId 用户id <必传 />
      *
-     * @apiSuccess {Object}  messageWatchingList 约看列表
-     * @apiSuccess {Long} messageWatchingList.id 约看id
-     * @apiSuccess {Object} messageWatchingList.user 好友
-     * @apiSuccess {Long} messageWatchingList.user.id 好友id
-     * @apiSuccess {String} messageWatchingList.user.nickname 好友昵称
-     * @apiSuccess {Object} messageWatchingList.bigRace 现场看球
-     * @apiSuccess {Long} messageWatchingList.bigRace.id 现场看球id
-     * @apiSuccess {String} messageWatchingList.bigRace.stadium.name 现场看球球场名字
-     * @apiSuccess {Long} messageWatchingList.bigRace.startTime 现场看球开始时间
+     * @apiSuccess {Object}  list 约看列表
+     * @apiSuccess {Long} list.id 约看id
+     * @apiSuccess {Object} list.user 好友
+     * @apiSuccess {Long} list.user.id 好友id
+     * @apiSuccess {String} list.user.nickname 好友昵称
+     * @apiSuccess {Object} list.bigRace 现场看球
+     * @apiSuccess {Long} list.bigRace.id 现场看球id
+     * @apiSuccess {String} list.bigRace.stadium.name 现场看球球场名字
+     * @apiSuccess {Long} list.bigRace.startTime 现场看球开始时间
      *
-     * @apiSuccess {Object} messageWatchingList.watchingRace 直播看球
-     * @apiSuccess {Long} messageWatchingList.watchingRace.id 直播看球id
-     * @apiSuccess {String} messageWatchingList.watchingRace.name 直播看球球馆名字
-     * @apiSuccess {String} messageWatchingList.watchingRace.avater 直播看球球馆封面
-     * @apiSuccess {Long} messageWatchingList.watchingRace.startTime 直播看球开始时间
+     * @apiSuccess {Object} list.watchingRace 直播看球
+     * @apiSuccess {Long} list.watchingRace.id 直播看球id
+     * @apiSuccess {String} list.watchingRace.name 直播看球球馆名字
+     * @apiSuccess {String} list.watchingRace.avater 直播看球球馆封面
+     * @apiSuccess {Long} list.watchingRace.startTime 直播看球开始时间
      *
-     * @apiSuccess {Long} messageWatchingList.createDate 记录生成时间
+     * @apiSuccess {Long} list.createDate 记录生成时间
      *
      */
     @RequestMapping(value = "/watching")
@@ -266,14 +272,14 @@ public class MessageApi extends CommonController {
             return;
         }
 
-        List<MessageWatching> messageWatchingList = messageWatchingService.findByToUserId(userId);
-        for (MessageWatching messageWatching : messageWatchingList) {
+        List<MessageWatching> list = messageWatchingService.findByToUserId(userId);
+        for (MessageWatching messageWatching : list) {
 
             messageWatching.setContent("user" + "约您看球");
             messageWatching.getWatchingRace().setAvater(messageWatching.getWatchingRace().getAvater());
         }
 
-        Result obj = new Result(true).data(messageWatchingList);
+        Result obj = new Result(true).data(createMap("list",list));
         String result = JsonUtil.obj2ApiJson(obj,"toUser");
         WebUtil.printApi(response, result);
     }
@@ -286,16 +292,16 @@ public class MessageApi extends CommonController {
      * @apiGroup message
      * @apiParam {Long} userId 用户id <必传 />
      *
-     * @apiSuccess {Object}  postCommentList 帖子消息列表
-     * @apiSuccess {Long} postCommentList.id 消息id
-     * @apiSuccess {String} postCommentList.title 消息标题
-     * @apiSuccess {Object} postCommentList.fUser 好友
-     * @apiSuccess {Long} postCommentList.fUser.id 好友id
-     * @apiSuccess {String} postCommentList.fUser.nickname 好友昵称
-     * @apiSuccess {Object} postCommentList.post 帖子
-     * @apiSuccess {Long} postCommentList.post.id 帖子id
-     * @apiSuccess {String} postCommentList.post.content 帖子内容
-     * @apiSuccess {Long} postCommentList.createDate 评论时间
+     * @apiSuccess {Object}  list 帖子消息列表
+     * @apiSuccess {Long} list.id 消息id
+     * @apiSuccess {String} list.title 消息标题
+     * @apiSuccess {Object} list.fUser 好友
+     * @apiSuccess {Long} list.fUser.id 好友id
+     * @apiSuccess {String} list.fUser.nickname 好友昵称
+     * @apiSuccess {Object} list.post 帖子
+     * @apiSuccess {Long} list.post.id 帖子id
+     * @apiSuccess {String} list.post.content 帖子内容
+     * @apiSuccess {Long} list.createDate 评论时间
      *
      *
      */
@@ -307,12 +313,12 @@ public class MessageApi extends CommonController {
             return;
         }
 
-        List<PostComment> postCommentList = postCommentService.findByToUserId(userId);
-        for (PostComment postComment : postCommentList) {
+        List<PostComment> list = postCommentService.findByToUserId(userId);
+        for (PostComment postComment : list) {
             postComment.setTitle("user" + "评论了您的" + "post");
         }
 
-        Result obj = new Result(true).data(postCommentList);
+        Result obj = new Result(true).data(createMap("list",list));
         String result = JsonUtil.obj2ApiJson(obj,"toUser","content");
         WebUtil.printApi(response, result);
     }
@@ -325,10 +331,10 @@ public class MessageApi extends CommonController {
      * @apiGroup message
      * @apiParam {Long} userId 用户id <必传/>
      *
-     * @apiSuccess {Object}  messageList 系统消息列表
-     * @apiSuccess {Long} messageList.id 消息id
-     * @apiSuccess {String} messageList.title 消息标题
-     * @apiSuccess {Long} messageList.createDate 消息时间
+     * @apiSuccess {Object}  list 系统消息列表
+     * @apiSuccess {Long} list.id 消息id
+     * @apiSuccess {String} list.title 消息标题
+     * @apiSuccess {Long} list.createDate 消息时间
      *
      *
      */
@@ -340,9 +346,9 @@ public class MessageApi extends CommonController {
             return;
         }
 
-        List<SystemMessage> messageList = systemMessageService.findByToUserId(userId);
+        List<SystemMessage> list = systemMessageService.findByToUserId(userId);
 
-        Result obj = new Result(true).data(messageList);
+        Result obj = new Result(true).data(createMap("list",list));
         String result = JsonUtil.obj2ApiJson(obj,"toUser");
         WebUtil.printApi(response, result);
     }
@@ -386,13 +392,13 @@ public class MessageApi extends CommonController {
      * @apiGroup message
      * @apiParam {Long} userId 用户id <必传/>
      *
-     * @apiSuccess {Object}  messageAddList 消息列表
-     * @apiSuccess {Long} messageAddList.id 消息id
-     * @apiSuccess {String} messageAddList.content 消息内容
-     * @apiSuccess {Object} messageAddList.toUser 好友
-     * @apiSuccess {Long} messageAddList.toUser.id 好友id
-     * @apiSuccess {String} messageAddList.toUser.nickname 好友昵称
-     * @apiSuccess {Long} messageAddList.createDate 消息时间
+     * @apiSuccess {Object}  list 消息列表
+     * @apiSuccess {Long} list.id 消息id
+     * @apiSuccess {String} list.content 消息内容
+     * @apiSuccess {Object} list.toUser 好友
+     * @apiSuccess {Long} list.toUser.id 好友id
+     * @apiSuccess {String} list.toUser.nickname 好友昵称
+     * @apiSuccess {Long} list.createDate 消息时间
      *
      */
     @RequestMapping(value = "/toAdd")
@@ -403,9 +409,9 @@ public class MessageApi extends CommonController {
             return;
         }
 
-        List<MessageAdd> messageAddList = messageAddService.findByUserId(userId);
+        List<MessageAdd> list = messageAddService.findByUserId(userId);
 
-        for (MessageAdd messageAdd : messageAddList) {
+        for (MessageAdd messageAdd : list) {
 
             if (messageAdd.getStatus() == 1) {
                 messageAdd.setContent("user" + "同意了您的好友请求");
@@ -415,7 +421,7 @@ public class MessageApi extends CommonController {
             }
         }
 
-        Result obj = new Result(true).data(messageAddList);
+        Result obj = new Result(true).data(createMap("list",list));
         String result = JsonUtil.obj2ApiJson(obj,"user");
         WebUtil.printApi(response, result);
     }
@@ -428,13 +434,13 @@ public class MessageApi extends CommonController {
      * @apiGroup message
      * @apiParam {Long} userId 用户id <必传/>
      *
-     * @apiSuccess {Object}  messageAddList 消息列表
-     * @apiSuccess {Long} messageAddList.id 消息id
-     * @apiSuccess {String} messageAddList.content 消息内容
-     * @apiSuccess {Object} messageAddList.user 好友
-     * @apiSuccess {Long} messageAddList.user.id 好友id
-     * @apiSuccess {String} messageAddList.user.nickname 好友昵称
-     * @apiSuccess {Long} messageAddList.createDate 消息时间
+     * @apiSuccess {Object}  list 消息列表
+     * @apiSuccess {Long} list.id 消息id
+     * @apiSuccess {String} list.content 消息内容
+     * @apiSuccess {Object} list.user 好友
+     * @apiSuccess {Long} list.user.id 好友id
+     * @apiSuccess {String} list.user.nickname 好友昵称
+     * @apiSuccess {Long} list.createDate 消息时间
      *
      */
     @RequestMapping(value = "/beAdd")
@@ -445,15 +451,15 @@ public class MessageApi extends CommonController {
             return;
         }
 
-        List<MessageAdd> messageAddList = messageAddService.findByToUserId(userId);
+        List<MessageAdd> list = messageAddService.findByToUserId(userId);
 
-        for (MessageAdd messageAdd : messageAddList) {
+        for (MessageAdd messageAdd : list) {
 
             messageAdd.setContent("user" + "添加您为好友");
 
         }
 
-        Result obj = new Result(true).data(messageAddList);
+        Result obj = new Result(true).data(createMap("list",list));
         String result = JsonUtil.obj2ApiJson(obj,"toUser");
         WebUtil.printApi(response, result);
     }
@@ -491,13 +497,13 @@ public class MessageApi extends CommonController {
      * @apiGroup message
      * @apiParam {Long} userId 用户id <必传/>
      *
-     * @apiSuccess {Object}  messageJoinList 消息列表
-     * @apiSuccess {Long} messageJoinList.id 消息id
-     * @apiSuccess {String} messageJoinList.content 消息内容
-     * @apiSuccess {Object} messageJoinList.user 申请加入球队的用户
-     * @apiSuccess {Long} messageJoinList.user.id 用户id
-     * @apiSuccess {String} messageJoinList.user.nickname 用户昵称
-     * @apiSuccess {Long} messageJoinList.createDate 消息时间
+     * @apiSuccess {Object}  list 消息列表
+     * @apiSuccess {Long} list.id 消息id
+     * @apiSuccess {String} list.content 消息内容
+     * @apiSuccess {Object} list.user 申请加入球队的用户
+     * @apiSuccess {Long} list.user.id 用户id
+     * @apiSuccess {String} list.user.nickname 用户昵称
+     * @apiSuccess {Long} list.createDate 消息时间
      *
      */
     @RequestMapping(value = "joinTeam")
@@ -514,12 +520,12 @@ public class MessageApi extends CommonController {
             WebUtil.printApi(response, new Result(true).data("不是队长，不能查看申请加入球队消息"));
         }else {
 
-            List<MessageJoin> messageJoinList = messageJoinService.findByTeam(team);
-            for (MessageJoin messageJoin : messageJoinList) {
+            List<MessageJoin> list = messageJoinService.findByTeam(team);
+            for (MessageJoin messageJoin : list) {
                 messageJoin.setContent("user" + "申请加入您的球队");
             }
 
-            Result obj = new Result(true).data(messageJoinList);
+            Result obj = new Result(true).data(createMap("list",list));
             String result = JsonUtil.obj2ApiJson(obj,"team");
             WebUtil.printApi(response, result);
         }
@@ -565,16 +571,16 @@ public class MessageApi extends CommonController {
      * @apiGroup message
      * @apiParam {Long} userId 用户id <必传/>
      *
-     * @apiSuccess {Object}  messageTeamList 消息列表
-     * @apiSuccess {Long} messageTeamList.id 消息id
-     * @apiSuccess {String} messageTeamList.content 消息内容
-     * @apiSuccess {Object} messageTeamList.user 邀请加入球队的用户
-     * @apiSuccess {Long} messageTeamList.user.id 用户id
-     * @apiSuccess {String} messageTeamList.user.nickname 用户昵称
-     * @apiSuccess {Object} messageTeamList.team 邀请加入的球队
-     * @apiSuccess {Long} messageTeamList.team.id 球队id
-     * @apiSuccess {String} messageTeamList.team.name 球队名称
-     * @apiSuccess {Long} messageTeamList.createDate 消息时间
+     * @apiSuccess {Object}  list 消息列表
+     * @apiSuccess {Long} list.id 消息id
+     * @apiSuccess {String} list.content 消息内容
+     * @apiSuccess {Object} list.user 邀请加入球队的用户
+     * @apiSuccess {Long} list.user.id 用户id
+     * @apiSuccess {String} list.user.nickname 用户昵称
+     * @apiSuccess {Object} list.team 邀请加入的球队
+     * @apiSuccess {Long} list.team.id 球队id
+     * @apiSuccess {String} list.team.name 球队名称
+     * @apiSuccess {Long} list.createDate 消息时间
      *
      */
     @RequestMapping(value = "/beJoinTeam")
@@ -585,14 +591,14 @@ public class MessageApi extends CommonController {
             return;
         }
 
-        List<MessageTeam> messageTeamList = messageTeamService.findByToUserId(userId);
+        List<MessageTeam> list = messageTeamService.findByToUserId(userId);
 
 
-        for (MessageTeam messageTeam : messageTeamList) {
+        for (MessageTeam messageTeam : list) {
             messageTeam.setContent("user" + "邀请您加入" + "team");
         }
 
-        Result obj = new Result(true).data(messageTeamList);
+        Result obj = new Result(true).data(createMap("list",list));
         String result = JsonUtil.obj2ApiJson(obj,"list","leaderUser","toUser");
         WebUtil.printApi(response, result);
 
@@ -638,16 +644,16 @@ public class MessageApi extends CommonController {
      * @apiGroup message
      * @apiParam {Long} userId 用户id <必传/>
      *
-     * @apiSuccess {Object}  messageTeamList 消息列表
-     * @apiSuccess {Long} messageTeamList.id 消息id
-     * @apiSuccess {String} messageTeamList.content 消息内容
-     * @apiSuccess {Object} messageTeamList.toUser 邀请加入球队的用户
-     * @apiSuccess {Long} messageTeamList.toUser.id 用户id
-     * @apiSuccess {String} messageTeamList.toUser.nickname 用户昵称
-     * @apiSuccess {Object} messageTeamList.team 邀请加入的球队
-     * @apiSuccess {Long} messageTeamList.team.id 球队id
-     * @apiSuccess {String} messageTeamList.team.name 球队名称
-     * @apiSuccess {Long} messageTeamList.createDate 消息时间
+     * @apiSuccess {Object}  list 消息列表
+     * @apiSuccess {Long} list.id 消息id
+     * @apiSuccess {String} list.content 消息内容
+     * @apiSuccess {Object} list.toUser 邀请加入球队的用户
+     * @apiSuccess {Long} list.toUser.id 用户id
+     * @apiSuccess {String} list.toUser.nickname 用户昵称
+     * @apiSuccess {Object} list.team 邀请加入的球队
+     * @apiSuccess {Long} list.team.id 球队id
+     * @apiSuccess {String} list.team.name 球队名称
+     * @apiSuccess {Long} list.createDate 消息时间
      *
      */
     @RequestMapping(value = "/Join")
@@ -664,9 +670,9 @@ public class MessageApi extends CommonController {
             WebUtil.printApi(response, new Result(true).data("不是队长，不能查看被邀请加入球队消息"));
         }else {
 
-            List<MessageTeam> messageTeamList = messageTeamService.findByTeam(team);
+            List<MessageTeam> list = messageTeamService.findByTeam(team);
 
-            for (MessageTeam messageTeam : messageTeamList) {
+            for (MessageTeam messageTeam : list) {
                 if (messageTeam.getStatus() == 1) {
 
                     messageTeam.setContent("user" + "同意加入您的球队");
@@ -677,7 +683,7 @@ public class MessageApi extends CommonController {
 
             }
 
-            Result obj = new Result(true).data(messageTeamList);
+            Result obj = new Result(true).data(createMap("list",list));
             String result = JsonUtil.obj2ApiJson(obj,"list","leaderUser","user");
             WebUtil.printApi(response, result);
         }
@@ -691,19 +697,19 @@ public class MessageApi extends CommonController {
      * @apiGroup message
      * @apiParam {Long} userId 用户id <必传/>
      *
-     * @apiSuccess {Object}  messageJoinList 消息列表
-     * @apiSuccess {Long} messageJoinList.id 消息id
-     * @apiSuccess {String} messageJoinList.content 消息内容
-     * @apiSuccess {Object} messageJoinList.visitingTeam 约战主队
-     * @apiSuccess {Long} messageJoinList.visitingTeam.id 主队id
-     * @apiSuccess {String} messageJoinList.visitingTeam.name 主队名称
-     * @apiSuccess {String} messageJoinList.visitingTeam.avater 主队队徽
-     * @apiSuccess {Object} messageJoinList.homeTeam 约战客队
-     * @apiSuccess {Long} messageJoinList.homeTeam.id 客队id
-     * @apiSuccess {String} messageJoinList.homeTeam.name 客队名称
-     * @apiSuccess {String} messageJoinList.homeTeam.avater 客队队徽
-     * @apiSuccess {Long} messageJoinList.startTime 约战时间
-     * @apiSuccess {Long} messageJoinList.createDate 消息时间
+     * @apiSuccess {Object}  list 消息列表
+     * @apiSuccess {Long} list.id 消息id
+     * @apiSuccess {String} list.content 消息内容
+     * @apiSuccess {Object} list.visitingTeam 约战主队
+     * @apiSuccess {Long} list.visitingTeam.id 主队id
+     * @apiSuccess {String} list.visitingTeam.name 主队名称
+     * @apiSuccess {String} list.visitingTeam.avater 主队队徽
+     * @apiSuccess {Object} list.homeTeam 约战客队
+     * @apiSuccess {Long} list.homeTeam.id 客队id
+     * @apiSuccess {String} list.homeTeam.name 客队名称
+     * @apiSuccess {String} list.homeTeam.avater 客队队徽
+     * @apiSuccess {Long} list.startTime 约战时间
+     * @apiSuccess {Long} list.createDate 消息时间
      *
      */
     @RequestMapping(value = "/teamOrder")
@@ -718,28 +724,28 @@ public class MessageApi extends CommonController {
         List<TeamMember> teamMemberList = teamMemberService.findByUserId(userId);
         for (TeamMember teamMember : teamMemberList) {
 
-            if (teamMember.getUser().getAvater() != null) {
-                teamMember.getUser().setAvater(ConfigUtil.getString("base.url") + teamMember.getUser().getAvater());
+            if (StringUtils.isNotBlank(teamMember.getUser().getAvater())) {
+                teamMember.getUser().setAvater(ConfigUtil.getString("upload.url") + teamMember.getUser().getAvater());
             }
 
             teamList.add(teamMember.getTeam());
         }
 
-        List<TeamRace> teamRaceList = new ArrayList<TeamRace>();
+        List<TeamRace> list = new ArrayList<TeamRace>();
         for (Team team : teamList) {
             List<TeamRace> teamRaceList1 = teamRaceService.findHomeId(team.getId());
             for (TeamRace teamRace : teamRaceList1) {
                 if (teamRace.getStatus() == 1) {
                     teamRace.setContent("您的队伍和" + "visitingTeam" + "约战成功");
 
-                    if (teamRace.getHomeTeam().getAvater() != null) {
-                        teamRace.getHomeTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getHomeTeam().getAvater());
+                    if (StringUtils.isNotBlank(teamRace.getHomeTeam().getAvater())) {
+                        teamRace.getHomeTeam().setAvater(ConfigUtil.getString("upload.url") + teamRace.getHomeTeam().getAvater());
                     }
-                    if (teamRace.getVisitingTeam().getAvater() != null) {
-                        teamRace.getVisitingTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getVisitingTeam().getAvater());
+                    if (StringUtils.isNotBlank(teamRace.getVisitingTeam().getAvater())) {
+                        teamRace.getVisitingTeam().setAvater(ConfigUtil.getString("upload.url") + teamRace.getVisitingTeam().getAvater());
                     }
 
-                    teamRaceList.add(teamRace);
+                    list.add(teamRace);
                 }
             }
             List<TeamRace> teamRaceList2 = teamRaceService.findVisitingId(team.getId());
@@ -747,14 +753,14 @@ public class MessageApi extends CommonController {
                 if (teamRace.getStatus() == 1) {
                     teamRace.setContent("您的队伍和" + "homeTeam" + "约战成功");
 
-                    if (teamRace.getHomeTeam().getAvater() != null) {
-                        teamRace.getHomeTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getHomeTeam().getAvater());
+                    if (StringUtils.isNotBlank(teamRace.getHomeTeam().getAvater())) {
+                        teamRace.getHomeTeam().setAvater(ConfigUtil.getString("upload.url") + teamRace.getHomeTeam().getAvater());
                     }
-                    if (teamRace.getVisitingTeam().getAvater() != null) {
-                        teamRace.getVisitingTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getVisitingTeam().getAvater());
+                    if (StringUtils.isNotBlank(teamRace.getVisitingTeam().getAvater())) {
+                        teamRace.getVisitingTeam().setAvater(ConfigUtil.getString("upload.url") + teamRace.getVisitingTeam().getAvater());
                     }
 
-                    teamRaceList.add(teamRace);
+                    list.add(teamRace);
                 }
             }
         }
@@ -765,14 +771,14 @@ public class MessageApi extends CommonController {
             if (teamRace.getStatus() == 2) {
                 teamRace.setContent("visitingTeam" + "拒绝了和您约战");
 
-                if (teamRace.getHomeTeam().getAvater() != null) {
-                    teamRace.getHomeTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getHomeTeam().getAvater());
+                if (StringUtils.isNotBlank(teamRace.getHomeTeam().getAvater())) {
+                    teamRace.getHomeTeam().setAvater(ConfigUtil.getString("upload.url") + teamRace.getHomeTeam().getAvater());
                 }
-                if (teamRace.getVisitingTeam().getAvater() != null) {
-                    teamRace.getVisitingTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getVisitingTeam().getAvater());
+                if (StringUtils.isNotBlank(teamRace.getVisitingTeam().getAvater())) {
+                    teamRace.getVisitingTeam().setAvater(ConfigUtil.getString("upload.url") + teamRace.getVisitingTeam().getAvater());
                 }
 
-                teamRaceList.add(teamRace);
+                list.add(teamRace);
             }
         }
         List<TeamRace> teamRaceList2 = teamRaceService.findVisitingId(team.getId());
@@ -780,18 +786,18 @@ public class MessageApi extends CommonController {
             if (teamRace.getStatus() == 0) {
                 teamRace.setContent("visitingTeam" + "约您对战");
 
-                if (teamRace.getHomeTeam().getAvater() != null) {
-                    teamRace.getHomeTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getHomeTeam().getAvater());
+                if (StringUtils.isNotBlank(teamRace.getHomeTeam().getAvater())) {
+                    teamRace.getHomeTeam().setAvater(ConfigUtil.getString("upload.url") + teamRace.getHomeTeam().getAvater());
                 }
-                if (teamRace.getVisitingTeam().getAvater() != null) {
-                    teamRace.getVisitingTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getVisitingTeam().getAvater());
+                if (StringUtils.isNotBlank(teamRace.getVisitingTeam().getAvater())) {
+                    teamRace.getVisitingTeam().setAvater(ConfigUtil.getString("upload.url") + teamRace.getVisitingTeam().getAvater());
                 }
 
-                teamRaceList.add(teamRace);
+                list.add(teamRace);
             }
         }
 
-        Result obj = new Result(true).data(teamRaceList);
+        Result obj = new Result(true).data(createMap("list",list));
         String result = JsonUtil.obj2ApiJson(obj,"leaderUser","list");
         WebUtil.printApi(response, result);
     }

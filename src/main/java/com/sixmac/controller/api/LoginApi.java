@@ -10,6 +10,7 @@ import com.sixmac.entity.User;
 import com.sixmac.service.ServiceMessageService;
 import com.sixmac.service.UserService;
 import com.sixmac.utils.CommonUtils;
+import com.sixmac.utils.ConfigUtil;
 import com.sixmac.utils.JsonUtil;
 import com.sixmac.utils.WebUtil;
 import org.apache.commons.lang.StringUtils;
@@ -88,6 +89,9 @@ public class LoginApi extends CommonController {
             return;
         }
         User user = userService.findByMobile(mobile);
+        if (StringUtils.isNotBlank(user.getAvater())) {
+            user.setAvater(ConfigUtil.getString("upload.url") + user.getAvater());
+        }
         if (!user.getPassword().equals(password)) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0027));
             return;

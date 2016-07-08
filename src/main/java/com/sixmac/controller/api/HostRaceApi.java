@@ -7,15 +7,15 @@ import com.sixmac.service.*;
 import com.sixmac.utils.ConfigUtil;
 import com.sixmac.utils.JsonUtil;
 import com.sixmac.utils.WebUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 
 /**
  * Created by Administrator on 2016/5/25 0025.
@@ -49,9 +49,9 @@ public class HostRaceApi {
      * @apiName hostRace.list
      * @apiGroup hostRace
      *
-     * @apiSuccess {Object}  hostRace 草根杯列表
+     * @apiSuccess {Object}  hostRace 草根杯
      * @apiSuccess {Long} hostRace.id 草根杯id
-     * @apiSuccess {Long} hostRace.id 草根杯赛制
+     * @apiSuccess {Integer} hostRace.type 草根杯赛制
      * @apiSuccess {String} hostRace.name 草根杯名字
      * @apiSuccess {String} hostRace.avater 草根杯封面
      * @apiSuccess {Long} hostRace.createDate 草根杯创建时间
@@ -64,8 +64,8 @@ public class HostRaceApi {
         List<HostRace> hostRaceList = hostRaceService.findAll();
         HostRace hostRace = hostRaceList.get(hostRaceList.size()-1);
 
-        if (hostRace.getAvater() != null) {
-            hostRace.setAvater(ConfigUtil.getString("base.url") + hostRace.getAvater());
+        if (StringUtils.isNotBlank(hostRace.getAvater())) {
+            hostRace.setAvater(ConfigUtil.getString("upload.url") + hostRace.getAvater());
         }
 
         Result obj = new Result(true).data(hostRace);
@@ -81,7 +81,7 @@ public class HostRaceApi {
      * @apiGroup hostRace
      * @apiParam {Integer} raceId 草根杯id <必传 />
      *
-     * @apiSuccess {Object}  hostRace 草根杯列表
+     * @apiSuccess {Object}  hostRace 草根杯
      * @apiSuccess {Long} hostRace.id 草根杯id
      * @apiSuccess {Integer} hostRace.type 草根杯赛制
      * @apiSuccess {String} hostRace.name 草根杯名字
@@ -100,8 +100,8 @@ public class HostRaceApi {
 
         HostRace hostRace = hostRaceService.getById(raceId);
 
-        if (hostRace.getAvater() != null) {
-            hostRace.setAvater(ConfigUtil.getString("base.url") + hostRace.getAvater());
+        if (StringUtils.isNotBlank(hostRace.getAvater())) {
+            hostRace.setAvater(ConfigUtil.getString("upload.url") + hostRace.getAvater());
         }
 
         Result obj = new Result(true).data(hostRace);
@@ -117,15 +117,15 @@ public class HostRaceApi {
      * @apiGroup hostRace
      * @apiParam {Integer} raceId 草根杯id <必传 />
      *
-     * @apiSuccess {Object}  hostRace 草根杯列表
-     * @apiSuccess {Object} hostRace.team 草根杯参赛队伍列表
-     * @apiSuccess {Long} hostRace.team.id 球队id
-     * @apiSuccess {String} hostRace.team.name 球队名称
-     * @apiSuccess {String} hostRace.team.avater 球队队徽
-     * @apiSuccess {Integer} hostRace.team.count 球队总人数
-     * @apiSuccess {String} hostRace.team.provinceName 球队所在地的省份
-     * @apiSuccess {String} hostRace.team.cityName 球队所在地的城市
-     * @apiSuccess {Integer} hostRace.team.num 球队场次
+     * @apiSuccess {Object}  list 草根杯列表
+     * @apiSuccess {Object} list.team 草根杯参赛队伍列表
+     * @apiSuccess {Long} list.team.id 球队id
+     * @apiSuccess {String} list.team.name 球队名称
+     * @apiSuccess {String} list.team.avater 球队队徽
+     * @apiSuccess {Integer} list.team.count 球队总人数
+     * @apiSuccess {String} list.team.provinceName 球队所在地的省份
+     * @apiSuccess {String} list.team.cityName 球队所在地的城市
+     * @apiSuccess {Integer} list.team.num 球队场次
      */
     @RequestMapping(value = "/teamList")
     public void teamList(HttpServletResponse response, Long raceId) {
@@ -135,7 +135,7 @@ public class HostRaceApi {
             return;
         }
 
-        List<Team> teams = new ArrayList<Team>();
+        List<Team> list = new ArrayList<Team>();
 
         List<HostJoin> hostJoinList = hostJoinService.findByHostRaceId(raceId);
         for (HostJoin hostJoin : hostJoinList) {
@@ -144,14 +144,14 @@ public class HostRaceApi {
             hostJoin.getTeam().setCityName(cityService.getByCityId(hostJoin.getTeam().getCityId()).getCity());
             hostJoin.getTeam().setProvinceName(provinceService.getByProvinceId(hostJoin.getTeam().getProvinceId()).getProvince());
 
-            if (hostJoin.getTeam().getAvater() != null) {
-                hostJoin.getTeam().setAvater(ConfigUtil.getString("base.url") + hostJoin.getTeam().getAvater());
+            if (StringUtils.isNotBlank(hostJoin.getTeam().getAvater())) {
+                hostJoin.getTeam().setAvater(ConfigUtil.getString("upload.url") + hostJoin.getTeam().getAvater());
             }
 
-            teams.add(hostJoin.getTeam());
+            list.add(hostJoin.getTeam());
         }
 
-        Result obj = new Result(true).data(teams);
+        Result obj = new Result(true).data(list);
         String result = JsonUtil.obj2ApiJson(obj,"leaderUser","list","slogan","avater","declareNum","address");
         WebUtil.printApi(response, result);
     }

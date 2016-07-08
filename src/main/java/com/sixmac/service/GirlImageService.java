@@ -17,5 +17,5 @@ public interface GirlImageService extends ICommonService<GirlImage> {
 
     public List<GirlImage> find(Long girlId, Integer type);
 
-    public Page<GirlImage> page(Integer type,Integer pageNum, Integer pageSize);
+    public Page<GirlImage> page(Integer type, Integer status, Integer pageNum, Integer pageSize);
 }

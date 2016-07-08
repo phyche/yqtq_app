@@ -9,6 +9,7 @@ import com.sixmac.entity.vo.OrderBallVo;
 import com.sixmac.entity.vo.WatchBallVo;
 import com.sixmac.service.*;
 import com.sixmac.utils.*;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -99,8 +100,8 @@ public class OrderBallApi extends CommonController {
             reserve.setJoinCount(reserve.getList() != null ? reserve.getList().size() : 0);
             reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
 
-            if (reserve.getUser().getAvater() != null) {
-                reserve.getUser().setAvater(ConfigUtil.getString("base.url") + reserve.getUser().getAvater());
+            if (StringUtils.isNotBlank(reserve.getUser().getAvater())) {
+                reserve.getUser().setAvater(ConfigUtil.getString("upload.url") + reserve.getUser().getAvater());
             }
         }
 
@@ -119,25 +120,26 @@ public class OrderBallApi extends CommonController {
      * @apiName orderBall.orderInfo
      * @apiGroup orderBall
      * @apiParam {Long} reserveId 约球ID <必传 />
-     * @apiSuccess {Object}  reserve 约球列表
-     * @apiSuccess {Long} reserve.id 约球id
-     * @apiSuccess {String} reserve.content 约球内容
-     * @apiSuccess {Integer} reserve.matchType 赛制
-     * @apiSuccess {Integer} reserve.joinCount 已报人数
-     * @apiSuccess {Integer} reserve.lackCount 剩余人数
-     * @apiSuccess {Object} reserve.user 创建人
-     * @apiSuccess {String} reserve.user.nickname 创建人昵称
-     * @apiSuccess {String} reserve.user.avater 创建人头像
-     * @apiSuccess {Object} reserve.stadium 球场
-     * @apiSuccess {Long} reserve.stadium.id 球场id
-     * @apiSuccess {String} reserve.stadium.name 球场名字
-     * @apiSuccess {Double} reserve.avePrice AA制金额
-     * @apiSuccess {Double} reserve.sumPrice 支付总金额
-     * @apiSuccess {Object} userList 已报名球友列表
-     * @apiSuccess {Long} userList.id 报名球友id
-     * @apiSuccess {String} userList.nickname 报名球友昵称
-     * @apiSuccess {String} userList.avater 报名球友头像
-     * @apiSuccess {Long} reserve.startTime 开始时间
+     *
+     * @apiSuccess {Object}  reserve.reserve 约球列表
+     * @apiSuccess {Long} reserve.reserve.id 约球id
+     * @apiSuccess {String} reserve.reserve.content 约球内容
+     * @apiSuccess {Integer} reserve.reserve.matchType 赛制
+     * @apiSuccess {Integer} reserve.reserve.joinCount 已报人数
+     * @apiSuccess {Integer} reserve.reserve.lackCount 剩余人数
+     * @apiSuccess {Object} reserve.reserve.user 创建人
+     * @apiSuccess {String} reserve.reserve.user.nickname 创建人昵称
+     * @apiSuccess {String} reserve.reserve.user.avater 创建人头像
+     * @apiSuccess {Object} reserve.reserve.stadium 球场
+     * @apiSuccess {Long} reserve.reserve.stadium.id 球场id
+     * @apiSuccess {String} reserve.reserve.stadium.name 球场名字
+     * @apiSuccess {Double} reserve.reserve.avePrice AA制金额
+     * @apiSuccess {Double} reserve.reserve.sumPrice 支付总金额
+     * @apiSuccess {Object} reserve.userList 已报名球友列表
+     * @apiSuccess {Long} reserve.userList.id 报名球友id
+     * @apiSuccess {String} reserve.userList.nickname 报名球友昵称
+     * @apiSuccess {String} reserve.userList.avater 报名球友头像
+     * @apiSuccess {Long} reserve.reserve.startTime 开始时间
      */
     @RequestMapping(value = "/orderInfo")
     public void orderInfo(HttpServletResponse response, Long reserveId) {
@@ -159,8 +161,8 @@ public class OrderBallApi extends CommonController {
             reserve.setJoinCount(reserve.getList() != null ? reserve.getList().size() : 0);
             reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
 
-            if (reserve.getUser().getAvater() != null) {
-                reserve.getUser().setAvater(ConfigUtil.getString("base.url") + reserve.getUser().getAvater());
+            if (StringUtils.isNotBlank(reserve.getUser().getAvater())) {
+                reserve.getUser().setAvater(ConfigUtil.getString("upload.url") + reserve.getUser().getAvater());
             }
 
             if (null == reserve) {
@@ -173,8 +175,8 @@ public class OrderBallApi extends CommonController {
             List<UserReserve> userReserves = userReserveService.findByReserverId(reserveId);
             for (UserReserve userReserve : userReserves) {
 
-                if (userReserve.getUser().getAvater() != null) {
-                    userReserve.getUser().setAvater(ConfigUtil.getString("base.url") + userReserve.getUser().getAvater());
+                if (StringUtils.isNotBlank(userReserve.getUser().getAvater())) {
+                    userReserve.getUser().setAvater(ConfigUtil.getString("upload.url") + userReserve.getUser().getAvater());
                 }
                 userList.add(userReserve.getUser());
             }
@@ -190,7 +192,7 @@ public class OrderBallApi extends CommonController {
             map.put("userList", userList);
             map.put("reserve", reserve);
 
-            Result obj = new Result(true).data(map);
+            Result obj = new Result(true).data(createMap("reserve",map));
             String result = JsonUtil.obj2ApiJson(obj, "set", "site", "list");
             WebUtil.printApi(response, result);
         } catch (Exception e) {
@@ -227,25 +229,26 @@ public class OrderBallApi extends CommonController {
      * @apiName orderBall.info
      * @apiGroup orderBall
      * @apiParam {Long} playerId 球友ID <必传 />
-     * @apiSuccess {Object}  user 球友列表
-     * @apiSuccess {String} user.avater 球友头像
-     * @apiSuccess {String} user.nickname 球友昵称
-     * @apiSuccess {Integer} user.vipNum 球友会员等级
-     * @apiSuccess {Integer} user.credibility 球友信誉评分
-     * @apiSuccess {Integer} user.age 球友年龄
-     * @apiSuccess {Integer} user.gender 球友性别 0:男 1：女
-     * @apiSuccess {Double} user.height 球友身高
-     * @apiSuccess {Double} user.weight 球友体重
-     * @apiSuccess {Integer} user.position 球友位置 0：前 1：中 2：后 3：守
-     * @apiSuccess {Object} team 球友的球队
-     * @apiSuccess {String} team.avater 球队队徽
-     * @apiSuccess {String} team.name 球队名称
-     * @apiSuccess {Integer} team.declareNum 球队宣战数
-     * @apiSuccess {Integer} team.battleNum 球队应战数
-     * @apiSuccess {Integer} team.count 球队总人数
-     * @apiSuccess {Object} team.list 球队球员列表
-     * @apiSuccess {Long} team.list .id 球队球员id
-     * @apiSuccess {String} team.list.avater 球队球员头像
+     *
+     * @apiSuccess {Object}  player.user 球友
+     * @apiSuccess {String} player.user.avater 球友头像
+     * @apiSuccess {String} player.user.nickname 球友昵称
+     * @apiSuccess {Integer} player.user.vipNum 球友会员等级
+     * @apiSuccess {Integer} player.user.credibility 球友信誉评分
+     * @apiSuccess {Integer} player.user.age 球友年龄
+     * @apiSuccess {Integer} player.user.gender 球友性别 0:男 1：女
+     * @apiSuccess {Double} player.user.height 球友身高
+     * @apiSuccess {Double} player.user.weight 球友体重
+     * @apiSuccess {Integer} player.user.position 球友位置 0：前 1：中 2：后 3：守
+     * @apiSuccess {Object} player.team 球友的球队
+     * @apiSuccess {String} player.team.avater 球队队徽
+     * @apiSuccess {String} player.team.name 球队名称
+     * @apiSuccess {Integer} player.team.declareNum 球队宣战数
+     * @apiSuccess {Integer} player.team.battleNum 球队应战数
+     * @apiSuccess {Integer} player.team.count 球队总人数
+     * @apiSuccess {Object} player.team.list 球队球员列表
+     * @apiSuccess {Long} player.team.list .id 球队球员id
+     * @apiSuccess {String} player.team.list.avater 球队球员头像
      */
     @RequestMapping(value = "/info")
     public void info(HttpServletResponse response, Long playerId) {
@@ -258,14 +261,16 @@ public class OrderBallApi extends CommonController {
         Map<String, Object> map = new HashMap<String, Object>();
 
         User user = userService.getById(playerId);
-        user.setAvater(ConfigUtil.getString("base.url") + user.getAvater());
+        if (StringUtils.isNotBlank(user.getAvater())) {
+            user.setAvater(ConfigUtil.getString("upload.url") + user.getAvater());
+        }
 
         //查询用户所属球队
         List<Team> team = new ArrayList<Team>();
         List<TeamMember> teamMemberList = teamMemberService.findByUserId(user.getId());
         for (TeamMember teamMember : teamMemberList) {
-            if (teamMember.getUser().getAvater() != null) {
-                teamMember.getUser().setAvater(ConfigUtil.getString("base.url") + teamMember.getUser().getAvater());
+            if (StringUtils.isNotBlank(teamMember.getUser().getAvater())) {
+                teamMember.getUser().setAvater(ConfigUtil.getString("upload.url") + teamMember.getUser().getAvater());
             }
             team.add(teamMember.getTeam());
         }
@@ -274,7 +279,7 @@ public class OrderBallApi extends CommonController {
         map.put("user", user);
         map.put("team", team);
 
-        Result obj = new Result(true).data(map);
+        Result obj = new Result(true).data(createMap("player",map));
         String result = JsonUtil.obj2ApiJson(obj, "address", "city", "slogan", "leaderUser");
         WebUtil.printApi(response, result);
     }
@@ -314,21 +319,21 @@ public class OrderBallApi extends CommonController {
         for (UserReserve userReserve : userReserves) {
 
             userReserve.getUser().setAvater(userReserve.getUser().getAvater());
-            reserveList.add(userReserve.getReserve());
+            reserveList.add(reserveService.getById(userReserve.getReserveId()));
         }
         for (Reserve reserve : reserveList) {
             reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
             reserve.setJoinCount(reserve.getList() != null ? reserve.getList().size() : 0);
             reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
 
-            if (reserve.getUser().getAvater() != null) {
-                reserve.getUser().setAvater(ConfigUtil.getString("base.url") + reserve.getUser().getAvater());
+            if (StringUtils.isNotBlank(reserve.getUser().getAvater())) {
+                reserve.getUser().setAvater(ConfigUtil.getString("upload.url") + reserve.getUser().getAvater());
             }
         }
 
         map.put("reserveList", reserveList);
 
-        Result obj = new Result(true).data(map);
+        Result obj = new Result(true).data(createMap("list",map));
         String result = JsonUtil.obj2ApiJson(obj, "set", "insurance", "site", "list");
         WebUtil.printApi(response, result);
     }
@@ -372,22 +377,22 @@ public class OrderBallApi extends CommonController {
      * @apiName orderBall.raceList
      * @apiGroup orderBall
      * @apiParam {Long} playerId 球友ID <必传 />
-     * @apiSuccess {Object}  watchBallVos 球员所在球队为主队赛事列表
-     * @apiSuccess {String} watchBallVos.homeTeamName 主队队名
-     * @apiSuccess {String} watchBallVos.homeTeamAvater 主队队徽
-     * @apiSuccess {String} watchBallVos.vTeamName 客队队名
-     * @apiSuccess {String} watchBallVos.vTeamAvater 客队队徽
-     * @apiSuccess {Integer} watchBallVos.status 赛事状态 （0：等待同意，1：约赛成功，2：约赛失败）
-     * @apiSuccess {String} watchBallVos.stadiumName 球场名称
-     * @apiSuccess {Long} watchBallVos.startTime 开始时间
-     * @apiSuccess {Object}  watchBallVoList 球员所在球队为客队赛事列表
-     * @apiSuccess {String} watchBallVoList.homeTeamName 主队队名
-     * @apiSuccess {String} watchBallVoList.homeTeamAvater 主队队徽
-     * @apiSuccess {String} watchBallVoList.vTeamName 客队队名
-     * @apiSuccess {String} watchBallVoList.vTeamAvater 客队队徽
-     * @apiSuccess {Integer} watchBallVoList.status 赛事状态 （0：等待同意，1：约赛成功，2：约赛失败）
-     * @apiSuccess {String} watchBallVoList.stadiumName 球场名称
-     * @apiSuccess {Long} watchBallVoList.startTime 开始时间
+     * @apiSuccess {Object}  list.watchBallVos 球员所在球队为主队赛事列表
+     * @apiSuccess {String} list.watchBallVos.homeTeamName 主队队名
+     * @apiSuccess {String} list.watchBallVos.homeTeamAvater 主队队徽
+     * @apiSuccess {String} list.watchBallVos.vTeamName 客队队名
+     * @apiSuccess {String} list.watchBallVos.vTeamAvater 客队队徽
+     * @apiSuccess {Integer} list.watchBallVos.status 赛事状态 （0：等待同意，1：约赛成功，2：约赛失败）
+     * @apiSuccess {String} list.watchBallVos.stadiumName 球场名称
+     * @apiSuccess {Long} list.watchBallVos.startTime 开始时间
+     * @apiSuccess {Object}  list.watchBallVoList 球员所在球队为客队赛事列表
+     * @apiSuccess {String} list.watchBallVoList.homeTeamName 主队队名
+     * @apiSuccess {String} list.watchBallVoList.homeTeamAvater 主队队徽
+     * @apiSuccess {String} list.watchBallVoList.vTeamName 客队队名
+     * @apiSuccess {String} list.watchBallVoList.vTeamAvater 客队队徽
+     * @apiSuccess {Integer} list.watchBallVoList.status 赛事状态 （0：等待同意，1：约赛成功，2：约赛失败）
+     * @apiSuccess {String} list.watchBallVoList.stadiumName 球场名称
+     * @apiSuccess {Long} list.watchBallVoList.startTime 开始时间
      */
     @RequestMapping(value = "/raceList")
     public void raceList(HttpServletResponse response, Long playerId) {
@@ -402,8 +407,8 @@ public class OrderBallApi extends CommonController {
         List<Team> teams = new ArrayList<Team>();
         List<TeamMember> teamMemberList = teamMemberService.findByUserId(playerId);
         for (TeamMember teamMember : teamMemberList) {
-            if (teamMember.getUser().getAvater() != null) {
-                teamMember.getUser().setAvater(ConfigUtil.getString("base.url") + teamMember.getUser().getAvater());
+            if (StringUtils.isNotBlank(teamMember.getUser().getAvater())) {
+                teamMember.getUser().setAvater(ConfigUtil.getString("upload.url") + teamMember.getUser().getAvater());
             }
             teams.add(teamMember.getTeam());
         }
@@ -426,12 +431,12 @@ public class OrderBallApi extends CommonController {
             watchBallVo1.setStadiumName(teamRace.getStadium().getName());
             watchBallVo1.setStartTime(teamRace.getStartTime());
             watchBallVo1.setHomeTeamName(teamRace.getHomeTeam().getName());
-            if (teamRace.getHomeTeam().getAvater() != null) {
-                watchBallVo1.setHomeTeamAvater(ConfigUtil.getString("base.url") + teamRace.getHomeTeam().getAvater());
+            if (StringUtils.isNotBlank(teamRace.getHomeTeam().getAvater())) {
+                watchBallVo1.setHomeTeamAvater(ConfigUtil.getString("upload.url") + teamRace.getHomeTeam().getAvater());
             }
             watchBallVo1.setvTeamName(teamRace.getVisitingTeam().getName());
-            if (teamRace.getVisitingTeam().getAvater() != null) {
-                watchBallVo1.setvTeamAvater(ConfigUtil.getString("base.url") + teamRace.getVisitingTeam().getAvater());
+            if (StringUtils.isNotBlank(teamRace.getVisitingTeam().getAvater())) {
+                watchBallVo1.setvTeamAvater(ConfigUtil.getString("upload.url") + teamRace.getVisitingTeam().getAvater());
             }
             watchBallVo1.setStatus(teamRace.getStatus());
             watchBallVos.add(watchBallVo1);
@@ -445,12 +450,12 @@ public class OrderBallApi extends CommonController {
             watchBallVo2.setStadiumName(teamRace.getStadium().getName());
             watchBallVo2.setStartTime(teamRace.getStartTime());
             watchBallVo2.setHomeTeamName(teamRace.getHomeTeam().getName());
-            if (teamRace.getHomeTeam().getAvater() != null) {
-                watchBallVo2.setHomeTeamAvater(ConfigUtil.getString("base.url") + teamRace.getHomeTeam().getAvater());
+            if (StringUtils.isNotBlank(teamRace.getHomeTeam().getAvater())) {
+                watchBallVo2.setHomeTeamAvater(ConfigUtil.getString("upload.url") + teamRace.getHomeTeam().getAvater());
             }
             watchBallVo2.setvTeamName(teamRace.getVisitingTeam().getName());
-            if (teamRace.getVisitingTeam().getAvater() != null) {
-                watchBallVo2.setvTeamAvater(ConfigUtil.getString("base.url") + teamRace.getVisitingTeam().getAvater());
+            if (StringUtils.isNotBlank(teamRace.getVisitingTeam().getAvater())) {
+                watchBallVo2.setvTeamAvater(ConfigUtil.getString("upload.url") + teamRace.getVisitingTeam().getAvater());
             }
             watchBallVo2.setStatus(teamRace.getStatus());
 
@@ -467,7 +472,7 @@ public class OrderBallApi extends CommonController {
             e.printStackTrace();
         }
 
-        Result obj = new Result(true).data(map);
+        Result obj = new Result(true).data(createMap("list",map));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
@@ -520,12 +525,12 @@ public class OrderBallApi extends CommonController {
         WatchBallVo watchBallVo = new WatchBallVo();
         watchBallVo.setId(teamRace.getId());
         watchBallVo.setHomeTeamName(homeTeam.getName());
-        if (homeTeam.getAvater() != null) {
-            watchBallVo.setHomeTeamAvater(ConfigUtil.getString("base.url") + homeTeam.getAvater());
+        if (StringUtils.isNotBlank(homeTeam.getAvater())) {
+            watchBallVo.setHomeTeamAvater(ConfigUtil.getString("upload.url") + homeTeam.getAvater());
         }
         watchBallVo.setvTeamName(visitingTeam.getName());
-        if (visitingTeam.getAvater() != null) {
-            watchBallVo.setvTeamAvater(ConfigUtil.getString("base.url") + visitingTeam.getAvater());
+        if (StringUtils.isNotBlank(visitingTeam.getAvater())) {
+            watchBallVo.setvTeamAvater(ConfigUtil.getString("upload.url") + visitingTeam.getAvater());
         }
         watchBallVo.setStatus(teamRace.getStatus());
         watchBallVo.setStartTime(teamRace.getStartTime());
@@ -602,7 +607,9 @@ public class OrderBallApi extends CommonController {
 
         UserReserve userReserve = new UserReserve();
         userReserve.setUser(userService.getById(userId));
-        userReserve.setReserve(reserve);
+
+        userReserve.setReserveId(reserveId);
+        //userReserve.setReserve(reserve);
         userReserve.setStatus(0);
         userReserveService.create(userReserve);
 

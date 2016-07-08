@@ -8,6 +8,7 @@ import com.sixmac.entity.vo.TeamVo;
 import com.sixmac.entity.vo.UserVo;
 import com.sixmac.service.*;
 import com.sixmac.utils.*;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -95,33 +96,34 @@ public class UserApi extends CommonController {
      * @apiGroup user
      * @apiParam {Integer} userId 用户id <必传 />
      *
-     * @apiSuccess {Object}  user 用户
-     * @apiSuccess {String} user.nickname 用户昵称
-     * @apiSuccess {String} user.avater 用户头像
-     * @apiSuccess {Integer} user.vipNum 用户会员等级
-     * @apiSuccess {Integer} user.credibility 用户信誉评分
+     * @apiSuccess {Object}  userInfo 用户
+     * @apiSuccess {Object}  userInfo.user 用户
+     * @apiSuccess {String} userInfo.user.nickname 用户昵称
+     * @apiSuccess {String} userInfo.user.avater 用户头像
+     * @apiSuccess {Integer} userInfo.user.vipNum 用户会员等级
+     * @apiSuccess {Integer} userInfo.user.credibility 用户信誉评分
      *
-     * @apiSuccess {Object}  teamList 我加入的球队列表
-     * @apiSuccess {Long} teamList.id 球队id
-     * @apiSuccess {String} teamList.name 球队名称
-     * @apiSuccess {String} teamList.avater 球队队徽
-     * @apiSuccess {Integer} teamList.count 球员总数
-     * @apiSuccess {Integer} teamList.battleNum 球队应战数
-     * @apiSuccess {Integer} teamList.declareNum 球队宣战数
-     * @apiSuccess {Object} teamList.list 我加入的球队的球员列表
-     * @apiSuccess {Long} teamList.list.id 球员id
-     * @apiSuccess {String} teamList.list.avater 球员头像
+     * @apiSuccess {Object}  userInfo.teamList 我加入的球队列表
+     * @apiSuccess {Long} userInfo.teamList.id 球队id
+     * @apiSuccess {String} userInfo.teamList.name 球队名称
+     * @apiSuccess {String} userInfo.teamList.avater 球队队徽
+     * @apiSuccess {Integer} userInfo.teamList.count 球员总数
+     * @apiSuccess {Integer} userInfo.teamList.battleNum 球队应战数
+     * @apiSuccess {Integer} userInfo.teamList.declareNum 球队宣战数
+     * @apiSuccess {Object} userInfo.teamList.list 我加入的球队的球员列表
+     * @apiSuccess {Long} userInfo.teamList.list.id 球员id
+     * @apiSuccess {String} userInfo.teamList.list.avater 球员头像
      *
-     * @apiSuccess {Object}  myTeam 我的球队
-     * @apiSuccess {Long} myTeam.id 球队id
-     * @apiSuccess {String} myTeam.name 球队名称
-     * @apiSuccess {String} myTeam.avater 球队队徽
-     * @apiSuccess {Integer} myTeam.count 球员总数
-     * @apiSuccess {Integer} myTeam.battleNum 球队应战数
-     * @apiSuccess {Integer} myTeam.declareNum 球队宣战数
-     * @apiSuccess {Object} myTeam.list 我的球队的球员列表
-     * @apiSuccess {Long} myTeam.list.id 球员id
-     * @apiSuccess {String} myTeam.list.avater 球员头像
+     * @apiSuccess {Object}  userInfo.myTeam 我的球队
+     * @apiSuccess {Long} userInfo.myTeam.id 球队id
+     * @apiSuccess {String} userInfo.myTeam.name 球队名称
+     * @apiSuccess {String} userInfo.myTeam.avater 球队队徽
+     * @apiSuccess {Integer} userInfo.myTeam.count 球员总数
+     * @apiSuccess {Integer} userInfo.myTeam.battleNum 球队应战数
+     * @apiSuccess {Integer} userInfo.myTeam.declareNum 球队宣战数
+     * @apiSuccess {Object} userInfo.myTeam.list 我的球队的球员列表
+     * @apiSuccess {Long} userInfo.myTeam.list.id 球员id
+     * @apiSuccess {String} userInfo.myTeam.list.avater 球员头像
      */
     @RequestMapping(value = "/homePage")
     public void homePage(HttpServletResponse response, Long userId) {
@@ -134,15 +136,17 @@ public class UserApi extends CommonController {
         Map<String, Object> map = new HashMap<String, Object>();
 
         User user = userService.getById(userId);
-        user.setAvater(ConfigUtil.getString("base.url") + user.getAvater());
+        if (StringUtils.isNotBlank(user.getAvater())) {
+            user.setAvater(ConfigUtil.getString("upload.url") + user.getAvater());
+        }
 
         //我加入的球队
         List<Team> teamList = new ArrayList<Team>();
         List<TeamMember> teamMemberList = teamMemberService.findByUserId(userId);
         for (TeamMember teamMember : teamMemberList) {
 
-            if (teamMember.getUser().getAvater() != null) {
-                teamMember.getUser().setAvater(ConfigUtil.getString("base.url") + teamMember.getUser().getAvater());
+            if (StringUtils.isNotBlank(teamMember.getUser().getAvater())) {
+                teamMember.getUser().setAvater(ConfigUtil.getString("upload.url") + teamMember.getUser().getAvater());
             }
             teamList.add(teamMember.getTeam());
         }
@@ -152,15 +156,15 @@ public class UserApi extends CommonController {
         //我的球队
         if (teamService.findListByLeaderId(userId) != null) {
             Team myTeam = teamService.findListByLeaderId(userId);
-            if (myTeam.getAvater() != null) {
-                myTeam.setAvater(ConfigUtil.getString("base.url") + myTeam.getAvater());
+            if (StringUtils.isNotBlank(myTeam.getAvater())) {
+                myTeam.setAvater(ConfigUtil.getString("upload.url") + myTeam.getAvater());
             }
             map.put("myTeam", myTeam);
         }
 
         map.put("user", user);
 
-        Result obj = new Result(true).data(map);
+        Result obj = new Result(true).data(createMap("userInfo",map));
         String result = JsonUtil.obj2ApiJson(obj, "leaderUser");
         WebUtil.printApi(response, result);
     }
@@ -268,8 +272,8 @@ public class UserApi extends CommonController {
         }
 
         User user = userService.getById(userId);
-        if (user.getAvater() != null) {
-            user.setAvater(ConfigUtil.getString("base.url") + user.getAvater());
+        if (StringUtils.isNotBlank(user.getAvater())) {
+            user.setAvater(ConfigUtil.getString("upload.url") + user.getAvater());
         }
 
         Result obj = new Result(true).data(user);
@@ -283,18 +287,18 @@ public class UserApi extends CommonController {
      * @apiName user.provinceList
      * @apiGroup user
      *
-     * @apiSuccess {Object} provinceList 省份列表
-     * @apiSuccess {Object} province 省份
-     * @apiSuccess {Long} province.provinceId 省份id
-     * @apiSuccess {String} province.province 省份名字
+     * @apiSuccess {Object} list 省份列表
+     * @apiSuccess {Object} list.province 省份
+     * @apiSuccess {Long} list.province.provinceId 省份id
+     * @apiSuccess {String} list.province.province 省份名字
      *
      */
     @RequestMapping(value = "/provinceList")
     public void provinceList(HttpServletResponse response) {
 
-        List<Province> provinceList = provinceService.findAll();
+        List<Province> list = provinceService.findAll();
 
-        Result obj = new Result(true).data(provinceList);
+        Result obj = new Result(true).data(createMap("list",list));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
 
@@ -307,17 +311,17 @@ public class UserApi extends CommonController {
      * @apiGroup user
      * @apiParam {Long} provinceId 省份id <必传 />
      *
-     * @apiSuccess {Object} cityList 城市列表
-     * @apiSuccess {Object} city 城市
-     * @apiSuccess {Long} city.id 城市id
-     * @apiSuccess {String} city.city 城市名字
+     * @apiSuccess {Object} list 城市列表
+     * @apiSuccess {Object} list.city 城市
+     * @apiSuccess {Long} list.city.id 城市id
+     * @apiSuccess {String} list.city.city 城市名字
      */
     @RequestMapping(value = "/cityList")
     public void cityList(HttpServletResponse response, Long provinceId) {
 
-        List<City> cityList = cityService.getByProvinceId(provinceId);
+        List<City> list = cityService.getByProvinceId(provinceId);
 
-        Result obj = new Result(true).data(cityList);
+        Result obj = new Result(true).data(createMap("list",list));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
 
@@ -560,11 +564,12 @@ public class UserApi extends CommonController {
      * @apiGroup user
      * @apiParam {Long} userId 用户id <必传 />
      *
-     * @apiSuccess {Object} tUser 被评论用户
-     * @apiSuccess {Long} tUser.id 被评论用户id
-     * @apiSuccess {String} tUser.nickname 被评论用户昵称
-     * @apiSuccess {String} content 帖子内容
-     * @apiSuccess {String} createDate 评论时间
+     * @apiSuccess {Object} list 评论
+     * @apiSuccess {Object} list.tUser 被评论用户
+     * @apiSuccess {Long} list.tUser.id 被评论用户id
+     * @apiSuccess {String} list.tUser.nickname 被评论用户昵称
+     * @apiSuccess {String} list.content 帖子内容
+     * @apiSuccess {String} list.createDate 评论时间
      *
      *
      */
@@ -576,12 +581,12 @@ public class UserApi extends CommonController {
             return;
         }
 
-        List<PostComment> postComments = postCommentService.findByFuserId(userId);
-        for (PostComment postComment : postComments) {
+        List<PostComment> list = postCommentService.findByFuserId(userId);
+        for (PostComment postComment : list) {
             postComment.gettUser().setAvater(postComment.gettUser().getAvater());
         }
 
-        Result obj = new Result(true).data(postComments);
+        Result obj = new Result(true).data(createMap("list",list));
         String result = JsonUtil.obj2ApiJson(obj,"fUser","user","mobile", "password", "age", "height", "weight", "position", "credibility", "vipNum", "integral", "experience", "proviceId", "endDate", "cityId", "status", "gender", "birthday");
         WebUtil.printApi(response, result);
     }
@@ -594,15 +599,15 @@ public class UserApi extends CommonController {
      * @apiGroup user
      * @apiParam {Long} userId 用户id <必传 />
      *
-     * @apiSuccess {Object} postList 帖子
-     * @apiSuccess {Object} postList.user 用户
-     * @apiSuccess {String} postList.user.avater 用户头像
-     * @apiSuccess {String} postList.user.nickname 用户昵称
-     * @apiSuccess {Object} postList.postImage 帖子图片列表
-     * @apiSuccess {String} postList.postImage.avater 帖子图片
-     * @apiSuccess {String} postList.content 帖子内容
-     * @apiSuccess {Integer} postList.commentNum 帖子评论数
-     * @apiSuccess {Long} postList.createDate 创建时间
+     * @apiSuccess {Object} list 帖子
+     * @apiSuccess {Object} list.user 用户
+     * @apiSuccess {String} list.user.avater 用户头像
+     * @apiSuccess {String} list.user.nickname 用户昵称
+     * @apiSuccess {Object} list.postImage 帖子图片列表
+     * @apiSuccess {String} list.postImage.avater 帖子图片
+     * @apiSuccess {String} list.content 帖子内容
+     * @apiSuccess {Integer} list.commentNum 帖子评论数
+     * @apiSuccess {Long} list.createDate 创建时间
      */
     @RequestMapping(value = "/postList")
     public void postList(HttpServletResponse response, Long userId) {
@@ -612,21 +617,21 @@ public class UserApi extends CommonController {
             return;
         }
 
-        List<Post> postList = postService.findByUserId(userId);
-        for (Post post : postList) {
+        List<Post> list = postService.findByUserId(userId);
+        for (Post post : list) {
             post.setCommentNum(postCommentService.findByPostId(post.getId()).size());
             post.setPostImages(postImageService.findByPostId(post.getId()));
             for (PostImage postImage : postImageService.findByPostId(post.getId())) {
-                if (postImage.getAvater() != null) {
-                    postImage.setAvater(ConfigUtil.getString("base.url") + postImage.getAvater());
+                if (StringUtils.isNotBlank(postImage.getAvater())) {
+                    postImage.setAvater(ConfigUtil.getString("upload.url") + postImage.getAvater());
                 }
             }
-            if (post.getUser().getAvater() != null) {
-                post.getUser().setAvater(ConfigUtil.getString("base.url") + post.getUser().getAvater());
+            if (StringUtils.isNotBlank(post.getUser().getAvater())) {
+                post.getUser().setAvater(ConfigUtil.getString("upload.url") + post.getUser().getAvater());
             }
         }
 
-        Result obj = new Result(true).data(postList);
+        Result obj = new Result(true).data(createMap("list",list));
         String result = JsonUtil.obj2ApiJson(obj,"post");
         WebUtil.printApi(response, result);
 
@@ -640,24 +645,25 @@ public class UserApi extends CommonController {
      * @apiGroup user
      * @apiParam {Long} postId 帖子id <必传 />
      *
-     * @apiSuccess {Object} post 帖子
-     * @apiSuccess {String} post.content 帖子内容
-     * @apiSuccess {Long} post.createDate 帖子创建时间
+     * @apiSuccess {Object} postInfo 帖子
+     * @apiSuccess {Object} postInfo.post 帖子
+     * @apiSuccess {String} postInfo.post.content 帖子内容
+     * @apiSuccess {Long} postInfo.post.createDate 帖子创建时间
      *
-     * @apiSuccess {Object} post.user 用户列表
-     * @apiSuccess {Long} post.user.id 用户id
-     * @apiSuccess {String} post.user.nickname 用户昵称
+     * @apiSuccess {Object} postInfo.post.user 用户列表
+     * @apiSuccess {Long} postInfo.post.user.id 用户id
+     * @apiSuccess {String} postInfo.post.user.nickname 用户昵称
      *
-     * @apiSuccess {Object} postImages 帖子图片列表
-     * @apiSuccess {String} postImages.avater 帖子图片
+     * @apiSuccess {Object} postInfo.postImages 帖子图片列表
+     * @apiSuccess {String} postInfo.postImages.avater 帖子图片
      *
-     * @apiSuccess {Object} postComments 帖子评论列表
-     * @apiSuccess {String} postComments.content 帖子内容
-     * @apiSuccess {Long} postComments.createDate 帖子创建时间
-     * @apiSuccess {Object} postComments.fUser 帖子评论人
-     * @apiSuccess {Long} postComments.fUser.id 帖子评论人id
-     * @apiSuccess {String} postComments.fUser.avater 帖子评论人头像
-     * @apiSuccess {String} postComments.fUser.nickname 帖子评论人昵称
+     * @apiSuccess {Object} postInfo.postComments 帖子评论列表
+     * @apiSuccess {String} postInfo.postComments.content 帖子内容
+     * @apiSuccess {Long} postInfo.postComments.createDate 帖子创建时间
+     * @apiSuccess {Object} postInfo.postComments.fUser 帖子评论人
+     * @apiSuccess {Long} postInfo.postComments.fUser.id 帖子评论人id
+     * @apiSuccess {String} postInfo.postComments.fUser.avater 帖子评论人头像
+     * @apiSuccess {String} postInfo.postComments.fUser.nickname 帖子评论人昵称
      *
      */
     @RequestMapping(value = "/postInfo")
@@ -675,8 +681,8 @@ public class UserApi extends CommonController {
         //我的帖子图片列表
         List<PostImage> postImages = postImageService.findByPostId(postId);
         for (PostImage postImage : postImages) {
-            if (postImage.getAvater() != null) {
-                postImage.setAvater(ConfigUtil.getString("base.url") + postImage.getAvater());
+            if (StringUtils.isNotBlank(postImage.getAvater())) {
+                postImage.setAvater(ConfigUtil.getString("upload.url") + postImage.getAvater());
             }
         }
         //我的帖子评论列表
@@ -694,7 +700,7 @@ public class UserApi extends CommonController {
         map.put("postImages", postImages);
         map.put("postComments", postComments);
 
-        Result obj = new Result(true).data(map);
+        Result obj = new Result(true).data(createMap("postInfo",map));
         String result = JsonUtil.obj2ApiJson(obj,"post","tUser","mobile", "password", "age", "height", "weight", "position", "credibility", "vipNum", "integral", "experience", "proviceId", "endDate", "cityId", "status", "gender", "birthday");
         WebUtil.printApi(response, result);
     }
@@ -707,20 +713,20 @@ public class UserApi extends CommonController {
      * @apiGroup user
      * @apiParam {Long} userId 用户id <必传 />
      *
-     * @apiSuccess {Object} girlUserList 用户约看列表
-     * @apiSuccess {Long} girlUserList.id 约看id
-     * @apiSuccess {Double} girlUserList.tip 红包（小费）
-     * @apiSuccess {Long} girlUserList.startDate 预约时间
+     * @apiSuccess {Object} list 用户约看列表
+     * @apiSuccess {Long} list.id 约看id
+     * @apiSuccess {Double} list.tip 红包（小费）
+     * @apiSuccess {Long} list.startDate 预约时间
      *
-     * @apiSuccess {Object} girlUserList.girl 宝贝
-     * @apiSuccess {String} girlUserList.girl.avater 宝贝头像
-     * @apiSuccess {String} girlUserList.girl,nickname 宝贝昵称
-     * @apiSuccess {Double} girlUserList.girl.price 宝贝价格
+     * @apiSuccess {Object} list.girl 宝贝
+     * @apiSuccess {String} list.girl.avater 宝贝头像
+     * @apiSuccess {String} list.girl,nickname 宝贝昵称
+     * @apiSuccess {Double} list.girl.price 宝贝价格
      *
-     * @apiSuccess {Object} girlUserList.bigRace 赛事
-     * @apiSuccess {Long} girlUserList.bigRace.id 赛事id
-     * @apiSuccess {Long} girlUserList.bigRace.team1name 球队1的名字
-     * @apiSuccess {Object} girlUserList.bigRace.team2name 球队2的名字
+     * @apiSuccess {Object} list.bigRace 赛事
+     * @apiSuccess {Long} list.bigRace.id 赛事id
+     * @apiSuccess {Long} list.bigRace.team1name 球队1的名字
+     * @apiSuccess {Object} list.bigRace.team2name 球队2的名字
      *
      */
     @RequestMapping(value = "/watchingList")
@@ -731,16 +737,16 @@ public class UserApi extends CommonController {
             return;
         }
 
-        List<GirlUser> girlUserList = girlUserService.findByUserId(userId);
-        for (GirlUser girlUser : girlUserList) {
+        List<GirlUser> list = girlUserService.findByUserId(userId);
+        for (GirlUser girlUser : list) {
             for (GirlImage girlImage : girlImageService.find(girlUser.getGirl().getId(), 0)) {
-                if (girlImage.getUrl() != null) {
-                    girlImage.setUrl(ConfigUtil.getString("base.url") + girlImage.getUrl());
+                if (StringUtils.isNotBlank(girlImage.getUrl())) {
+                    girlImage.setUrl(ConfigUtil.getString("upload.url") + girlImage.getUrl());
                 }
             }
         }
 
-        Result obj = new Result(true).data(girlUserList);
+        Result obj = new Result(true).data(createMap("list",list));
         String result = JsonUtil.obj2ApiJson(obj,"user","stadium");
         WebUtil.printApi(response, result);
     }
@@ -780,8 +786,8 @@ public class UserApi extends CommonController {
 
         GirlUser girlUsers = girlUserService.getById(girlUserId);
         for (GirlImage girlImage : girlImageService.find(girlUsers.getGirl().getId(), 0)) {
-            if (girlImage.getUrl() != null) {
-                girlImage.setUrl(ConfigUtil.getString("base.url") + girlImage.getUrl());
+            if (StringUtils.isNotBlank(girlImage.getUrl())) {
+                girlImage.setUrl(ConfigUtil.getString("upload.url") + girlImage.getUrl());
             }
         }
 
@@ -866,7 +872,7 @@ public class UserApi extends CommonController {
         User user = userService.getById(userId);
 
         Report report = new Report();
-        if (mobile == null) {
+        if (mobile == null || mobile == "") {
             report.setMobile(user.getMobile());
         }else {
             report.setMobile(mobile);

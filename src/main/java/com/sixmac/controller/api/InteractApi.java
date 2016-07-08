@@ -8,6 +8,7 @@ import com.sixmac.core.bean.Result;
 import com.sixmac.entity.*;
 import com.sixmac.service.*;
 import com.sixmac.utils.*;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -92,13 +93,13 @@ public class InteractApi extends CommonController {
         List<Post> postList = page.getContent();
         for (Post post : postList) {
 
-            if (post.getUser().getAvater() != null) {
-                post.getUser().setAvater(ConfigUtil.getString("base.url") + post.getUser().getAvater());
+            if (StringUtils.isNotBlank(post.getUser().getAvater())) {
+                post.getUser().setAvater(ConfigUtil.getString("upload.url") + post.getUser().getAvater());
             }
             post.setPostImages(postImageService.findByPostId(post.getId()));
             for (PostImage postImage : postImageService.findByPostId(post.getId())) {
-                if (postImage.getAvater() != null) {
-                    postImage.setAvater(ConfigUtil.getString("base.url") + postImage.getAvater());
+                if (StringUtils.isNotBlank(postImage.getAvater())) {
+                    postImage.setAvater(ConfigUtil.getString("upload.url") + postImage.getAvater());
                 }
             }
             post.setPostCommentList(postCommentService.findByPostId(post.getId()));
@@ -193,27 +194,27 @@ public class InteractApi extends CommonController {
      * @apiGroup interact
      * @apiParam {Long} postId 足球圈id <必传 />
      *
-     * @apiSuccess {Object} post 帖子
-     * @apiSuccess {Integer} post.content 帖子内容
-     * @apiSuccess {Long} post.createDate 帖子创建时间
+     * @apiSuccess {Object} postInfo.post 帖子
+     * @apiSuccess {String} postInfo.post.content 帖子内容
+     * @apiSuccess {Long} postInfo.post.createDate 帖子创建时间
      *
-     * @apiSuccess {Integer} post.shareNum 分享数
-     * @apiSuccess {Integer} post.commentNum 评论数
+     * @apiSuccess {Integer} postInfo.post.shareNum 分享数
+     * @apiSuccess {Integer} postInfo.post.commentNum 评论数
      *
-     * @apiSuccess {Object} post.user 用户列表
-     * @apiSuccess {Long} post.user.id 用户id
-     * @apiSuccess {String} post.user.nickname 用户昵称
+     * @apiSuccess {Object} postInfo.post.user 用户列表
+     * @apiSuccess {Long} postInfo.post.user.id 用户id
+     * @apiSuccess {String} postInfo.post.user.nickname 用户昵称
      *
-     * @apiSuccess {Object} postImages 帖子图片列表
-     * @apiSuccess {String} postImages.avater 帖子图片
+     * @apiSuccess {Object} postInfo.postImages 帖子图片列表
+     * @apiSuccess {String} postInfo.postImages.avater 帖子图片
      *
-     * @apiSuccess {Object} postComments 帖子评论列表
-     * @apiSuccess {String} postComments.content 帖子内容
-     * @apiSuccess {Long} postComments.createDate 帖子创建时间
-     * @apiSuccess {Object} postComments.fUser 帖子评论人
-     * @apiSuccess {Long} postComments.fUser.id 帖子评论人id
-     * @apiSuccess {String} postComments.fUser.avater 帖子评论人头像
-     * @apiSuccess {String} postComments.fUser.nickname 帖子评论人昵称
+     * @apiSuccess {Object} postInfo.postComments 帖子评论列表
+     * @apiSuccess {String} postInfo.postComments.content 帖子内容
+     * @apiSuccess {Long} postInfo.postComments.createDate 帖子创建时间
+     * @apiSuccess {Object} postInfo.postComments.fUser 帖子评论人
+     * @apiSuccess {Long} postInfo.postComments.fUser.id 帖子评论人id
+     * @apiSuccess {String} postInfo.postComments.fUser.avater 帖子评论人头像
+     * @apiSuccess {String} postInfo.postComments.fUser.nickname 帖子评论人昵称
      */
     @RequestMapping(value = "/postInfo")
     public void postInfo(HttpServletResponse response, Long postId) {
@@ -229,20 +230,20 @@ public class InteractApi extends CommonController {
         post.setCommentNum(postComments.size());
         List<PostImage> postImages = postImageService.findByPostId(postId);
 
-        if (post.getUser().getAvater() != null) {
-            post.getUser().setAvater(ConfigUtil.getString("base.url") + post.getUser().getAvater());
+        if (StringUtils.isNotBlank(post.getUser().getAvater())) {
+            post.getUser().setAvater(ConfigUtil.getString("upload.url") + post.getUser().getAvater());
         }
         for (PostComment postComment : postComments) {
-            if (postComment.getfUser().getAvater() != null) {
-                postComment.getfUser().setAvater(ConfigUtil.getString("base.url") + postComment.getfUser().getAvater());
+            if (StringUtils.isNotBlank(postComment.getfUser().getAvater())) {
+                postComment.getfUser().setAvater(ConfigUtil.getString("upload.url") + postComment.getfUser().getAvater());
             }
-            if (postComment.gettUser().getAvater() != null) {
-                postComment.gettUser().setAvater(ConfigUtil.getString("base.url") + postComment.gettUser().getAvater());
+            if (StringUtils.isNotBlank(postComment.gettUser().getAvater())) {
+                postComment.gettUser().setAvater(ConfigUtil.getString("upload.url") + postComment.gettUser().getAvater());
             }
         }
         for (PostImage postImage : postImages) {
-            if (postImage.getAvater() != null) {
-                postImage.setAvater(ConfigUtil.getString("base.url") + postImage.getAvater());
+            if (StringUtils.isNotBlank(postImage.getAvater())) {
+                postImage.setAvater(ConfigUtil.getString("upload.url") + postImage.getAvater());
             }
         }
 
@@ -250,7 +251,7 @@ public class InteractApi extends CommonController {
         map.put("postComments",postComments);
         map.put("postImages",postImages);
 
-        Result obj = new Result(true).data(map);
+        Result obj = new Result(true).data(createMap("postInfo",map));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
@@ -296,12 +297,12 @@ public class InteractApi extends CommonController {
      * @apiGroup interact
      * @apiParam {Long} userId 用户id <必传/>
      *
-     * @apiSuccess {Object}  messageAddList 通讯录列表
-     * @apiSuccess {Integer} messageAddList.id 通讯录id
-     * @apiSuccess {Object} messageAddList.toUser 通讯录好友
-     * @apiSuccess {Integer} messageAddList.toUser.id 好友id
-     * @apiSuccess {String} messageAddList.toUser.nickname 好友昵称
-     * @apiSuccess {String} messageAddList.toUser.avater 好友头像
+     * @apiSuccess {Object}  list 通讯录列表
+     * @apiSuccess {Integer} list.id 通讯录id
+     * @apiSuccess {Object} list.toUser 通讯录好友
+     * @apiSuccess {Long} list.toUser.id 好友id
+     * @apiSuccess {String} list.toUser.nickname 好友昵称
+     * @apiSuccess {String} list.toUser.avater 好友头像
      *
      */
     @RequestMapping(value = "/addressBook")
@@ -312,16 +313,16 @@ public class InteractApi extends CommonController {
             return;
         }
 
-        List<MessageAdd> messageAddList = messageAddService.findUserId(userId);
+        List<MessageAdd> list = messageAddService.findUserId(userId);
 
-        for (MessageAdd messageAdd : messageAddList) {
-            if (messageAdd.getToUser().getAvater() != null) {
-                messageAdd.getToUser().setAvater(ConfigUtil.getString("base.url") + messageAdd.getToUser().getAvater());
+        for (MessageAdd messageAdd : list) {
+            if (StringUtils.isNotBlank(messageAdd.getToUser().getAvater())) {
+                messageAdd.getToUser().setAvater(ConfigUtil.getString("upload.url") + messageAdd.getToUser().getAvater());
             }
         }
 
-        Result obj = new Result(true).data(messageAddList);
-        String result = JsonUtil.obj2ApiJson(obj,"user","content","status");
+        Result obj = new Result(true).data(createMap("list",list));
+        String result = JsonUtil.obj2ApiJson(obj,"user","content");
         WebUtil.printApi(response, result);
     }
 
@@ -365,7 +366,7 @@ public class InteractApi extends CommonController {
      * @apiParam {Integer} pageSize 每页显示数
      *
      * @apiSuccess {Object}  list 资讯列表
-     * @apiSuccess {Long} list.id 资讯id
+     * @apiSuccess {Long} list.Information.id 资讯id
      * @apiSuccess {String} list.title 资讯标题
      * @apiSuccess {String} list.avater 资讯封面
      * @apiSuccess {String} list.introduction 资讯简介
@@ -385,8 +386,8 @@ public class InteractApi extends CommonController {
         Page<Information> page = informationService.page(pageNum, pageSize);
 
         for (Information information : page.getContent()) {
-            if (information.getAvater() != null) {
-                information.setAvater(ConfigUtil.getString("base.url") + information.getAvater());
+            if (StringUtils.isNotBlank(information.getAvater())) {
+                information.setAvater(ConfigUtil.getString("upload.url") + information.getAvater());
             }
         }
 
@@ -405,7 +406,7 @@ public class InteractApi extends CommonController {
      * @apiParam {Long} messageId 资讯id <必传 />
      *
      * @apiSuccess {Object}  information 资讯列表
-     * @apiSuccess {Integer} information.id 资讯id
+     * @apiSuccess {Long} information.id 资讯id
      * @apiSuccess {String} information.title 资讯标题
      * @apiSuccess {String} information.avater 资讯封面
      * @apiSuccess {String} information.introduction 资讯简介
@@ -421,8 +422,8 @@ public class InteractApi extends CommonController {
         }
 
         Information information = informationService.getById(messageId);
-        if (information.getAvater() != null) {
-            information.setAvater(ConfigUtil.getString("base.url") + information.getAvater());
+        if (StringUtils.isNotBlank(information.getAvater())) {
+            information.setAvater(ConfigUtil.getString("upload.url") + information.getAvater());
         }
 
         Result obj = new Result(true).data(information);
@@ -460,8 +461,8 @@ public class InteractApi extends CommonController {
         Page<Activity> page = activityService.page(pageNum, pageSize);
 
         for (Activity activity : page.getContent()) {
-            if (activity.getAvater() != null) {
-                activity.setAvater(ConfigUtil.getString("base.url") + activity.getAvater());
+            if (StringUtils.isNotBlank(activity.getAvater())) {
+                activity.setAvater(ConfigUtil.getString("upload.url") + activity.getAvater());
             }
         }
         Map<String, Object> dataMap = APIFactory.fitting(page);
@@ -478,8 +479,8 @@ public class InteractApi extends CommonController {
      * @apiGroup interact
      * @apiParam {Long} activityId 活动id <必传 />
      *
-     * @apiSuccess {Object}  activity 活动列表
-     * @apiSuccess {Integer} activity.id 活动id
+     * @apiSuccess {Object}  activity 活动
+     * @apiSuccess {Long} activity.id 活动id
      * @apiSuccess {String} activity.title 活动标题
      * @apiSuccess {String} activity.avater 活动封面
      * @apiSuccess {String} activity.introduction 活动简介
@@ -495,8 +496,8 @@ public class InteractApi extends CommonController {
         }
 
         Activity activity = activityService.getById(activityId);
-        if (activity.getAvater() != null) {
-            activity.setAvater(ConfigUtil.getString("base.url") + activity.getAvater());
+        if (StringUtils.isNotBlank(activity.getAvater())) {
+            activity.setAvater(ConfigUtil.getString("upload.url") + activity.getAvater());
         }
 
         Result obj = new Result(true).data(createMap("activity",activity));

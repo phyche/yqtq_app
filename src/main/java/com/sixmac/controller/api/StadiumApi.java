@@ -9,6 +9,7 @@ import com.sixmac.entity.vo.StadiumVo;
 import com.sixmac.entity.vo.TimeVo;
 import com.sixmac.service.*;
 import com.sixmac.utils.*;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.NamedBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -78,6 +79,7 @@ public class StadiumApi extends CommonController {
      * @apiParam {Long} areaId 区域ID
      * @apiParam {Integer} pageNum 当前页
      * @apiParam {Integer} pageSize 每页显示数
+     *
      * @apiSuccess {Object}  list 球场列表
      * @apiSuccess {Integer} list.id 球场id
      * @apiSuccess {String} list.name 球场名称
@@ -114,7 +116,9 @@ public class StadiumApi extends CommonController {
             stadium.setAreaName(areaService.getByAreaId(stadium.getAreaId()).getArea());
             stadium.setDistance(Distance.GetDistance(longitude, latitude, stadium.getLongitude(), stadium.getLatitude()));
             if (stadium.getAvater() != null) {
-                stadium.setAvater(ConfigUtil.getString("base.url") + stadium.getAvater());
+                if (StringUtils.isNotBlank(stadium.getAvater())) {
+                    stadium.setAvater(ConfigUtil.getString("upload.url") + stadium.getAvater());
+                }
             }
         }
 
@@ -131,19 +135,24 @@ public class StadiumApi extends CommonController {
      * @apiName stadium.info
      * @apiGroup stadium
      * @apiParam {Long} stadiumId 球场ID  <必传/>
-     * @apiSuccess {Object}  stadium 球场
-     * @apiSuccess {Long} stadium.id 球场id
-     * @apiSuccess {String} stadium.name 球场名称
-     * @apiSuccess {String} stadium.areaName 球场地区名字
-     * @apiSuccess {String} stadium.address 球场地址
-     * @apiSuccess {String} stadium.avater 球场封面
-     * @apiSuccess {String} stadium.siteType 场地类型
-     * @apiSuccess {String} stadium.sodType 草皮类型
-     * @apiSuccess {String} stadium.light 灯光
-     * @apiSuccess {Integer} stadium.park 停车场（0：有停车场 1；没有停车场）
-     * @apiSuccess {String} stadium.giving 赠送
-     * @apiSuccess {String} stadium.description 球场简介
-     * @apiSuccess {Object} sites 球场场地
+     *
+     * @apiSuccess {Object}  info.stadium 球场
+     * @apiSuccess {Long} info.stadium.id 球场id
+     * @apiSuccess {String} info.stadium.name 球场名称
+     * @apiSuccess {String} info.stadium.areaName 球场地区名字
+     * @apiSuccess {String} info.stadium.address 球场地址
+     * @apiSuccess {String} info.stadium.avater 球场封面
+     * @apiSuccess {String} info.stadium.siteType 场地类型
+     * @apiSuccess {String} info.stadium.sodType 草皮类型
+     * @apiSuccess {String} info.stadium.light 灯光
+     * @apiSuccess {Integer} info.stadium.park 停车场（0：有停车场 1；没有停车场）
+     * @apiSuccess {String} info.stadium.giving 赠送
+     * @apiSuccess {String} info.stadium.description 球场简介
+     *
+     * @apiSuccess {Object} info.time 时间
+     * @apiSuccess {String} info.time.week 星期
+     * @apiSuccess {String} info.time.date 日期
+     * @apiSuccess {Long} info.time.time 具体时间
      */
     @RequestMapping(value = "/info")
     public void info(HttpServletResponse response, Long stadiumId) throws ParseException {
@@ -157,8 +166,8 @@ public class StadiumApi extends CommonController {
 
         Stadium stadium = stadiumService.getById(stadiumId);
         stadium.setAreaName(areaService.getByAreaId(stadium.getAreaId()).getArea());
-        if (stadium.getAvater() != null) {
-            stadium.setAvater(ConfigUtil.getString("base.url") + stadium.getAvater());
+        if (StringUtils.isNotBlank(stadium.getAvater())) {
+            stadium.setAvater(ConfigUtil.getString("upload.url") + stadium.getAvater());
         }
 
         if (stadiumService.getById(stadiumId).getType() == 1) {
@@ -181,12 +190,12 @@ public class StadiumApi extends CommonController {
 
                 list.add(timeVo);
             }
-            map.put("list", list);
+            map.put("time", list);
 
         }
 
         map.put("stadium", stadium);
-        Result obj = new Result(true).data(map);
+        Result obj = new Result(true).data(createMap("info",map));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
@@ -214,8 +223,8 @@ public class StadiumApi extends CommonController {
 
         Stadium stadium = stadiumService.getById(stadiumId);
         stadium.setAreaName(areaService.getByAreaId(stadium.getAreaId()).getArea());
-        if (stadium.getAvater() != null) {
-            stadium.setAvater(ConfigUtil.getString("base.url") + stadium.getAvater());
+        if (StringUtils.isNotBlank(stadium.getAvater())) {
+            stadium.setAvater(ConfigUtil.getString("upload.url") + stadium.getAvater());
         }
 
         Result obj = new Result(true).data(stadium);
@@ -264,7 +273,8 @@ public class StadiumApi extends CommonController {
 
         UserReserve userReserve = new UserReserve();
         userReserve.setUser(user);
-        userReserve.setReserve(reserve);
+        userReserve.setReserveId(reserve.getId());
+        //userReserve.setReserve(reserve);
         userReserve.setStatus(1);
 
         userReserveService.create(userReserve);
@@ -468,7 +478,10 @@ public class StadiumApi extends CommonController {
 
             UserReserve userReserve = new UserReserve();
             userReserve.setUser(userService.getById(userId));
-            userReserve.setReserve(reserve);
+            userReserve.setReserveId(reserve.getId());
+
+
+            //userReserve.setReserve(reserve);
             userReserve.setStatus(1);
             userReserveService.create(userReserve);
 
@@ -494,7 +507,10 @@ public class StadiumApi extends CommonController {
 
             UserReserve userReserve = new UserReserve();
             userReserve.setUser(userService.getById(userId));
-            userReserve.setReserve(reserve);
+
+
+            userReserve.setReserveId(reserve.getId());
+            //userReserve.setReserve(reserve);
             userReserve.setStatus(1);
             userReserveService.create(userReserve);
 
