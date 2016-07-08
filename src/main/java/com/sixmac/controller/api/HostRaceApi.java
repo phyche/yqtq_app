@@ -64,7 +64,9 @@ public class HostRaceApi {
         List<HostRace> hostRaceList = hostRaceService.findAll();
         HostRace hostRace = hostRaceList.get(hostRaceList.size()-1);
 
-        hostRace.setAvater(ConfigUtil.getString("base.url") + hostRace.getAvater());
+        if (hostRace.getAvater() != null) {
+            hostRace.setAvater(ConfigUtil.getString("base.url") + hostRace.getAvater());
+        }
 
         Result obj = new Result(true).data(hostRace);
         String result = JsonUtil.obj2ApiJson(obj);
@@ -98,7 +100,9 @@ public class HostRaceApi {
 
         HostRace hostRace = hostRaceService.getById(raceId);
 
-        hostRace.setAvater(ConfigUtil.getString("base.url") + hostRace.getAvater());
+        if (hostRace.getAvater() != null) {
+            hostRace.setAvater(ConfigUtil.getString("base.url") + hostRace.getAvater());
+        }
 
         Result obj = new Result(true).data(hostRace);
         String result = JsonUtil.obj2ApiJson(obj);
@@ -140,7 +144,9 @@ public class HostRaceApi {
             hostJoin.getTeam().setCityName(cityService.getByCityId(hostJoin.getTeam().getCityId()).getCity());
             hostJoin.getTeam().setProvinceName(provinceService.getByProvinceId(hostJoin.getTeam().getProvinceId()).getProvince());
 
-            hostJoin.getTeam().setAvater(ConfigUtil.getString("base.url") + hostJoin.getTeam().getAvater());
+            if (hostJoin.getTeam().getAvater() != null) {
+                hostJoin.getTeam().setAvater(ConfigUtil.getString("base.url") + hostJoin.getTeam().getAvater());
+            }
 
             teams.add(hostJoin.getTeam());
         }

@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
@@ -91,10 +92,14 @@ public class InteractApi extends CommonController {
         List<Post> postList = page.getContent();
         for (Post post : postList) {
 
-            post.getUser().setAvater(ConfigUtil.getString("base.url") + post.getUser().getAvater());
+            if (post.getUser().getAvater() != null) {
+                post.getUser().setAvater(ConfigUtil.getString("base.url") + post.getUser().getAvater());
+            }
             post.setPostImages(postImageService.findByPostId(post.getId()));
             for (PostImage postImage : postImageService.findByPostId(post.getId())) {
-                postImage.setAvater(ConfigUtil.getString("base.url") + postImage.getAvater());
+                if (postImage.getAvater() != null) {
+                    postImage.setAvater(ConfigUtil.getString("base.url") + postImage.getAvater());
+                }
             }
             post.setPostCommentList(postCommentService.findByPostId(post.getId()));
             post.setCommentNum(post.getPostCommentList().size());
@@ -124,14 +129,22 @@ public class InteractApi extends CommonController {
      *
      */
     @RequestMapping(value = "/publish")
-    public void publish(HttpServletResponse response,
+    public void publish(HttpServletRequest request ,
+                        HttpServletResponse response,
                         Long userId,
-                        String content,
-                        MultipartHttpServletRequest multipartRequest) {
+                        String content) {
 
         if (null == userId || content == null || content == " ") {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
+        }
+
+        MultipartFile multipartFile = null;
+        MultipartRequest multipartRequest = null;
+
+        if(request instanceof MultipartRequest) {
+            multipartRequest = (MultipartRequest) request;
+
         }
 
         User user = userService.getById(userId);
@@ -145,18 +158,21 @@ public class InteractApi extends CommonController {
             // 保存圈子图片集合
             PostImage postImage = new PostImage();
 
-            // 获取图片集合
-            Iterator<String> fileList = multipartRequest.getFileNames();
-            while (fileList.hasNext()) {
-                String fileName = fileList.next();
-                MultipartFile file = multipartRequest.getFile(fileName);
-                if (null != file) {
-                    postImage = new PostImage();
-                    postImage.setPost(post);
-                    postImage.setStatus(0);
-                    postImage.setAvater(FileUtil.save(file).getPath());
+            if(multipartRequest != null) {
 
-                    postImageService.create(postImage);
+                // 获取图片集合
+                Iterator<String> fileList = multipartRequest.getFileNames();
+                while (fileList.hasNext()) {
+                    String fileName = fileList.next();
+                    MultipartFile file = multipartRequest.getFile(fileName);
+                    if (null != file) {
+                        postImage = new PostImage();
+                        postImage.setPost(post);
+                        postImage.setStatus(0);
+                        postImage.setAvater(FileUtil.save(file).getPath());
+
+                        postImageService.create(postImage);
+                    }
                 }
             }
         } catch (Exception e) {
@@ -213,13 +229,21 @@ public class InteractApi extends CommonController {
         post.setCommentNum(postComments.size());
         List<PostImage> postImages = postImageService.findByPostId(postId);
 
-        post.getUser().setAvater(ConfigUtil.getString("base.url") + post.getUser().getAvater());
+        if (post.getUser().getAvater() != null) {
+            post.getUser().setAvater(ConfigUtil.getString("base.url") + post.getUser().getAvater());
+        }
         for (PostComment postComment : postComments) {
-            postComment.getfUser().setAvater(ConfigUtil.getString("base.url") + postComment.getfUser().getAvater());
-            postComment.gettUser().setAvater(ConfigUtil.getString("base.url") + postComment.gettUser().getAvater());
+            if (postComment.getfUser().getAvater() != null) {
+                postComment.getfUser().setAvater(ConfigUtil.getString("base.url") + postComment.getfUser().getAvater());
+            }
+            if (postComment.gettUser().getAvater() != null) {
+                postComment.gettUser().setAvater(ConfigUtil.getString("base.url") + postComment.gettUser().getAvater());
+            }
         }
         for (PostImage postImage : postImages) {
-            postImage.setAvater(ConfigUtil.getString("base.url") + postImage.getAvater());
+            if (postImage.getAvater() != null) {
+                postImage.setAvater(ConfigUtil.getString("base.url") + postImage.getAvater());
+            }
         }
 
         map.put("post",post);
@@ -291,7 +315,9 @@ public class InteractApi extends CommonController {
         List<MessageAdd> messageAddList = messageAddService.findUserId(userId);
 
         for (MessageAdd messageAdd : messageAddList) {
-            messageAdd.getToUser().setAvater(ConfigUtil.getString("base.url") + messageAdd.getToUser().getAvater());
+            if (messageAdd.getToUser().getAvater() != null) {
+                messageAdd.getToUser().setAvater(ConfigUtil.getString("base.url") + messageAdd.getToUser().getAvater());
+            }
         }
 
         Result obj = new Result(true).data(messageAddList);
@@ -359,7 +385,9 @@ public class InteractApi extends CommonController {
         Page<Information> page = informationService.page(pageNum, pageSize);
 
         for (Information information : page.getContent()) {
-            information.setAvater(ConfigUtil.getString("base.url") + information.getAvater());
+            if (information.getAvater() != null) {
+                information.setAvater(ConfigUtil.getString("base.url") + information.getAvater());
+            }
         }
 
         Map<String, Object> dataMap = APIFactory.fitting(page);
@@ -393,7 +421,9 @@ public class InteractApi extends CommonController {
         }
 
         Information information = informationService.getById(messageId);
-        information.setAvater(ConfigUtil.getString("base.url") + information.getAvater());
+        if (information.getAvater() != null) {
+            information.setAvater(ConfigUtil.getString("base.url") + information.getAvater());
+        }
 
         Result obj = new Result(true).data(information);
         String result = JsonUtil.obj2ApiJson(obj);
@@ -430,7 +460,9 @@ public class InteractApi extends CommonController {
         Page<Activity> page = activityService.page(pageNum, pageSize);
 
         for (Activity activity : page.getContent()) {
-            activity.setAvater(ConfigUtil.getString("base.url") + activity.getAvater());
+            if (activity.getAvater() != null) {
+                activity.setAvater(ConfigUtil.getString("base.url") + activity.getAvater());
+            }
         }
         Map<String, Object> dataMap = APIFactory.fitting(page);
         Result obj = new Result(true).data(dataMap);
@@ -463,7 +495,9 @@ public class InteractApi extends CommonController {
         }
 
         Activity activity = activityService.getById(activityId);
-        activity.setAvater(ConfigUtil.getString("base.url") + activity.getAvater());
+        if (activity.getAvater() != null) {
+            activity.setAvater(ConfigUtil.getString("base.url") + activity.getAvater());
+        }
 
         Result obj = new Result(true).data(createMap("activity",activity));
         String result = JsonUtil.obj2ApiJson(obj);

@@ -718,7 +718,9 @@ public class MessageApi extends CommonController {
         List<TeamMember> teamMemberList = teamMemberService.findByUserId(userId);
         for (TeamMember teamMember : teamMemberList) {
 
-            teamMember.getUser().setAvater(ConfigUtil.getString("base.url") + teamMember.getUser().getAvater());
+            if (teamMember.getUser().getAvater() != null) {
+                teamMember.getUser().setAvater(ConfigUtil.getString("base.url") + teamMember.getUser().getAvater());
+            }
 
             teamList.add(teamMember.getTeam());
         }
@@ -730,8 +732,12 @@ public class MessageApi extends CommonController {
                 if (teamRace.getStatus() == 1) {
                     teamRace.setContent("您的队伍和" + "visitingTeam" + "约战成功");
 
-                    teamRace.getHomeTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getHomeTeam().getAvater());
-                    teamRace.getVisitingTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getVisitingTeam().getAvater());
+                    if (teamRace.getHomeTeam().getAvater() != null) {
+                        teamRace.getHomeTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getHomeTeam().getAvater());
+                    }
+                    if (teamRace.getVisitingTeam().getAvater() != null) {
+                        teamRace.getVisitingTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getVisitingTeam().getAvater());
+                    }
 
                     teamRaceList.add(teamRace);
                 }
@@ -741,8 +747,12 @@ public class MessageApi extends CommonController {
                 if (teamRace.getStatus() == 1) {
                     teamRace.setContent("您的队伍和" + "homeTeam" + "约战成功");
 
-                    teamRace.getHomeTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getHomeTeam().getAvater());
-                    teamRace.getVisitingTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getVisitingTeam().getAvater());
+                    if (teamRace.getHomeTeam().getAvater() != null) {
+                        teamRace.getHomeTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getHomeTeam().getAvater());
+                    }
+                    if (teamRace.getVisitingTeam().getAvater() != null) {
+                        teamRace.getVisitingTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getVisitingTeam().getAvater());
+                    }
 
                     teamRaceList.add(teamRace);
                 }
@@ -755,8 +765,12 @@ public class MessageApi extends CommonController {
             if (teamRace.getStatus() == 2) {
                 teamRace.setContent("visitingTeam" + "拒绝了和您约战");
 
-                teamRace.getHomeTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getHomeTeam().getAvater());
-                teamRace.getVisitingTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getVisitingTeam().getAvater());
+                if (teamRace.getHomeTeam().getAvater() != null) {
+                    teamRace.getHomeTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getHomeTeam().getAvater());
+                }
+                if (teamRace.getVisitingTeam().getAvater() != null) {
+                    teamRace.getVisitingTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getVisitingTeam().getAvater());
+                }
 
                 teamRaceList.add(teamRace);
             }
@@ -766,8 +780,12 @@ public class MessageApi extends CommonController {
             if (teamRace.getStatus() == 0) {
                 teamRace.setContent("visitingTeam" + "约您对战");
 
-                teamRace.getHomeTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getHomeTeam().getAvater());
-                teamRace.getVisitingTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getVisitingTeam().getAvater());
+                if (teamRace.getHomeTeam().getAvater() != null) {
+                    teamRace.getHomeTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getHomeTeam().getAvater());
+                }
+                if (teamRace.getVisitingTeam().getAvater() != null) {
+                    teamRace.getVisitingTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getVisitingTeam().getAvater());
+                }
 
                 teamRaceList.add(teamRace);
             }

@@ -138,7 +138,9 @@ public class UserApi extends CommonController {
         List<TeamMember> teamMemberList = teamMemberService.findByUserId(userId);
         for (TeamMember teamMember : teamMemberList) {
 
-            teamMember.getUser().setAvater(ConfigUtil.getString("base.url") + teamMember.getUser().getAvater());
+            if (teamMember.getUser().getAvater() != null) {
+                teamMember.getUser().setAvater(ConfigUtil.getString("base.url") + teamMember.getUser().getAvater());
+            }
             teamList.add(teamMember.getTeam());
         }
 
@@ -147,7 +149,9 @@ public class UserApi extends CommonController {
         //我的球队
         if (teamService.findListByLeaderId(userId) != null) {
             Team myTeam = teamService.findListByLeaderId(userId);
-            myTeam.setAvater(ConfigUtil.getString("base.url") + myTeam.getAvater());
+            if (myTeam.getAvater() != null) {
+                myTeam.setAvater(ConfigUtil.getString("base.url") + myTeam.getAvater());
+            }
             map.put("myTeam", myTeam);
         }
 
@@ -261,7 +265,9 @@ public class UserApi extends CommonController {
         }
 
         User user = userService.getById(userId);
-        user.setAvater(ConfigUtil.getString("base.url") + user.getAvater());
+        if (user.getAvater() != null) {
+            user.setAvater(ConfigUtil.getString("base.url") + user.getAvater());
+        }
 
         Result obj = new Result(true).data(user);
         String result = JsonUtil.obj2ApiJson(obj);
@@ -608,9 +614,13 @@ public class UserApi extends CommonController {
             post.setCommentNum(postCommentService.findByPostId(post.getId()).size());
             post.setPostImages(postImageService.findByPostId(post.getId()));
             for (PostImage postImage : postImageService.findByPostId(post.getId())) {
-                postImage.setAvater(ConfigUtil.getString("base.url") + postImage.getAvater());
+                if (postImage.getAvater() != null) {
+                    postImage.setAvater(ConfigUtil.getString("base.url") + postImage.getAvater());
+                }
             }
-            post.getUser().setAvater(ConfigUtil.getString("base.url") + post.getUser().getAvater());
+            if (post.getUser().getAvater() != null) {
+                post.getUser().setAvater(ConfigUtil.getString("base.url") + post.getUser().getAvater());
+            }
         }
 
         Result obj = new Result(true).data(postList);
@@ -662,13 +672,19 @@ public class UserApi extends CommonController {
         //我的帖子图片列表
         List<PostImage> postImages = postImageService.findByPostId(postId);
         for (PostImage postImage : postImages) {
-            postImage.setAvater(ConfigUtil.getString("base.url") + postImage.getAvater());
+            if (postImage.getAvater() != null) {
+                postImage.setAvater(ConfigUtil.getString("base.url") + postImage.getAvater());
+            }
         }
         //我的帖子评论列表
         List<PostComment> postComments = postCommentService.findByPostId(postId);
         for (PostComment postComment : postComments) {
-            postComment.gettUser().setAvater(postComment.gettUser().getAvater());
-            postComment.getfUser().setAvater(postComment.getfUser().getAvater());
+            if (postComment.gettUser().getAvater() != null) {
+                postComment.gettUser().setAvater(postComment.gettUser().getAvater());
+            }
+            if (postComment.getfUser().getAvater() != null) {
+                postComment.getfUser().setAvater(postComment.getfUser().getAvater());
+            }
         }
 
         map.put("post",post);
@@ -715,7 +731,9 @@ public class UserApi extends CommonController {
         List<GirlUser> girlUserList = girlUserService.findByUserId(userId);
         for (GirlUser girlUser : girlUserList) {
             for (GirlImage girlImage : girlImageService.find(girlUser.getGirl().getId(), 0)) {
-                girlImage.setUrl(ConfigUtil.getString("base.url") + girlImage.getUrl());
+                if (girlImage.getUrl() != null) {
+                    girlImage.setUrl(ConfigUtil.getString("base.url") + girlImage.getUrl());
+                }
             }
         }
 
@@ -759,7 +777,9 @@ public class UserApi extends CommonController {
 
         GirlUser girlUsers = girlUserService.getById(girlUserId);
         for (GirlImage girlImage : girlImageService.find(girlUsers.getGirl().getId(), 0)) {
-            girlImage.setUrl(ConfigUtil.getString("base.url") + girlImage.getUrl());
+            if (girlImage.getUrl() != null) {
+                girlImage.setUrl(ConfigUtil.getString("base.url") + girlImage.getUrl());
+            }
         }
 
         Result obj = new Result(true).data(girlUsers);

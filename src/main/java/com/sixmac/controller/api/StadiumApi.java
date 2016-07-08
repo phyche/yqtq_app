@@ -113,8 +113,9 @@ public class StadiumApi extends CommonController {
 
             stadium.setAreaName(areaService.getByAreaId(stadium.getAreaId()).getArea());
             stadium.setDistance(Distance.GetDistance(longitude, latitude, stadium.getLongitude(), stadium.getLatitude()));
-            stadium.setAvater(ConfigUtil.getString("base.url") + stadium.getAvater());
-
+            if (stadium.getAvater() != null) {
+                stadium.setAvater(ConfigUtil.getString("base.url") + stadium.getAvater());
+            }
         }
 
         Map<String, Object> dataMap = APIFactory.fitting(page);
@@ -156,7 +157,9 @@ public class StadiumApi extends CommonController {
 
         Stadium stadium = stadiumService.getById(stadiumId);
         stadium.setAreaName(areaService.getByAreaId(stadium.getAreaId()).getArea());
-        stadium.setAvater(ConfigUtil.getString("base.url") + stadium.getAvater());
+        if (stadium.getAvater() != null) {
+            stadium.setAvater(ConfigUtil.getString("base.url") + stadium.getAvater());
+        }
 
         if (stadiumService.getById(stadiumId).getType() == 1) {
 
@@ -211,7 +214,9 @@ public class StadiumApi extends CommonController {
 
         Stadium stadium = stadiumService.getById(stadiumId);
         stadium.setAreaName(areaService.getByAreaId(stadium.getAreaId()).getArea());
-        stadium.setAvater(ConfigUtil.getString("base.url") + stadium.getAvater());
+        if (stadium.getAvater() != null) {
+            stadium.setAvater(ConfigUtil.getString("base.url") + stadium.getAvater());
+        }
 
         Result obj = new Result(true).data(stadium);
         String result = JsonUtil.obj2ApiJson(obj, "type", "description", "siteType", "sodType", "light", "park", "giving");

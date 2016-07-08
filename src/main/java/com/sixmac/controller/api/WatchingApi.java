@@ -85,7 +85,9 @@ public class WatchingApi extends CommonController {
         Page<WatchingRace> page = watchingRaceService.page(0, pageNum, pageSize);
 
         for (WatchingRace watchingRace : page.getContent()) {
-            watchingRace.setAvater(ConfigUtil.getString("base.url") + watchingRace.getAvater());
+            if (watchingRace.getAvater() != null) {
+                watchingRace.setAvater(ConfigUtil.getString("base.url") + watchingRace.getAvater());
+            }
         }
 
         Map<String, Object> dataMap = APIFactory.fitting(page);
@@ -118,7 +120,9 @@ public class WatchingApi extends CommonController {
         }
 
         WatchingRace watchingRace = watchingRaceService.getById(telecastId);
-        watchingRace.setAvater(ConfigUtil.getString("base.url") + watchingRace.getAvater());
+        if (watchingRace.getAvater() != null) {
+            watchingRace.setAvater(ConfigUtil.getString("base.url") + watchingRace.getAvater());
+        }
 
         Result obj = new Result(true).data(watchingRace);
         String result = JsonUtil.obj2ApiJson(obj);
@@ -193,8 +197,12 @@ public class WatchingApi extends CommonController {
         Page<BigRace> page = bigRaceService.page(cityId, 0, pageNum, pageSize);
 
         for (BigRace bigRace : page.getContent()) {
-            bigRace.setAvater1(ConfigUtil.getString("base.url") + bigRace.getAvater1());
-            bigRace.setAvater2(ConfigUtil.getString("base.url") + bigRace.getAvater2());
+            if (bigRace.getAvater1() != null) {
+                bigRace.setAvater1(ConfigUtil.getString("base.url") + bigRace.getAvater1());
+            }
+            if (bigRace.getAvater2() != null) {
+                bigRace.setAvater2(ConfigUtil.getString("base.url") + bigRace.getAvater2());
+            }
         }
         Map<String, Object> dataMap = APIFactory.fitting(page);
         Result obj = new Result(true).data(dataMap);
@@ -233,8 +241,12 @@ public class WatchingApi extends CommonController {
         }
 
         BigRace bigRace = bigRaceService.getById(sceneId);
-        bigRace.setAvater1(ConfigUtil.getString("base.url") + bigRace.getAvater1());
-        bigRace.setAvater2(ConfigUtil.getString("base.url") + bigRace.getAvater2());
+        if (bigRace.getAvater1() != null) {
+            bigRace.setAvater1(ConfigUtil.getString("base.url") + bigRace.getAvater1());
+        }
+        if (bigRace.getAvater2() != null) {
+            bigRace.setAvater2(ConfigUtil.getString("base.url") + bigRace.getAvater2());
+        }
 
         Result obj = new Result(true).data(bigRace);
         String result = JsonUtil.obj2ApiJson(obj);
@@ -306,7 +318,9 @@ public class WatchingApi extends CommonController {
         List<GirlImage> girlImageList = new ArrayList<GirlImage>();
         for (GirlImage girlImage : list) {
             if (girlImage.getGirl().getStatus() == 1) {
-                girlImage.setUrl(ConfigUtil.getString("base.url") + girlImage.getUrl());
+                if (girlImage.getUrl() != null) {
+                    girlImage.setUrl(ConfigUtil.getString("base.url") + girlImage.getUrl());
+                }
                 girlImageList.add(girlImage);
             }
         }
@@ -385,7 +399,9 @@ public class WatchingApi extends CommonController {
         //宝贝相册
         List<GirlImage> girlImages = girlImageService.findByGirlId(girlId);
         for (GirlImage girlImage : girlImages) {
-            girlImage.setUrl(ConfigUtil.getString("base.url") + girlImage.getUrl());
+            if (girlImage.getUrl() != null) {
+                girlImage.setUrl(ConfigUtil.getString("base.url") + girlImage.getUrl());
+            }
         }
 
         //宝贝预约数
