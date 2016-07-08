@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
@@ -184,16 +185,24 @@ public class TeamApi extends CommonController {
      *
      */
     @RequestMapping(value = "/add")
-    public void add(HttpServletResponse response,
+    public void add(HttpServletRequest request ,
+                    HttpServletResponse response,
                     Long userId,
                     String name,
                     String address,
-                    String slogan,
-                    MultipartRequest multipartRequest) throws IOException {
+                    String slogan) throws IOException {
+
+        MultipartFile multipartFile = null;
+        MultipartRequest multipartRequest = null;
 
         if (null == userId || name == null || name == " " || address == null || address == " " || slogan == null || slogan == " ") {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
+        }
+
+        if(request instanceof MultipartRequest) {
+            multipartRequest = (MultipartRequest) request;
+
         }
 
         Team team = new Team();
@@ -205,10 +214,17 @@ public class TeamApi extends CommonController {
             team.setAvater(url);
         }*/
 
-        MultipartFile multipartFile = multipartRequest.getFile("avater");
-        if (null != multipartFile) {
-            FileBo fileBo = FileUtil.save(multipartFile);
-            team.setAvater(fileBo.getPath());
+        if(multipartRequest != null) {
+            multipartFile = multipartRequest.getFile("avater");
+            if (null != multipartFile) {
+                FileBo fileBo = null;
+                try {
+                    fileBo = FileUtil.save(multipartFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                team.setAvater(fileBo.getPath());
+            }
         }
 
         team.setName(name);

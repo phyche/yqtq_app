@@ -5,6 +5,7 @@ import com.sixmac.core.ErrorCode;
 import com.sixmac.core.bean.Result;
 import com.sixmac.entity.*;
 import com.sixmac.service.*;
+import com.sixmac.utils.ConfigUtil;
 import com.sixmac.utils.JsonUtil;
 import com.sixmac.utils.WebUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,12 +91,21 @@ public class PlayIndexApi extends CommonController {
             List<Reserve> reserves = new ArrayList<Reserve>();
             if (reserveList.size() >= 3) {
                 reserves.add(reserveList.get(reserveList.size()-3));
+                for (Reserve reserve : reserves) {
+                    reserve.getUser().setAvater(ConfigUtil.getString("base.url") + reserve.getUser().getAvater());
+                }
             }
             if (reserveList.size() >= 2) {
                 reserves.add(reserveList.get(reserveList.size()-2));
+                for (Reserve reserve : reserves) {
+                    reserve.getUser().setAvater(ConfigUtil.getString("base.url") + reserve.getUser().getAvater());
+                }
             }
             if (reserveList.size() >= 1) {
                 reserves.add(reserveList.get(reserveList.size()-1));
+                for (Reserve reserve : reserves) {
+                    reserve.getUser().setAvater(ConfigUtil.getString("base.url") + reserve.getUser().getAvater());
+                }
             }
 
             map.put("reserves", reserves);
@@ -124,6 +134,9 @@ public class PlayIndexApi extends CommonController {
     public void banner(HttpServletResponse response) {
 
         List<Banner> bannerList = bannerService.findAll();
+        for (Banner banner : bannerList) {
+            banner.setAvater(ConfigUtil.getString("base.url") + banner.getAvater());
+        }
 
         Result obj = new Result(true).data(bannerList);
         String result = JsonUtil.obj2ApiJson(obj);
@@ -175,21 +188,25 @@ public class PlayIndexApi extends CommonController {
         Map<String, Object> map = new HashMap<String, Object>();
 
         Banner banner = bannerService.getById(bannerId);
+        banner.setAvater(ConfigUtil.getString("base.url") + banner.getAvater());
         //活动
         if (banner.getType() == 0) {
             Activity activity = activityService.getById(banner.getToId());
+            activity.setAvater(ConfigUtil.getString("base.url") + activity.getAvater());
             map.put("activity",activity);
         }
 
         //平台赛事
         if (banner.getType() == 1) {
             HostRace hostRace = hostRaceService.getById(banner.getToId());
+            hostRace.setAvater(ConfigUtil.getString("base.url") + hostRace.getAvater());
             map.put("hostRace",hostRace);
         }
 
         //资讯
         if (banner.getType() == 2) {
             Information information = informationService.getById(banner.getToId());
+            information.setAvater(ConfigUtil.getString("base.url") + information.getAvater());
             map.put("information",information);
         }
 
@@ -233,6 +250,7 @@ public class PlayIndexApi extends CommonController {
         }
 
         for (TeamMember teamMember : teamMemberList) {
+            teamMember.getUser().setAvater(teamMember.getUser().getAvater());
             teams.add(teamMember.getTeam());
         }
 
@@ -249,11 +267,19 @@ public class PlayIndexApi extends CommonController {
         List<TeamRace> list = teamRaceService.findByHomeTeamId(teamIds);
         List<Team> teamList = new ArrayList<Team>();
         for (TeamRace teamRace : list) {
+
+            teamRace.getVisitingTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getVisitingTeam().getAvater());
+            teamRace.getHomeTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getHomeTeam().getAvater());
+
             teamList.add(teamRace.getVisitingTeam());
         }
 
         List<TeamRace> listrace = teamRaceService.findByVisitingId(teamIds);
         for (TeamRace teamRace : listrace) {
+
+            teamRace.getVisitingTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getVisitingTeam().getAvater());
+            teamRace.getHomeTeam().setAvater(ConfigUtil.getString("base.url") + teamRace.getHomeTeam().getAvater());
+
             teamList.add(teamRace.getHomeTeam());
         }
 
