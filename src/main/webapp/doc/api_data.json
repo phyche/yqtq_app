@@ -1966,89 +1966,6 @@
   },
   {
     "type": "post",
-    "url": "/api/message/beAdd",
-    "title": "被动添加好友消息",
-    "name": "message_beAdd",
-    "group": "message",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Long",
-            "optional": false,
-            "field": "userId",
-            "description": "<p>用户id &lt;必传/&gt;</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "list",
-            "description": "<p>消息列表</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.id",
-            "description": "<p>消息id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "list.content",
-            "description": "<p>消息内容</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "list.user",
-            "description": "<p>好友</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.user.id",
-            "description": "<p>好友id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "list.user.nickname",
-            "description": "<p>好友昵称</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.createDate",
-            "description": "<p>消息时间</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/MessageApi.java",
-    "groupTitle": "message",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/message/beAdd"
-      }
-    ]
-  },
-  {
-    "type": "post",
     "url": "/api/message/beJoinTeam",
     "title": "被邀请加入球队消息",
     "name": "message_beJoinTeam",
@@ -2761,28 +2678,126 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "list",
+            "field": "list.list1",
             "description": "<p>系统消息列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "list.id",
+            "field": "list.list1.id",
             "description": "<p>消息id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.title",
+            "field": "list.list1.title",
             "description": "<p>消息标题</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "list.createDate",
+            "field": "list.list1.createDate",
+            "description": "<p>消息时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list.list2",
+            "description": "<p>消息列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.list2.id",
+            "description": "<p>消息id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.list2.content",
+            "description": "<p>消息内容</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list.list2.toUser",
+            "description": "<p>好友</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.list2.toUser.id",
+            "description": "<p>好友id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.list2.toUser.nickname",
+            "description": "<p>好友昵称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.list2.createDate",
+            "description": "<p>消息时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list.list3",
+            "description": "<p>消息列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.list3.id",
+            "description": "<p>消息id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.list3.content",
+            "description": "<p>消息内容</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list.list3.user",
+            "description": "<p>好友</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.list3.user.id",
+            "description": "<p>好友id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.list3.user.nickname",
+            "description": "<p>好友昵称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.list3.createDate",
             "description": "<p>消息时间</p>"
           }
         ]
@@ -2988,89 +3003,6 @@
     "sampleRequest": [
       {
         "url": "http://4.16.1.158:8080/yqtq_app/api/message/teamOrder"
-      }
-    ]
-  },
-  {
-    "type": "post",
-    "url": "/api/message/toAdd",
-    "title": "主动添加好友消息",
-    "name": "message_toAdd",
-    "group": "message",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Long",
-            "optional": false,
-            "field": "userId",
-            "description": "<p>用户id &lt;必传/&gt;</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "list",
-            "description": "<p>消息列表</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.id",
-            "description": "<p>消息id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "list.content",
-            "description": "<p>消息内容</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "list.toUser",
-            "description": "<p>好友</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.toUser.id",
-            "description": "<p>好友id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "list.toUser.nickname",
-            "description": "<p>好友昵称</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.createDate",
-            "description": "<p>消息时间</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/MessageApi.java",
-    "groupTitle": "message",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/message/toAdd"
       }
     ]
   },

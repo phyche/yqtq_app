@@ -15,9 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Administrator on 2016/6/2 0002.
@@ -70,19 +68,42 @@ public class MessageApi extends CommonController {
      * @apiGroup message
      * @apiParam {Integer} userId 用户id <必传 />
      *
-     * @apiSuccess {Object}  list 好友约球消息列表
-     * @apiSuccess {Long} list.id 消息id
-     * @apiSuccess {String} list.content 消息内容
-     * @apiSuccess {Object} list.user 好友
-     * @apiSuccess {Long} list.user.id 好友d
-     * @apiSuccess {String} list.user.nickname 好友昵称
-     * @apiSuccess {Object} list.reserve 约球
-     * @apiSuccess {Long} list.reserve.id 约球d
-     * @apiSuccess {Object} list.reserve.stadium 约球球场
-     * @apiSuccess {String} list.reserve.stadium.name 约球球场名字
-     * @apiSuccess {Long} list.reserve.startTime 开始时间
+     * @apiSuccess {Object}  list.list1 好友约球消息列表
+     * @apiSuccess {Long} list.list1.id 消息id
+     * @apiSuccess {String} list.list1.content 消息内容
+     * @apiSuccess {Object} list.list1.user 好友
+     * @apiSuccess {Long} list.list1.user.id 好友d
+     * @apiSuccess {String} list.list1.user.nickname 好友昵称
+     * @apiSuccess {Object} list.list1.reserve 约球
+     * @apiSuccess {Long} list.list1.reserve.id 约球d
+     * @apiSuccess {Object} list.list1.reserve.stadium 约球球场
+     * @apiSuccess {String} list.list1.reserve.stadium.name 约球球场名字
+     * @apiSuccess {Long} list.list1.reserve.startTime 开始时间
+     * @apiSuccess {Long} list.list1.createDate 记录生成时间
      *
-     * @apiSuccess {Long} messageOrderBallList.createDate 记录生成时间
+     * @apiSuccess {Object}  list.list2 加入约球消息列表
+     * @apiSuccess {Long} list.list2.id 加入约球id
+     * @apiSuccess {String} list.list2.content 约球内容
+     * @apiSuccess {Object} list.list2.user 加入约球人
+     * @apiSuccess {Long} list.list2.user.id 加入约球人id
+     * @apiSuccess {String} list.list2.user.nickname 加入约球人昵称
+     * @apiSuccess {Object} list.list2.reserve 加入约球预约
+     * @apiSuccess {Long} list.list2.reserve.id 加入约球预约id
+     * @apiSuccess {Object} list.list2.reserve.stadium 约球球场
+     * @apiSuccess {String} list.list2.reserve.stadium.name 约球球场名字
+     * @apiSuccess {Long} list.list2.reserve.startTime 开始时间
+     * @apiSuccess {Long} list.list2.createDate 记录生成时间
+     *
+     * @apiSuccess {Object}  list.list3 约球列表
+     * @apiSuccess {Long} list.list3.id 约球id
+     * @apiSuccess {String} list.list3.content 约球内容
+     * @apiSuccess {Integer} list.list3.status 约球状态（1:组队成功2:组队失败）
+     * @apiSuccess {Object} list.list3.reserve 约球预约
+     * @apiSuccess {Long} list.list3.reserve.id 约球预约id
+     * @apiSuccess {Object} list.list3.reserve.stadium 约球球场
+     * @apiSuccess {String} list.list3.reserve.stadium.name 约球球场名字
+     * @apiSuccess {Long} list.list3.reserve.startTime 开始时间
+     * @apiSuccess {Long} list.list3.createDate 记录生成时间
      *
      */
     @RequestMapping(value = "/orderBall")
@@ -93,97 +114,27 @@ public class MessageApi extends CommonController {
             return;
         }
 
-        List<MessageOrderBall> list = messageOrderBallService.findByToUserId(userId);
-        for (MessageOrderBall messageOrderBall : list) {
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        List<MessageOrderBall> list1 = messageOrderBallService.findByToUserId(userId);
+        for (MessageOrderBall messageOrderBall : list1) {
 
             messageOrderBall.setContent("您的好友" + "user" + "约您去踢球啦！");
 
         }
 
-        Result obj = new Result(true).data(createMap("list",list));
-        String result = JsonUtil.obj2ApiJson(obj,"set","site","list","insurance","toUser");
-        WebUtil.printApi(response, result);
-    }
-
-    /**
-     * 完成
-     *
-     * @api {post} /api/message/addOrder 加入的约球消息
-     * @apiName message.addOrder
-     * @apiGroup message
-     * @apiParam {Long} userId 用户id <必传 />
-     *
-     * @apiSuccess {Object}  list 加入约球消息列表
-     * @apiSuccess {Long} list.id 加入约球id
-     * @apiSuccess {String} list.content 约球内容
-     * @apiSuccess {Object} list.user 加入约球人
-     * @apiSuccess {Long} list.user.id 加入约球人id
-     * @apiSuccess {String} list.user.nickname 加入约球人昵称
-     * @apiSuccess {Object} list.reserve 加入约球预约
-     * @apiSuccess {Long} list.reserve.id 加入约球预约id
-     * @apiSuccess {Object} list.reserve.stadium 约球球场
-     * @apiSuccess {String} list.reserve.stadium.name 约球球场名字
-     * @apiSuccess {Long} list.reserve.startTime 开始时间
-     *
-     * @apiSuccess {Long} list.createDate 记录生成时间
-     *
-     */
-    @RequestMapping(value = "/addOrder")
-    public void addOrder(HttpServletResponse response, Long userId) {
-
-        if (null == userId ) {
-            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
-            return;
-        }
-
         List<Reserve> reserveList = reserveService.findByUserId(userId);
-        List<UserReserve> list = new ArrayList<UserReserve>();
+        List<UserReserve> list2 = new ArrayList<UserReserve>();
         for (Reserve reserve : reserveList) {
             for (UserReserve userReserve : userReserveService.findByReserverId(reserve.getId())){
 
                 userReserve.setContent("user" + "加入了您的约球");
-                list.add(userReserve);
+                list2.add(userReserve);
             }
         }
 
-        Result obj = new Result(true).data(createMap("list",list));
-        String result = JsonUtil.obj2ApiJson(obj,"site","list","insurance");
-        WebUtil.printApi(response, result);
-    }
-
-    /**
-     * 待定 内容状态存不进去
-     *
-     * @api {post} /api/message/myOrder 我参与的约球消息
-     * @apiName message.myOrder
-     * @apiGroup message
-     * @apiParam {Long} userId 用户id <必传 />
-     *
-     * @apiSuccess {Object}  list 约球列表
-     * @apiSuccess {Long} list.id 约球id
-     * @apiSuccess {String} list.content 约球内容
-     * @apiSuccess {Integer} list.status 约球状态（1:组队成功2:组队失败）
-     * @apiSuccess {Object} list.reserve 约球预约
-     * @apiSuccess {Long} list.reserve.id 约球预约id
-     * @apiSuccess {Object} list.reserve.stadium 约球球场
-     * @apiSuccess {String} list.reserve.stadium.name 约球球场名字
-     * @apiSuccess {Long} list.reserve.startTime 开始时间
-     *
-     * @apiSuccess {Long} list.createDate 记录生成时间
-     *
-     */
-    @RequestMapping(value = "/myOrder")
-    public void myOrder(HttpServletResponse response, Long userId) {
-
-        if (null == userId ) {
-            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
-            return;
-        }
-
-        List<UserReserve> list = userReserveService.findByUserId(userId);
-
-
-        for (UserReserve userReserve : list) {
+        List<UserReserve> list3 = userReserveService.findByUserId(userId);
+        for (UserReserve userReserve : list3) {
 
             Reserve reserve = reserveService.getById(userReserve.getReserveId());
             if (reserve.getStatus() == 1 || reserve.getStatus() == 2) {
@@ -192,15 +143,117 @@ public class MessageApi extends CommonController {
                 userReserve.setStatus(reserve.getStatus());
                 userReserveService.update(userReserve);
 
-                Result obj = new Result(true).data(createMap("list",list));
-                String result = JsonUtil.obj2ApiJson(obj,"site","list","insurance");
-                WebUtil.printApi(response, result);
             }else {
                 WebUtil.printApi(response, new Result(true).data("不用显示"));
             }
-
         }
+
+        map.put("list1",list1);
+        map.put("list2",list2);
+        map.put("list3",list3);
+
+        Result obj = new Result(true).data(createMap("list",map));
+        String result = JsonUtil.obj2ApiJson(obj,"set","site","list","insurance","toUser");
+        WebUtil.printApi(response, result);
     }
+
+//
+//    /**
+//     * 完成
+//     *
+//     * @api {post} /api/message/addOrder 加入的约球消息
+//     * @apiName message.addOrder
+//     * @apiGroup message
+//     * @apiParam {Long} userId 用户id <必传 />
+//     *
+//     * @apiSuccess {Object}  list 加入约球消息列表
+//     * @apiSuccess {Long} list.id 加入约球id
+//     * @apiSuccess {String} list.content 约球内容
+//     * @apiSuccess {Object} list.user 加入约球人
+//     * @apiSuccess {Long} list.user.id 加入约球人id
+//     * @apiSuccess {String} list.user.nickname 加入约球人昵称
+//     * @apiSuccess {Object} list.reserve 加入约球预约
+//     * @apiSuccess {Long} list.reserve.id 加入约球预约id
+//     * @apiSuccess {Object} list.reserve.stadium 约球球场
+//     * @apiSuccess {String} list.reserve.stadium.name 约球球场名字
+//     * @apiSuccess {Long} list.reserve.startTime 开始时间
+//     *
+//     * @apiSuccess {Long} list.createDate 记录生成时间
+//     *
+//     */
+//    @RequestMapping(value = "/addOrder")
+//    public void addOrder(HttpServletResponse response, Long userId) {
+//
+//        if (null == userId ) {
+//            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+//            return;
+//        }
+//
+//        List<Reserve> reserveList = reserveService.findByUserId(userId);
+//        List<UserReserve> list = new ArrayList<UserReserve>();
+//        for (Reserve reserve : reserveList) {
+//            for (UserReserve userReserve : userReserveService.findByReserverId(reserve.getId())){
+//
+//                userReserve.setContent("user" + "加入了您的约球");
+//                list.add(userReserve);
+//            }
+//        }
+//
+//        Result obj = new Result(true).data(createMap("list",list));
+//        String result = JsonUtil.obj2ApiJson(obj,"site","list","insurance");
+//        WebUtil.printApi(response, result);
+//    }
+//
+//    /**
+//     * 待定 内容状态存不进去
+//     *
+//     * @api {post} /api/message/myOrder 我参与的约球消息
+//     * @apiName message.myOrder
+//     * @apiGroup message
+//     * @apiParam {Long} userId 用户id <必传 />
+//     *
+//     * @apiSuccess {Object}  list 约球列表
+//     * @apiSuccess {Long} list.id 约球id
+//     * @apiSuccess {String} list.content 约球内容
+//     * @apiSuccess {Integer} list.status 约球状态（1:组队成功2:组队失败）
+//     * @apiSuccess {Object} list.reserve 约球预约
+//     * @apiSuccess {Long} list.reserve.id 约球预约id
+//     * @apiSuccess {Object} list.reserve.stadium 约球球场
+//     * @apiSuccess {String} list.reserve.stadium.name 约球球场名字
+//     * @apiSuccess {Long} list.reserve.startTime 开始时间
+//     *
+//     * @apiSuccess {Long} list.createDate 记录生成时间
+//     *
+//     */
+//    @RequestMapping(value = "/myOrder")
+//    public void myOrder(HttpServletResponse response, Long userId) {
+//
+//        if (null == userId ) {
+//            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+//            return;
+//        }
+//
+//        List<UserReserve> list = userReserveService.findByUserId(userId);
+//
+//
+//        for (UserReserve userReserve : list) {
+//
+//            Reserve reserve = reserveService.getById(userReserve.getReserveId());
+//            if (reserve.getStatus() == 1 || reserve.getStatus() == 2) {
+//
+//                userReserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
+//                userReserve.setStatus(reserve.getStatus());
+//                userReserveService.update(userReserve);
+//
+//                Result obj = new Result(true).data(createMap("list",list));
+//                String result = JsonUtil.obj2ApiJson(obj,"site","list","insurance");
+//                WebUtil.printApi(response, result);
+//            }else {
+//                WebUtil.printApi(response, new Result(true).data("不用显示"));
+//            }
+//
+//        }
+//    }
 
     /**
      * 完成
@@ -331,10 +384,26 @@ public class MessageApi extends CommonController {
      * @apiGroup message
      * @apiParam {Long} userId 用户id <必传/>
      *
-     * @apiSuccess {Object}  list 系统消息列表
-     * @apiSuccess {Long} list.id 消息id
-     * @apiSuccess {String} list.title 消息标题
-     * @apiSuccess {Long} list.createDate 消息时间
+     * @apiSuccess {Object}  list.list1 系统消息列表
+     * @apiSuccess {Long} list.list1.id 消息id
+     * @apiSuccess {String} list.list1.title 消息标题
+     * @apiSuccess {Long} list.list1.createDate 消息时间
+     *
+     * @apiSuccess {Object}  list.list2 消息列表
+     * @apiSuccess {Long} list.list2.id 消息id
+     * @apiSuccess {String} list.list2.content 消息内容
+     * @apiSuccess {Object} list.list2.toUser 好友
+     * @apiSuccess {Long} list.list2.toUser.id 好友id
+     * @apiSuccess {String} list.list2.toUser.nickname 好友昵称
+     * @apiSuccess {Long} list.list2.createDate 消息时间
+     *
+     * @apiSuccess {Object}  list.list3 消息列表
+     * @apiSuccess {Long} list.list3.id 消息id
+     * @apiSuccess {String} list.list3.content 消息内容
+     * @apiSuccess {Object} list.list3.user 好友
+     * @apiSuccess {Long} list.list3.user.id 好友id
+     * @apiSuccess {String} list.list3.user.nickname 好友昵称
+     * @apiSuccess {Long} list.list3.createDate 消息时间
      *
      *
      */
@@ -346,9 +415,33 @@ public class MessageApi extends CommonController {
             return;
         }
 
-        List<SystemMessage> list = systemMessageService.findByToUserId(userId);
+        Map<String, Object> map = new HashMap<String, Object>();
 
-        Result obj = new Result(true).data(createMap("list",list));
+        List<SystemMessage> list1 = systemMessageService.findByToUserId(userId);
+
+        List<MessageAdd> list2 = messageAddService.findByUserId(userId);
+        for (MessageAdd messageAdd : list2) {
+
+            if (messageAdd.getStatus() == 1) {
+                messageAdd.setContent("user" + "同意了您的好友请求");
+            }
+            if (messageAdd.getStatus() == 2) {
+                messageAdd.setContent("user" + "拒绝了您的好友请求");
+            }
+        }
+
+        List<MessageAdd> list3 = messageAddService.findByToUserId(userId);
+        for (MessageAdd messageAdd : list3) {
+
+            messageAdd.setContent("user" + "添加您为好友");
+
+        }
+
+        map.put("list1",list1);
+        map.put("list2",list2);
+        map.put("list3",list3);
+
+        Result obj = new Result(true).data(createMap("list",map));
         String result = JsonUtil.obj2ApiJson(obj,"toUser");
         WebUtil.printApi(response, result);
     }
@@ -380,86 +473,6 @@ public class MessageApi extends CommonController {
         SystemMessage message = systemMessageService.getById(systemId);
 
         Result obj = new Result(true).data(message);
-        String result = JsonUtil.obj2ApiJson(obj,"toUser");
-        WebUtil.printApi(response, result);
-    }
-
-    /**
-     * 完成
-     *
-     * @api {post} /api/message/toAdd 主动添加好友消息
-     * @apiName message.toAdd
-     * @apiGroup message
-     * @apiParam {Long} userId 用户id <必传/>
-     *
-     * @apiSuccess {Object}  list 消息列表
-     * @apiSuccess {Long} list.id 消息id
-     * @apiSuccess {String} list.content 消息内容
-     * @apiSuccess {Object} list.toUser 好友
-     * @apiSuccess {Long} list.toUser.id 好友id
-     * @apiSuccess {String} list.toUser.nickname 好友昵称
-     * @apiSuccess {Long} list.createDate 消息时间
-     *
-     */
-    @RequestMapping(value = "/toAdd")
-    public void toAdd(HttpServletResponse response, Long userId) {
-
-        if (null == userId ) {
-            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
-            return;
-        }
-
-        List<MessageAdd> list = messageAddService.findByUserId(userId);
-
-        for (MessageAdd messageAdd : list) {
-
-            if (messageAdd.getStatus() == 1) {
-                messageAdd.setContent("user" + "同意了您的好友请求");
-            }
-            if (messageAdd.getStatus() == 2) {
-                messageAdd.setContent("user" + "拒绝了您的好友请求");
-            }
-        }
-
-        Result obj = new Result(true).data(createMap("list",list));
-        String result = JsonUtil.obj2ApiJson(obj,"user");
-        WebUtil.printApi(response, result);
-    }
-
-    /**
-     * 完成
-     *
-     * @api {post} /api/message/beAdd 被动添加好友消息
-     * @apiName message.beAdd
-     * @apiGroup message
-     * @apiParam {Long} userId 用户id <必传/>
-     *
-     * @apiSuccess {Object}  list 消息列表
-     * @apiSuccess {Long} list.id 消息id
-     * @apiSuccess {String} list.content 消息内容
-     * @apiSuccess {Object} list.user 好友
-     * @apiSuccess {Long} list.user.id 好友id
-     * @apiSuccess {String} list.user.nickname 好友昵称
-     * @apiSuccess {Long} list.createDate 消息时间
-     *
-     */
-    @RequestMapping(value = "/beAdd")
-    public void beAdd(HttpServletResponse response, Long userId) {
-
-        if (null == userId ) {
-            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
-            return;
-        }
-
-        List<MessageAdd> list = messageAddService.findByToUserId(userId);
-
-        for (MessageAdd messageAdd : list) {
-
-            messageAdd.setContent("user" + "添加您为好友");
-
-        }
-
-        Result obj = new Result(true).data(createMap("list",list));
         String result = JsonUtil.obj2ApiJson(obj,"toUser");
         WebUtil.printApi(response, result);
     }
