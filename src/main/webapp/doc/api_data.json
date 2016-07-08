@@ -7571,6 +7571,48 @@
   },
   {
     "type": "post",
+    "url": "/api/user/report",
+    "title": "问题反馈",
+    "name": "user_report",
+    "group": "user",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Long",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>用户id &lt;必传 /&gt;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "mobile",
+            "description": "<p>联系方式</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "content",
+            "description": "<p>内容</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/UserApi.java",
+    "groupTitle": "user",
+    "sampleRequest": [
+      {
+        "url": "http://4.16.2.59:8080/yqtq_app/api/user/report"
+      }
+    ]
+  },
+  {
+    "type": "post",
     "url": "/api/user/vipLevelMessage",
     "title": "会员等级说明",
     "name": "user_vipLevelMessage",
@@ -7705,14 +7747,14 @@
           },
           {
             "group": "Success 200",
-            "type": "Long",
+            "type": "String",
             "optional": false,
             "field": "girlUsers.bigRace.team1name",
             "description": "<p>球队1的名字</p>"
           },
           {
             "group": "Success 200",
-            "type": "Object",
+            "type": "String",
             "optional": false,
             "field": "girlUsers.bigRace.team2name",
             "description": "<p>球队2的名字</p>"

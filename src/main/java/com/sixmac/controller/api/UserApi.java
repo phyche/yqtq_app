@@ -84,6 +84,9 @@ public class UserApi extends CommonController {
     @Autowired
     private CityService cityService;
 
+    @Autowired
+    private ReportService reportService;
+
     /**
      * 完成
      *
@@ -763,8 +766,8 @@ public class UserApi extends CommonController {
      *
      * @apiSuccess {Object} girlUsers.bigRace 赛事
      * @apiSuccess {Long} girlUsers.bigRace.id 赛事id
-     * @apiSuccess {Long} girlUsers.bigRace.team1name 球队1的名字
-     * @apiSuccess {Object} girlUsers.bigRace.team2name 球队2的名字
+     * @apiSuccess {String} girlUsers.bigRace.team1name 球队1的名字
+     * @apiSuccess {String} girlUsers.bigRace.team2name 球队2的名字
      *
      */
     @RequestMapping(value = "/watchingInfo")
@@ -842,6 +845,35 @@ public class UserApi extends CommonController {
             girlComment.setContent(content);
             girlCommentService.create(girlComment);
         }
+
+        WebUtil.printApi(response, new Result(true));
+    }
+
+    /**
+     * 完成
+     *
+     * @api {post} /api/user/report 问题反馈
+     * @apiName user.report
+     * @apiGroup user
+     * @apiParam {Long} userId 用户id <必传 />
+     * @apiParam {String} mobile 联系方式
+     * @apiParam {String} content 内容
+     *
+     */
+    @RequestMapping(value = "/report")
+    public void report(HttpServletResponse response, Long userId, String mobile, String content) {
+
+        User user = userService.getById(userId);
+
+        Report report = new Report();
+        if (mobile == null) {
+            report.setMobile(user.getMobile());
+        }else {
+            report.setMobile(mobile);
+        }
+        report.setUser(user);
+        report.setContent(content);
+        reportService.create(report);
 
         WebUtil.printApi(response, new Result(true));
     }
