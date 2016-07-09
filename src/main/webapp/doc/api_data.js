@@ -1848,124 +1848,6 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/api/message/addOrder",
-    "title": "加入的约球消息",
-    "name": "message_addOrder",
-    "group": "message",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Long",
-            "optional": false,
-            "field": "userId",
-            "description": "<p>用户id &lt;必传 /&gt;</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "list",
-            "description": "<p>加入约球消息列表</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.id",
-            "description": "<p>加入约球id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "list.content",
-            "description": "<p>约球内容</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "list.user",
-            "description": "<p>加入约球人</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.user.id",
-            "description": "<p>加入约球人id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "list.user.nickname",
-            "description": "<p>加入约球人昵称</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "list.reserve",
-            "description": "<p>加入约球预约</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.reserve.id",
-            "description": "<p>加入约球预约id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "list.reserve.stadium",
-            "description": "<p>约球球场</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "list.reserve.stadium.name",
-            "description": "<p>约球球场名字</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.reserve.startTime",
-            "description": "<p>开始时间</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.createDate",
-            "description": "<p>记录生成时间</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/MessageApi.java",
-    "groupTitle": "message",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/message/addOrder"
-      }
-    ]
-  },
-  {
-    "type": "post",
     "url": "/api/message/beJoinTeam",
     "title": "被邀请加入球队消息",
     "name": "message_beJoinTeam",
@@ -2328,110 +2210,6 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/api/message/myOrder",
-    "title": "我参与的约球消息",
-    "name": "message_myOrder",
-    "group": "message",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Long",
-            "optional": false,
-            "field": "userId",
-            "description": "<p>用户id &lt;必传 /&gt;</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "list",
-            "description": "<p>约球列表</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.id",
-            "description": "<p>约球id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "list.content",
-            "description": "<p>约球内容</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "optional": false,
-            "field": "list.status",
-            "description": "<p>约球状态（1:组队成功2:组队失败）</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "list.reserve",
-            "description": "<p>约球预约</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.reserve.id",
-            "description": "<p>约球预约id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "list.reserve.stadium",
-            "description": "<p>约球球场</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "list.reserve.stadium.name",
-            "description": "<p>约球球场名字</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.reserve.startTime",
-            "description": "<p>开始时间</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.createDate",
-            "description": "<p>记录生成时间</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/MessageApi.java",
-    "groupTitle": "message",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/message/myOrder"
-      }
-    ]
-  },
-  {
-    "type": "post",
     "url": "/api/message/orderBall",
     "title": "好友约球消息",
     "name": "message_orderBall",
@@ -2456,84 +2234,238 @@ define({ "api": [
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "list",
+            "field": "list.list1",
             "description": "<p>好友约球消息列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "list.id",
+            "field": "list.list1.id",
             "description": "<p>消息id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.content",
+            "field": "list.list1.content",
             "description": "<p>消息内容</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "list.user",
+            "field": "list.list1.user",
             "description": "<p>好友</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "list.user.id",
+            "field": "list.list1.user.id",
             "description": "<p>好友d</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.user.nickname",
+            "field": "list.list1.user.nickname",
             "description": "<p>好友昵称</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "list.reserve",
+            "field": "list.list1.reserve",
             "description": "<p>约球</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "list.reserve.id",
+            "field": "list.list1.reserve.id",
             "description": "<p>约球d</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "list.reserve.stadium",
+            "field": "list.list1.reserve.stadium",
             "description": "<p>约球球场</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.reserve.stadium.name",
+            "field": "list.list1.reserve.stadium.name",
             "description": "<p>约球球场名字</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "list.reserve.startTime",
+            "field": "list.list1.reserve.startTime",
             "description": "<p>开始时间</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "messageOrderBallList.createDate",
+            "field": "list.list1.createDate",
+            "description": "<p>记录生成时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list.list2",
+            "description": "<p>加入约球消息列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.list2.id",
+            "description": "<p>加入约球id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.list2.content",
+            "description": "<p>约球内容</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list.list2.user",
+            "description": "<p>加入约球人</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.list2.user.id",
+            "description": "<p>加入约球人id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.list2.user.nickname",
+            "description": "<p>加入约球人昵称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list.list2.reserve",
+            "description": "<p>加入约球预约</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.list2.reserve.id",
+            "description": "<p>加入约球预约id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list.list2.reserve.stadium",
+            "description": "<p>约球球场</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.list2.reserve.stadium.name",
+            "description": "<p>约球球场名字</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.list2.reserve.startTime",
+            "description": "<p>开始时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.list2.createDate",
+            "description": "<p>记录生成时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list.list3",
+            "description": "<p>约球列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.list3.id",
+            "description": "<p>约球id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.list3.content",
+            "description": "<p>约球内容</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "list.list3.status",
+            "description": "<p>约球状态（1:组队成功2:组队失败）</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list.list3.reserve",
+            "description": "<p>约球预约</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.list3.reserve.id",
+            "description": "<p>约球预约id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list.list3.reserve.stadium",
+            "description": "<p>约球球场</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.list3.reserve.stadium.name",
+            "description": "<p>约球球场名字</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.list3.reserve.startTime",
+            "description": "<p>开始时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.list3.createDate",
             "description": "<p>记录生成时间</p>"
           }
         ]
@@ -7491,6 +7423,55 @@ define({ "api": [
   {
     "type": "post",
     "url": "/api/user/provinceList",
+    "title": "查询省份列表",
+    "name": "user_provinceList",
+    "group": "user",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list",
+            "description": "<p>省份列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list.province",
+            "description": "<p>省份</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.province.provinceId",
+            "description": "<p>省份id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.province.province",
+            "description": "<p>省份名字</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/UserApi.java",
+    "groupTitle": "user",
+    "sampleRequest": [
+      {
+        "url": "http://4.16.1.158:8080/yqtq_app/api/user/provinceList"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/api/user/provinceList",
     "title": "查询城市列表",
     "name": "user_provinceList",
     "group": "user",
@@ -7537,55 +7518,6 @@ define({ "api": [
             "optional": false,
             "field": "list.city.city",
             "description": "<p>城市名字</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/UserApi.java",
-    "groupTitle": "user",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/user/provinceList"
-      }
-    ]
-  },
-  {
-    "type": "post",
-    "url": "/api/user/provinceList",
-    "title": "查询省份列表",
-    "name": "user_provinceList",
-    "group": "user",
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "list",
-            "description": "<p>省份列表</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "list.province",
-            "description": "<p>省份</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.province.provinceId",
-            "description": "<p>省份id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "list.province.province",
-            "description": "<p>省份名字</p>"
           }
         ]
       }
