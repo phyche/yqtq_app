@@ -8414,20 +8414,6 @@
             "optional": false,
             "field": "cityId",
             "description": "<p>城市id &lt;必传/&gt;</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Integer",
-            "optional": false,
-            "field": "pageNum",
-            "description": "<p>当前页</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Integer",
-            "optional": false,
-            "field": "pageSize",
-            "description": "<p>每页显示数</p>"
           }
         ]
       }

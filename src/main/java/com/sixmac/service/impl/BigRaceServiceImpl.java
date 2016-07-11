@@ -113,4 +113,9 @@ public class BigRaceServiceImpl implements BigRaceService {
     public BigRace getByStartDate(Long startDate) {
         return bigRaceDao.getByStartDate(startDate);
     }
+
+    @Override
+    public List<BigRace> page(Long cityId, Integer status) {
+        return bigRaceDao.page(cityId, status);
+    }
 }

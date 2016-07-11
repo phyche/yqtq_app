@@ -127,4 +127,9 @@ public class GirlImageServiceImpl implements GirlImageService {
 
         return page;
     }
+
+    @Override
+    public List<GirlImage> page(Integer type, Integer status, Long cityId) {
+        return girlImageDao.page(type, status, cityId);
+    }
 }

@@ -114,7 +114,11 @@ public class StadiumApi extends CommonController {
         for (Stadium stadium : stadiumList) {
 
             stadium.setAreaName(areaService.getByAreaId(stadium.getAreaId()).getArea());
-            stadium.setDistance(Distance.GetDistance(longitude, latitude, stadium.getLongitude(), stadium.getLatitude()));
+            if (longitude == 0.0 && latitude == 0.0) {
+                stadium.setDistance(-1);
+            }else {
+                stadium.setDistance(Distance.GetDistance(longitude, latitude, stadium.getLongitude(), stadium.getLatitude()));
+            }
             if (stadium.getAvater() != null) {
                 if (StringUtils.isNotBlank(stadium.getAvater())) {
                     stadium.setAvater(ConfigUtil.getString("upload.url") + stadium.getAvater());

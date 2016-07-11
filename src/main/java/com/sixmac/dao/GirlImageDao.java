@@ -25,4 +25,8 @@ public interface GirlImageDao extends JpaRepository<GirlImage, Long>, JpaSpecifi
     @Query("select a from GirlImage a where a.type = ?2 and a.girl.id = ?1")
     public List<GirlImage> find(Long girlId, Integer type);
 
+    //根据图片类型、状态、城市筛选图片
+    @Query("select a from GirlImage a where a.type = ?1 and a.girl.status = ?2 and a.girl.cityId = ?3")
+    public List<GirlImage> page(Integer type, Integer status, Long cityId);
+
 }

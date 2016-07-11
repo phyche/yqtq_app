@@ -170,8 +170,6 @@ public class WatchingApi extends CommonController {
      * @apiName watching.sceneList
      * @apiGroup watching
      * @apiParam {Long} cityId 城市id <必传/>
-     * @apiParam {Integer} pageNum 当前页
-     * @apiParam {Integer} pageSize 每页显示数
      *
      * @apiSuccess {Object}  info.bigRace 现场看球列表
      * @apiSuccess {Long} info.bigRace.id 看球id
@@ -194,60 +192,65 @@ public class WatchingApi extends CommonController {
                           Integer pageNum,
                           Integer pageSize) {
 
-        Page<BigRace> page = bigRaceService.page(cityId, 0, pageNum, pageSize);
+        List<BigRace> bigRaceList = bigRaceService.page(cityId, 0);
+       // Page<BigRace> page = bigRaceService.page(cityId, 0, pageNum, pageSize);
 
         Map<String,Object> map = new HashMap<String,Object>();
 
         List<Long> numList = new ArrayList<Long>();
         //NumVo numVo = new NumVo();
-        for (BigRace bigRace : page.getContent()) {
+        for (BigRace bigRace : bigRaceList) {
 
             if (bigRace.getStartDate() - System.currentTimeMillis() > 0) {
                 numList.add(bigRace.getStartDate() - System.currentTimeMillis());
             }
         }
-        Long minnum = numList.get(0);
-        for (int i=0; i<numList.size(); i ++) {
-            if (numList.get(i) >= minnum) {
-                minnum = numList.get(i);
-            }
-        }
 
-        BigRace bigRace = bigRaceService.getByStartDate(minnum + System.currentTimeMillis());
-        if (StringUtils.isNotBlank(bigRace.getAvater1())) {
-            bigRace.setAvater1(ConfigUtil.getString("upload.url") + bigRace.getAvater1());
-        }
-        if (StringUtils.isNotBlank(bigRace.getAvater2())) {
-            bigRace.setAvater2(ConfigUtil.getString("upload.url") + bigRace.getAvater2());
-        }
-
-        List<GirlImage> girlImageList = new ArrayList<GirlImage>();
-        if (bigRace == null) {
-            girlImageList = null;
-        }else {
-            Page<GirlImage> pageGirlImage = girlImageService.page(0, 0, cityId, pageNum, pageSize);
-            List<GirlImage> list = pageGirlImage.getContent();
-            for (GirlImage girlImage : list) {
-                if (StringUtils.isNotBlank(girlImage.getUrl())) {
-                    girlImage.setUrl(ConfigUtil.getString("upload.url") + girlImage.getUrl());
+        if (numList.size() > 0){
+            Long minnum = numList.get(0);
+            for (int i=0; i<numList.size(); i ++) {
+                if (numList.get(i) >= minnum) {
+                    minnum = numList.get(i);
                 }
-                girlImageList.add(girlImage);
             }
-        }
-        for (int i=0; i<girlImageList.size(); i++) {
-            GirlImage girlImage = girlImageList.get(i);
-            if (girlImageList.contains(girlImage)) {
-                girlImageList.remove(i);
+
+            BigRace bigRace = bigRaceService.getByStartDate(minnum + System.currentTimeMillis());
+
+            if (StringUtils.isNotBlank(bigRace.getAvater1())) {
+                bigRace.setAvater1(ConfigUtil.getString("upload.url") + bigRace.getAvater1());
             }
+            if (StringUtils.isNotBlank(bigRace.getAvater2())) {
+                bigRace.setAvater2(ConfigUtil.getString("upload.url") + bigRace.getAvater2());
+            }
+
+            List<GirlImage> girlImageList = new ArrayList<GirlImage>();
+            if (bigRace == null) {
+                girlImageList = null;
+            }else {
+                //Page<GirlImage> pageGirlImage = girlImageService.page(0, 0, cityId, pageNum, pageSize);
+                List<GirlImage> list = girlImageService.page(0, 0, cityId);
+                for (GirlImage girlImage : list) {
+                    if (StringUtils.isNotBlank(girlImage.getUrl())) {
+                        girlImage.setUrl(ConfigUtil.getString("upload.url") + girlImage.getUrl());
+                    }
+                    girlImageList.add(girlImage);
+                }
+            }
+            for (int i=0; i<girlImageList.size(); i++) {
+                GirlImage girlImage = girlImageList.get(i);
+                if (girlImageList.contains(girlImage)) {
+                    girlImageList.remove(i);
+                }
+            }
+
+            map.put("bigRace",bigRace);
+            map.put("girlImageList",girlImageList);
         }
 
-        map.put("bigRace",bigRace);
-        map.put("girlImageList",girlImageList);
         //Map<String, Object> dataMap = APIFactory.fitting(page);
         Result obj = new Result(true).data(createMap("info",map));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
-
     }
 
     /**
