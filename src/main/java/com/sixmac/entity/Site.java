@@ -24,7 +24,7 @@ public class Site extends BaseEntity{
     private Stadium stadium;
 
     @Transient
-    private List<String> list;
+    private List<String> numList;
 
     public String getCode() {
         return code;
@@ -58,11 +58,11 @@ public class Site extends BaseEntity{
         this.stadium = stadium;
     }
 
-    public List<String> getList() {
-        return list;
+    public List<String> getNumList() {
+        return numList;
     }
 
-    public void setList(List<String> list) {
-        this.list = list;
+    public void setNumList(List<String> numList) {
+        this.numList = numList;
     }
 }

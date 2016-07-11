@@ -374,7 +374,7 @@ public class MessageApi extends CommonController {
 
         SystemMessage message = systemMessageService.getById(systemId);
 
-        Result obj = new Result(true).data(message);
+        Result obj = new Result(true).data(createMap("message",message));
         String result = JsonUtil.obj2ApiJson(obj,"toUser");
         WebUtil.printApi(response, result);
     }

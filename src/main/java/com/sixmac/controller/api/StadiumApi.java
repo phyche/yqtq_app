@@ -227,7 +227,7 @@ public class StadiumApi extends CommonController {
             stadium.setAvater(ConfigUtil.getString("upload.url") + stadium.getAvater());
         }
 
-        Result obj = new Result(true).data(stadium);
+        Result obj = new Result(true).data(createMap("stadium",stadium));
         String result = JsonUtil.obj2ApiJson(obj, "type", "description", "siteType", "sodType", "light", "park", "giving");
         WebUtil.printApi(response, result);
     }
@@ -292,7 +292,7 @@ public class StadiumApi extends CommonController {
      * @apiSuccess {Object}  site 场地
      * @apiSuccess {String}  site.code 场地编号
      * @apiSuccess {Integer} site.type 场地类型  N人制
-     * @apiSuccess {String} list 预定字符串 (0：不可预定 1：可预订)
+     * @apiSuccess {String} site.numList 预定字符串 (0：不可预定 1：可预订)
      */
     @RequestMapping(value = "/siteSelect")
     public void siteSelect(HttpServletResponse response, Long time, Long stadiumId) {
@@ -320,13 +320,13 @@ public class StadiumApi extends CommonController {
                     list.add("0");
                 }
             }
-            site.setList(list);
+            site.setNumList(list);
 
         }
 
         map.put("siteList", siteList);
 
-        Result obj = new Result(true).data(map);
+        Result obj = new Result(true).data(createMap("site",map));
         String result = JsonUtil.obj2ApiJson(obj, "stadium");
         WebUtil.printApi(response, result);
     }
@@ -343,16 +343,16 @@ public class StadiumApi extends CommonController {
      * @apiParam {Integer} start 开始时间点  <必传/>
      * @apiParam {Integer} end 结束时间点  <必传/>
      *
-     * @apiSuccess {Object}  siteTime 场地预定
-     * @apiSuccess {Long} siteTime.id 预定id
-     * @apiSuccess {Object} siteTime.site 预定场地
-     * @apiSuccess {String} siteTime.site.code 场地编号
-     * @apiSuccess {String} siteTime.site.type 场地类型
-     * @apiSuccess {Long} siteTime.startTime 开始时间
-     * @apiSuccess {Long} siteTime.endTime 结束时间
-     * @apiSuccess {Object} siteTime.site.stadium 预定球场
-     * @apiSuccess {String} siteTime.site.stadium.name 预定球场名字
-     * @apiSuccess {String} siteTime.area 预定球场地区
+     * @apiSuccess {Object}  siteIfo.siteTime 场地预定
+     * @apiSuccess {Long} siteIfo.siteTime.id 预定id
+     * @apiSuccess {Object} siteIfo.siteTime.site 预定场地
+     * @apiSuccess {String} siteIfo.siteTime.site.code 场地编号
+     * @apiSuccess {String} siteIfo.siteTime.site.type 场地类型
+     * @apiSuccess {Long} siteIfo.siteTime.startTime 开始时间
+     * @apiSuccess {Long} siteIfo.siteTime.endTime 结束时间
+     * @apiSuccess {Object} siteIfo.siteTime.site.stadium 预定球场
+     * @apiSuccess {String} siteIfo.siteTime.site.stadium.name 预定球场名字
+     * @apiSuccess {String} siteIfo.area 预定球场地区
      *
      */
     @RequestMapping(value = "/siteOrder")
@@ -388,8 +388,8 @@ public class StadiumApi extends CommonController {
         map.put("area",area);
         map.put("siteTime", siteTime);
 
-        Result obj = new Result(true).data(map);
-        String result = JsonUtil.obj2ApiJson(obj, "stadium");
+        Result obj = new Result(true).data(createMap("siteIfo",map));
+        String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
 
@@ -428,17 +428,16 @@ public class StadiumApi extends CommonController {
      * @apiParam {Long} insuranceId 保险ID
      * @apiParam {Integer} num 购买保险数
      *
-     * @apiSuccess {Object}  site 场地
-     * @apiSuccess {Object}  sysInsurance 保险
-     * @apiSuccess {Long} sysInsurance.id 保险id
-     * @apiSuccess {Integer} sysInsurance.name 保险名称
-     * @apiSuccess {String} sysInsurance.price 保险金额
-     * @apiSuccess {Integer} siteMoney 场地费
-     * @apiSuccess {Object}  vipNum 会员等级
-     * @apiSuccess {Integer} preferente 会员折扣
-     * @apiSuccess {String} money 总金额
-     * @apiSuccess {Object}  reserve 散客预定（约球）
-     * @apiSuccess {Long} reserve.id 预定id
+     * @apiSuccess {Object}  payInfo.sysInsurance 保险
+     * @apiSuccess {Long} payInfo.sysInsurance.id 保险id
+     * @apiSuccess {Integer} payInfo.sysInsurance.name 保险名称
+     * @apiSuccess {String} payInfo.sysInsurance.price 保险金额
+     * @apiSuccess {Integer} payInfo.siteMoney 场地费
+     * @apiSuccess {Object}  payInfo.vipNum 会员等级
+     * @apiSuccess {Integer} payInfo.preferente 会员折扣
+     * @apiSuccess {String} payInfo.money 总金额
+     * @apiSuccess {Object}  payInfo.reserve 散客预定（约球）
+     * @apiSuccess {Long} payInfo.reserve.id 预定id
      */
     @RequestMapping(value = "/pay")
     public void pay(HttpServletResponse response,
@@ -529,7 +528,7 @@ public class StadiumApi extends CommonController {
         map.put("siteMoney", siteTimeService.getById(siteTimeId).getSite().getPrice());
         map.put("vipNum", userService.getById(userId).getVipNum());
 
-        Result obj = new Result(true).data(map);
+        Result obj = new Result(true).data(createMap("payInfo",map));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
@@ -578,7 +577,7 @@ public class StadiumApi extends CommonController {
             reserve.setPayment(1);
         }
 
-        Result obj = new Result(true).data(order);
+        Result obj = new Result(true).data(createMap("order",order));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
@@ -593,16 +592,16 @@ public class StadiumApi extends CommonController {
      * @apiParam {Long} userId 用户ID <必传/>
      * @apiParam {Long} insuranceId 保险ID
      * @apiParam {Integer} num 购买保险数
-     * @apiSuccess {Object}  site 场地
-     * @apiSuccess {Object}  sysInsurance 保险
-     * @apiSuccess {String} sysInsurance.name 保险名称
-     * @apiSuccess {Double} sysInsurance.price 保险金额
-     * @apiSuccess {Double} siteMoney 场地费
-     * @apiSuccess {Integer}  vipNum 会员等级
-     * @apiSuccess {Double} preferente 会员折扣
-     * @apiSuccess {Double} money 总金额
-     * @apiSuccess {Object}  reserveTeam 球队预定
-     * @apiSuccess {Long} reserveTeam.id 预定id
+     *
+     * @apiSuccess {Object}  payInfo.sysInsurance 保险
+     * @apiSuccess {String} payInfo.sysInsurance.name 保险名称
+     * @apiSuccess {Double} payInfo.sysInsurance.price 保险金额
+     * @apiSuccess {Double} payInfo.siteMoney 场地费
+     * @apiSuccess {Integer}  payInfo.vipNum 会员等级
+     * @apiSuccess {Double} payInfo.preferente 会员折扣
+     * @apiSuccess {Double} payInfo.money 总金额
+     * @apiSuccess {Object}  payInfo.reserveTeam 球队预定
+     * @apiSuccess {Long} payInfo.reserveTeam.id 预定id
      */
     @RequestMapping(value = "/teamPay")
     public void teamPay(HttpServletResponse response,
@@ -675,7 +674,7 @@ public class StadiumApi extends CommonController {
         map.put("siteMoney", siteTimeService.getById(siteTimeId).getSite().getPrice());
         map.put("vipNum", userService.getById(userId).getVipNum());
 
-        Result obj = new Result(true).data(map);
+        Result obj = new Result(true).data(createMap("payInfo",map));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
@@ -714,7 +713,7 @@ public class StadiumApi extends CommonController {
 
         money = order.getPrice();
 
-        Result obj = new Result(true).data(order);
+        Result obj = new Result(true).data(createMap("order",order));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }

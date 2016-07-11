@@ -10,4 +10,6 @@ import org.springframework.data.domain.Page;
 public interface BigRaceService extends ICommonService<BigRace> {
 
     public Page<BigRace> page(Long cityId, Integer status, Integer pageNum, Integer pageSize);
+
+    public BigRace getByStartDate(Long startDate);
 }

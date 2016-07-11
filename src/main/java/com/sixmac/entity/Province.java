@@ -1,6 +1,7 @@
 package com.sixmac.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,14 +22,14 @@ public class Province {
     private String province;
 
     @Transient
-    private List<City> list;
+    private List<City> cityList = new ArrayList<City>();
 
-    public List<City> getList() {
-        return list;
+    public List<City> getCityList() {
+        return cityList;
     }
 
-    public void setList(List<City> list) {
-        this.list = list;
+    public void setCityList(List<City> cityList) {
+        this.cityList = cityList;
     }
 
     public Long getId() {

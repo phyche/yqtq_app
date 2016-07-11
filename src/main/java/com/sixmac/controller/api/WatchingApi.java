@@ -1,6 +1,5 @@
 package com.sixmac.controller.api;
 
-import com.sixmac.common.DataTableFactory;
 import com.sixmac.controller.common.CommonController;
 import com.sixmac.core.ErrorCode;
 import com.sixmac.core.bean.Result;
@@ -125,7 +124,7 @@ public class WatchingApi extends CommonController {
             watchingRace.setAvater(ConfigUtil.getString("upload.url") + watchingRace.getAvater());
         }
 
-        Result obj = new Result(true).data(watchingRace);
+        Result obj = new Result(true).data(createMap("watchingRace", watchingRace));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
@@ -174,20 +173,20 @@ public class WatchingApi extends CommonController {
      * @apiParam {Integer} pageNum 当前页
      * @apiParam {Integer} pageSize 每页显示数
      *
-     * @apiSuccess {Object}  list 现场看球列表
-     * @apiSuccess {Long} list.id 看球id
-     * @apiSuccess {String} list.team1name 球队1名称
-     * @apiSuccess {String} list.avater1 球队1队徽
-     * @apiSuccess {String} list.team2name 球队2名称
-     * @apiSuccess {String} list.avater2 球队2队徽
-     * @apiSuccess {Long} list.startDate 开始时间
-     * @apiSuccess {Object}  list.stadium 现场看球球场
-     * @apiSuccess {String} list.stadium.name 球场名字
+     * @apiSuccess {Object}  info.bigRace 现场看球列表
+     * @apiSuccess {Long} info.bigRace.id 看球id
+     * @apiSuccess {String} info.bigRace.team1name 球队1名称
+     * @apiSuccess {String} info.bigRace.avater1 球队1队徽
+     * @apiSuccess {String} info.bigRace.team2name 球队2名称
+     * @apiSuccess {String} info.bigRace.avater2 球队2队徽
+     * @apiSuccess {Long} info.bigRace.startDate 开始时间
+     * @apiSuccess {Object}  info.bigRace.stadium 现场看球球场
+     * @apiSuccess {String} info.bigRace.stadium.name 球场名字
      *
-     * @apiSuccess {Object}  page 翻页信息
-     * @apiSuccess {Integer} page.totalNum 总记录数
-     * @apiSuccess {Integer} page.totalPage 总页数
-     * @apiSuccess {Integer} page.currentPage 当前页
+     * @apiSuccess {Object} info.girlImageList.girlImage 宝贝
+     * @apiSuccess {Long} info.girlImageList.girlImage.id 宝贝id
+     * @apiSuccess {String} info.girlImageList.girlImage.url 宝贝封面
+     *
      */
     @RequestMapping(value = "/sceneList")
     public void sceneList(HttpServletResponse response,
@@ -197,16 +196,55 @@ public class WatchingApi extends CommonController {
 
         Page<BigRace> page = bigRaceService.page(cityId, 0, pageNum, pageSize);
 
+        Map<String,Object> map = new HashMap<String,Object>();
+
+        List<Long> numList = new ArrayList<Long>();
+        //NumVo numVo = new NumVo();
         for (BigRace bigRace : page.getContent()) {
-            if (StringUtils.isNotBlank(bigRace.getAvater1())) {
-                bigRace.setAvater1(ConfigUtil.getString("upload.url") + bigRace.getAvater1());
-            }
-            if (StringUtils.isNotBlank(bigRace.getAvater2())) {
-                bigRace.setAvater2(ConfigUtil.getString("upload.url") + bigRace.getAvater2());
+
+            if (bigRace.getStartDate() - System.currentTimeMillis() > 0) {
+                numList.add(bigRace.getStartDate() - System.currentTimeMillis());
             }
         }
-        Map<String, Object> dataMap = APIFactory.fitting(page);
-        Result obj = new Result(true).data(dataMap);
+        Long minnum = numList.get(0);
+        for (int i=0; i<numList.size(); i ++) {
+            if (numList.get(i) >= minnum) {
+                minnum = numList.get(i);
+            }
+        }
+
+        BigRace bigRace = bigRaceService.getByStartDate(minnum + System.currentTimeMillis());
+        if (StringUtils.isNotBlank(bigRace.getAvater1())) {
+            bigRace.setAvater1(ConfigUtil.getString("upload.url") + bigRace.getAvater1());
+        }
+        if (StringUtils.isNotBlank(bigRace.getAvater2())) {
+            bigRace.setAvater2(ConfigUtil.getString("upload.url") + bigRace.getAvater2());
+        }
+
+        List<GirlImage> girlImageList = new ArrayList<GirlImage>();
+        if (bigRace == null) {
+            girlImageList = null;
+        }else {
+            Page<GirlImage> pageGirlImage = girlImageService.page(0, 0, cityId, pageNum, pageSize);
+            List<GirlImage> list = pageGirlImage.getContent();
+            for (GirlImage girlImage : list) {
+                if (StringUtils.isNotBlank(girlImage.getUrl())) {
+                    girlImage.setUrl(ConfigUtil.getString("upload.url") + girlImage.getUrl());
+                }
+                girlImageList.add(girlImage);
+            }
+        }
+        for (int i=0; i<girlImageList.size(); i++) {
+            GirlImage girlImage = girlImageList.get(i);
+            if (girlImageList.contains(girlImage)) {
+                girlImageList.remove(i);
+            }
+        }
+
+        map.put("bigRace",bigRace);
+        map.put("girlImageList",girlImageList);
+        //Map<String, Object> dataMap = APIFactory.fitting(page);
+        Result obj = new Result(true).data(createMap("info",map));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
 
@@ -249,7 +287,7 @@ public class WatchingApi extends CommonController {
             bigRace.setAvater2(ConfigUtil.getString("upload.url") + bigRace.getAvater2());
         }
 
-        Result obj = new Result(true).data(bigRace);
+        Result obj = new Result(true).data(createMap("bigRace",bigRace));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
@@ -286,53 +324,6 @@ public class WatchingApi extends CommonController {
         messageWatchingService.create(messageWatching);
 
         WebUtil.printApi(response, new Result(true).data(0));
-    }
-
-    /**
-     * 完成
-     *
-     * @api {post} /api/watching/girlList 现场看球宝贝列表
-     * @apiName watching.girlList
-     * @apiGroup watching
-     * @apiParam {Integer} pageNum 当前页
-     * @apiParam {Integer} pageSize 每页显示数
-     *
-     * @apiSuccess {Object} list.girl 宝贝
-     * @apiSuccess {Long} list.girl.id 宝贝id
-     * @apiSuccess {String} list.url 宝贝封面
-     *
-     * @apiSuccess {Object}  page 翻页信息
-     * @apiSuccess {Integer} page.totalNum 总记录数
-     * @apiSuccess {Integer} page.totalPage 总页数
-     * @apiSuccess {Integer} page.currentPage 当前页
-     *
-     */
-    @RequestMapping(value = "/girlList")
-    public void girlList(HttpServletResponse response,
-                         Integer pageNum,
-                         Integer pageSize) {
-
-        Page<GirlImage> page = girlImageService.page(0, 0, pageNum, pageSize);
-
-        List<GirlImage> list = page.getContent();
-        List<GirlImage> girlImageList = new ArrayList<GirlImage>();
-        for (GirlImage girlImage : list) {
-            /*if (girlImage.getGirl().getStatus() == 1) {
-                if (StringUtils.isNotBlank(girlImage.getUrl())) {
-                    girlImage.setUrl(ConfigUtil.getString("upload.url") + girlImage.getUrl());
-                }
-                girlImageList.add(girlImage);
-            }*/
-            if (StringUtils.isNotBlank(girlImage.getUrl())) {
-                girlImage.setUrl(ConfigUtil.getString("upload.url") + girlImage.getUrl());
-            }
-        }
-
-        Map<String, Object> dataMap = APIFactory.fitting(page);
-        Result obj = new Result(true).data(dataMap);
-        String result = JsonUtil.obj2ApiJson(obj);
-        WebUtil.printApi(response, result);
-
     }
 
     /**
@@ -512,7 +503,7 @@ public class WatchingApi extends CommonController {
 
         map.put("girlUser",girlUser);
 
-        Result obj = new Result(true).data(map);
+        Result obj = new Result(true).data(createMap("girlUser",map));
         String result = JsonUtil.obj2ApiJson(obj,"user","stadium");
         WebUtil.printApi(response, result);
     }
@@ -560,7 +551,7 @@ public class WatchingApi extends CommonController {
         order.setAction(3);
         orderService.create(order);
 
-        Result obj = new Result(true).data(order);
+        Result obj = new Result(true).data(createMap("order",order));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }

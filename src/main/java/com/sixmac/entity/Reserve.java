@@ -55,7 +55,7 @@ public class Reserve extends BaseEntity{
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "reserve_id")
-    private List<UserReserve> list;
+    private List<UserReserve> userReservelist;
 
     @Transient
     private String content;
@@ -88,12 +88,12 @@ public class Reserve extends BaseEntity{
         this.joinCount = joinCount;
     }
 
-    public List<UserReserve> getList() {
-        return list;
+    public List<UserReserve> getUserReservelist() {
+        return userReservelist;
     }
 
-    public void setList(List<UserReserve> list) {
-        this.list = list;
+    public void setUserReservelist(List<UserReserve> userReservelist) {
+        this.userReservelist = userReservelist;
     }
 
     public String getContent() {

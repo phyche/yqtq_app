@@ -97,7 +97,7 @@ public class OrderBallApi extends CommonController {
         List<Reserve> list = page.getContent();
         for (Reserve reserve : list) {
             reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
-            reserve.setJoinCount(reserve.getList() != null ? reserve.getList().size() : 0);
+            reserve.setJoinCount(reserve.getUserReservelist() != null ? reserve.getUserReservelist().size() : 0);
             reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
 
             if (StringUtils.isNotBlank(reserve.getUser().getAvater())) {
@@ -158,7 +158,7 @@ public class OrderBallApi extends CommonController {
 
             Reserve reserve = reserveService.getById(reserveId);
             reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
-            reserve.setJoinCount(reserve.getList() != null ? reserve.getList().size() : 0);
+            reserve.setJoinCount(reserve.getUserReservelist() != null ? reserve.getUserReservelist().size() : 0);
             reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
 
             if (StringUtils.isNotBlank(reserve.getUser().getAvater())) {
@@ -323,7 +323,7 @@ public class OrderBallApi extends CommonController {
         }
         for (Reserve reserve : reserveList) {
             reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
-            reserve.setJoinCount(reserve.getList() != null ? reserve.getList().size() : 0);
+            reserve.setJoinCount(reserve.getUserReservelist() != null ? reserve.getUserReservelist().size() : 0);
             reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
 
             if (StringUtils.isNotBlank(reserve.getUser().getAvater())) {
@@ -485,15 +485,15 @@ public class OrderBallApi extends CommonController {
      * @apiGroup orderBall
      * @apiParam {Long} userId 球友ID <必传 />
      * @apiParam {Long} raceId 赛事ID <必传 />
-     * @apiSuccess {Object}  watchBallVo 球员赛事
-     * @apiSuccess {String} watchBallVo.homeTeamName 主队队名
-     * @apiSuccess {String} watchBallVo.homeTeamAvater 主队队徽
-     * @apiSuccess {String} watchBallVo.vTeamName 客队队名
-     * @apiSuccess {String} watchBallVo.vTeamAvater 客队队徽
-     * @apiSuccess {Integer} watchBallVo.status 赛事状态 （0：等待同意，1：约赛成功，2：约赛失败）
-     * @apiSuccess {String} watchBallVo.stadiumName 球场名称
-     * @apiSuccess {Long} watchBallVo.startTime 开始时间
-     * @apiSuccess {String} mobile 手机号
+     * @apiSuccess {Object}  race.watchBallVo 球员赛事
+     * @apiSuccess {String} race.watchBallVo.homeTeamName 主队队名
+     * @apiSuccess {String} race.watchBallVo.homeTeamAvater 主队队徽
+     * @apiSuccess {String} race.watchBallVo.vTeamName 客队队名
+     * @apiSuccess {String} race.watchBallVo.vTeamAvater 客队队徽
+     * @apiSuccess {Integer} race.watchBallVo.status 赛事状态 （0：等待同意，1：约赛成功，2：约赛失败）
+     * @apiSuccess {String} race.watchBallVo.stadiumName 球场名称
+     * @apiSuccess {Long} race.watchBallVo.startTime 开始时间
+     * @apiSuccess {String} race.mobile 手机号
      */
     @RequestMapping(value = "/raceInfo")
     public void raceInfo(HttpServletResponse response, Long userId, Long raceId, String mobile) {
@@ -539,7 +539,7 @@ public class OrderBallApi extends CommonController {
         map.put("watchBallVo", watchBallVo);
         map.put("mobile", mobile);
 
-        Result obj = new Result(true).data(map);
+        Result obj = new Result(true).data(createMap("race",map));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }

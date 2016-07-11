@@ -99,7 +99,7 @@ public class PlayIndexApi extends CommonController {
                     }
 
                     reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
-                    reserve.setJoinCount(reserve.getList() != null ? reserve.getList().size() : 0);
+                    reserve.setJoinCount(reserve.getUserReservelist() != null ? reserve.getUserReservelist().size() : 0);
                     reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
                 }
             }
@@ -111,7 +111,7 @@ public class PlayIndexApi extends CommonController {
                     }
 
                     reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
-                    reserve.setJoinCount(reserve.getList() != null ? reserve.getList().size() : 0);
+                    reserve.setJoinCount(reserve.getUserReservelist() != null ? reserve.getUserReservelist().size() : 0);
                     reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
                 }
             }
@@ -123,7 +123,7 @@ public class PlayIndexApi extends CommonController {
                     }
 
                     reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
-                    reserve.setJoinCount(reserve.getList() != null ? reserve.getList().size() : 0);
+                    reserve.setJoinCount(reserve.getUserReservelist() != null ? reserve.getUserReservelist().size() : 0);
                     reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
                 }
             }
@@ -131,7 +131,7 @@ public class PlayIndexApi extends CommonController {
             //map.put("list", list);
 
             Result obj = new Result(true).data(createMap("list",list));
-            String result = JsonUtil.obj2ApiJson(obj,"user","stadium","site");
+            String result = JsonUtil.obj2ApiJson(obj,"site","userReservelist");
             WebUtil.printApi(response, result);
         }
     }
@@ -143,9 +143,9 @@ public class PlayIndexApi extends CommonController {
      * @apiName playIndex.notice
      * @apiGroup playIndex
      *
-     * @apiSuccess {Object}  list 约球列表
-     * @apiSuccess {Long} list.id 约球id
-     * @apiSuccess {String} list.content 约球内容
+     * @apiSuccess {Object}  reserve 约球列表
+     * @apiSuccess {Long} reserve.id 约球id
+     * @apiSuccess {String} reserve.content 约球内容
      *
      */
     @RequestMapping(value = "/notice")
@@ -155,7 +155,7 @@ public class PlayIndexApi extends CommonController {
         Reserve reserve = list.get(list.size()-1);
         reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
 
-        Result obj = new Result(true).data(reserve);
+        Result obj = new Result(true).data(createMap("reserve",reserve));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
@@ -345,7 +345,7 @@ public class PlayIndexApi extends CommonController {
             list.add(teamRace.getHomeTeam());
         }
 
-        Result obj = new Result(true).data(list);
+        Result obj = new Result(true).data(createMap("list",list));
         String result = JsonUtil.obj2ApiJson(obj,"leaderUser");
         WebUtil.printApi(response, result);
     }

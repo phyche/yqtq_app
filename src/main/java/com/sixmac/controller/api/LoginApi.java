@@ -93,12 +93,12 @@ public class LoginApi extends CommonController {
             user.setAvater(ConfigUtil.getString("upload.url") + user.getAvater());
         }
         if (!user.getPassword().equals(password)) {
-            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0027));
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0019));
             return;
         }
 
         if (user.getStatus() == 1) {
-            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0028));
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0013));
         }
 
         Result obj = new Result(true).data(createMap("userInfo", user));

@@ -1,8 +1,13 @@
 package com.sixmac.controller.api;
 
+
+import com.sixmac.controller.common.CommonController;
 import com.sixmac.core.ErrorCode;
 import com.sixmac.core.bean.Result;
-import com.sixmac.entity.*;
+import com.sixmac.entity.EventInformation;
+import com.sixmac.entity.HostJoin;
+import com.sixmac.entity.HostRace;
+import com.sixmac.entity.Team;
 import com.sixmac.service.*;
 import com.sixmac.utils.ConfigUtil;
 import com.sixmac.utils.JsonUtil;
@@ -16,13 +21,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * Created by Administrator on 2016/5/25 0025.
  */
 @Controller
 @RequestMapping(value = "api/hostRace")
-public class HostRaceApi {
+public class HostRaceApi extends CommonController {
 
     @Autowired
     private HostRaceService hostRaceService;
@@ -68,7 +72,7 @@ public class HostRaceApi {
             hostRace.setAvater(ConfigUtil.getString("upload.url") + hostRace.getAvater());
         }
 
-        Result obj = new Result(true).data(hostRace);
+        Result obj = new Result(true).data(createMap("hostRace",hostRace));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
@@ -104,7 +108,7 @@ public class HostRaceApi {
             hostRace.setAvater(ConfigUtil.getString("upload.url") + hostRace.getAvater());
         }
 
-        Result obj = new Result(true).data(hostRace);
+        Result obj = new Result(true).data(createMap("hostRace",hostRace));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
@@ -151,7 +155,7 @@ public class HostRaceApi {
             list.add(hostJoin.getTeam());
         }
 
-        Result obj = new Result(true).data(list);
+        Result obj = new Result(true).data(createMap("list",list));
         String result = JsonUtil.obj2ApiJson(obj,"leaderUser","list","slogan","avater","declareNum","address");
         WebUtil.printApi(response, result);
     }
@@ -177,7 +181,7 @@ public class HostRaceApi {
 
         EventInformation eventInformation = eventInformationService.findByRaceId(raceId);
 
-        Result obj = new Result(true).data(eventInformation);
+        Result obj = new Result(true).data(createMap("eventInformation",eventInformation));
         String result = JsonUtil.obj2ApiJson(obj,"hostRace");
         WebUtil.printApi(response, result);
     }

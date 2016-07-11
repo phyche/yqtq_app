@@ -34,7 +34,7 @@ public class BigRace extends BaseEntity{
     @JoinColumn(name = "stadium_id")
     private Stadium stadium;
 
-    @Transient
+    @Column(name = "status")
     private Integer status;
 
     public String getName() {

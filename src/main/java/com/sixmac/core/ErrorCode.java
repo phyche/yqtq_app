@@ -83,9 +83,5 @@ public class ErrorCode {
     // 无效的优惠券
     public static final String ERROR_CODE_0026 = "error_0026";
 
-    // 密码不正确
-    public static final String ERROR_CODE_0027 = "error_0027";
 
-    // 用户被封禁
-    public static final String ERROR_CODE_0028 = "error_0028";
 }

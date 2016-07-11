@@ -276,7 +276,7 @@ public class UserApi extends CommonController {
             user.setAvater(ConfigUtil.getString("upload.url") + user.getAvater());
         }
 
-        Result obj = new Result(true).data(user);
+        Result obj = new Result(true).data(createMap("user",user));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
@@ -291,12 +291,22 @@ public class UserApi extends CommonController {
      * @apiSuccess {Object} list.province 省份
      * @apiSuccess {Long} list.province.provinceId 省份id
      * @apiSuccess {String} list.province.province 省份名字
+     * @apiSuccess {Object} list.province.cityList 城市列表
+     * @apiSuccess {Object} list.province.cityList.city 城市
+     * @apiSuccess {Long} list.province.cityList.city.id 城市id
+     * @apiSuccess {String} list.province.cityList.city.city 城市名字
      *
      */
     @RequestMapping(value = "/provinceList")
     public void provinceList(HttpServletResponse response) {
 
         List<Province> list = provinceService.findAll();
+        for (Province province : list) {
+            List<City> cityList = cityService.getByProvinceId(province.getProvinceId());
+            for (City city : cityList) {
+                province.getCityList().add(city);
+            }
+        }
 
         Result obj = new Result(true).data(createMap("list",list));
         String result = JsonUtil.obj2ApiJson(obj);
@@ -306,8 +316,8 @@ public class UserApi extends CommonController {
 
     /**
      *
-     * @api {post} /api/user/provinceList 查询城市列表
-     * @apiName user.provinceList
+     * @api {post} /api/user/cityList 查询城市列表
+     * @apiName user.cityList
      * @apiGroup user
      * @apiParam {Long} provinceId 省份id <必传 />
      *
@@ -427,7 +437,7 @@ public class UserApi extends CommonController {
 
         userService.update(user);
 
-        Result obj = new Result(true).data(user);
+        Result obj = new Result(true).data(createMap("user", user));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
@@ -441,10 +451,10 @@ public class UserApi extends CommonController {
      * @apiParam {Long} userId 用户id <必传 />
      * @apiParam {Integer} num 会员时长（1：一年 2：两年 3：三年 默认为1）
      *
-     * @apiSuccess {String} status 会员状态
-     * @apiSuccess {Integer} level 会员等级
-     * @apiSuccess {String} endDate 会员时间
-     * @apiSuccess {Double} price 价格
+     * @apiSuccess {String} vip.status 会员状态
+     * @apiSuccess {Integer} vip.level 会员等级
+     * @apiSuccess {String} vip.endDate 会员时间
+     * @apiSuccess {Double} vip.price 价格
      *
      */
     @RequestMapping(value = "/operation")
@@ -488,7 +498,7 @@ public class UserApi extends CommonController {
         map.put("price",price);
         map.put("status",status);
 
-        Result obj = new Result(true).data(map);
+        Result obj = new Result(true).data(createMap("vip",map));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
@@ -540,7 +550,7 @@ public class UserApi extends CommonController {
         order.setSn(sn);
         orderService.create(order);
 
-        Result obj = new Result(true).data(order);
+        Result obj = new Result(true).data(createMap("order", order));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
@@ -791,7 +801,7 @@ public class UserApi extends CommonController {
             }
         }
 
-        Result obj = new Result(true).data(girlUsers);
+        Result obj = new Result(true).data(createMap("girlUsers", girlUsers));
         String result = JsonUtil.obj2ApiJson(obj,"user","stadium");
         WebUtil.printApi(response, result);
     }

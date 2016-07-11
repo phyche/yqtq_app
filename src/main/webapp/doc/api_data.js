@@ -3882,63 +3882,63 @@ define({ "api": [
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "watchBallVo",
+            "field": "race.watchBallVo",
             "description": "<p>球员赛事</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "watchBallVo.homeTeamName",
+            "field": "race.watchBallVo.homeTeamName",
             "description": "<p>主队队名</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "watchBallVo.homeTeamAvater",
+            "field": "race.watchBallVo.homeTeamAvater",
             "description": "<p>主队队徽</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "watchBallVo.vTeamName",
+            "field": "race.watchBallVo.vTeamName",
             "description": "<p>客队队名</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "watchBallVo.vTeamAvater",
+            "field": "race.watchBallVo.vTeamAvater",
             "description": "<p>客队队徽</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "watchBallVo.status",
+            "field": "race.watchBallVo.status",
             "description": "<p>赛事状态 （0：等待同意，1：约赛成功，2：约赛失败）</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "watchBallVo.stadiumName",
+            "field": "race.watchBallVo.stadiumName",
             "description": "<p>球场名称</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "watchBallVo.startTime",
+            "field": "race.watchBallVo.startTime",
             "description": "<p>开始时间</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "mobile",
+            "field": "race.mobile",
             "description": "<p>手机号</p>"
           }
         ]
@@ -4446,21 +4446,21 @@ define({ "api": [
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "list",
+            "field": "reserve",
             "description": "<p>约球列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "list.id",
+            "field": "reserve.id",
             "description": "<p>约球id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.content",
+            "field": "reserve.content",
             "description": "<p>约球内容</p>"
           }
         ]
@@ -5160,77 +5160,70 @@ define({ "api": [
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "site",
-            "description": "<p>场地</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "sysInsurance",
+            "field": "payInfo.sysInsurance",
             "description": "<p>保险</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "sysInsurance.id",
+            "field": "payInfo.sysInsurance.id",
             "description": "<p>保险id</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "sysInsurance.name",
+            "field": "payInfo.sysInsurance.name",
             "description": "<p>保险名称</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "sysInsurance.price",
+            "field": "payInfo.sysInsurance.price",
             "description": "<p>保险金额</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "siteMoney",
+            "field": "payInfo.siteMoney",
             "description": "<p>场地费</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "vipNum",
+            "field": "payInfo.vipNum",
             "description": "<p>会员等级</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "preferente",
+            "field": "payInfo.preferente",
             "description": "<p>会员折扣</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "money",
+            "field": "payInfo.money",
             "description": "<p>总金额</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "reserve",
+            "field": "payInfo.reserve",
             "description": "<p>散客预定（约球）</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "reserve.id",
+            "field": "payInfo.reserve.id",
             "description": "<p>预定id</p>"
           }
         ]
@@ -5465,70 +5458,70 @@ define({ "api": [
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "siteTime",
+            "field": "siteIfo.siteTime",
             "description": "<p>场地预定</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "siteTime.id",
+            "field": "siteIfo.siteTime.id",
             "description": "<p>预定id</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "siteTime.site",
+            "field": "siteIfo.siteTime.site",
             "description": "<p>预定场地</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "siteTime.site.code",
+            "field": "siteIfo.siteTime.site.code",
             "description": "<p>场地编号</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "siteTime.site.type",
+            "field": "siteIfo.siteTime.site.type",
             "description": "<p>场地类型</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "siteTime.startTime",
+            "field": "siteIfo.siteTime.startTime",
             "description": "<p>开始时间</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "siteTime.endTime",
+            "field": "siteIfo.siteTime.endTime",
             "description": "<p>结束时间</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "siteTime.site.stadium",
+            "field": "siteIfo.siteTime.site.stadium",
             "description": "<p>预定球场</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "siteTime.site.stadium.name",
+            "field": "siteIfo.siteTime.site.stadium.name",
             "description": "<p>预定球场名字</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "siteTime.area",
+            "field": "siteIfo.area",
             "description": "<p>预定球场地区</p>"
           }
         ]
@@ -5597,7 +5590,7 @@ define({ "api": [
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list",
+            "field": "site.numList",
             "description": "<p>预定字符串 (0：不可预定 1：可预订)</p>"
           }
         ]
@@ -5659,70 +5652,63 @@ define({ "api": [
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "site",
-            "description": "<p>场地</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "sysInsurance",
+            "field": "payInfo.sysInsurance",
             "description": "<p>保险</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "sysInsurance.name",
+            "field": "payInfo.sysInsurance.name",
             "description": "<p>保险名称</p>"
           },
           {
             "group": "Success 200",
             "type": "Double",
             "optional": false,
-            "field": "sysInsurance.price",
+            "field": "payInfo.sysInsurance.price",
             "description": "<p>保险金额</p>"
           },
           {
             "group": "Success 200",
             "type": "Double",
             "optional": false,
-            "field": "siteMoney",
+            "field": "payInfo.siteMoney",
             "description": "<p>场地费</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "vipNum",
+            "field": "payInfo.vipNum",
             "description": "<p>会员等级</p>"
           },
           {
             "group": "Success 200",
             "type": "Double",
             "optional": false,
-            "field": "preferente",
+            "field": "payInfo.preferente",
             "description": "<p>会员折扣</p>"
           },
           {
             "group": "Success 200",
             "type": "Double",
             "optional": false,
-            "field": "money",
+            "field": "payInfo.money",
             "description": "<p>总金额</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "reserveTeam",
+            "field": "payInfo.reserveTeam",
             "description": "<p>球队预定</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "reserveTeam.id",
+            "field": "payInfo.reserveTeam.id",
             "description": "<p>预定id</p>"
           }
         ]
@@ -6483,6 +6469,68 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "/api/user/cityList",
+    "title": "查询城市列表",
+    "name": "user_cityList",
+    "group": "user",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Long",
+            "optional": false,
+            "field": "provinceId",
+            "description": "<p>省份id &lt;必传 /&gt;</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list",
+            "description": "<p>城市列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list.city",
+            "description": "<p>城市</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.city.id",
+            "description": "<p>城市id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.city.city",
+            "description": "<p>城市名字</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/UserApi.java",
+    "groupTitle": "user",
+    "sampleRequest": [
+      {
+        "url": "http://4.16.1.158:8080/yqtq_app/api/user/cityList"
+      }
+    ]
+  },
+  {
+    "type": "post",
     "url": "/api/user/comment",
     "title": "我的看球评价",
     "name": "user_comment",
@@ -7079,28 +7127,28 @@ define({ "api": [
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "status",
+            "field": "vip.status",
             "description": "<p>会员状态</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "level",
+            "field": "vip.level",
             "description": "<p>会员等级</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "endDate",
+            "field": "vip.endDate",
             "description": "<p>会员时间</p>"
           },
           {
             "group": "Success 200",
             "type": "Double",
             "optional": false,
-            "field": "price",
+            "field": "vip.price",
             "description": "<p>价格</p>"
           }
         ]
@@ -7456,67 +7504,33 @@ define({ "api": [
             "optional": false,
             "field": "list.province.province",
             "description": "<p>省份名字</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/UserApi.java",
-    "groupTitle": "user",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/user/provinceList"
-      }
-    ]
-  },
-  {
-    "type": "post",
-    "url": "/api/user/provinceList",
-    "title": "查询城市列表",
-    "name": "user_provinceList",
-    "group": "user",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Long",
-            "optional": false,
-            "field": "provinceId",
-            "description": "<p>省份id &lt;必传 /&gt;</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
+          },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "list",
+            "field": "list.province.cityList",
             "description": "<p>城市列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "list.city",
+            "field": "list.province.cityList.city",
             "description": "<p>城市</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "list.city.id",
+            "field": "list.province.cityList.city.id",
             "description": "<p>城市id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.city.city",
+            "field": "list.province.cityList.city.city",
             "description": "<p>城市名字</p>"
           }
         ]
@@ -8068,96 +8082,6 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/api/watching/girlList",
-    "title": "现场看球宝贝列表",
-    "name": "watching_girlList",
-    "group": "watching",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Integer",
-            "optional": false,
-            "field": "pageNum",
-            "description": "<p>当前页</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Integer",
-            "optional": false,
-            "field": "pageSize",
-            "description": "<p>每页显示数</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "list.girl",
-            "description": "<p>宝贝</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.girl.id",
-            "description": "<p>宝贝id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "list.url",
-            "description": "<p>宝贝封面</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "page",
-            "description": "<p>翻页信息</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "optional": false,
-            "field": "page.totalNum",
-            "description": "<p>总记录数</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "optional": false,
-            "field": "page.totalPage",
-            "description": "<p>总页数</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "optional": false,
-            "field": "page.currentPage",
-            "description": "<p>当前页</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/WatchingApi.java",
-    "groupTitle": "watching",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/watching/girlList"
-      }
-    ]
-  },
-  {
-    "type": "post",
     "url": "/api/watching/information",
     "title": "足球宝贝服务说明",
     "name": "watching_information",
@@ -8515,92 +8439,85 @@ define({ "api": [
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "list",
+            "field": "info.bigRace",
             "description": "<p>现场看球列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "list.id",
+            "field": "info.bigRace.id",
             "description": "<p>看球id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.team1name",
+            "field": "info.bigRace.team1name",
             "description": "<p>球队1名称</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.avater1",
+            "field": "info.bigRace.avater1",
             "description": "<p>球队1队徽</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.team2name",
+            "field": "info.bigRace.team2name",
             "description": "<p>球队2名称</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.avater2",
+            "field": "info.bigRace.avater2",
             "description": "<p>球队2队徽</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "list.startDate",
+            "field": "info.bigRace.startDate",
             "description": "<p>开始时间</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "list.stadium",
+            "field": "info.bigRace.stadium",
             "description": "<p>现场看球球场</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.stadium.name",
+            "field": "info.bigRace.stadium.name",
             "description": "<p>球场名字</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "page",
-            "description": "<p>翻页信息</p>"
+            "field": "info.girlImageList.girlImage",
+            "description": "<p>宝贝</p>"
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
-            "field": "page.totalNum",
-            "description": "<p>总记录数</p>"
+            "field": "info.girlImageList.girlImage.id",
+            "description": "<p>宝贝id</p>"
           },
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "String",
             "optional": false,
-            "field": "page.totalPage",
-            "description": "<p>总页数</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "optional": false,
-            "field": "page.currentPage",
-            "description": "<p>当前页</p>"
+            "field": "info.girlImageList.girlImage.url",
+            "description": "<p>宝贝封面</p>"
           }
         ]
       }

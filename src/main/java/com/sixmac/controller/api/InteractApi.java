@@ -181,8 +181,6 @@ public class InteractApi extends CommonController {
             WebUtil.printApi(response, new Result(false).msg(ErrorCode.ERROR_CODE_0001));
         }
 
-
-
         WebUtil.printApi(response, new Result(true));
     }
 
@@ -426,7 +424,7 @@ public class InteractApi extends CommonController {
             information.setAvater(ConfigUtil.getString("upload.url") + information.getAvater());
         }
 
-        Result obj = new Result(true).data(information);
+        Result obj = new Result(true).data(createMap("information",information));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
