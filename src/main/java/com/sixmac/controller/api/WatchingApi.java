@@ -58,6 +58,9 @@ public class WatchingApi extends CommonController {
     @Autowired
     private MessageWatchingService messageWatchingService;
 
+    @Autowired
+    private VipLevelService vipLevelService;
+
     /**
      * 完成
      *
@@ -549,7 +552,13 @@ public class WatchingApi extends CommonController {
         Order order = new Order();
         order.setUser(girlUser.getUser());
         order.setStadiumname(girlUser.getStadium().getName());
-        order.setPrice(girlUser.getPrice() + girlUser.getTip());
+
+        VipLevel vipLevel = vipLevelService.findBylevel(girlUser.getUser().getVipNum());
+        if (girlUser.getUser().getVipNum() != 0) {
+            order.setPrice((girlUser.getPrice() + girlUser.getTip()) * vipLevel.getPreferente());
+        }else {
+            order.setPrice(girlUser.getPrice() + girlUser.getTip());
+        }
         order.setSn(sn);
         order.setAction(3);
         orderService.create(order);

@@ -1,12 +1,14 @@
 package com.sixmac.service.impl;
 
 import com.sixmac.core.Constant;
-import com.sixmac.dao.CityDao;
-import com.sixmac.dao.UserDao;
-import com.sixmac.dao.UserOtherDao;
+import com.sixmac.dao.*;
+import com.sixmac.entity.SysExperience;
 import com.sixmac.entity.User;
 import com.sixmac.entity.UserOther;
+import com.sixmac.entity.VipLevel;
+import com.sixmac.service.SysExperienceService;
 import com.sixmac.service.UserService;
+import com.sixmac.service.VipLevelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,6 +33,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private CityDao cityDao;
+
+    @Autowired
+    private VipLevelDao vipLevelDao;
 
     @Override
     public List<User> findAll() {
@@ -111,6 +116,18 @@ public class UserServiceImpl implements UserService {
         }
 
         return user;
+    }
+
+    @Override
+    public void changeIntegral(User userInfo) {
+
+        List<VipLevel> levelList = vipLevelDao.findAll();
+        for (VipLevel vipLevel : levelList) {
+            if (userInfo.getExperience() < vipLevel.getExperience()) {
+                userInfo.setVipNum(vipLevel.getLevel() - 1);
+                userDao.save(userInfo);
+            }
+        }
     }
 
 }

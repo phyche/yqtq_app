@@ -7,8 +7,10 @@ import com.sixmac.core.bean.Result;
 import com.sixmac.entity.GirlServiceMessage;
 import com.sixmac.entity.ServiceMessage;
 import com.sixmac.entity.User;
+import com.sixmac.entity.UserVip;
 import com.sixmac.service.ServiceMessageService;
 import com.sixmac.service.UserService;
+import com.sixmac.service.UserVipService;
 import com.sixmac.utils.CommonUtils;
 import com.sixmac.utils.ConfigUtil;
 import com.sixmac.utils.JsonUtil;
@@ -32,6 +34,9 @@ public class LoginApi extends CommonController {
 
     @Autowired
     private ServiceMessageService serviceMessageService;
+
+    @Autowired
+    private UserVipService userVipService;
 
     private static Map<String, String> codeMap = new HashMap<String, String>();
 
@@ -89,6 +94,13 @@ public class LoginApi extends CommonController {
             return;
         }
         User user = userService.findByMobile(mobile);
+
+        UserVip userVip = userVipService.findByUserId(user.getId());
+        if (userVip.getEndDate() < System.currentTimeMillis()) {
+            user.setVipNum(0);
+            user.setExperience(0);
+            userService.update(user);
+        }
         if (StringUtils.isNotBlank(user.getAvater())) {
             user.setAvater(ConfigUtil.getString("upload.url") + user.getAvater());
         }

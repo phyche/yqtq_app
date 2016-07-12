@@ -60,25 +60,14 @@ public class Reserve extends BaseEntity{
     @Transient
     private String content;
 
-    @Transient
+    @Column(name = "joinCount")
     private Integer joinCount;
-
-    @Transient
-    private Integer lackCount;
 
     @Transient
     private Double avePrice;
 
     @Transient
     private Double sumPrice;
-
-    public Integer getLackCount() {
-        return lackCount;
-    }
-
-    public void setLackCount(Integer lackCount) {
-        this.lackCount = lackCount;
-    }
 
     public Integer getJoinCount() {
         return joinCount;

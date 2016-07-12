@@ -19,7 +19,7 @@ public interface UserReserveDao extends JpaRepository<UserReserve, Long>, JpaSpe
     public List<UserReserve> findByReserverId(Long reserveId);
 
     //根据用户id查询所有的预定
-    @Query("select a from UserReserve a where a.user.id = ?1 ")
+    @Query("select a from UserReserve a where a.user.id = ?1 order by a.id desc")
     public List<UserReserve> findByUserId(Long userId);
 
 }

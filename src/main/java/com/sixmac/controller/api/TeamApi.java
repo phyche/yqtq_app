@@ -52,6 +52,9 @@ public class TeamApi extends CommonController {
     @Autowired
     private MessageTeamService messageTeamService;
 
+    @Autowired
+    private TeamMemberService teamMemberService;
+
 
     /**
      * 完成
@@ -68,8 +71,8 @@ public class TeamApi extends CommonController {
      * @apiSuccess {String} list.name 球队名称
      * @apiSuccess {String} list.avater 球队队徽
      * @apiSuccess {Integer} list.count 球队人数
-     * @apiSuccess {String} list.provinceName 球队省份名字
-     * @apiSuccess {String} list.cityName 球队城市名字
+     * @apiSuccess {String} list.address 球队地址
+
      * @apiSuccess {Integer} list.num 球队场次
      *
      *
@@ -138,7 +141,6 @@ public class TeamApi extends CommonController {
         }
 
         Map<String, Object> map = new HashMap<String, Object>();
-
         Integer sum = 0;
         double sumAge = 0;
         double sumWeight = 0.0;
@@ -150,24 +152,40 @@ public class TeamApi extends CommonController {
         }
         team.getLeaderUser().setAvater(team.getLeaderUser().getAvater());
 
-        for (sum = 0; sum < team.getList().size(); sum++) {
-            sumAge += team.getList().get(sum).getAge();
-            sumHeight += team.getList().get(sum).getHeight();
-            sumWeight += team.getList().get(sum).getWeight();
-        }
-
-        team.setAveAge(sumAge / team.getList().size());
-        team.setAveHeight(sumHeight / team.getList().size());
-        team.setAveWeight(sumWeight / team.getList().size());
-
-        //球员列表
-        List<User> userList = team.getList();
-        for (User user : userList) {
-            if (StringUtils.isNotBlank(user.getAvater())) {
-                user.setAvater(ConfigUtil.getString("upload.url") + user.getAvater());
+        List<User> userList = new ArrayList<User>();
+        if (teamMemberService.findByTeamId(teamId).size() != 0) {
+            for (sum = 0; sum < team.getList().size(); sum++) {
+                sumAge += team.getList().get(sum).getAge();
+                sumHeight += team.getList().get(sum).getHeight();
+                sumWeight += team.getList().get(sum).getWeight();
             }
+
+            sumAge = sumAge + teamService.getById(teamId).getLeaderUser().getAge();
+            sumHeight = sumHeight + teamService.getById(teamId).getLeaderUser().getHeight();
+            sumWeight = sumWeight + teamService.getById(teamId).getLeaderUser().getWeight();
+
+            team.setAveAge(sumAge / (team.getList().size()+1));
+            team.setAveHeight(sumHeight / (team.getList().size()+1));
+            team.setAveWeight(sumWeight / (team.getList().size()+1));
+
+            //球员列表
+            userList = team.getList();
+            for (User user : userList) {
+                if (StringUtils.isNotBlank(user.getAvater())) {
+                    user.setAvater(ConfigUtil.getString("upload.url") + user.getAvater());
+                }
+            }
+            team.setCount(userList.size());
+        }else {
+            sumAge = sumAge + teamService.getById(teamId).getLeaderUser().getAge();
+            sumHeight = sumHeight + teamService.getById(teamId).getLeaderUser().getHeight();
+            sumWeight = sumWeight + teamService.getById(teamId).getLeaderUser().getWeight();
+
+            team.setAveAge(sumAge);
+            team.setAveHeight(sumHeight);
+            team.setAveWeight(sumWeight);
         }
-        team.setCount(userList.size());
+
 
         map.put("team", team);
         map.put("userList",userList);
@@ -233,7 +251,6 @@ public class TeamApi extends CommonController {
                 team.setAvater(fileBo.getPath());
             }
         }
-
         team.setName(name);
         team.setAddress(address);
         team.setSlogan(slogan);

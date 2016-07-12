@@ -71,4 +71,9 @@ public class TeamMemberServiceImpl implements TeamMemberService {
     public List<TeamMember> findByUserId(Long userId) {
         return teamMemberDao.findByUserId(userId);
     }
+
+    @Override
+    public List<TeamMember> findByTeamId(Long teamId) {
+        return teamMemberDao.findByTeamId(teamId);
+    }
 }

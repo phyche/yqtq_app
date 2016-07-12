@@ -6139,15 +6139,8 @@ define({ "api": [
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.provinceName",
-            "description": "<p>球队省份名字</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "list.cityName",
-            "description": "<p>球队城市名字</p>"
+            "field": "list.address",
+            "description": "<p>球队地址</p>"
           },
           {
             "group": "Success 200",
@@ -7122,7 +7115,7 @@ define({ "api": [
             "type": "Integer",
             "optional": false,
             "field": "num",
-            "description": "<p>会员时长（1：一年 2：两年 3：三年 默认为1）</p>"
+            "description": "<p>会员时长（1：一年 2：两年 3：三年 默认为1）&lt;必传 /&gt;</p>"
           }
         ]
       }
@@ -7191,21 +7184,21 @@ define({ "api": [
             "type": "Integer",
             "optional": false,
             "field": "num",
-            "description": "<p>会员时长（1：一年 2：两年 3：三年 默认为1）</p>"
+            "description": "<p>会员时长（1：一年 2：两年 3：三年 默认为1）&lt;必传 /&gt;</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": false,
             "field": "endDate",
-            "description": "<p>会员时间</p>"
+            "description": "<p>会员时间 &lt;必传 /&gt;</p>"
           },
           {
             "group": "Parameter",
             "type": "Double",
             "optional": false,
             "field": "price",
-            "description": "<p>价格</p>"
+            "description": "<p>价格 &lt;必传 /&gt;</p>"
           }
         ]
       }
@@ -7215,10 +7208,31 @@ define({ "api": [
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "Integer",
+            "type": "Object",
             "optional": false,
-            "field": "level",
-            "description": "<p>会员等级</p>"
+            "field": "order",
+            "description": "<p>订单</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "order.userName",
+            "description": "<p>用户昵称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "order.price",
+            "description": "<p>订单金额</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "order.sn",
+            "description": "<p>订单号</p>"
           }
         ]
       }

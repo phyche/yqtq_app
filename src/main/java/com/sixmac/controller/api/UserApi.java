@@ -80,6 +80,9 @@ public class UserApi extends CommonController {
     private VipLevelMessageService vipLevelMessageService;
 
     @Autowired
+    private SysVipService sysVipService;
+
+    @Autowired
     private ProvinceService provinceService;
 
     @Autowired
@@ -145,7 +148,15 @@ public class UserApi extends CommonController {
         List<TeamMember> teamMemberList = teamMemberService.findByUserId(userId);
         for (TeamMember teamMember : teamMemberList) {
 
-            if (teamMember.getTeam().getId() != teamService.findListByLeaderId(userId).getId()) {
+            if (teamService.findListByLeaderId(userId) != null) {
+
+                if (teamMember.getTeam().getId() != teamService.findListByLeaderId(userId).getId()) {
+                    if (StringUtils.isNotBlank(teamMember.getUser().getAvater())) {
+                        teamMember.getUser().setAvater(ConfigUtil.getString("upload.url") + teamMember.getUser().getAvater());
+                    }
+                    teamList.add(teamMember.getTeam());
+                }
+            }else {
                 if (StringUtils.isNotBlank(teamMember.getUser().getAvater())) {
                     teamMember.getUser().setAvater(ConfigUtil.getString("upload.url") + teamMember.getUser().getAvater());
                 }
@@ -450,7 +461,7 @@ public class UserApi extends CommonController {
      * @apiName user.operation
      * @apiGroup user
      * @apiParam {Long} userId 用户id <必传 />
-     * @apiParam {Integer} num 会员时长（1：一年 2：两年 3：三年 默认为1）
+     * @apiParam {Integer} num 会员时长（1：一年 2：两年 3：三年 默认为1）<必传 />
      *
      * @apiSuccess {String} vip.status 会员状态
      * @apiSuccess {Integer} vip.level 会员等级
@@ -466,33 +477,40 @@ public class UserApi extends CommonController {
         String endDate = null;
         String status = null;
         UserVip userVip = userVipService.findByUserId(userId);
+        Double price = 0.0;
 
         if (userVip == null || userVip.getEndDate() < System.currentTimeMillis()) {
-            level = 1;
+            level = 0;
             status = "您不是会员";
             //userVip.setStatus("您不是会员");
             if (num == 1) {
 
                 endDate = DateUtils.longToString(System.currentTimeMillis() + 1000 * 3600 * 365,"yyyy年-MM月-dd日 HH:mm:ss");
+                price = sysVipService.getById(1l).getPrice();
             }else if (num == 2) {
                 endDate = DateUtils.longToString(System.currentTimeMillis() + 2 * 1000 * 3600 * 365,"yyyy年-MM月-dd日 HH:mm:ss");
+                price = sysVipService.getById(1l).getPrice() * 2;
             }else if (num == 3) {
                 endDate = DateUtils.longToString(System.currentTimeMillis() + 3 * 1000 * 3600 * 365,"yyyy年-MM月-dd日 HH:mm:ss");
+                price = sysVipService.getById(1l).getPrice() * 3;
             }
+
+
         }else {
             level = userService.getById(userId).getVipNum();
             status = "会员到期时间" + DateUtils.longToString(userVip.getEndDate(),"yyyy年-MM月-dd日 HH:mm:ss");
             //userVip.setStatus("会员到期时间" + DateUtils.longToString(userVip.getEndDate(),"yyyy年-MM月-dd日 HH:mm:ss"));
             if (num == 1) {
                 endDate = DateUtils.longToString(userVip.getEndDate() + 1000 * 3600 * 365,"yyyy年-MM月-dd日 HH:mm:ss");
+                price = sysVipService.getById(1l).getPrice() * vipLevelService.findBylevel(level).getPreferente();
             }else if (num == 2) {
                 endDate = DateUtils.longToString(userVip.getEndDate() + 2 * 1000 * 3600 * 365,"yyyy年-MM月-dd日 HH:mm:ss");
+                price = sysVipService.getById(1l).getPrice() * vipLevelService.findBylevel(level).getPreferente() * 2;
             }else if (num == 3) {
                 endDate = DateUtils.longToString(userVip.getEndDate() + 3 * 1000 * 3600 * 365,"yyyy年-MM月-dd日 HH:mm:ss");
+                price = sysVipService.getById(1l).getPrice() * vipLevelService.findBylevel(level).getPreferente() * 3;
             }
         }
-
-        Double price = vipLevelService.findBylevel(level).getSysVip().getPrice();
 
         map.put("level",level);
         map.put("endDate",endDate);
@@ -511,26 +529,34 @@ public class UserApi extends CommonController {
      * @apiName user.operation
      * @apiGroup user
      * @apiParam {Long} userId 用户id <必传 />
-     * @apiParam {Integer} num 会员时长（1：一年 2：两年 3：三年 默认为1）
-     * @apiSuccess {Integer} level 会员等级
-     * @apiParam {String} endDate 会员时间
-     * @apiParam {Double} price 价格
+     * @apiParam {Integer} num 会员时长（1：一年 2：两年 3：三年 默认为1）<必传 />
+     * @apiParam {String} endDate 会员时间 <必传 />
+     * @apiParam {Double} price 价格 <必传 />
      *
+     * @apiSuccess {Object} order 订单
+     * @apiSuccess {String} order.userName 用户昵称
+     * @apiSuccess {Double} order.price 订单金额
+     * @apiSuccess {Long} order.sn 订单号
      */
     @RequestMapping(value = "/pay")
     public void pay(HttpServletResponse response,
                     Long userId,
                     Integer num,
-                    Integer level,
                     String endDate,
                     Double price) throws ParseException {
 
-        UserVip userVip = new UserVip();
+        UserVip userVip = null;
+
+        if (userVipService.findByUserId(userId) == null) {
+            userVip = new UserVip();
+        }else {
+            userVip = userVipService.findByUserId(userId);
+        }
         userVip.setUser(userService.getById(userId));
         userVip.setDuration(num);
         userVip.setEndDate(DateUtils.stringToDate(endDate,"yyyy-MM-dd HH:mm:ss").getTime());
 
-        User user = userService.getById(userId);
+        /*User user = userService.getById(userId);
         user.setVipNum(level);
         if (num == 1) {
 
@@ -542,12 +568,12 @@ public class UserApi extends CommonController {
 
             user.setExperience(user.getExperience() + 500);
         }
-        userService.update(user);
+        userService.update(user);*/
 
         String sn = CommonUtils.generateSn(); // 订单号
         Order order = new Order();
         order.setUser(userService.getById(userId));
-        order.setPrice(price * num);
+        order.setPrice(price);
         order.setSn(sn);
         orderService.create(order);
 

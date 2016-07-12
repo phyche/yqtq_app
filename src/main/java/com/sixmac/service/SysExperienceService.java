@@ -9,4 +9,5 @@ import com.sixmac.service.common.ICommonService;
 public interface SysExperienceService extends ICommonService<SysExperience> {
 
     public SysExperience findByAction(Integer action);
+
 }

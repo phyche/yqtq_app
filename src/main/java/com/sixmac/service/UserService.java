@@ -12,9 +12,9 @@ public interface UserService extends ICommonService<User> {
     //根据手机号（账号）查询用户
     public User findByMobile(String mobile);
 
-
     // 移动端用户第三方登录
     public User iTLogin(Integer type, String openId, String head, String nickname);
 
-
+    // 用户获取经验
+    public void changeIntegral(User userInfo);
 }

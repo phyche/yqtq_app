@@ -67,6 +67,7 @@ public class StadiumApi extends CommonController {
     @Autowired
     private InsuranceService insuranceService;
 
+
     /**
      * 完成
      *
@@ -476,6 +477,7 @@ public class StadiumApi extends CommonController {
             reserve.setUser(userService.getById(userId));
             reserve.setPrice(money);
             reserve.setMatchType(siteTimeService.getById(siteTimeId).getSite().getType());
+            reserve.setStartTime(siteTimeService.getById(siteTimeId).getStartTime());
             reserveService.create(reserve);
             map.put("reserve", reserve);
 
@@ -505,6 +507,7 @@ public class StadiumApi extends CommonController {
             reserve.setInsurance(sysInsurance);
             reserve.setPrice(money);
             reserve.setMatchType(siteTimeService.getById(siteTimeId).getSite().getType());
+            reserve.setStartTime(siteTimeService.getById(siteTimeId).getStartTime());
             reserveService.create(reserve);
             map.put("reserve", reserve);
 

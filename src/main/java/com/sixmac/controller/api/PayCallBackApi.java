@@ -47,6 +47,9 @@ public class PayCallBackApi extends CommonController {
     @Autowired
     private SysCredibilityService sysCredibilityService;
 
+    @Autowired
+    private UserService userService;
+
     /**
      * @api {post} /api/pay/getPayInfo 拼接微信支付参数
      * @apiName pay.getPayInfo
@@ -215,9 +218,13 @@ public class PayCallBackApi extends CommonController {
             orders.setPayTime(new Date().getTime());
             orderService.update(orders);
 
-            User user = orders.getUser();
-            user.setCredibility(user.getCredibility() + sysCredibilityService.findByAction(orders.getAction()).getCredibility());
-            user.setExperience(user.getExperience() + sysExperienceService.findByAction(orders.getAction()).getExperience());
+            if (orders.getAction() != 1) {
+                User user = orders.getUser();
+                user.setCredibility(user.getCredibility() + sysCredibilityService.findByAction(orders.getAction()).getCredibility());
+                user.setExperience(user.getExperience() + sysExperienceService.findByAction(orders.getAction()).getExperience());
+
+                userService.changeIntegral(user);
+            }
 
             WebUtil.printApi(response, new Result(true));
         } catch (Exception e) {

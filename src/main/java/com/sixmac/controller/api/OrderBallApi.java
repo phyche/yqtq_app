@@ -53,6 +53,15 @@ public class OrderBallApi extends CommonController {
     @Autowired
     private MessageOrderBallService messageOrderBallService;
 
+    @Autowired
+    private SysExperienceService sysExperienceService;
+
+    @Autowired
+    private SysCredibilityService sysCredibilityService;
+
+    @Autowired
+    private VipLevelService vipLevelService;
+
 
     /**
      * 完成
@@ -97,8 +106,6 @@ public class OrderBallApi extends CommonController {
         List<Reserve> list = page.getContent();
         for (Reserve reserve : list) {
             reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
-            reserve.setJoinCount(reserve.getUserReservelist() != null ? reserve.getUserReservelist().size() : 0);
-            reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
 
             if (StringUtils.isNotBlank(reserve.getUser().getAvater())) {
                 reserve.getUser().setAvater(ConfigUtil.getString("upload.url") + reserve.getUser().getAvater());
@@ -158,8 +165,6 @@ public class OrderBallApi extends CommonController {
 
             Reserve reserve = reserveService.getById(reserveId);
             reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
-            reserve.setJoinCount(reserve.getUserReservelist() != null ? reserve.getUserReservelist().size() : 0);
-            reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
 
             if (StringUtils.isNotBlank(reserve.getUser().getAvater())) {
                 reserve.getUser().setAvater(ConfigUtil.getString("upload.url") + reserve.getUser().getAvater());
@@ -181,10 +186,6 @@ public class OrderBallApi extends CommonController {
                 userList.add(userReserve.getUser());
             }
 
-            //已报名该预定的用户数量
-            reserve.setJoinCount(userList.size());
-            //缺少的人数
-            reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
             reserve.setAvePrice(reserve.getPrice() / reserve.getMatchType());
             reserve.setSumPrice(reserve.getAvePrice() + reserve.getInsurance().getPrice());
             reserveService.update(reserve);
@@ -323,9 +324,9 @@ public class OrderBallApi extends CommonController {
         }
         for (Reserve reserve : reserveList) {
             reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
-            reserve.setJoinCount(reserve.getUserReservelist() != null ? reserve.getUserReservelist().size() : 0);
+            /*reserve.setJoinCount(reserve.getUserReservelist() != null ? reserve.getUserReservelist().size() : 0);
             reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
-
+*/
             if (StringUtils.isNotBlank(reserve.getUser().getAvater())) {
                 reserve.getUser().setAvater(ConfigUtil.getString("upload.url") + reserve.getUser().getAvater());
             }
@@ -558,7 +559,8 @@ public class OrderBallApi extends CommonController {
      * @apiName orderBall.pay
      * @apiGroup orderBall
      * @apiParam {Long} reserveId 约球ID <必传 />
-     * @apiParam {Long} userId 赛事ID <必传 />
+     * @apiParam {Long} userId 用户ID <必传 />
+     *
      * @apiSuccess {Object} order 订单
      * @apiSuccess {String} order.userName 用户昵称
      * @apiSuccess {String} order.stadiumName 球场名称
@@ -574,44 +576,69 @@ public class OrderBallApi extends CommonController {
         }
 
         Reserve reserve = reserveService.getById(reserveId);
+        Order order = null;
+        if (reserve.getJoinCount() < reserve.getMatchType()*2) {
 
-        Insurance insurance = new Insurance();
+            reserve.setJoinCount(reserve.getJoinCount() + 1);
+            reserveService.update(reserve);
+            if (reserve.getJoinCount() == reserve.getMatchType()*2) {
 
-        //球场已经全额付款的
-        if (reserve.getPayment() == 0) {
-            WebUtil.printApi(response, new Result(true).data("加入成功"));
+                List<UserReserve> userReserveList = userReserveService.findByReserverId(reserveId);
+                for (UserReserve userReserve : userReserveList) {
+
+                    SysExperience sysExperience = sysExperienceService.findByAction(1);
+                    userReserve.getUser().setExperience(userReserve.getUser().getExperience() + sysExperience.getExperience());
+                    userService.changeIntegral(userReserve.getUser());
+                    SysCredibility sysCredibility = sysCredibilityService.findByAction(1);
+                    userReserve.getUser().setCredibility(userReserve.getUser().getCredibility() + sysCredibility.getCredibility());
+
+                    userService.update(userReserve.getUser());
+                }
+            }
+
+            Insurance insurance = new Insurance();
+
+            //球场已经全额付款的
+            if (reserve.getPayment() == 0) {
+                WebUtil.printApi(response, new Result(true).data("加入成功"));
+            }
+            //球场AA付款
+            if (reserve.getPayment() == 1) {
+                insurance.setMoney(reserve.getInsurance().getPrice());
+                /*if (userService.getById(userId).getVipNum() != 0) {
+                    VipLevel vipLevel = vipLevelService.findBylevel(userService.getById(userId).getVipNum());
+                    money = (reserve.getPrice() / reserve.getMatchType() + reserve.getInsurance().getPrice()) * vipLevel.getPreferente();
+                }else {
+                    money = reserve.getPrice() / reserve.getMatchType() + reserve.getInsurance().getPrice();
+                }*/
+
+                money = reserve.getPrice() / reserve.getMatchType();
+                insurance.setUser(userService.getById(userId));
+                insurance.setReserve(reserve);
+                insuranceService.create(insurance);
+
+                String sn = CommonUtils.generateSn(); // 订单号
+
+                order = new Order();
+                order.setUser(userService.getById(userId));
+                order.setStadiumname(reserve.getStadium().getName());
+                order.setPrice(money);
+                //order.setAction(1);
+                order.setSn(sn);
+                orderService.create(order);
+            }
+
+            UserReserve userReserve = new UserReserve();
+            userReserve.setUser(userService.getById(userId));
+
+            userReserve.setReserveId(reserveId);
+            //userReserve.setReserve(reserve);
+            userReserve.setStatus(0);
+            userReserveService.create(userReserve);
         }
-        //球场AA付款
-        if (reserve.getPayment() == 1) {
-            insurance.setMoney(reserve.getInsurance().getPrice());
-            money = reserve.getPrice() / reserve.getMatchType() + reserve.getInsurance().getPrice();
 
-            insurance.setUser(userService.getById(userId));
-            insurance.setReserve(reserve);
-            insuranceService.create(insurance);
-
-            String sn = CommonUtils.generateSn(); // 订单号
-            Order order = new Order();
-            order.setUser(userService.getById(userId));
-            order.setStadiumname(reserve.getStadium().getName());
-            order.setPrice(money);
-            order.setAction(1);
-            order.setSn(sn);
-            orderService.create(order);
-
-            Result obj = new Result(true).data(order);
-            String result = JsonUtil.obj2ApiJson(obj);
-            WebUtil.printApi(response, result);
-
-        }
-
-        UserReserve userReserve = new UserReserve();
-        userReserve.setUser(userService.getById(userId));
-
-        userReserve.setReserveId(reserveId);
-        //userReserve.setReserve(reserve);
-        userReserve.setStatus(0);
-        userReserveService.create(userReserve);
-
+        Result obj = new Result(true).data(createMap("order", order));
+        String result = JsonUtil.obj2ApiJson(obj);
+        WebUtil.printApi(response, result);
     }
 }
