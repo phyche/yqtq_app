@@ -145,12 +145,13 @@ public class UserApi extends CommonController {
         List<TeamMember> teamMemberList = teamMemberService.findByUserId(userId);
         for (TeamMember teamMember : teamMemberList) {
 
-            if (StringUtils.isNotBlank(teamMember.getUser().getAvater())) {
-                teamMember.getUser().setAvater(ConfigUtil.getString("upload.url") + teamMember.getUser().getAvater());
+            if (teamMember.getTeam().getId() != teamService.findListByLeaderId(userId).getId()) {
+                if (StringUtils.isNotBlank(teamMember.getUser().getAvater())) {
+                    teamMember.getUser().setAvater(ConfigUtil.getString("upload.url") + teamMember.getUser().getAvater());
+                }
+                teamList.add(teamMember.getTeam());
             }
-            teamList.add(teamMember.getTeam());
         }
-
         map.put("teamList", teamList);
 
         //我的球队

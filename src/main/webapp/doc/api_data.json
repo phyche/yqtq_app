@@ -1330,140 +1330,140 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "userInfo",
+            "field": "user",
             "description": ""
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "userInfo.id",
+            "field": "user.id",
             "description": "<p>用户id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "userInfo.mobile",
+            "field": "user.mobile",
             "description": "<p>手机号</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "userInfo.password",
+            "field": "user.password",
             "description": "<p>密码</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "userInfo.nickname",
+            "field": "user.nickname",
             "description": "<p>昵称</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "userInfo.age",
+            "field": "user.age",
             "description": "<p>年龄</p>"
           },
           {
             "group": "Success 200",
             "type": "Double",
             "optional": false,
-            "field": "userInfo.height",
+            "field": "user.height",
             "description": "<p>身高</p>"
           },
           {
             "group": "Success 200",
             "type": "Double",
             "optional": false,
-            "field": "userInfo.weight",
+            "field": "user.weight",
             "description": "<p>体重</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "userInfo.position",
+            "field": "user.position",
             "description": "<p>位置（0：前 1：中 2：后 3：守）</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "userInfo.credibility",
+            "field": "user.credibility",
             "description": "<p>信誉度</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "userInfo.vipNum",
+            "field": "user.vipNum",
             "description": "<p>vip等级</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "userInfo.integral",
+            "field": "user.integral",
             "description": "<p>积分</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "userInfo.experience",
+            "field": "user.experience",
             "description": "<p>经验值</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "userInfo.avater",
+            "field": "user.avater",
             "description": "<p>头像</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "userInfo.endDate",
+            "field": "user.endDate",
             "description": "<p>会员截止日期</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "userInfo.status",
+            "field": "user.status",
             "description": "<p>状态 （0：男 1：女）</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "userInfo.gender",
+            "field": "user.gender",
             "description": "<p>性别（0：正常 1：冻结）</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "userInfo.birthday",
+            "field": "user.birthday",
             "description": "<p>出生年月</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "userInfo.provinceId",
+            "field": "user.provinceId",
             "description": "<p>省份</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "userInfo.cityId",
+            "field": "user.cityId",
             "description": "<p>城市</p>"
           }
         ]
@@ -4580,6 +4580,13 @@
             "optional": false,
             "field": "list.startTime",
             "description": "<p>开始时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.createDate",
+            "description": "<p>创建时间</p>"
           }
         ]
       }

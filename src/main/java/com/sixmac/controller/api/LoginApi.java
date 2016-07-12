@@ -54,26 +54,26 @@ public class LoginApi extends CommonController {
      * @apiParam {String} mobile 手机号  <必传 />
      * @apiParam {String} password 密码  <必传 />
      *
-     * @apiSuccess {Object}  userInfo
-     * @apiSuccess {Long} userInfo.id 用户id
-     * @apiSuccess {String} userInfo.mobile 手机号
-     * @apiSuccess {String} userInfo.password 密码
-     * @apiSuccess {String} userInfo.nickname 昵称
-     * @apiSuccess {Integer} userInfo.age 年龄
-     * @apiSuccess {Double} userInfo.height 身高
-     * @apiSuccess {Double} userInfo.weight 体重
-     * @apiSuccess {Integer} userInfo.position 位置（0：前 1：中 2：后 3：守）
-     * @apiSuccess {Integer} userInfo.credibility 信誉度
-     * @apiSuccess {Integer} userInfo.vipNum vip等级
-     * @apiSuccess {Integer} userInfo.integral 积分
-     * @apiSuccess {Integer} userInfo.experience 经验值
-     * @apiSuccess {String} userInfo.avater 头像
-     * @apiSuccess {Long} userInfo.endDate 会员截止日期
-     * @apiSuccess {Integer} userInfo.status 状态 （0：男 1：女）
-     * @apiSuccess {Integer} userInfo.gender 性别（0：正常 1：冻结）
-     * @apiSuccess {Long} userInfo.birthday 出生年月
-     * @apiSuccess {Long} userInfo.provinceId 省份
-     * @apiSuccess {Long} userInfo.cityId 城市
+     * @apiSuccess {Object}  user
+     * @apiSuccess {Long} user.id 用户id
+     * @apiSuccess {String} user.mobile 手机号
+     * @apiSuccess {String} user.password 密码
+     * @apiSuccess {String} user.nickname 昵称
+     * @apiSuccess {Integer} user.age 年龄
+     * @apiSuccess {Double} user.height 身高
+     * @apiSuccess {Double} user.weight 体重
+     * @apiSuccess {Integer} user.position 位置（0：前 1：中 2：后 3：守）
+     * @apiSuccess {Integer} user.credibility 信誉度
+     * @apiSuccess {Integer} user.vipNum vip等级
+     * @apiSuccess {Integer} user.integral 积分
+     * @apiSuccess {Integer} user.experience 经验值
+     * @apiSuccess {String} user.avater 头像
+     * @apiSuccess {Long} user.endDate 会员截止日期
+     * @apiSuccess {Integer} user.status 状态 （0：男 1：女）
+     * @apiSuccess {Integer} user.gender 性别（0：正常 1：冻结）
+     * @apiSuccess {Long} user.birthday 出生年月
+     * @apiSuccess {Long} user.provinceId 省份
+     * @apiSuccess {Long} user.cityId 城市
      *
      */
     @RequestMapping(value = "/checkLogin")
@@ -101,7 +101,7 @@ public class LoginApi extends CommonController {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0013));
         }
 
-        Result obj = new Result(true).data(createMap("userInfo", user));
+        Result obj = new Result(true).data(createMap("user", user));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }

@@ -68,6 +68,7 @@ public class PlayIndexApi extends CommonController {
      * @apiSuccess {Object} list.stadium 球场
      * @apiSuccess {String} list.stadium.name 球场名字
      * @apiSuccess {Long} list.startTime 开始时间
+     * @apiSuccess {Long} list.createDate 创建时间
      */
     @RequestMapping(value = "orderballList")
     public void orderballList(HttpServletResponse response, Long userId) {
