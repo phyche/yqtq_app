@@ -76,6 +76,9 @@ public class User extends BaseEntity{
     @Column(name = "birthday")
     private Long birthday;
 
+    @Transient
+    private Long teamId;
+
     public String getMobile() {
         return mobile;
     }
@@ -218,5 +221,13 @@ public class User extends BaseEntity{
 
     public void setBirthday(Long birthday) {
         this.birthday = birthday;
+    }
+
+    public Long getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(Long teamId) {
+        this.teamId = teamId;
     }
 }

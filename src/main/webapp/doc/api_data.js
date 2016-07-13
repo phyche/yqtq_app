@@ -1465,6 +1465,13 @@ define({ "api": [
             "optional": false,
             "field": "user.cityId",
             "description": "<p>城市</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "user.teamId",
+            "description": "<p>我的球队id</p>"
           }
         ]
       }
@@ -3794,7 +3801,7 @@ define({ "api": [
             "type": "Long",
             "optional": false,
             "field": "userId",
-            "description": "<p>赛事ID &lt;必传 /&gt;</p>"
+            "description": "<p>用户ID &lt;必传 /&gt;</p>"
           }
         ]
       }
@@ -3979,113 +3986,127 @@ define({ "api": [
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "list.watchBallVos",
+            "field": "schedule.watchBallVos",
             "description": "<p>球员所在球队为主队赛事列表</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.watchBallVos.homeTeamName",
+            "field": "schedule.watchBallVos.homeTeamName",
             "description": "<p>主队队名</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.watchBallVos.homeTeamAvater",
+            "field": "schedule.watchBallVos.homeTeamAvater",
             "description": "<p>主队队徽</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.watchBallVos.vTeamName",
+            "field": "schedule.watchBallVos.vTeamName",
             "description": "<p>客队队名</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.watchBallVos.vTeamAvater",
+            "field": "schedule.watchBallVos.vTeamAvater",
             "description": "<p>客队队徽</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "list.watchBallVos.status",
+            "field": "schedule.watchBallVos.status",
             "description": "<p>赛事状态 （0：等待同意，1：约赛成功，2：约赛失败）</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.watchBallVos.stadiumName",
+            "field": "schedule.watchBallVos.stadiumName",
             "description": "<p>球场名称</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "list.watchBallVos.startTime",
+            "field": "schedule.watchBallVos.startTime",
             "description": "<p>开始时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "schedule.watchBallVos.createDate",
+            "description": "<p>发起时间</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "list.watchBallVoList",
+            "field": "schedule.watchBallVoList",
             "description": "<p>球员所在球队为客队赛事列表</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.watchBallVoList.homeTeamName",
+            "field": "schedule.watchBallVoList.homeTeamName",
             "description": "<p>主队队名</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.watchBallVoList.homeTeamAvater",
+            "field": "schedule.watchBallVoList.homeTeamAvater",
             "description": "<p>主队队徽</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.watchBallVoList.vTeamName",
+            "field": "schedule.watchBallVoList.vTeamName",
             "description": "<p>客队队名</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.watchBallVoList.vTeamAvater",
+            "field": "schedule.watchBallVoList.vTeamAvater",
             "description": "<p>客队队徽</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "list.watchBallVoList.status",
+            "field": "schedule.watchBallVoList.status",
             "description": "<p>赛事状态 （0：等待同意，1：约赛成功，2：约赛失败）</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.watchBallVoList.stadiumName",
+            "field": "schedule.watchBallVoList.stadiumName",
             "description": "<p>球场名称</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "list.watchBallVoList.startTime",
+            "field": "schedule.watchBallVoList.startTime",
             "description": "<p>开始时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "schedule.watchBallVoList.createDate",
+            "description": "<p>发起时间</p>"
           }
         ]
       }
@@ -5846,6 +5867,19 @@ define({ "api": [
         ]
       }
     },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "teamId",
+            "description": "<p>球队id</p>"
+          }
+        ]
+      }
+    },
     "version": "0.0.0",
     "filename": "src/main/java/com/sixmac/controller/api/TeamApi.java",
     "groupTitle": "team",
@@ -6326,134 +6360,148 @@ define({ "api": [
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "list",
+            "field": "schedule",
             "description": "<p>赛事列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "list.watchBallVos",
+            "field": "schedule.watchBallVos",
             "description": "<p>球员所在球队为主队赛事列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "list.watchBallVos.id",
+            "field": "schedule.watchBallVos.id",
             "description": "<p>赛事id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.watchBallVos.homeTeamName",
+            "field": "schedule.watchBallVos.homeTeamName",
             "description": "<p>主队队名</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.watchBallVos.homeTeamAvater",
+            "field": "schedule.watchBallVos.homeTeamAvater",
             "description": "<p>主队队徽</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.watchBallVos.vTeamName",
+            "field": "schedule.watchBallVos.vTeamName",
             "description": "<p>客队队名</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.watchBallVos.vTeamAvater",
+            "field": "schedule.watchBallVos.vTeamAvater",
             "description": "<p>客队队徽</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "list.watchBallVos.status",
+            "field": "schedule.watchBallVos.status",
             "description": "<p>赛事状态 （0：等待同意，1：约赛成功，2：约赛失败）</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.watchBallVos.stadiumName",
+            "field": "schedule.watchBallVos.stadiumName",
             "description": "<p>球场名称</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "list.watchBallVos.startTime",
+            "field": "schedule.watchBallVos.startTime",
             "description": "<p>开始时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "schedule.watchBallVos.createDate",
+            "description": "<p>发起时间</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "list.watchBallVoList",
+            "field": "schedule.watchBallVoList",
             "description": "<p>球员所在球队为客队赛事列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "list.watchBallVoList.id",
+            "field": "schedule.watchBallVoList.id",
             "description": "<p>赛事id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.watchBallVoList.homeTeamName",
+            "field": "schedule.watchBallVoList.homeTeamName",
             "description": "<p>主队队名</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.watchBallVoList.homeTeamAvater",
+            "field": "schedule.watchBallVoList.homeTeamAvater",
             "description": "<p>主队队徽</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.watchBallVoList.vTeamName",
+            "field": "schedule.watchBallVoList.vTeamName",
             "description": "<p>客队队名</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.watchBallVoList.vTeamAvater",
+            "field": "schedule.watchBallVoList.vTeamAvater",
             "description": "<p>客队队徽</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "list.watchBallVoList.status",
+            "field": "schedule.watchBallVoList.status",
             "description": "<p>赛事状态 （0：等待同意，1：约赛成功，2：约赛失败）</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.watchBallVoList.stadiumName",
+            "field": "schedule.watchBallVoList.stadiumName",
             "description": "<p>球场名称</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "list.watchBallVoList.startTime",
+            "field": "schedule.watchBallVoList.startTime",
             "description": "<p>开始时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "schedule.watchBallVoList.createDate",
+            "description": "<p>发起时间</p>"
           }
         ]
       }

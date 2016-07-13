@@ -92,7 +92,7 @@ public class PlayIndexApi extends CommonController {
         }else {
             //查询约球的前三条信息
             List<Reserve> list = new ArrayList<Reserve>();
-            if (reserveList.size() >= 3) {
+            /*if (reserveList.size() >= 3) {
                 list.add(reserveList.get(reserveList.size()-3));
                 for (Reserve reserve : list) {
                     if (StringUtils.isNotBlank(reserve.getUser().getAvater())) {
@@ -100,11 +100,11 @@ public class PlayIndexApi extends CommonController {
                     }
 
                     reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
-                    reserve.setJoinCount(reserve.getUserReservelist() != null ? reserve.getUserReservelist().size() : 0);
-                    reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
+                    *//*reserve.setJoinCount(reserve.getUserReservelist() != null ? reserve.getUserReservelist().size() : 0);
+                    reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());*//*
                 }
             }
-            if (reserveList.size() >= 2) {
+            if (reserveList.size() == 2) {
                 list.add(reserveList.get(reserveList.size()-2));
                 for (Reserve reserve : list) {
                     if (StringUtils.isNotBlank(reserve.getUser().getAvater())) {
@@ -112,8 +112,8 @@ public class PlayIndexApi extends CommonController {
                     }
 
                     reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
-                    reserve.setJoinCount(reserve.getUserReservelist() != null ? reserve.getUserReservelist().size() : 0);
-                    reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
+                    *//*reserve.setJoinCount(reserve.getUserReservelist() != null ? reserve.getUserReservelist().size() : 0);
+                    reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());*//*
                 }
             }
             if (reserveList.size() >= 1) {
@@ -124,15 +124,26 @@ public class PlayIndexApi extends CommonController {
                     }
 
                     reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
-                    reserve.setJoinCount(reserve.getUserReservelist() != null ? reserve.getUserReservelist().size() : 0);
-                    reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
+                    *//*reserve.setJoinCount(reserve.getUserReservelist() != null ? reserve.getUserReservelist().size() : 0);
+                    reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());*//*
+                }
+            }*/
+            if (reserveList != null) {
+                if (reserveList.size() >= 1) {
+                    list.add(reserveList.get(0));
+                }
+                if (reserveList.size() >= 2) {
+                    list.add(reserveList.get(1));
+                }
+                if (reserveList.size() >= 3) {
+                    list.add(reserveList.get(2));
                 }
             }
 
             //map.put("list", list);
 
             Result obj = new Result(true).data(createMap("list",list));
-            String result = JsonUtil.obj2ApiJson(obj,"site","userReservelist");
+            String result = JsonUtil.obj2ApiJson(obj,"site","userReservelist","insurance");
             WebUtil.printApi(response, result);
         }
     }

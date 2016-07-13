@@ -19,6 +19,8 @@ public class WatchBallVo {
 
     private Long startTime;
 
+    private Long createDate;
+
     private String stadiumName;
 
     private Integer addressId;
@@ -93,5 +95,13 @@ public class WatchBallVo {
 
     public void setAddressId(Integer addressId) {
         this.addressId = addressId;
+    }
+
+    public Long getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Long createDate) {
+        this.createDate = createDate;
     }
 }

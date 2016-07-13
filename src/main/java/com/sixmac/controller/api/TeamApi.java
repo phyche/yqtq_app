@@ -207,7 +207,7 @@ public class TeamApi extends CommonController {
      * @apiParam {Stream} avater 队徽
      * @apiParam {String} address 球队地址
      *
-     *
+     * @apiSuccess {Long}  teamId 球队id
      */
     @RequestMapping(value = "/add")
     public void add(HttpServletRequest request ,
@@ -257,7 +257,7 @@ public class TeamApi extends CommonController {
         team.setLeaderUser(userService.getById(userId));
         teamService.create(team);
 
-        WebUtil.printApi(response, new Result(true));
+        WebUtil.printApi(response, new Result(true).data(createMap("teamId",team.getId())));
     }
 
     /**
@@ -411,26 +411,28 @@ public class TeamApi extends CommonController {
      * @apiGroup team
      * @apiParam {Long} teamId 球队Id <必传 />
      *
-     * @apiSuccess {Object}  list 赛事列表
-     * @apiSuccess {Object}  list.watchBallVos 球员所在球队为主队赛事列表
-     * @apiSuccess {Long} list.watchBallVos.id 赛事id
-     * @apiSuccess {String} list.watchBallVos.homeTeamName 主队队名
-     * @apiSuccess {String} list.watchBallVos.homeTeamAvater 主队队徽
-     * @apiSuccess {String} list.watchBallVos.vTeamName 客队队名
-     * @apiSuccess {String} list.watchBallVos.vTeamAvater 客队队徽
-     * @apiSuccess {Integer} list.watchBallVos.status 赛事状态 （0：等待同意，1：约赛成功，2：约赛失败）
-     * @apiSuccess {String} list.watchBallVos.stadiumName 球场名称
-     * @apiSuccess {Long} list.watchBallVos.startTime 开始时间
+     * @apiSuccess {Object}  schedule 赛事列表
+     * @apiSuccess {Object}  schedule.watchBallVos 球员所在球队为主队赛事列表
+     * @apiSuccess {Long} schedule.watchBallVos.id 赛事id
+     * @apiSuccess {String} schedule.watchBallVos.homeTeamName 主队队名
+     * @apiSuccess {String} schedule.watchBallVos.homeTeamAvater 主队队徽
+     * @apiSuccess {String} schedule.watchBallVos.vTeamName 客队队名
+     * @apiSuccess {String} schedule.watchBallVos.vTeamAvater 客队队徽
+     * @apiSuccess {Integer} schedule.watchBallVos.status 赛事状态 （0：等待同意，1：约赛成功，2：约赛失败）
+     * @apiSuccess {String} schedule.watchBallVos.stadiumName 球场名称
+     * @apiSuccess {Long} schedule.watchBallVos.startTime 开始时间
+     * @apiSuccess {Long} schedule.watchBallVos.createDate 发起时间
      *
-     * @apiSuccess {Object}  list.watchBallVoList 球员所在球队为客队赛事列表
-     * @apiSuccess {Long} list.watchBallVoList.id 赛事id
-     * @apiSuccess {String} list.watchBallVoList.homeTeamName 主队队名
-     * @apiSuccess {String} list.watchBallVoList.homeTeamAvater 主队队徽
-     * @apiSuccess {String} list.watchBallVoList.vTeamName 客队队名
-     * @apiSuccess {String} list.watchBallVoList.vTeamAvater 客队队徽
-     * @apiSuccess {Integer} list.watchBallVoList.status 赛事状态 （0：等待同意，1：约赛成功，2：约赛失败）
-     * @apiSuccess {String} list.watchBallVoList.stadiumName 球场名称
-     * @apiSuccess {Long} list.watchBallVoList.startTime 开始时间
+     * @apiSuccess {Object}  schedule.watchBallVoList 球员所在球队为客队赛事列表
+     * @apiSuccess {Long} schedule.watchBallVoList.id 赛事id
+     * @apiSuccess {String} schedule.watchBallVoList.homeTeamName 主队队名
+     * @apiSuccess {String} schedule.watchBallVoList.homeTeamAvater 主队队徽
+     * @apiSuccess {String} schedule.watchBallVoList.vTeamName 客队队名
+     * @apiSuccess {String} schedule.watchBallVoList.vTeamAvater 客队队徽
+     * @apiSuccess {Integer} schedule.watchBallVoList.status 赛事状态 （0：等待同意，1：约赛成功，2：约赛失败）
+     * @apiSuccess {String} schedule.watchBallVoList.stadiumName 球场名称
+     * @apiSuccess {Long} schedule.watchBallVoList.startTime 开始时间
+     * @apiSuccess {Long} schedule.watchBallVoList.createDate 发起时间
      */
     @RequestMapping(value = "/schedule")
     private void schedule(HttpServletResponse response, Long teamId) {
@@ -452,6 +454,7 @@ public class TeamApi extends CommonController {
             watchBallVo1.setId(teamRace.getId());
             watchBallVo1.setStadiumName(teamRace.getStadium().getName());
             watchBallVo1.setStartTime(teamRace.getStartTime());
+            watchBallVo1.setCreateDate(teamRace.getCreateDate());
             watchBallVo1.setHomeTeamName(teamRace.getHomeTeam().getName());
             if (StringUtils.isNotBlank(teamRace.getHomeTeam().getAvater())) {
                 watchBallVo1.setHomeTeamAvater(ConfigUtil.getString("upload.url") + teamRace.getHomeTeam().getAvater());
@@ -474,6 +477,7 @@ public class TeamApi extends CommonController {
             watchBallVo2.setStadiumName(teamRace.getStadium().getName());
             watchBallVo2.setStartTime(teamRace.getStartTime());
             watchBallVo2.setHomeTeamName(teamRace.getHomeTeam().getName());
+            watchBallVo2.setCreateDate(teamRace.getCreateDate());
             if (StringUtils.isNotBlank(teamRace.getHomeTeam().getAvater())) {
                 watchBallVo2.setHomeTeamAvater(ConfigUtil.getString("upload.url") + teamRace.getHomeTeam().getAvater());
             }
@@ -488,7 +492,7 @@ public class TeamApi extends CommonController {
         map.put("watchBallVos", watchBallVos);
         map.put("watchBallVoList", watchBallVoList);
 
-        Result obj = new Result(true).data(createMap("list",map));
+        Result obj = new Result(true).data(createMap("schedule",map));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }

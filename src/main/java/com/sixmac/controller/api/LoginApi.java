@@ -4,11 +4,9 @@ import cn.emay.channel.SmsSend;
 import com.sixmac.controller.common.CommonController;
 import com.sixmac.core.ErrorCode;
 import com.sixmac.core.bean.Result;
-import com.sixmac.entity.GirlServiceMessage;
-import com.sixmac.entity.ServiceMessage;
-import com.sixmac.entity.User;
-import com.sixmac.entity.UserVip;
+import com.sixmac.entity.*;
 import com.sixmac.service.ServiceMessageService;
+import com.sixmac.service.TeamService;
 import com.sixmac.service.UserService;
 import com.sixmac.service.UserVipService;
 import com.sixmac.utils.CommonUtils;
@@ -37,6 +35,9 @@ public class LoginApi extends CommonController {
 
     @Autowired
     private UserVipService userVipService;
+
+    @Autowired
+    private TeamService teamService;
 
     private static Map<String, String> codeMap = new HashMap<String, String>();
 
@@ -79,6 +80,7 @@ public class LoginApi extends CommonController {
      * @apiSuccess {Long} user.birthday 出生年月
      * @apiSuccess {Long} user.provinceId 省份
      * @apiSuccess {Long} user.cityId 城市
+     * @apiSuccess {Long} user.teamId 我的球队id
      *
      */
     @RequestMapping(value = "/checkLogin")
@@ -94,16 +96,11 @@ public class LoginApi extends CommonController {
             return;
         }
         User user = userService.findByMobile(mobile);
+        Team team = teamService.findListByLeaderId(user.getId());
+        if (team != null) {
+            user.setTeamId(team.getId());
+        }
 
-        UserVip userVip = userVipService.findByUserId(user.getId());
-        if (userVip.getEndDate() < System.currentTimeMillis()) {
-            user.setVipNum(0);
-            user.setExperience(0);
-            userService.update(user);
-        }
-        if (StringUtils.isNotBlank(user.getAvater())) {
-            user.setAvater(ConfigUtil.getString("upload.url") + user.getAvater());
-        }
         if (!user.getPassword().equals(password)) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0019));
             return;
@@ -111,6 +108,19 @@ public class LoginApi extends CommonController {
 
         if (user.getStatus() == 1) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0013));
+        }
+
+        UserVip userVip = userVipService.findByUserId(user.getId());
+        if (userVip != null) {
+            if (userVip.getEndDate() < System.currentTimeMillis()) {
+                user.setVipNum(0);
+                user.setExperience(0);
+                userService.update(user);
+            }
+        }
+
+        if (StringUtils.isNotBlank(user.getAvater())) {
+            user.setAvater(ConfigUtil.getString("upload.url") + user.getAvater());
         }
 
         Result obj = new Result(true).data(createMap("user", user));
