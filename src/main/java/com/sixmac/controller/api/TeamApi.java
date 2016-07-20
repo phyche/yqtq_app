@@ -287,7 +287,7 @@ public class TeamApi extends CommonController {
         messageTeam.setStatus(0);
         messageTeamService.create(messageTeam);
 
-        WebUtil.printApi(response, new Result(true).data("添加成功"));
+        WebUtil.printApi(response, new Result(true));
     }
 
     /**
@@ -314,56 +314,80 @@ public class TeamApi extends CommonController {
         messageJoin.setTeam(teamService.getById(teamId));
         messageJoinService.create(messageJoin);
 
-        WebUtil.printApi(response, new Result(true).data("申请成功，等待球队确认"));
+        WebUtil.printApi(response, new Result(true));
     }
 
     /**
      * 完成
-     * 如果用户没有球队会有弹窗提示创建球队
      *
      * @api {post} /api/team/order 约球队
      * @apiName team.order
      * @apiGroup team
      * @apiParam {Long} userId 用户Id <必传 />
-     * @apiParam {Long} teamId 球队Id <必传 />
-     * @apiParam {Long} time 约球时间
-     * @apiParam {Long} cityId 约球地址
+     *
+     * @apiSuccess {Object}  team 球队
+     * @apiSuccess {Long} team.id 球队id
+     * @apiSuccess {String} team.name 球队名称
+     * @apiSuccess {String} team.avater 球队队徽
+     * @apiSuccess {String} team.address 球队地址
      */
     @RequestMapping(value = "/order")
     public void order(HttpServletResponse response,
-                      Long userId,
-                      Long teamId,
-                      Long time,
-                      Long cityId) {
+                          Long userId) {
 
-        if (null == teamId || userId == null ) {
+        if (userId == null ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
 
         Map<String, Object> map = new HashMap<String, Object>();
 
+        Team team = null;
         if (teamService.findListByLeaderId(userId) != null) {
-
-            //被约球球队(客队)
-            Team team1 = teamService.getById(teamId);
-            //约球球队（主队）
-            Team team2 = teamService.findListByLeaderId(userId);
-
-            TeamRace teamRace = new TeamRace();
-            teamRace.setHomeTeam(team2);
-            teamRace.setVisitingTeam(team1);
-            teamRace.setStartTime(time);
-            teamRace.setStartTime(time);
-            teamRace.setCityId(cityId);
-            team2.setDeclareNum(team2.getDeclareNum() + 1);
-            teamRaceService.create(teamRace);
-
-            WebUtil.printApi(response, new Result(true).data(0));
-        } else {
-            //会有弹窗提示创建球队
-            WebUtil.printApi(response, new Result(true).data(1));
+            team = teamService.findListByLeaderId(userId);
         }
+        WebUtil.printApi(response, new Result(true).data(createMap("team",team)));
+    }
+
+    /**
+     * 完成
+     *
+     * @api {post} /api/team/orderInfo 约球队详情
+     * @apiName team.orderInfo
+     * @apiGroup team
+     * @apiParam {Long} team1Id 主队Id <必传 />
+     * @apiParam {Long} team2Id 客队Id <必传 />
+     * @apiParam {Long} time 约球时间
+     */
+    @RequestMapping(value = "/orderInfo")
+    public void orderInfo(HttpServletResponse response,
+                      Long team1Id,
+                      Long team2Id,
+                      Long time,
+                      Long cityId) {
+
+        if (null == team1Id || team2Id == null ) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        //被约球球队(客队)
+        Team team1 = teamService.getById(team2Id);
+        //约球球队（主队）
+        Team team2 = teamService.getById(team1Id);
+
+        TeamRace teamRace = new TeamRace();
+        teamRace.setHomeTeam(team2);
+        teamRace.setVisitingTeam(team1);
+        teamRace.setStartTime(time);
+        team2.setDeclareNum(team2.getDeclareNum() + 1);
+        teamService.update(team2);
+        teamRaceService.create(teamRace);
+
+        WebUtil.printApi(response, new Result(true));
+
     }
 
     /**
@@ -372,7 +396,7 @@ public class TeamApi extends CommonController {
      * @api {post} /api/team/playerList 球员列表
      * @apiName team.playerList
      * @apiGroup team
-     * @apiParam {Integer} teamId 球队Id <必传 />
+     * @apiParam {Long} teamId 球队Id <必传 />
      *
      * @apiSuccess {Object}  list 队员
      * @apiSuccess {Long} list.user.id 队员id
@@ -409,7 +433,8 @@ public class TeamApi extends CommonController {
      * @api {post} /api/team/schedule 日程
      * @apiName team.schedule
      * @apiGroup team
-     * @apiParam {Long} teamId 球队Id <必传 />
+     * @apiParam {Long} teamId 球队Id
+     * @apiParam {Long} userId 用户Id <必传 />
      *
      * @apiSuccess {Object}  schedule 赛事列表
      * @apiSuccess {Object}  schedule.watchBallVos 球员所在球队为主队赛事列表
@@ -419,9 +444,10 @@ public class TeamApi extends CommonController {
      * @apiSuccess {String} schedule.watchBallVos.vTeamName 客队队名
      * @apiSuccess {String} schedule.watchBallVos.vTeamAvater 客队队徽
      * @apiSuccess {Integer} schedule.watchBallVos.status 赛事状态 （0：等待同意，1：约赛成功，2：约赛失败）
-     * @apiSuccess {String} schedule.watchBallVos.stadiumName 球场名称
+     * @apiSuccess {String} schedule.watchBallVos.stadiumName 地址
      * @apiSuccess {Long} schedule.watchBallVos.startTime 开始时间
      * @apiSuccess {Long} schedule.watchBallVos.createDate 发起时间
+     * @apiSuccess {String} schedule.watchBallVos.mobile 手机号
      *
      * @apiSuccess {Object}  schedule.watchBallVoList 球员所在球队为客队赛事列表
      * @apiSuccess {Long} schedule.watchBallVoList.id 赛事id
@@ -430,12 +456,13 @@ public class TeamApi extends CommonController {
      * @apiSuccess {String} schedule.watchBallVoList.vTeamName 客队队名
      * @apiSuccess {String} schedule.watchBallVoList.vTeamAvater 客队队徽
      * @apiSuccess {Integer} schedule.watchBallVoList.status 赛事状态 （0：等待同意，1：约赛成功，2：约赛失败）
-     * @apiSuccess {String} schedule.watchBallVoList.stadiumName 球场名称
+     * @apiSuccess {String} schedule.watchBallVoList.stadiumName 地址
      * @apiSuccess {Long} schedule.watchBallVoList.startTime 开始时间
      * @apiSuccess {Long} schedule.watchBallVoList.createDate 发起时间
+     * @apiSuccess {String} schedule.watchBallVoList.mobile 手机号
      */
     @RequestMapping(value = "/schedule")
-    private void schedule(HttpServletResponse response, Long teamId) {
+    private void schedule(HttpServletResponse response, Long teamId, Long userId) {
 
         if (null == teamId ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -447,12 +474,15 @@ public class TeamApi extends CommonController {
         //球队为主队的球赛
         List<TeamRace> teamRaces = teamRaceService.findHomeId(teamId);
 
-        WatchBallVo watchBallVo1 = new WatchBallVo();
+        WatchBallVo watchBallVo1 = null;
         List<WatchBallVo> watchBallVos = new ArrayList<WatchBallVo>();
         for (TeamRace teamRace : teamRaces) {
-
+            watchBallVo1 = new WatchBallVo();
+            if (teamRace.getHomeTeam().getLeaderUser().getId() == userId) {
+                watchBallVo1.setMobile(teamRace.getVisitingTeam().getLeaderUser().getMobile());
+            }
             watchBallVo1.setId(teamRace.getId());
-            watchBallVo1.setStadiumName(teamRace.getStadium().getName());
+            watchBallVo1.setStadiumName(teamRace.getAddress());
             watchBallVo1.setStartTime(teamRace.getStartTime());
             watchBallVo1.setCreateDate(teamRace.getCreateDate());
             watchBallVo1.setHomeTeamName(teamRace.getHomeTeam().getName());
@@ -469,12 +499,16 @@ public class TeamApi extends CommonController {
 
         //球队为客队的球赛
         List<TeamRace> teamRaces1 = teamRaceService.findVisitingId(teamId);
-        WatchBallVo watchBallVo2 = new WatchBallVo();
+        WatchBallVo watchBallVo2 = null;
         List<WatchBallVo> watchBallVoList = new ArrayList<WatchBallVo>();
         for (TeamRace teamRace : teamRaces1) {
 
+            watchBallVo2 = new WatchBallVo();
+            if (teamRace.getVisitingTeam().getLeaderUser().getId() == userId) {
+                watchBallVo2.setMobile(teamRace.getHomeTeam().getLeaderUser().getMobile());
+            }
             watchBallVo2.setId(teamRace.getId());
-            watchBallVo2.setStadiumName(teamRace.getStadium().getName());
+            watchBallVo2.setStadiumName(teamRace.getAddress());
             watchBallVo2.setStartTime(teamRace.getStartTime());
             watchBallVo2.setHomeTeamName(teamRace.getHomeTeam().getName());
             watchBallVo2.setCreateDate(teamRace.getCreateDate());
@@ -493,6 +527,31 @@ public class TeamApi extends CommonController {
         map.put("watchBallVoList", watchBallVoList);
 
         Result obj = new Result(true).data(createMap("schedule",map));
+        String result = JsonUtil.obj2ApiJson(obj);
+        WebUtil.printApi(response, result);
+    }
+
+    /**
+     * 完成
+     *
+     * @api {post} /api/team/raceAddress 球赛地址
+     * @apiName team.raceAddress
+     * @apiGroup team
+     * @apiParam {Long} teamRaceId 球赛Id <必传 />
+     * @apiParam {String} address 地址 <必传 />
+     *
+     *
+     */
+    @RequestMapping(value = "raceAddress")
+    public void raceAddress(HttpServletResponse response,
+                            Long teamRaceId,
+                            String address) {
+
+        TeamRace teamRace = teamRaceService.getById(teamRaceId);
+        teamRace.setAddress(address);
+        teamRaceService.update(teamRace);
+
+        Result obj = new Result(true);
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }

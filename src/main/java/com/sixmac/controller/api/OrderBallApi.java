@@ -384,9 +384,10 @@ public class OrderBallApi extends CommonController {
      * @apiSuccess {String} schedule.watchBallVos.vTeamName 客队队名
      * @apiSuccess {String} schedule.watchBallVos.vTeamAvater 客队队徽
      * @apiSuccess {Integer} schedule.watchBallVos.status 赛事状态 （0：等待同意，1：约赛成功，2：约赛失败）
-     * @apiSuccess {String} schedule.watchBallVos.stadiumName 球场名称
+     * @apiSuccess {String} schedule.watchBallVos.stadiumName 地址
      * @apiSuccess {Long} schedule.watchBallVos.startTime 开始时间
      * @apiSuccess {Long} schedule.watchBallVos.createDate 发起时间
+     * @apiSuccess {String} schedule.watchBallVos.mobile 手机号
      *
      * @apiSuccess {Object}  schedule.watchBallVoList 球员所在球队为客队赛事列表
      * @apiSuccess {String} schedule.watchBallVoList.homeTeamName 主队队名
@@ -394,9 +395,10 @@ public class OrderBallApi extends CommonController {
      * @apiSuccess {String} schedule.watchBallVoList.vTeamName 客队队名
      * @apiSuccess {String} schedule.watchBallVoList.vTeamAvater 客队队徽
      * @apiSuccess {Integer} schedule.watchBallVoList.status 赛事状态 （0：等待同意，1：约赛成功，2：约赛失败）
-     * @apiSuccess {String} schedule.watchBallVoList.stadiumName 球场名称
+     * @apiSuccess {String} schedule.watchBallVoList.stadiumName 地址
      * @apiSuccess {Long} schedule.watchBallVoList.startTime 开始时间
      * @apiSuccess {Long} schedule.watchBallVoList.createDate 发起时间
+     * @apiSuccess {String} schedule.watchBallVoList.mobile 手机号
      */
     @RequestMapping(value = "/raceList")
     public void raceList(HttpServletResponse response, Long playerId) {
@@ -431,8 +433,11 @@ public class OrderBallApi extends CommonController {
         List<WatchBallVo> watchBallVos = new ArrayList<WatchBallVo>();
         for (TeamRace teamRace : list) {
             WatchBallVo watchBallVo1 = new WatchBallVo();
+            if (teamRace.getHomeTeam().getLeaderUser().getId() == playerId) {
+                watchBallVo1.setMobile(teamRace.getVisitingTeam().getLeaderUser().getMobile());
+            }
             watchBallVo1.setId(teamRace.getId());
-            watchBallVo1.setStadiumName(teamRace.getStadium().getName());
+            watchBallVo1.setStadiumName(teamRace.getAddress());
             watchBallVo1.setStartTime(teamRace.getStartTime());
             watchBallVo1.setCreateDate(teamRace.getCreateDate());
             watchBallVo1.setHomeTeamName(teamRace.getHomeTeam().getName());
@@ -451,8 +456,11 @@ public class OrderBallApi extends CommonController {
         List<WatchBallVo> watchBallVoList = new ArrayList<WatchBallVo>();
         for (TeamRace teamRace : listrace) {
             WatchBallVo watchBallVo2 = new WatchBallVo();
+            if (teamRace.getVisitingTeam().getLeaderUser().getId() == playerId) {
+                watchBallVo2.setMobile(teamRace.getHomeTeam().getLeaderUser().getMobile());
+            }
             watchBallVo2.setId(teamRace.getId());
-            watchBallVo2.setStadiumName(teamRace.getStadium().getName());
+            watchBallVo2.setStadiumName(teamRace.getAddress());
             watchBallVo2.setStartTime(teamRace.getStartTime());
             watchBallVo2.setHomeTeamName(teamRace.getHomeTeam().getName());
             watchBallVo2.setCreateDate(teamRace.getCreateDate());
@@ -497,7 +505,7 @@ public class OrderBallApi extends CommonController {
      * @apiSuccess {String} race.watchBallVo.vTeamName 客队队名
      * @apiSuccess {String} race.watchBallVo.vTeamAvater 客队队徽
      * @apiSuccess {Integer} race.watchBallVo.status 赛事状态 （0：等待同意，1：约赛成功，2：约赛失败）
-     * @apiSuccess {String} race.watchBallVo.stadiumName 球场名称
+     * @apiSuccess {String} race.watchBallVo.stadiumName 地址
      * @apiSuccess {Long} race.watchBallVo.startTime 开始时间
      * @apiSuccess {String} race.mobile 手机号
      */
@@ -540,7 +548,7 @@ public class OrderBallApi extends CommonController {
         }
         watchBallVo.setStatus(teamRace.getStatus());
         watchBallVo.setStartTime(teamRace.getStartTime());
-        watchBallVo.setStadiumName(teamRace.getStadium().getName());
+        watchBallVo.setStadiumName(teamRace.getAddress());
 
         map.put("watchBallVo", watchBallVo);
         map.put("mobile", mobile);

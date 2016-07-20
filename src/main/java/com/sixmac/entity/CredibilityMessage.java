@@ -8,11 +8,14 @@ import javax.persistence.Table;
  * Created by Administrator on 2016/6/2 0002.
  */
 @Entity
-@Table(name = "t_credibility_message")
+@Table(name = "t_message")
 public class CredibilityMessage extends BaseEntity {
 
     @Column(name = "content")
     private String content;
+
+    @Column(name = "type")
+    private Integer type;
 
     public String getContent() {
         return content;
@@ -20,5 +23,13 @@ public class CredibilityMessage extends BaseEntity {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 }

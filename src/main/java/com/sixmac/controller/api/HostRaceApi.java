@@ -127,8 +127,7 @@ public class HostRaceApi extends CommonController {
      * @apiSuccess {String} list.team.name 球队名称
      * @apiSuccess {String} list.team.avater 球队队徽
      * @apiSuccess {Integer} list.team.count 球队总人数
-     * @apiSuccess {String} list.team.provinceName 球队所在地的省份
-     * @apiSuccess {String} list.team.cityName 球队所在地的城市
+     * @apiSuccess {String} list.team.address 球队所在地
      * @apiSuccess {Integer} list.team.num 球队场次
      */
     @RequestMapping(value = "/teamList")
@@ -145,8 +144,8 @@ public class HostRaceApi extends CommonController {
         for (HostJoin hostJoin : hostJoinList) {
             hostJoin.getTeam().setNum(hostJoin.getTeam().getBattleNum() + hostJoin.getTeam().getDeclareNum());
             hostJoin.getTeam().setCount(hostJoin.getTeam().getList().size());
-            hostJoin.getTeam().setCityName(cityService.getByCityId(hostJoin.getTeam().getCityId()).getCity());
-            hostJoin.getTeam().setProvinceName(provinceService.getByProvinceId(hostJoin.getTeam().getProvinceId()).getProvince());
+            /*hostJoin.getTeam().setCityName(cityService.getByCityId(hostJoin.getTeam().getCityId()).getCity());
+            hostJoin.getTeam().setProvinceName(provinceService.getByProvinceId(hostJoin.getTeam().getProvinceId()).getProvince());*/
 
             if (StringUtils.isNotBlank(hostJoin.getTeam().getAvater())) {
                 hostJoin.getTeam().setAvater(ConfigUtil.getString("upload.url") + hostJoin.getTeam().getAvater());
@@ -156,7 +155,7 @@ public class HostRaceApi extends CommonController {
         }
 
         Result obj = new Result(true).data(createMap("list",list));
-        String result = JsonUtil.obj2ApiJson(obj,"leaderUser","list","slogan","avater","declareNum","address");
+        String result = JsonUtil.obj2ApiJson(obj,"leaderUser","list","slogan","declareNum","provinceName","cityName");
         WebUtil.printApi(response, result);
     }
 

@@ -10,6 +10,7 @@ import com.sixmac.service.*;
 import com.sixmac.utils.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -87,6 +88,9 @@ public class UserApi extends CommonController {
 
     @Autowired
     private CityService cityService;
+
+    @Autowired
+    private AreaService areaService;
 
     @Autowired
     private ReportService reportService;
@@ -317,6 +321,10 @@ public class UserApi extends CommonController {
             List<City> cityList = cityService.getByProvinceId(province.getProvinceId());
             for (City city : cityList) {
                 province.getCityList().add(city);
+                List<Area> areaList = areaService.getByCityId(city.getCityId());
+                for (Area area : areaList) {
+                    city.getAreaList().add(area);
+                }
             }
         }
 
@@ -635,6 +643,8 @@ public class UserApi extends CommonController {
      * @apiName user.postList
      * @apiGroup user
      * @apiParam {Long} userId 用户id <必传 />
+     * @apiParam {Integer} pageNum 当前页
+     * @apiParam {Integer} pageSize 每页显示数
      *
      * @apiSuccess {Object} list 帖子
      * @apiSuccess {Object} list.user 用户
@@ -645,17 +655,25 @@ public class UserApi extends CommonController {
      * @apiSuccess {String} list.content 帖子内容
      * @apiSuccess {Integer} list.commentNum 帖子评论数
      * @apiSuccess {Long} list.createDate 创建时间
+     *
+     * @apiSuccess {Object}  page 翻页信息
+     * @apiSuccess {Integer} page.totalNum 总记录数
+     * @apiSuccess {Integer} page.totalPage 总页数
+     * @apiSuccess {Integer} page.currentPage 当前页
      */
     @RequestMapping(value = "/postList")
-    public void postList(HttpServletResponse response, Long userId) {
+    public void postList(HttpServletResponse response,
+                         Long userId,
+                         Integer pageNum,
+                         Integer pageSize) {
 
         if (userId == null ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
 
-        List<Post> list = postService.findByUserId(userId);
-        for (Post post : list) {
+        Page<Post> page = postService.page(userId, pageNum, pageSize);
+        for (Post post : page.getContent()) {
             post.setCommentNum(postCommentService.findByPostId(post.getId()).size());
             post.setPostImages(postImageService.findByPostId(post.getId()));
             for (PostImage postImage : postImageService.findByPostId(post.getId())) {
@@ -668,8 +686,9 @@ public class UserApi extends CommonController {
             }
         }
 
-        Result obj = new Result(true).data(createMap("list",list));
-        String result = JsonUtil.obj2ApiJson(obj,"post");
+        Map<String, Object> dataMap = APIFactory.fitting(page);
+        Result obj = new Result(true).data(dataMap);
+        String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
 
     }
@@ -762,8 +781,11 @@ public class UserApi extends CommonController {
      *
      * @apiSuccess {Object} list.bigRace 赛事
      * @apiSuccess {Long} list.bigRace.id 赛事id
-     * @apiSuccess {Long} list.bigRace.team1name 球队1的名字
-     * @apiSuccess {Object} list.bigRace.team2name 球队2的名字
+     * @apiSuccess {String} list.bigRace.team1name 球队1的名字
+     * @apiSuccess {String} list.bigRace.team2name 球队2的名字
+     *
+     * @apiSuccess {Object} list.stadium 球场
+     * @apiSuccess {String} list.stadium.name 球场名字
      *
      */
     @RequestMapping(value = "/watchingList")
@@ -784,7 +806,7 @@ public class UserApi extends CommonController {
         }
 
         Result obj = new Result(true).data(createMap("list",list));
-        String result = JsonUtil.obj2ApiJson(obj,"user","stadium");
+        String result = JsonUtil.obj2ApiJson(obj,"user");
         WebUtil.printApi(response, result);
     }
 

@@ -337,15 +337,8 @@
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.team.provinceName",
-            "description": "<p>球队所在地的省份</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "list.team.cityName",
-            "description": "<p>球队所在地的城市</p>"
+            "field": "list.team.address",
+            "description": "<p>球队所在地</p>"
           },
           {
             "group": "Success 200",
@@ -3932,7 +3925,7 @@
             "type": "String",
             "optional": false,
             "field": "race.watchBallVo.stadiumName",
-            "description": "<p>球场名称</p>"
+            "description": "<p>地址</p>"
           },
           {
             "group": "Success 200",
@@ -4029,7 +4022,7 @@
             "type": "String",
             "optional": false,
             "field": "schedule.watchBallVos.stadiumName",
-            "description": "<p>球场名称</p>"
+            "description": "<p>地址</p>"
           },
           {
             "group": "Success 200",
@@ -4044,6 +4037,13 @@
             "optional": false,
             "field": "schedule.watchBallVos.createDate",
             "description": "<p>发起时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "schedule.watchBallVos.mobile",
+            "description": "<p>手机号</p>"
           },
           {
             "group": "Success 200",
@@ -4092,7 +4092,7 @@
             "type": "String",
             "optional": false,
             "field": "schedule.watchBallVoList.stadiumName",
-            "description": "<p>球场名称</p>"
+            "description": "<p>地址</p>"
           },
           {
             "group": "Success 200",
@@ -4107,6 +4107,13 @@
             "optional": false,
             "field": "schedule.watchBallVoList.createDate",
             "description": "<p>发起时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "schedule.watchBallVoList.mobile",
+            "description": "<p>手机号</p>"
           }
         ]
       }
@@ -6238,27 +6245,47 @@
             "optional": false,
             "field": "userId",
             "description": "<p>用户Id &lt;必传 /&gt;</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "team",
+            "description": "<p>球队</p>"
           },
           {
-            "group": "Parameter",
+            "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "teamId",
-            "description": "<p>球队Id &lt;必传 /&gt;</p>"
+            "field": "team.id",
+            "description": "<p>球队id</p>"
           },
           {
-            "group": "Parameter",
-            "type": "Long",
+            "group": "Success 200",
+            "type": "String",
             "optional": false,
-            "field": "time",
-            "description": "<p>约球时间</p>"
+            "field": "team.name",
+            "description": "<p>球队名称</p>"
           },
           {
-            "group": "Parameter",
-            "type": "Long",
+            "group": "Success 200",
+            "type": "String",
             "optional": false,
-            "field": "cityId",
-            "description": "<p>约球地址</p>"
+            "field": "team.avater",
+            "description": "<p>球队队徽</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "team.address",
+            "description": "<p>球队地址</p>"
           }
         ]
       }
@@ -6274,6 +6301,48 @@
   },
   {
     "type": "post",
+    "url": "/api/team/orderInfo",
+    "title": "约球队详情",
+    "name": "team_orderInfo",
+    "group": "team",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Long",
+            "optional": false,
+            "field": "team1Id",
+            "description": "<p>主队Id &lt;必传 /&gt;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Long",
+            "optional": false,
+            "field": "team2Id",
+            "description": "<p>客队Id &lt;必传 /&gt;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Long",
+            "optional": false,
+            "field": "time",
+            "description": "<p>约球时间</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/TeamApi.java",
+    "groupTitle": "team",
+    "sampleRequest": [
+      {
+        "url": "http://4.16.1.158:8080/yqtq_app/api/team/orderInfo"
+      }
+    ]
+  },
+  {
+    "type": "post",
     "url": "/api/team/playerList",
     "title": "球员列表",
     "name": "team_playerList",
@@ -6283,7 +6352,7 @@
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Long",
             "optional": false,
             "field": "teamId",
             "description": "<p>球队Id &lt;必传 /&gt;</p>"
@@ -6336,6 +6405,41 @@
   },
   {
     "type": "post",
+    "url": "/api/team/raceAddress",
+    "title": "球赛地址",
+    "name": "team_raceAddress",
+    "group": "team",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Long",
+            "optional": false,
+            "field": "teamRaceId",
+            "description": "<p>球赛Id &lt;必传 /&gt;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "address",
+            "description": "<p>地址 &lt;必传 /&gt;</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/TeamApi.java",
+    "groupTitle": "team",
+    "sampleRequest": [
+      {
+        "url": "http://4.16.1.158:8080/yqtq_app/api/team/raceAddress"
+      }
+    ]
+  },
+  {
+    "type": "post",
     "url": "/api/team/schedule",
     "title": "日程",
     "name": "team_schedule",
@@ -6348,7 +6452,14 @@
             "type": "Long",
             "optional": false,
             "field": "teamId",
-            "description": "<p>球队Id &lt;必传 /&gt;</p>"
+            "description": "<p>球队Id</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Long",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>用户Id &lt;必传 /&gt;</p>"
           }
         ]
       }
@@ -6417,7 +6528,7 @@
             "type": "String",
             "optional": false,
             "field": "schedule.watchBallVos.stadiumName",
-            "description": "<p>球场名称</p>"
+            "description": "<p>地址</p>"
           },
           {
             "group": "Success 200",
@@ -6432,6 +6543,13 @@
             "optional": false,
             "field": "schedule.watchBallVos.createDate",
             "description": "<p>发起时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "schedule.watchBallVos.mobile",
+            "description": "<p>手机号</p>"
           },
           {
             "group": "Success 200",
@@ -6487,7 +6605,7 @@
             "type": "String",
             "optional": false,
             "field": "schedule.watchBallVoList.stadiumName",
-            "description": "<p>球场名称</p>"
+            "description": "<p>地址</p>"
           },
           {
             "group": "Success 200",
@@ -6502,6 +6620,13 @@
             "optional": false,
             "field": "schedule.watchBallVoList.createDate",
             "description": "<p>发起时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "schedule.watchBallVoList.mobile",
+            "description": "<p>手机号</p>"
           }
         ]
       }
@@ -7455,6 +7580,20 @@
             "optional": false,
             "field": "userId",
             "description": "<p>用户id &lt;必传 /&gt;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "pageNum",
+            "description": "<p>当前页</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "pageSize",
+            "description": "<p>每页显示数</p>"
           }
         ]
       }
@@ -7524,6 +7663,34 @@
             "optional": false,
             "field": "list.createDate",
             "description": "<p>创建时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "page",
+            "description": "<p>翻页信息</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "page.totalNum",
+            "description": "<p>总记录数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "page.totalPage",
+            "description": "<p>总页数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "page.currentPage",
+            "description": "<p>当前页</p>"
           }
         ]
       }
@@ -7903,17 +8070,31 @@
           },
           {
             "group": "Success 200",
-            "type": "Long",
+            "type": "String",
             "optional": false,
             "field": "list.bigRace.team1name",
             "description": "<p>球队1的名字</p>"
           },
           {
             "group": "Success 200",
-            "type": "Object",
+            "type": "String",
             "optional": false,
             "field": "list.bigRace.team2name",
             "description": "<p>球队2的名字</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list.stadium",
+            "description": "<p>球场</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.stadium.name",
+            "description": "<p>球场名字</p>"
           }
         ]
       }

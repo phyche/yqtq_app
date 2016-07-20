@@ -25,6 +25,8 @@ public class WatchBallVo {
 
     private Integer addressId;
 
+    private String mobile;
+
     public Long getId() {
         return id;
     }
@@ -103,5 +105,13 @@ public class WatchBallVo {
 
     public void setCreateDate(Long createDate) {
         this.createDate = createDate;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 }

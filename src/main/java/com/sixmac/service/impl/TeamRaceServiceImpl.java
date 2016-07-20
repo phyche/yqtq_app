@@ -59,12 +59,12 @@ public class TeamRaceServiceImpl implements TeamRaceService {
 
     @Override
     public TeamRace create(TeamRace teamRace) {
-        return null;
+        return teamRaceDao.save(teamRace);
     }
 
     @Override
     public TeamRace update(TeamRace teamRace) {
-        return null;
+        return teamRaceDao.save(teamRace);
     }
 
 

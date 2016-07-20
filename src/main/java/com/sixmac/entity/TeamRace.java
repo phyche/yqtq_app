@@ -26,9 +26,11 @@ public class TeamRace extends BaseEntity{
     @Column(name = "status")
     private Integer status = 0;
 
-    @ManyToOne
+    /*@ManyToOne
     @JoinColumn(name = "stadium_id")
-    private Stadium stadium;
+    private Stadium stadium;*/
+    @Column(name = "address")
+    private String address;
 
     @Column(name = "start_date")
     private Long startTime;
@@ -62,12 +64,12 @@ public class TeamRace extends BaseEntity{
         this.cityId = cityId;
     }
 
-    public Stadium getStadium() {
-        return stadium;
+    public String getAddress() {
+        return address;
     }
 
-    public void setStadium(Stadium stadium) {
-        this.stadium = stadium;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public Long getStartTime() {

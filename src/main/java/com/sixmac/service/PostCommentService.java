@@ -1,7 +1,9 @@
 package com.sixmac.service;
 
+import com.sixmac.entity.BigRace;
 import com.sixmac.entity.PostComment;
 import com.sixmac.service.common.ICommonService;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -15,4 +17,5 @@ public interface PostCommentService extends ICommonService<PostComment> {
     public List<PostComment> findByFuserId(Long userId);
 
     public List<PostComment> findByToUserId(Long userId);
+
 }

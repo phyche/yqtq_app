@@ -3,6 +3,7 @@ package com.sixmac.service.impl;
 import com.sixmac.core.Constant;
 import com.sixmac.dao.PostDao;
 import com.sixmac.entity.Post;
+import com.sixmac.entity.PostComment;
 import com.sixmac.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -101,5 +102,35 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Post> findByUserId(Long userId) {
         return postDao.findByUserId(userId);
+    }
+
+    @Override
+    public Page<Post> page(final Long userId, Integer pageNum, Integer pageSize) {
+        PageRequest pageRequest = new PageRequest(pageNum - 1, pageSize, Sort.Direction.DESC, "id");
+
+        Page<Post> page = postDao.findAll(new Specification<Post>() {
+            @Override
+            public Predicate toPredicate(Root<Post> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                Predicate result = null;
+                List<Predicate> predicateList = new ArrayList<Predicate>();
+
+                if (userId != null) {
+                    Predicate pre = cb.equal(root.get("user").get("id").as(Integer.class), userId);
+                    predicateList.add(pre);
+                }
+
+                if (predicateList.size() > 0) {
+                    result = cb.and(predicateList.toArray(new Predicate[]{}));
+                }
+
+                if (result != null) {
+                    query.where(result);
+                }
+                return query.getGroupRestriction();
+            }
+
+        }, pageRequest);
+
+        return page;
     }
 }

@@ -71,4 +71,9 @@ public class AreaServiceImpl implements AreaService {
     public Area getByAreaId(Long areaId) {
         return areaDao.getByAreaId(areaId);
     }
+
+    @Override
+    public List<Area> getByCityId(Long cityId) {
+        return areaDao.getByCityId(cityId);
+    }
 }

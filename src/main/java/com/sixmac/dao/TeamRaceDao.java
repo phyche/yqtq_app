@@ -16,11 +16,11 @@ public interface TeamRaceDao extends JpaRepository<TeamRace, Long> {
     public List<TeamRace> findByTeamId(Integer teamId);*/
 
     //根据主队id查询队赛
-    @Query("select a from TeamRace a where a.homeTeam.id = ?1 and a.status = 1")
+    @Query("select a from TeamRace a where a.homeTeam.id = ?1")
     public List<TeamRace> findHomeId(Long homeId);
 
     //根据客队id查询队赛
-    @Query("select a from TeamRace a where a.visitingTeam.id = ?1 and a.status = 1")
+    @Query("select a from TeamRace a where a.visitingTeam.id = ?1")
     public List<TeamRace> findVisitingId(Long visitingId);
 
 }
