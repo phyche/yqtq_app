@@ -104,96 +104,6 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/api/hostRace/info",
-    "title": "草根杯详情",
-    "name": "hostRace_info",
-    "group": "hostRace",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Integer",
-            "optional": false,
-            "field": "raceId",
-            "description": "<p>草根杯id &lt;必传 /&gt;</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "hostRace",
-            "description": "<p>草根杯</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "hostRace.id",
-            "description": "<p>草根杯id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "optional": false,
-            "field": "hostRace.type",
-            "description": "<p>草根杯赛制</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "hostRace.name",
-            "description": "<p>草根杯名字</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "hostRace.avater",
-            "description": "<p>草根杯封面</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "hostRace.description",
-            "description": "<p>草根杯介绍</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "hostRace.stadium",
-            "description": "<p>球场</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "hostRace.stadium.name",
-            "description": "<p>球场名称</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/HostRaceApi.java",
-    "groupTitle": "hostRace",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/hostRace/info"
-      }
-    ]
-  },
-  {
-    "type": "post",
     "url": "/api/hostRace/list",
     "title": "草根杯列表",
     "name": "hostRace_list",
@@ -356,89 +266,6 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "http://4.16.1.158:8080/yqtq_app/api/hostRace/teamList"
-      }
-    ]
-  },
-  {
-    "type": "post",
-    "url": "/api/interact/activityInfo",
-    "title": "活动详情",
-    "name": "interact_activityInfo",
-    "group": "interact",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Long",
-            "optional": false,
-            "field": "activityId",
-            "description": "<p>活动id &lt;必传 /&gt;</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "activity",
-            "description": "<p>活动</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "activity.id",
-            "description": "<p>活动id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "activity.title",
-            "description": "<p>活动标题</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "activity.avater",
-            "description": "<p>活动封面</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "activity.introduction",
-            "description": "<p>活动简介</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "activity.description",
-            "description": "<p>活动介绍</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "activity.createDate",
-            "description": "<p>活动创建时间</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/InteractApi.java",
-    "groupTitle": "interact",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/interact/activityInfo"
       }
     ]
   },
@@ -1014,242 +841,6 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/api/interact/messageInfo",
-    "title": "资讯详情",
-    "name": "interact_messageInfo",
-    "group": "interact",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Long",
-            "optional": false,
-            "field": "messageId",
-            "description": "<p>资讯id &lt;必传 /&gt;</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "information",
-            "description": "<p>资讯列表</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "information.id",
-            "description": "<p>资讯id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "information.title",
-            "description": "<p>资讯标题</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "information.avater",
-            "description": "<p>资讯封面</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "information.introduction",
-            "description": "<p>资讯简介</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "information.description",
-            "description": "<p>资讯介绍</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "information.createDate",
-            "description": "<p>资讯创建时间</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/InteractApi.java",
-    "groupTitle": "interact",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/interact/messageInfo"
-      }
-    ]
-  },
-  {
-    "type": "post",
-    "url": "/api/interact/postInfo",
-    "title": "足球圈详情",
-    "name": "interact_postInfo",
-    "group": "interact",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Long",
-            "optional": false,
-            "field": "postId",
-            "description": "<p>足球圈id &lt;必传 /&gt;</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "postInfo.post",
-            "description": "<p>帖子</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "postInfo.post.content",
-            "description": "<p>帖子内容</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "postInfo.post.createDate",
-            "description": "<p>帖子创建时间</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "optional": false,
-            "field": "postInfo.post.shareNum",
-            "description": "<p>分享数</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "optional": false,
-            "field": "postInfo.post.commentNum",
-            "description": "<p>评论数</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "postInfo.post.user",
-            "description": "<p>用户列表</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "postInfo.post.user.id",
-            "description": "<p>用户id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "postInfo.post.user.nickname",
-            "description": "<p>用户昵称</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "postInfo.postImages",
-            "description": "<p>帖子图片列表</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "postInfo.postImages.avater",
-            "description": "<p>帖子图片</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "postInfo.postComments",
-            "description": "<p>帖子评论列表</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "postInfo.postComments.content",
-            "description": "<p>帖子内容</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "postInfo.postComments.createDate",
-            "description": "<p>帖子创建时间</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "postInfo.postComments.fUser",
-            "description": "<p>帖子评论人</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "postInfo.postComments.fUser.id",
-            "description": "<p>帖子评论人id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "postInfo.postComments.fUser.avater",
-            "description": "<p>帖子评论人头像</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "postInfo.postComments.fUser.nickname",
-            "description": "<p>帖子评论人昵称</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/InteractApi.java",
-    "groupTitle": "interact",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/interact/postInfo"
-      }
-    ]
-  },
-  {
-    "type": "post",
     "url": "/api/interact/publish",
     "title": "发布圈子",
     "name": "interact_publish",
@@ -1716,114 +1307,9 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/api/message/doAdd",
-    "title": "处理好友添加消息",
-    "name": "message_doAdd",
-    "group": "message",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Long",
-            "optional": false,
-            "field": "messageAddId",
-            "description": "<p>添加消息id &lt;必传 /&gt;</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Integer",
-            "optional": false,
-            "field": "status",
-            "description": "<p>状态（1：同意，2：拒绝） &lt;必传 /&gt;</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/MessageApi.java",
-    "groupTitle": "message",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/message/doAdd"
-      }
-    ]
-  },
-  {
-    "type": "post",
-    "url": "/api/message/doBeJoinTeam",
-    "title": "处理被邀请加入球队消息",
-    "name": "message_doBeJoinTeam",
-    "group": "message",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Long",
-            "optional": false,
-            "field": "messageTeamId",
-            "description": "<p>消息id &lt;必传/&gt;</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Integer",
-            "optional": false,
-            "field": "status",
-            "description": "<p>状态（1：同意，2：拒绝） &lt;必传 /&gt;</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/MessageApi.java",
-    "groupTitle": "message",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/message/doBeJoinTeam"
-      }
-    ]
-  },
-  {
-    "type": "post",
-    "url": "/api/message/doJoinTeam",
-    "title": "处理加入球队消息",
-    "name": "message_doJoinTeam",
-    "group": "message",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Long",
-            "optional": false,
-            "field": "messageJoinId",
-            "description": "<p>消息id &lt;必传/&gt;</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Integer",
-            "optional": false,
-            "field": "status",
-            "description": "<p>状态（1：同意，2：拒绝） &lt;必传 /&gt;</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/MessageApi.java",
-    "groupTitle": "message",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/message/doJoinTeam"
-      }
-    ]
-  },
-  {
-    "type": "post",
-    "url": "/api/message/doOrder",
-    "title": "处理好友约球消息",
-    "name": "message_doOrder",
+    "url": "/api/message/doMessage",
+    "title": "处理消息",
+    "name": "message_doMessage",
     "group": "message",
     "parameter": {
       "fields": {
@@ -1841,41 +1327,13 @@ define({ "api": [
             "optional": false,
             "field": "status",
             "description": "<p>状态（1：同意，2：拒绝） &lt;必传 /&gt;</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/MessageApi.java",
-    "groupTitle": "message",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/message/doOrder"
-      }
-    ]
-  },
-  {
-    "type": "post",
-    "url": "/api/message/doTeamOrder",
-    "title": "处理球队约战消息",
-    "name": "message_doTeamOrder",
-    "group": "message",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Long",
-            "optional": false,
-            "field": "messageTeamId",
-            "description": "<p>消息id &lt;必传/&gt;</p>"
           },
           {
             "group": "Parameter",
             "type": "Integer",
             "optional": false,
-            "field": "status",
-            "description": "<p>状态（1：同意，2：拒绝） &lt;必传 /&gt;</p>"
+            "field": "type",
+            "description": "<p>类型（1：处理约球消息，2：处理添加好友消息，3：处理加入球队消息，4：处理球队约战消息） &lt;必传 /&gt;</p>"
           }
         ]
       }
@@ -1885,7 +1343,7 @@ define({ "api": [
     "groupTitle": "message",
     "sampleRequest": [
       {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/message/doTeamOrder"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/message/doMessage"
       }
     ]
   },
@@ -2985,166 +2443,6 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "http://4.16.1.158:8080/yqtq_app/api/message/watching"
-      }
-    ]
-  },
-  {
-    "type": "post",
-    "url": "/api/orderBall/info",
-    "title": "球友个人资料",
-    "name": "orderBall_info",
-    "group": "orderBall",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Long",
-            "optional": false,
-            "field": "playerId",
-            "description": "<p>球友ID &lt;必传 /&gt;</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "player.user",
-            "description": "<p>球友</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "player.user.avater",
-            "description": "<p>球友头像</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "player.user.nickname",
-            "description": "<p>球友昵称</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "optional": false,
-            "field": "player.user.vipNum",
-            "description": "<p>球友会员等级</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "optional": false,
-            "field": "player.user.credibility",
-            "description": "<p>球友信誉评分</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "optional": false,
-            "field": "player.user.age",
-            "description": "<p>球友年龄</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "optional": false,
-            "field": "player.user.gender",
-            "description": "<p>球友性别 0:男 1：女</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Double",
-            "optional": false,
-            "field": "player.user.height",
-            "description": "<p>球友身高</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Double",
-            "optional": false,
-            "field": "player.user.weight",
-            "description": "<p>球友体重</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "optional": false,
-            "field": "player.user.position",
-            "description": "<p>球友位置 0：前 1：中 2：后 3：守</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "player.team",
-            "description": "<p>球友的球队</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "player.team.avater",
-            "description": "<p>球队队徽</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "player.team.name",
-            "description": "<p>球队名称</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "optional": false,
-            "field": "player.team.declareNum",
-            "description": "<p>球队宣战数</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "optional": false,
-            "field": "player.team.battleNum",
-            "description": "<p>球队应战数</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "optional": false,
-            "field": "player.team.count",
-            "description": "<p>球队总人数</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "player.team.list",
-            "description": "<p>球队球员列表</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "player.team.list.avater",
-            "description": "<p>球队球员头像</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/OrderBallApi.java",
-    "groupTitle": "orderBall",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/orderBall/info"
       }
     ]
   },
@@ -6484,68 +5782,6 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/api/user/cityList",
-    "title": "查询城市列表",
-    "name": "user_cityList",
-    "group": "user",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Long",
-            "optional": false,
-            "field": "provinceId",
-            "description": "<p>省份id &lt;必传 /&gt;</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "list",
-            "description": "<p>城市列表</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "list.city",
-            "description": "<p>城市</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.city.id",
-            "description": "<p>城市id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "list.city.city",
-            "description": "<p>城市名字</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/UserApi.java",
-    "groupTitle": "user",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/user/cityList"
-      }
-    ]
-  },
-  {
-    "type": "post",
     "url": "/api/user/comment",
     "title": "我的看球评价",
     "name": "user_comment",
@@ -6840,10 +6076,59 @@ define({ "api": [
           },
           {
             "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "userInfo.user.age",
+            "description": "<p>用户年龄</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "userInfo.user.gender",
+            "description": "<p>用户性别 0:男 1：女</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "userInfo.user.height",
+            "description": "<p>用户身高</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "userInfo.user.weight",
+            "description": "<p>用户体重</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "userInfo.user.position",
+            "description": "<p>用户位置 0：前 1：中 2：后 3：守</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "userInfo.user.birthday",
+            "description": "<p>用户出生日期</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "userInfo.user.cityId",
+            "description": "<p>用户城市</p>"
+          },
+          {
+            "group": "Success 200",
             "type": "Object",
             "optional": false,
             "field": "userInfo.teamList",
-            "description": "<p>我加入的球队列表</p>"
+            "description": "<p>加入的球队列表</p>"
           },
           {
             "group": "Success 200",
@@ -6913,7 +6198,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "userInfo.myTeam",
-            "description": "<p>我的球队</p>"
+            "description": "<p>自己创建的球队</p>"
           },
           {
             "group": "Success 200",
@@ -6992,110 +6277,6 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/api/user/info",
-    "title": "用户个人资料",
-    "name": "user_info",
-    "group": "user",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Integer",
-            "optional": false,
-            "field": "userId",
-            "description": "<p>用户id &lt;必传 /&gt;</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "user",
-            "description": "<p>用户</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "user.id",
-            "description": "<p>用户id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "user.avater",
-            "description": "<p>用户头像</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "user.nickname",
-            "description": "<p>用户昵称</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "optional": false,
-            "field": "user.gender",
-            "description": "<p>用户性别（0：男 1：女）</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "user.birthday",
-            "description": "<p>用户出生日期</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "user.cityId",
-            "description": "<p>用户城市</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Double",
-            "optional": false,
-            "field": "user.height",
-            "description": "<p>身高</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Double",
-            "optional": false,
-            "field": "user.weight",
-            "description": "<p>体重</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "optional": false,
-            "field": "user.position",
-            "description": "<p>位置（0：前 1：中 2：后 3：守）</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/UserApi.java",
-    "groupTitle": "user",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/user/info"
-      }
-    ]
-  },
-  {
-    "type": "post",
     "url": "/api/user/message",
     "title": "说明",
     "name": "user_message",
@@ -7132,6 +6313,75 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "http://4.16.1.158:8080/yqtq_app/api/user/message"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/api/user/operation",
+    "title": "会员操作",
+    "name": "user_operation",
+    "group": "user",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Long",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>用户id &lt;必传 /&gt;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "num",
+            "description": "<p>会员时长（1：一年 2：两年 3：三年 默认为1）&lt;必传 /&gt;</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "vip.status",
+            "description": "<p>会员状态</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "vip.level",
+            "description": "<p>会员等级</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "vip.endDate",
+            "description": "<p>会员时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "vip.price",
+            "description": "<p>价格</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/UserApi.java",
+    "groupTitle": "user",
+    "sampleRequest": [
+      {
+        "url": "http://4.16.1.158:8080/yqtq_app/api/user/operation"
       }
     ]
   },
@@ -7205,75 +6455,6 @@ define({ "api": [
             "optional": false,
             "field": "order.sn",
             "description": "<p>订单号</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/UserApi.java",
-    "groupTitle": "user",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/user/operation"
-      }
-    ]
-  },
-  {
-    "type": "post",
-    "url": "/api/user/operation",
-    "title": "会员操作",
-    "name": "user_operation",
-    "group": "user",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Long",
-            "optional": false,
-            "field": "userId",
-            "description": "<p>用户id &lt;必传 /&gt;</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Integer",
-            "optional": false,
-            "field": "num",
-            "description": "<p>会员时长（1：一年 2：两年 3：三年 默认为1）&lt;必传 /&gt;</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "vip.status",
-            "description": "<p>会员状态</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "optional": false,
-            "field": "vip.level",
-            "description": "<p>会员等级</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "vip.endDate",
-            "description": "<p>会员时间</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Double",
-            "optional": false,
-            "field": "vip.price",
-            "description": "<p>价格</p>"
           }
         ]
       }

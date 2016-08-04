@@ -33,12 +33,6 @@ public class Team extends BaseEntity{
     private Long cityId;
 
     @Transient
-    private String areaName;
-
-    @Transient
-    private String cityName;
-
-    @Transient
     private String provinceName;
 
     @Column(name = "slogan")
@@ -202,22 +196,6 @@ public class Team extends BaseEntity{
 
     public void setProvinceId(Long provinceId) {
         this.provinceId = provinceId;
-    }
-
-    public String getAreaName() {
-        return areaName;
-    }
-
-    public void setAreaName(String areaName) {
-        this.areaName = areaName;
-    }
-
-    public String getCityName() {
-        return cityName;
-    }
-
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
     }
 
     public String getProvinceName() {

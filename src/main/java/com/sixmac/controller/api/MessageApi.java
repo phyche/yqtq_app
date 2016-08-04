@@ -160,34 +160,61 @@ public class MessageApi extends CommonController {
     /**
      * 完成
      *
-     * @api {post} /api/message/doOrder 处理好友约球消息
-     * @apiName message.doOrder
+     * @api {post} /api/message/doMessage 处理消息
+     * @apiName message.doMessage
      * @apiGroup message
      * @apiParam {Long} messageOrderBallId 约球消息id <必传 />
      * @apiParam {Integer} status 状态（1：同意，2：拒绝） <必传 />
+     * @apiParam {Integer} type 类型（1：处理约球消息，2：处理添加好友消息，3：处理加入球队消息，4：处理球队约战消息） <必传 />
      *
      */
-    @RequestMapping(value = "/doOrder")
-    public void doOrder(HttpServletResponse response, Long messageOrderBallId, Integer status, Integer type) {
+    @RequestMapping(value = "/doMessage")
+    public void doMessage(HttpServletResponse response, Long id, Integer status, Integer type) {
 
-        if (null == messageOrderBallId || status == null ) {
+        if (null == id || status == null || type == null) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
 
-        MessageOrderBall messageOrderBall = messageOrderBallService.getById(messageOrderBallId);
-        messageOrderBall.setStatus(status);
-        messageOrderBallService.update(messageOrderBall);
+        if (type == 1) {
+            MessageOrderBall messageOrderBall = messageOrderBallService.getById(id);
+            messageOrderBall.setStatus(status);
+            messageOrderBallService.update(messageOrderBall);
 
-        if (status == 1) {
-            UserReserve userReserve = new UserReserve();
-            userReserve.setUser(messageOrderBall.getToUser());
+            if (status == 1) {
+                UserReserve userReserve = new UserReserve();
+                userReserve.setUser(messageOrderBall.getToUser());
 
-            userReserve.setReserveId(messageOrderBall.getReserve().getId());
-            //userReserve.setReserve(messageOrderBall.getReserve());
+                userReserve.setReserveId(messageOrderBall.getReserve().getId());
+                //userReserve.setReserve(messageOrderBall.getReserve());
 
-            userReserveService.create(userReserve);
+                userReserveService.create(userReserve);
+            }
+        }else if (type == 2) {
+            MessageAdd messageAdd = messageAddService.getById(id);
+            messageAdd.setStatus(status);
+            messageAddService.update(messageAdd);
+        }else if (type == 3) {
+            MessageJoin messageJoin = messageJoinService.getById(id);
+            messageJoin.setStatus(status);
+            messageJoinService.update(messageJoin);
+
+            if (status == 1) {
+                TeamMember teamMember = new TeamMember();
+                teamMember.setUser(messageJoin.getUser());
+                teamMember.setTeam(messageJoin.getTeam());
+                teamMemberService.create(teamMember);
+            }
+        }else if (type == 4) {
+            TeamRace teamRace = teamRaceService.getById(id);
+            teamRace.setStatus(status);
+            if (status == 1) {
+                teamRace.getVisitingTeam().setBattleNum(teamRace.getVisitingTeam().getBattleNum() + 1);
+                teamRace.getHomeTeam().setDeclareNum(teamRace.getHomeTeam().getDeclareNum() + 1);
+            }
+            teamRaceService.update(teamRace);
         }
+
 
         WebUtil.printApi(response,new Result(true));
     }
@@ -382,63 +409,6 @@ public class MessageApi extends CommonController {
     /**
      * 完成
      *
-     * @api {post} /api/message/doAdd 处理好友添加消息
-     * @apiName message.doAdd
-     * @apiGroup message
-     * @apiParam {Long} messageAddId 添加消息id <必传 />
-     * @apiParam {Integer} status 状态（1：同意，2：拒绝） <必传 />
-     *
-     */
-    @RequestMapping(value = "/doAdd")
-    public void doAdd(HttpServletResponse response, Long messageAddId, Integer status) {
-
-        if (null == messageAddId || status == null ) {
-            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
-            return;
-        }
-
-        MessageAdd messageAdd = messageAddService.getById(messageAddId);
-        messageAdd.setStatus(status);
-        messageAddService.update(messageAdd);
-
-        WebUtil.printApi(response,new Result(true));
-    }
-
-    /**
-     * 完成
-     *
-     * @api {post} /api/message/doJoinTeam 处理加入球队消息
-     * @apiName message.doJoinTeam
-     * @apiGroup message
-     * @apiParam {Long} messageJoinId 消息id <必传/>
-     * @apiParam {Integer} status 状态（1：同意，2：拒绝） <必传 />
-     *
-     */
-    @RequestMapping(value = "/doJoinTeam")
-    public void doJoinTeam(HttpServletResponse response, Long messageJoinId, Integer status) {
-
-        if (null == messageJoinId || status == null ) {
-            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
-            return;
-        }
-
-        MessageJoin messageJoin = messageJoinService.getById(messageJoinId);
-        messageJoin.setStatus(status);
-        messageJoinService.update(messageJoin);
-
-        if (status == 1) {
-            TeamMember teamMember = new TeamMember();
-            teamMember.setUser(messageJoin.getUser());
-            teamMember.setTeam(messageJoin.getTeam());
-            teamMemberService.create(teamMember);
-        }
-
-        WebUtil.printApi(response, new Result(true));
-    }
-
-    /**
-     * 完成
-     *
      * @api {post} /api/message/joinTeam 加入球队消息
      * @apiName message.joinTeam
      * @apiGroup message
@@ -519,38 +489,6 @@ public class MessageApi extends CommonController {
         String result = JsonUtil.obj2ApiJson(obj,"leaderUser","toUser");
         WebUtil.printApi(response, result);
 
-    }
-
-    /**
-     * 完成
-     *
-     * @api {post} /api/message/doBeJoinTeam 处理被邀请加入球队消息
-     * @apiName message.doBeJoinTeam
-     * @apiGroup message
-     * @apiParam {Long} messageTeamId 消息id <必传/>
-     * @apiParam {Integer} status 状态（1：同意，2：拒绝） <必传 />
-     *
-     */
-    @RequestMapping(value = "/doBeJoinTeam")
-    public void doBeJoinTeam(HttpServletResponse response, Long messageTeamId, Integer status) {
-
-        if (null == messageTeamId || status == null ) {
-            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
-            return;
-        }
-
-        MessageTeam messageTeam = messageTeamService.getById(messageTeamId);
-        messageTeam.setStatus(status);
-        messageTeamService.update(messageTeam);
-
-        if (status == 1) {
-            TeamMember teamMember = new TeamMember();
-            teamMember.setUser(messageTeam.getToUser());
-            teamMember.setTeam(messageTeam.getTeam());
-            teamMemberService.create(teamMember);
-        }
-
-        WebUtil.printApi(response, new Result(true));
     }
 
     /**
@@ -662,36 +600,7 @@ public class MessageApi extends CommonController {
         }
 
         Result obj = new Result(true).data(createMap("list",list));
-        String result = JsonUtil.obj2ApiJson(obj,"leaderUser","list");
+        String result = JsonUtil.obj2ApiJson(obj,"leaderUser");
         WebUtil.printApi(response, result);
-    }
-
-    /**
-     * 完成
-     *
-     * @api {post} /api/message/doTeamOrder 处理球队约战消息
-     * @apiName message.doTeamOrder
-     * @apiGroup message
-     * @apiParam {Long} messageTeamId 消息id <必传/>
-     * @apiParam {Integer} status 状态（1：同意，2：拒绝） <必传 />
-     *
-     */
-    @RequestMapping(value = "/doTeamOrder")
-    public void doTeamOrder(HttpServletResponse response, Long teamRaceId, Integer status) {
-
-        if (null == teamRaceId || status == null ) {
-            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
-            return;
-        }
-
-        TeamRace teamRace = teamRaceService.getById(teamRaceId);
-        teamRace.setStatus(status);
-        if (status == 1) {
-            teamRace.getVisitingTeam().setBattleNum(teamRace.getVisitingTeam().getBattleNum() + 1);
-            teamRace.getHomeTeam().setDeclareNum(teamRace.getHomeTeam().getDeclareNum() + 1);
-        }
-        teamRaceService.update(teamRace);
-
-        WebUtil.printApi(response, new Result(true));
     }
 }

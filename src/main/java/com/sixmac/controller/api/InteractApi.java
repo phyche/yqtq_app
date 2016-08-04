@@ -185,76 +185,6 @@ public class InteractApi extends CommonController {
     }
 
     /**
-     * 完成
-     *
-     * @api {post} /api/interact/postInfo 足球圈详情
-     * @apiName interact.postInfo
-     * @apiGroup interact
-     * @apiParam {Long} postId 足球圈id <必传 />
-     *
-     * @apiSuccess {Object} postInfo.post 帖子
-     * @apiSuccess {String} postInfo.post.content 帖子内容
-     * @apiSuccess {Long} postInfo.post.createDate 帖子创建时间
-     *
-     * @apiSuccess {Integer} postInfo.post.shareNum 分享数
-     * @apiSuccess {Integer} postInfo.post.commentNum 评论数
-     *
-     * @apiSuccess {Object} postInfo.post.user 用户列表
-     * @apiSuccess {Long} postInfo.post.user.id 用户id
-     * @apiSuccess {String} postInfo.post.user.nickname 用户昵称
-     *
-     * @apiSuccess {Object} postInfo.postImages 帖子图片列表
-     * @apiSuccess {String} postInfo.postImages.avater 帖子图片
-     *
-     * @apiSuccess {Object} postInfo.postComments 帖子评论列表
-     * @apiSuccess {String} postInfo.postComments.content 帖子内容
-     * @apiSuccess {Long} postInfo.postComments.createDate 帖子创建时间
-     * @apiSuccess {Object} postInfo.postComments.fUser 帖子评论人
-     * @apiSuccess {Long} postInfo.postComments.fUser.id 帖子评论人id
-     * @apiSuccess {String} postInfo.postComments.fUser.avater 帖子评论人头像
-     * @apiSuccess {String} postInfo.postComments.fUser.nickname 帖子评论人昵称
-     */
-    @RequestMapping(value = "/postInfo")
-    public void postInfo(HttpServletResponse response, Long postId) {
-
-        if (null == postId ) {
-            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
-            return;
-        }
-        Map<String,Object> map = new HashMap<String,Object>();
-
-        Post post = postService.getById(postId);
-        List<PostComment> postComments = postCommentService.findByPostId(postId);
-        post.setCommentNum(postComments.size());
-        List<PostImage> postImages = postImageService.findByPostId(postId);
-
-        if (StringUtils.isNotBlank(post.getUser().getAvater())) {
-            post.getUser().setAvater(ConfigUtil.getString("upload.url") + post.getUser().getAvater());
-        }
-        for (PostComment postComment : postComments) {
-            if (StringUtils.isNotBlank(postComment.getfUser().getAvater())) {
-                postComment.getfUser().setAvater(ConfigUtil.getString("upload.url") + postComment.getfUser().getAvater());
-            }
-            if (StringUtils.isNotBlank(postComment.gettUser().getAvater())) {
-                postComment.gettUser().setAvater(ConfigUtil.getString("upload.url") + postComment.gettUser().getAvater());
-            }
-        }
-        for (PostImage postImage : postImages) {
-            if (StringUtils.isNotBlank(postImage.getAvater())) {
-                postImage.setAvater(ConfigUtil.getString("upload.url") + postImage.getAvater());
-            }
-        }
-
-        map.put("post",post);
-        map.put("postComments",postComments);
-        map.put("postImages",postImages);
-
-        Result obj = new Result(true).data(createMap("postInfo",map));
-        String result = JsonUtil.obj2ApiJson(obj);
-        WebUtil.printApi(response, result);
-    }
-
-    /**
      * (完成)
      *
      * @api {post} /api/interact/comment 评论回复
@@ -398,40 +328,6 @@ public class InteractApi extends CommonController {
     /**
      * 完成
      *
-     * @api {post} /api/interact/messageInfo 资讯详情
-     * @apiName interact.messageInfo
-     * @apiGroup interact
-     * @apiParam {Long} messageId 资讯id <必传 />
-     *
-     * @apiSuccess {Object}  information 资讯列表
-     * @apiSuccess {Long} information.id 资讯id
-     * @apiSuccess {String} information.title 资讯标题
-     * @apiSuccess {String} information.avater 资讯封面
-     * @apiSuccess {String} information.introduction 资讯简介
-     * @apiSuccess {String} information.description 资讯介绍
-     * @apiSuccess {Long} information.createDate 资讯创建时间
-     */
-    @RequestMapping(value = "/messageInfo")
-    public void messageInfo(HttpServletResponse response, Long messageId) {
-
-        if (null == messageId ) {
-            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
-            return;
-        }
-
-        Information information = informationService.getById(messageId);
-        if (StringUtils.isNotBlank(information.getAvater())) {
-            information.setAvater(ConfigUtil.getString("upload.url") + information.getAvater());
-        }
-
-        Result obj = new Result(true).data(createMap("information",information));
-        String result = JsonUtil.obj2ApiJson(obj);
-        WebUtil.printApi(response, result);
-    }
-
-    /**
-     * 完成
-     *
      * @api {post} /api/interact/listActivity 活动列表
      * @apiName interact.listActivity
      * @apiGroup interact
@@ -468,39 +364,4 @@ public class InteractApi extends CommonController {
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
-
-    /**
-     * 完成
-     *
-     * @api {post} /api/interact/activityInfo 活动详情
-     * @apiName interact.activityInfo
-     * @apiGroup interact
-     * @apiParam {Long} activityId 活动id <必传 />
-     *
-     * @apiSuccess {Object}  activity 活动
-     * @apiSuccess {Long} activity.id 活动id
-     * @apiSuccess {String} activity.title 活动标题
-     * @apiSuccess {String} activity.avater 活动封面
-     * @apiSuccess {String} activity.introduction 活动简介
-     * @apiSuccess {String} activity.description 活动介绍
-     * @apiSuccess {Long} activity.createDate 活动创建时间
-     */
-    @RequestMapping(value = "/activityInfo")
-    public void activityInfo(HttpServletResponse response, Long activityId) {
-
-        if (null == activityId ) {
-            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
-            return;
-        }
-
-        Activity activity = activityService.getById(activityId);
-        if (StringUtils.isNotBlank(activity.getAvater())) {
-            activity.setAvater(ConfigUtil.getString("upload.url") + activity.getAvater());
-        }
-
-        Result obj = new Result(true).data(createMap("activity",activity));
-        String result = JsonUtil.obj2ApiJson(obj);
-        WebUtil.printApi(response, result);
-    }
-
 }

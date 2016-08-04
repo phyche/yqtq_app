@@ -98,8 +98,15 @@ public class UserApi extends CommonController {
      * @apiSuccess {String} userInfo.user.avater 用户头像
      * @apiSuccess {Integer} userInfo.user.vipNum 用户会员等级
      * @apiSuccess {Integer} userInfo.user.credibility 用户信誉评分
+     * @apiSuccess {Integer} userInfo.user.age 用户年龄
+     * @apiSuccess {Integer} userInfo.user.gender 用户性别 0:男 1：女
+     * @apiSuccess {Double} userInfo.user.height 用户身高
+     * @apiSuccess {Double} userInfo.user.weight 用户体重
+     * @apiSuccess {Integer} userInfo.user.position 用户位置 0：前 1：中 2：后 3：守
+     * @apiSuccess {Long} userInfo.user.birthday 用户出生日期
+     * @apiSuccess {Long} userInfo.user.cityId 用户城市
      *
-     * @apiSuccess {Object}  userInfo.teamList 我加入的球队列表
+     * @apiSuccess {Object}  userInfo.teamList 加入的球队列表
      * @apiSuccess {Long} userInfo.teamList.id 球队id
      * @apiSuccess {String} userInfo.teamList.name 球队名称
      * @apiSuccess {String} userInfo.teamList.avater 球队队徽
@@ -110,7 +117,7 @@ public class UserApi extends CommonController {
      * @apiSuccess {Long} userInfo.teamList.list.id 球员id
      * @apiSuccess {String} userInfo.teamList.list.avater 球员头像
      *
-     * @apiSuccess {Object}  userInfo.myTeam 我的球队
+     * @apiSuccess {Object}  userInfo.myTeam 自己创建的球队
      * @apiSuccess {Long} userInfo.myTeam.id 球队id
      * @apiSuccess {String} userInfo.myTeam.name 球队名称
      * @apiSuccess {String} userInfo.myTeam.avater 球队队徽
@@ -136,7 +143,7 @@ public class UserApi extends CommonController {
             user.setAvater(ConfigUtil.getString("upload.url") + user.getAvater());
         }
 
-        //我加入的球队
+        //加入的球队
         List<Team> teamList = new ArrayList<Team>();
         List<TeamMember> teamMemberList = teamMemberService.findByUserId(userId);
         for (TeamMember teamMember : teamMemberList) {
@@ -155,15 +162,17 @@ public class UserApi extends CommonController {
                 }
                 teamList.add(teamMember.getTeam());
             }
+            teamMember.getTeam().setCount(teamMember.getTeam().getList().size() + 1);
         }
         map.put("teamList", teamList);
 
-        //我的球队
+        //自己创建的球队
         if (teamService.findListByLeaderId(userId) != null) {
             Team myTeam = teamService.findListByLeaderId(userId);
             if (StringUtils.isNotBlank(myTeam.getAvater())) {
                 myTeam.setAvater(ConfigUtil.getString("upload.url") + myTeam.getAvater());
             }
+            myTeam.setCount(myTeam.getList().size() + 1);
             map.put("myTeam", myTeam);
         }
 
@@ -196,44 +205,6 @@ public class UserApi extends CommonController {
         description = others + description;
 
         Result obj = new Result(true).data(createMap("content", description));
-        String result = JsonUtil.obj2ApiJson(obj);
-        WebUtil.printApi(response, result);
-    }
-
-    /**
-     * 完成
-     *
-     * @api {post} /api/user/info 用户个人资料
-     * @apiName user.info
-     * @apiGroup user
-     * @apiParam {Integer} userId 用户id <必传 />
-     *
-     * @apiSuccess {Object} user 用户
-     * @apiSuccess {Long} user.id 用户id
-     * @apiSuccess {String} user.avater 用户头像
-     * @apiSuccess {String} user.nickname 用户昵称
-     * @apiSuccess {Integer} user.gender 用户性别（0：男 1：女）
-     * @apiSuccess {Long} user.birthday 用户出生日期
-     * @apiSuccess {Long} user.cityId 用户城市
-     * @apiSuccess {Double} user.height 身高
-     * @apiSuccess {Double} user.weight 体重
-     * @apiSuccess {Integer} user.position 位置（0：前 1：中 2：后 3：守）
-     *
-     */
-    @RequestMapping(value = "/info")
-    public void info(HttpServletResponse response, Long userId) {
-
-        if (userId == null ) {
-            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
-            return;
-        }
-
-        User user = userService.getById(userId);
-        if (StringUtils.isNotBlank(user.getAvater())) {
-            user.setAvater(ConfigUtil.getString("upload.url") + user.getAvater());
-        }
-
-        Result obj = new Result(true).data(createMap("user",user));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
@@ -274,30 +245,6 @@ public class UserApi extends CommonController {
         WebUtil.printApi(response, result);
 
     }
-
-    /**
-     *
-     * @api {post} /api/user/cityList 查询城市列表
-     * @apiName user.cityList
-     * @apiGroup user
-     * @apiParam {Long} provinceId 省份id <必传 />
-     *
-     * @apiSuccess {Object} list 城市列表
-     * @apiSuccess {Object} list.city 城市
-     * @apiSuccess {Long} list.city.id 城市id
-     * @apiSuccess {String} list.city.city 城市名字
-     */
-    @RequestMapping(value = "/cityList")
-    public void cityList(HttpServletResponse response, Long provinceId) {
-
-        List<City> list = cityService.getByProvinceId(provinceId);
-
-        Result obj = new Result(true).data(createMap("list",list));
-        String result = JsonUtil.obj2ApiJson(obj);
-        WebUtil.printApi(response, result);
-
-    }
-
 
     /**
      * 完成

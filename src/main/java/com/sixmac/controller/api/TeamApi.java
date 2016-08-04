@@ -92,16 +92,15 @@ public class TeamApi extends CommonController {
         List<Team> list = page.getContent();
         for (Team team : list) {
             team.setNum(team.getBattleNum() + team.getDeclareNum());
-            team.setProvinceName(provinceService.getByProvinceId(team.getProvinceId()).getProvince());
-            team.setCityName(cityService.getByCityId(team.getCityId()).getCity());
             if (StringUtils.isNotBlank(team.getAvater())) {
                 team.setAvater(ConfigUtil.getString("upload.url") + team.getAvater());
             }
+            team.setCount(team.getList().size() + 1);
         }
 
         Map<String, Object> dataMap = APIFactory.fitting(page);
         Result obj = new Result(true).data(dataMap);
-        String result = JsonUtil.obj2ApiJson(obj,"list","leaderUser","slogan","aveage","aveweight","aveheight","sum");
+        String result = JsonUtil.obj2ApiJson(obj,"leaderUser","slogan","aveage","aveweight","aveheight","sum");
         WebUtil.printApi(response, result);
     }
 
@@ -150,7 +149,9 @@ public class TeamApi extends CommonController {
         if (StringUtils.isNotBlank(team.getAvater())) {
             team.setAvater(ConfigUtil.getString("upload.url") + team.getAvater());
         }
-        team.getLeaderUser().setAvater(team.getLeaderUser().getAvater());
+        if (StringUtils.isNotBlank(team.getLeaderUser().getAvater())) {
+            team.getLeaderUser().setAvater(ConfigUtil.getString("upload.url") + team.getLeaderUser().getAvater());
+        }
 
         List<User> userList = new ArrayList<User>();
         if (teamMemberService.findByTeamId(teamId).size() != 0) {

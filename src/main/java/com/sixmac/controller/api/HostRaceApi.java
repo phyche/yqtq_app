@@ -80,42 +80,6 @@ public class HostRaceApi extends CommonController {
     /**
      * 完成
      *
-     * @api {post} /api/hostRace/info 草根杯详情
-     * @apiName hostRace.info
-     * @apiGroup hostRace
-     * @apiParam {Integer} raceId 草根杯id <必传 />
-     *
-     * @apiSuccess {Object}  hostRace 草根杯
-     * @apiSuccess {Long} hostRace.id 草根杯id
-     * @apiSuccess {Integer} hostRace.type 草根杯赛制
-     * @apiSuccess {String} hostRace.name 草根杯名字
-     * @apiSuccess {String} hostRace.avater 草根杯封面
-     * @apiSuccess {String} hostRace.description 草根杯介绍
-     * @apiSuccess {Object} hostRace.stadium 球场
-     * @apiSuccess {String} hostRace.stadium.name 球场名称
-     */
-    @RequestMapping(value = "/info")
-    public void info(HttpServletResponse response, Long raceId) {
-
-        if (null == raceId ) {
-            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
-            return;
-        }
-
-        HostRace hostRace = hostRaceService.getById(raceId);
-
-        if (StringUtils.isNotBlank(hostRace.getAvater())) {
-            hostRace.setAvater(ConfigUtil.getString("upload.url") + hostRace.getAvater());
-        }
-
-        Result obj = new Result(true).data(createMap("hostRace",hostRace));
-        String result = JsonUtil.obj2ApiJson(obj);
-        WebUtil.printApi(response, result);
-    }
-
-    /**
-     * 完成
-     *
      * @api {post} /api/hostRace/teamList 草根杯参赛队伍
      * @apiName hostRace.teamList
      * @apiGroup hostRace
@@ -143,7 +107,7 @@ public class HostRaceApi extends CommonController {
         List<HostJoin> hostJoinList = hostJoinService.findByHostRaceId(raceId);
         for (HostJoin hostJoin : hostJoinList) {
             hostJoin.getTeam().setNum(hostJoin.getTeam().getBattleNum() + hostJoin.getTeam().getDeclareNum());
-            hostJoin.getTeam().setCount(hostJoin.getTeam().getList().size());
+            hostJoin.getTeam().setCount(hostJoin.getTeam().getList().size() + 1);
             /*hostJoin.getTeam().setCityName(cityService.getByCityId(hostJoin.getTeam().getCityId()).getCity());
             hostJoin.getTeam().setProvinceName(provinceService.getByProvinceId(hostJoin.getTeam().getProvinceId()).getProvince());*/
 

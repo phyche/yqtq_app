@@ -200,68 +200,6 @@ public class OrderBallApi extends CommonController {
 
     /**
      * 完成
-     * * @api {post} /api/orderBall/info 球友个人资料
-     *
-     * @apiName orderBall.info
-     * @apiGroup orderBall
-     * @apiParam {Long} playerId 球友ID <必传 />
-     *
-     * @apiSuccess {Object}  player.user 球友
-     * @apiSuccess {String} player.user.avater 球友头像
-     * @apiSuccess {String} player.user.nickname 球友昵称
-     * @apiSuccess {Integer} player.user.vipNum 球友会员等级
-     * @apiSuccess {Integer} player.user.credibility 球友信誉评分
-     * @apiSuccess {Integer} player.user.age 球友年龄
-     * @apiSuccess {Integer} player.user.gender 球友性别 0:男 1：女
-     * @apiSuccess {Double} player.user.height 球友身高
-     * @apiSuccess {Double} player.user.weight 球友体重
-     * @apiSuccess {Integer} player.user.position 球友位置 0：前 1：中 2：后 3：守
-     * @apiSuccess {Object} player.team 球友的球队
-     * @apiSuccess {String} player.team.avater 球队队徽
-     * @apiSuccess {String} player.team.name 球队名称
-     * @apiSuccess {Integer} player.team.declareNum 球队宣战数
-     * @apiSuccess {Integer} player.team.battleNum 球队应战数
-     * @apiSuccess {Integer} player.team.count 球队总人数
-     * @apiSuccess {Object} player.team.list 球队球员列表
-     * @apiSuccess {Long} player.team.list .id 球队球员id
-     * @apiSuccess {String} player.team.list.avater 球队球员头像
-     */
-    @RequestMapping(value = "/info")
-    public void info(HttpServletResponse response, Long playerId) {
-
-        if (null == playerId) {
-            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
-            return;
-        }
-
-        Map<String, Object> map = new HashMap<String, Object>();
-
-        User user = userService.getById(playerId);
-        if (StringUtils.isNotBlank(user.getAvater())) {
-            user.setAvater(ConfigUtil.getString("upload.url") + user.getAvater());
-        }
-
-        //查询用户所属球队
-        List<Team> team = new ArrayList<Team>();
-        List<TeamMember> teamMemberList = teamMemberService.findByUserId(user.getId());
-        for (TeamMember teamMember : teamMemberList) {
-            if (StringUtils.isNotBlank(teamMember.getUser().getAvater())) {
-                teamMember.getUser().setAvater(ConfigUtil.getString("upload.url") + teamMember.getUser().getAvater());
-            }
-            team.add(teamMember.getTeam());
-        }
-
-
-        map.put("user", user);
-        map.put("team", team);
-
-        Result obj = new Result(true).data(createMap("player",map));
-        String result = JsonUtil.obj2ApiJson(obj, "address", "city", "slogan", "leaderUser");
-        WebUtil.printApi(response, result);
-    }
-
-    /**
-     * 完成
      *
      * @api {post} /api/orderBall/orderList 球友的约球列表
      * @apiName orderBall.orderList
