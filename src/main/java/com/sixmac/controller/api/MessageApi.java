@@ -168,7 +168,7 @@ public class MessageApi extends CommonController {
      *
      */
     @RequestMapping(value = "/doOrder")
-    public void doOrder(HttpServletResponse response, Long messageOrderBallId, Integer status) {
+    public void doOrder(HttpServletResponse response, Long messageOrderBallId, Integer status, Integer type) {
 
         if (null == messageOrderBallId || status == null ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -189,7 +189,7 @@ public class MessageApi extends CommonController {
             userReserveService.create(userReserve);
         }
 
-        WebUtil.printApi(response,new Result(true).data(0));
+        WebUtil.printApi(response,new Result(true));
     }
 
     /**
@@ -401,49 +401,7 @@ public class MessageApi extends CommonController {
         messageAdd.setStatus(status);
         messageAddService.update(messageAdd);
 
-        WebUtil.printApi(response,new Result(true).data(0));
-    }
-
-    /**
-     * 完成
-     *
-     * @api {post} /api/message/joinTeam 加入球队消息
-     * @apiName message.joinTeam
-     * @apiGroup message
-     * @apiParam {Long} userId 用户id <必传/>
-     *
-     * @apiSuccess {Object}  list 消息列表
-     * @apiSuccess {Long} list.id 消息id
-     * @apiSuccess {String} list.content 消息内容
-     * @apiSuccess {Object} list.user 申请加入球队的用户
-     * @apiSuccess {Long} list.user.id 用户id
-     * @apiSuccess {String} list.user.nickname 用户昵称
-     * @apiSuccess {Long} list.createDate 消息时间
-     *
-     */
-    @RequestMapping(value = "joinTeam")
-    public void joinTeam(HttpServletResponse response, Long userId) {
-
-        if (null == userId ) {
-            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
-            return;
-        }
-
-        Team team = teamService.findListByLeaderId(userId);
-
-        if (team == null) {
-            WebUtil.printApi(response, new Result(true).data("不是队长，不能查看申请加入球队消息"));
-        }else {
-
-            List<MessageJoin> list = messageJoinService.findByTeam(team);
-            for (MessageJoin messageJoin : list) {
-                messageJoin.setContent("user" + "申请加入您的球队");
-            }
-
-            Result obj = new Result(true).data(createMap("list",list));
-            String result = JsonUtil.obj2ApiJson(obj,"team");
-            WebUtil.printApi(response, result);
-        }
+        WebUtil.printApi(response,new Result(true));
     }
 
     /**
@@ -475,46 +433,90 @@ public class MessageApi extends CommonController {
             teamMemberService.create(teamMember);
         }
 
-        WebUtil.printApi(response, new Result(true).data(0));
+        WebUtil.printApi(response, new Result(true));
     }
 
     /**
      * 完成
      *
-     * @api {post} /api/message/beJoinTeam 被邀请加入球队消息
-     * @apiName message.beJoinTeam
+     * @api {post} /api/message/joinTeam 加入球队消息
+     * @apiName message.joinTeam
      * @apiGroup message
      * @apiParam {Long} userId 用户id <必传/>
      *
      * @apiSuccess {Object}  list 消息列表
-     * @apiSuccess {Long} list.id 消息id
-     * @apiSuccess {String} list.content 消息内容
-     * @apiSuccess {Object} list.user 邀请加入球队的用户
-     * @apiSuccess {Long} list.user.id 用户id
-     * @apiSuccess {String} list.user.nickname 用户昵称
-     * @apiSuccess {Object} list.team 邀请加入的球队
-     * @apiSuccess {Long} list.team.id 球队id
-     * @apiSuccess {String} list.team.name 球队名称
-     * @apiSuccess {Long} list.createDate 消息时间
+     * @apiSuccess {Object}  list.beJoinTeamList 被邀请列表
+     * @apiSuccess {Long} list.beJoinTeamList.id 被邀请消息id
+     * @apiSuccess {String} list.beJoinTeamList.content 被邀请消息内容
+     * @apiSuccess {Object} list.beJoinTeamList.user 邀请加入球队的用户
+     * @apiSuccess {Long} list.beJoinTeamList.user.id 用户id
+     * @apiSuccess {String} list.beJoinTeamList.user.nickname 用户昵称
+     * @apiSuccess {Object} list.beJoinTeamList.team 邀请加入的球队
+     * @apiSuccess {Long} list.beJoinTeamList.team.id 球队id
+     * @apiSuccess {String} list.beJoinTeamList.team.name 球队名称
+     * @apiSuccess {Long} list.beJoinTeamList.createDate 消息时间
+     *
+     * @apiSuccess {Object}  list.joinList 邀请列表
+     * @apiSuccess {Long} list.joinList.id 邀请消息id
+     * @apiSuccess {String} list.joinList.content 邀请消息内容
+     * @apiSuccess {Object} list.joinList.toUser 邀请加入球队的用户
+     * @apiSuccess {Long} list.joinList.toUser.id 用户id
+     * @apiSuccess {String} list.joinList.toUser.nickname 用户昵称
+     * @apiSuccess {Object} list.joinList.team 邀请加入的球队
+     * @apiSuccess {Long} list.joinList.team.id 球队id
+     * @apiSuccess {String} list.joinList.team.name 球队名称
+     * @apiSuccess {Long} list.joinList.createDate 消息时间
+     *
+     * @apiSuccess {Object}  list.joinTeamList 申请列表
+     * @apiSuccess {Long} list.joinTeamList.id 消息id
+     * @apiSuccess {String} list.joinTeamList.content 消息内容
+     * @apiSuccess {Object} list.joinTeamList.user 申请加入球队的用户
+     * @apiSuccess {Long} list.joinTeamList.user.id 用户id
+     * @apiSuccess {String} list.joinTeamList.user.nickname 用户昵称
+     * @apiSuccess {Long} list.joinTeamList.createDate 消息时间
      *
      */
-    @RequestMapping(value = "/beJoinTeam")
-    public void beJoinTeam(HttpServletResponse response, Long userId) {
+    @RequestMapping(value = "/joinTeam")
+    public void joinTeam(HttpServletResponse response, Long userId) {
 
         if (null == userId ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
+        Map<String, Object> map = new HashMap<String, Object>();
 
         List<MessageTeam> list = messageTeamService.findByToUserId(userId);
-
-
         for (MessageTeam messageTeam : list) {
             messageTeam.setContent("user" + "邀请您加入" + "team");
         }
+        map.put("beJoinTeamList", list);
 
-        Result obj = new Result(true).data(createMap("list",list));
-        String result = JsonUtil.obj2ApiJson(obj,"list","leaderUser","toUser");
+        Team team = teamService.findListByLeaderId(userId);
+        if (team == null) {
+            WebUtil.printApi(response, new Result(true).data("不是队长，不能查看"));
+        }else {
+
+            List<MessageTeam> list1 = messageTeamService.findByTeam(team);
+            for (MessageTeam messageTeam : list1) {
+                if (messageTeam.getStatus() == 1) {
+
+                    messageTeam.setContent("user" + "同意加入您的球队");
+                } else if (messageTeam.getStatus() == 2) {
+
+                    messageTeam.setContent("user" + "拒绝加入您的球队");
+                }
+            }
+            map.put("joinList", list1);
+
+            List<MessageJoin> list2 = messageJoinService.findByTeam(team);
+            for (MessageJoin messageJoin : list2) {
+                messageJoin.setContent("user" + "申请加入您的球队");
+            }
+            map.put("joinTeamList", list2);
+        }
+
+        Result obj = new Result(true).data(createMap("list",map));
+        String result = JsonUtil.obj2ApiJson(obj,"leaderUser","toUser");
         WebUtil.printApi(response, result);
 
     }
@@ -548,60 +550,7 @@ public class MessageApi extends CommonController {
             teamMemberService.create(teamMember);
         }
 
-        WebUtil.printApi(response, new Result(true).data(0));
-    }
-
-    /**
-     * 完成
-     *
-     * @api {post} /api/message/Join 邀请加入球队消息
-     * @apiName message.Join
-     * @apiGroup message
-     * @apiParam {Long} userId 用户id <必传/>
-     *
-     * @apiSuccess {Object}  list 消息列表
-     * @apiSuccess {Long} list.id 消息id
-     * @apiSuccess {String} list.content 消息内容
-     * @apiSuccess {Object} list.toUser 邀请加入球队的用户
-     * @apiSuccess {Long} list.toUser.id 用户id
-     * @apiSuccess {String} list.toUser.nickname 用户昵称
-     * @apiSuccess {Object} list.team 邀请加入的球队
-     * @apiSuccess {Long} list.team.id 球队id
-     * @apiSuccess {String} list.team.name 球队名称
-     * @apiSuccess {Long} list.createDate 消息时间
-     *
-     */
-    @RequestMapping(value = "/Join")
-    public void Join(HttpServletResponse response, Long userId) {
-
-        if (null == userId ) {
-            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
-            return;
-        }
-
-        Team team = teamService.findListByLeaderId(userId);
-
-        if (team == null) {
-            WebUtil.printApi(response, new Result(true).data("不是队长，不能查看被邀请加入球队消息"));
-        }else {
-
-            List<MessageTeam> list = messageTeamService.findByTeam(team);
-
-            for (MessageTeam messageTeam : list) {
-                if (messageTeam.getStatus() == 1) {
-
-                    messageTeam.setContent("user" + "同意加入您的球队");
-                } else if (messageTeam.getStatus() == 2) {
-
-                    messageTeam.setContent("user" + "拒绝加入您的球队");
-                }
-
-            }
-
-            Result obj = new Result(true).data(createMap("list",list));
-            String result = JsonUtil.obj2ApiJson(obj,"list","leaderUser","user");
-            WebUtil.printApi(response, result);
-        }
+        WebUtil.printApi(response, new Result(true));
     }
 
     /**
@@ -743,6 +692,6 @@ public class MessageApi extends CommonController {
         }
         teamRaceService.update(teamRace);
 
-        WebUtil.printApi(response, new Result(true).data(0));
+        WebUtil.printApi(response, new Result(true));
     }
 }

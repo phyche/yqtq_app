@@ -1716,214 +1716,6 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/api/message/Join",
-    "title": "邀请加入球队消息",
-    "name": "message_Join",
-    "group": "message",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Long",
-            "optional": false,
-            "field": "userId",
-            "description": "<p>用户id &lt;必传/&gt;</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "list",
-            "description": "<p>消息列表</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.id",
-            "description": "<p>消息id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "list.content",
-            "description": "<p>消息内容</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "list.toUser",
-            "description": "<p>邀请加入球队的用户</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.toUser.id",
-            "description": "<p>用户id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "list.toUser.nickname",
-            "description": "<p>用户昵称</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "list.team",
-            "description": "<p>邀请加入的球队</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.team.id",
-            "description": "<p>球队id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "list.team.name",
-            "description": "<p>球队名称</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.createDate",
-            "description": "<p>消息时间</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/MessageApi.java",
-    "groupTitle": "message",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/message/Join"
-      }
-    ]
-  },
-  {
-    "type": "post",
-    "url": "/api/message/beJoinTeam",
-    "title": "被邀请加入球队消息",
-    "name": "message_beJoinTeam",
-    "group": "message",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Long",
-            "optional": false,
-            "field": "userId",
-            "description": "<p>用户id &lt;必传/&gt;</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "list",
-            "description": "<p>消息列表</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.id",
-            "description": "<p>消息id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "list.content",
-            "description": "<p>消息内容</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "list.user",
-            "description": "<p>邀请加入球队的用户</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.user.id",
-            "description": "<p>用户id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "list.user.nickname",
-            "description": "<p>用户昵称</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "list.team",
-            "description": "<p>邀请加入的球队</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.team.id",
-            "description": "<p>球队id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "list.team.name",
-            "description": "<p>球队名称</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.createDate",
-            "description": "<p>消息时间</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/MessageApi.java",
-    "groupTitle": "message",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/message/beJoinTeam"
-      }
-    ]
-  },
-  {
-    "type": "post",
     "url": "/api/message/doAdd",
     "title": "处理好友添加消息",
     "name": "message_doAdd",
@@ -2128,44 +1920,191 @@ define({ "api": [
           },
           {
             "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list.beJoinTeamList",
+            "description": "<p>被邀请列表</p>"
+          },
+          {
+            "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "list.id",
-            "description": "<p>消息id</p>"
+            "field": "list.beJoinTeamList.id",
+            "description": "<p>被邀请消息id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.content",
-            "description": "<p>消息内容</p>"
+            "field": "list.beJoinTeamList.content",
+            "description": "<p>被邀请消息内容</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "list.user",
-            "description": "<p>申请加入球队的用户</p>"
+            "field": "list.beJoinTeamList.user",
+            "description": "<p>邀请加入球队的用户</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "list.user.id",
+            "field": "list.beJoinTeamList.user.id",
             "description": "<p>用户id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.user.nickname",
+            "field": "list.beJoinTeamList.user.nickname",
+            "description": "<p>用户昵称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list.beJoinTeamList.team",
+            "description": "<p>邀请加入的球队</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.beJoinTeamList.team.id",
+            "description": "<p>球队id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.beJoinTeamList.team.name",
+            "description": "<p>球队名称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.beJoinTeamList.createDate",
+            "description": "<p>消息时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list.joinList",
+            "description": "<p>邀请列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.joinList.id",
+            "description": "<p>邀请消息id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.joinList.content",
+            "description": "<p>邀请消息内容</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list.joinList.toUser",
+            "description": "<p>邀请加入球队的用户</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.joinList.toUser.id",
+            "description": "<p>用户id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.joinList.toUser.nickname",
+            "description": "<p>用户昵称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list.joinList.team",
+            "description": "<p>邀请加入的球队</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.joinList.team.id",
+            "description": "<p>球队id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.joinList.team.name",
+            "description": "<p>球队名称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.joinList.createDate",
+            "description": "<p>消息时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list.joinTeamList",
+            "description": "<p>申请列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.joinTeamList.id",
+            "description": "<p>消息id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.joinTeamList.content",
+            "description": "<p>消息内容</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list.joinTeamList.user",
+            "description": "<p>申请加入球队的用户</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.joinTeamList.user.id",
+            "description": "<p>用户id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.joinTeamList.user.nickname",
             "description": "<p>用户昵称</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "list.createDate",
+            "field": "list.joinTeamList.createDate",
             "description": "<p>消息时间</p>"
           }
         ]
