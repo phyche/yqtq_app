@@ -4,8 +4,6 @@ import com.sixmac.controller.common.CommonController;
 import com.sixmac.core.ErrorCode;
 import com.sixmac.core.bean.Result;
 import com.sixmac.entity.*;
-import com.sixmac.entity.vo.TeamVo;
-import com.sixmac.entity.vo.UserVo;
 import com.sixmac.service.*;
 import com.sixmac.utils.*;
 import org.apache.commons.lang.StringUtils;
@@ -14,10 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartRequest;
 
 import javax.servlet.http.HttpServletRequest;
@@ -66,19 +61,13 @@ public class UserApi extends CommonController {
     private UserVipService userVipService;
 
     @Autowired
-    private CredibilityMessageService credibilityMessageService;
-
-    @Autowired
-    private VipMessageService vipMessageService;
+    private MessageService messageService;
 
     @Autowired
     private VipLevelService vipLevelService;
 
     @Autowired
     private OrderService orderService;
-
-    @Autowired
-    private VipLevelMessageService vipLevelMessageService;
 
     @Autowired
     private SysVipService sysVipService;
@@ -188,69 +177,20 @@ public class UserApi extends CommonController {
     /**
      * 完成
      *
-     * @api {post} /api/user/credibilityMessage 信誉评分
-     * @apiName user.credibilityMessage
+     * @api {post} /api/user/message 说明
+     * @apiName user.message
      * @apiGroup user
+     * @apiParam {Integer} type 类型 <必传 /> (1:信誉评分说明，2：足球宝贝服务说明，3：保险说明，4：约球须知，5：服务条款说明，6：会员等级说明，7：会员优惠说明，8：看球说明)
      *
-     * @apiSuccess {String} content 信誉评分内容
+     * @apiSuccess {String} content 内容
      *
      */
-    @RequestMapping(value = "/credibilityMessage")
-    public void credibilityMessage(HttpServletResponse response) {
+    @RequestMapping(value = "/message")
+    public void message(HttpServletResponse response, Integer type) {
 
-        CredibilityMessage credibilityMessage = credibilityMessageService.getById(1l);
+        Message message = messageService.getByType(type);
 
-        String description = credibilityMessage.getContent();
-        String others = "<html><head><style type='text/css'>body{overflow-x:hidden;margin:0;padding:0;background:#fff;color:#000;font-size:18px;font-family:Arial,'microsoft yahei',Verdana}body,div,fieldset,form,h1,h2,h3,h4,h5,h6,html,p,span{-webkit-text-size-adjust:none}h1,h2,h3,h4,h5,h6{font-weight:normal}applet,dd,div,dl,dt,h1,h2,h3,h4,h5,h6,html,iframe,img,object,p,span{margin:0;padding:0;border:0}img{margin:0;padding:0;border:0;vertical-align:top}li,ul{margin:0;padding:0;list-style:none outside none}input[type=text],select{margin:0;padding:0;border:0;background:0;text-indent:3px;font-size:14px;font-family:Arial,'microsoft yahei',Verdana;-webkit-appearance:none;-moz-appearance:none}.wrapper{box-sizing:border-box;padding:10px;width:100%}p{color:#666;line-height:1.6em}.wrapper img{width:auto!important;height:auto!important;max-width:100%}p,span,p span{font-size:18px!important}</head></style>";
-        description = description.format("<body><div class='wrapper'>%s</div></body></html>", description);
-        description = others + description;
-
-        Result obj = new Result(true).data(createMap("content", description));
-        String result = JsonUtil.obj2ApiJson(obj);
-        WebUtil.printApi(response, result);
-    }
-
-    /**
-     * 完成
-     *
-     * @api {post} /api/user/vipMessage 会员优惠说明
-     * @apiName user.vipMessage
-     * @apiGroup user
-     *
-     * @apiSuccess {String} content 会员优惠说明内容
-     *
-     */
-    @RequestMapping(value = "/vipMessage")
-    public void vipMessage(HttpServletResponse response) {
-
-        VipMessage vipMessage = vipMessageService.getById(1l);
-
-        String description = vipMessage.getContent();
-        String others = "<html><head><style type='text/css'>body{overflow-x:hidden;margin:0;padding:0;background:#fff;color:#000;font-size:18px;font-family:Arial,'microsoft yahei',Verdana}body,div,fieldset,form,h1,h2,h3,h4,h5,h6,html,p,span{-webkit-text-size-adjust:none}h1,h2,h3,h4,h5,h6{font-weight:normal}applet,dd,div,dl,dt,h1,h2,h3,h4,h5,h6,html,iframe,img,object,p,span{margin:0;padding:0;border:0}img{margin:0;padding:0;border:0;vertical-align:top}li,ul{margin:0;padding:0;list-style:none outside none}input[type=text],select{margin:0;padding:0;border:0;background:0;text-indent:3px;font-size:14px;font-family:Arial,'microsoft yahei',Verdana;-webkit-appearance:none;-moz-appearance:none}.wrapper{box-sizing:border-box;padding:10px;width:100%}p{color:#666;line-height:1.6em}.wrapper img{width:auto!important;height:auto!important;max-width:100%}p,span,p span{font-size:18px!important}</head></style>";
-        description = description.format("<body><div class='wrapper'>%s</div></body></html>", description);
-        description = others + description;
-
-        Result obj = new Result(true).data(createMap("content", description));
-        String result = JsonUtil.obj2ApiJson(obj);
-        WebUtil.printApi(response, result);
-    }
-
-    /**
-     * 完成
-     *
-     * @api {post} /api/user/vipLevelMessage 会员等级说明
-     * @apiName user.vipLevelMessage
-     * @apiGroup user
-     *
-     * @apiSuccess {String} content 会员等级说明内容
-     *
-     */
-    @RequestMapping(value = "/vipLevelMessage")
-    public void vipLevelMessage(HttpServletResponse response) {
-
-        VipLevelMessage vipLevelMessage = vipLevelMessageService.getById(1l);
-
-        String description = vipLevelMessage.getContent();
+        String description = message.getContent();
         String others = "<html><head><style type='text/css'>body{overflow-x:hidden;margin:0;padding:0;background:#fff;color:#000;font-size:18px;font-family:Arial,'microsoft yahei',Verdana}body,div,fieldset,form,h1,h2,h3,h4,h5,h6,html,p,span{-webkit-text-size-adjust:none}h1,h2,h3,h4,h5,h6{font-weight:normal}applet,dd,div,dl,dt,h1,h2,h3,h4,h5,h6,html,iframe,img,object,p,span{margin:0;padding:0;border:0}img{margin:0;padding:0;border:0;vertical-align:top}li,ul{margin:0;padding:0;list-style:none outside none}input[type=text],select{margin:0;padding:0;border:0;background:0;text-indent:3px;font-size:14px;font-family:Arial,'microsoft yahei',Verdana;-webkit-appearance:none;-moz-appearance:none}.wrapper{box-sizing:border-box;padding:10px;width:100%}p{color:#666;line-height:1.6em}.wrapper img{width:auto!important;height:auto!important;max-width:100%}p,span,p span{font-size:18px!important}</head></style>";
         description = description.format("<body><div class='wrapper'>%s</div></body></html>", description);
         description = others + description;
@@ -266,6 +206,7 @@ public class UserApi extends CommonController {
      * @api {post} /api/user/info 用户个人资料
      * @apiName user.info
      * @apiGroup user
+     * @apiParam {Integer} userId 用户id <必传 />
      *
      * @apiSuccess {Object} user 用户
      * @apiSuccess {Long} user.id 用户id

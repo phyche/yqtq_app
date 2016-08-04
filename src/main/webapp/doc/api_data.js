@@ -1550,34 +1550,6 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/api/login/information",
-    "title": "服务条款说明",
-    "name": "login_information",
-    "group": "login",
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "content",
-            "description": "<p>服务条款说明内容</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/LoginApi.java",
-    "groupTitle": "login",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/login/information"
-      }
-    ]
-  },
-  {
-    "type": "post",
     "url": "/api/login/sendCode",
     "title": "发送验证码",
     "name": "login_sendCode",
@@ -3239,34 +3211,6 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/api/orderBall/information",
-    "title": "约球须知",
-    "name": "orderBall_information",
-    "group": "orderBall",
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "content",
-            "description": "<p>约球须知内容</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/OrderBallApi.java",
-    "groupTitle": "orderBall",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/orderBall/information"
-      }
-    ]
-  },
-  {
-    "type": "post",
     "url": "/api/orderBall/list",
     "title": "约球列表",
     "name": "orderBall_list",
@@ -4868,47 +4812,6 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "http://4.16.1.158:8080/yqtq_app/api/stadium/info"
-      }
-    ]
-  },
-  {
-    "type": "post",
-    "url": "/api/stadium/insurance",
-    "title": "保险说明",
-    "name": "stadium_insurance",
-    "group": "stadium",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Long",
-            "optional": false,
-            "field": "insuranceId",
-            "description": "<p>保险ID</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "content",
-            "description": "<p>保险说明内容</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/StadiumApi.java",
-    "groupTitle": "stadium",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/stadium/insurance"
       }
     ]
   },
@@ -6850,34 +6753,6 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/api/user/credibilityMessage",
-    "title": "信誉评分",
-    "name": "user_credibilityMessage",
-    "group": "user",
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "content",
-            "description": "<p>信誉评分内容</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/UserApi.java",
-    "groupTitle": "user",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/user/credibilityMessage"
-      }
-    ]
-  },
-  {
-    "type": "post",
     "url": "/api/user/edit",
     "title": "编辑个人资料",
     "name": "user_edit",
@@ -7182,6 +7057,19 @@ define({ "api": [
     "title": "用户个人资料",
     "name": "user_info",
     "group": "user",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>用户id &lt;必传 /&gt;</p>"
+          }
+        ]
+      }
+    },
     "success": {
       "fields": {
         "Success 200": [
@@ -7269,26 +7157,19 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/api/user/operation",
-    "title": "会员操作",
-    "name": "user_operation",
+    "url": "/api/user/message",
+    "title": "说明",
+    "name": "user_message",
     "group": "user",
     "parameter": {
       "fields": {
         "Parameter": [
           {
             "group": "Parameter",
-            "type": "Long",
-            "optional": false,
-            "field": "userId",
-            "description": "<p>用户id &lt;必传 /&gt;</p>"
-          },
-          {
-            "group": "Parameter",
             "type": "Integer",
             "optional": false,
-            "field": "num",
-            "description": "<p>会员时长（1：一年 2：两年 3：三年 默认为1）&lt;必传 /&gt;</p>"
+            "field": "type",
+            "description": "<p>类型 &lt;必传 /&gt; (1:信誉评分说明，2：足球宝贝服务说明，3：保险说明，4：约球须知，5：服务条款说明，6：会员等级说明，7：会员优惠说明，8：看球说明)</p>"
           }
         ]
       }
@@ -7300,29 +7181,8 @@ define({ "api": [
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "vip.status",
-            "description": "<p>会员状态</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "optional": false,
-            "field": "vip.level",
-            "description": "<p>会员等级</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "vip.endDate",
-            "description": "<p>会员时间</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Double",
-            "optional": false,
-            "field": "vip.price",
-            "description": "<p>价格</p>"
+            "field": "content",
+            "description": "<p>内容</p>"
           }
         ]
       }
@@ -7332,7 +7192,7 @@ define({ "api": [
     "groupTitle": "user",
     "sampleRequest": [
       {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/user/operation"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/user/message"
       }
     ]
   },
@@ -7406,6 +7266,75 @@ define({ "api": [
             "optional": false,
             "field": "order.sn",
             "description": "<p>订单号</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/UserApi.java",
+    "groupTitle": "user",
+    "sampleRequest": [
+      {
+        "url": "http://4.16.1.158:8080/yqtq_app/api/user/operation"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/api/user/operation",
+    "title": "会员操作",
+    "name": "user_operation",
+    "group": "user",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Long",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>用户id &lt;必传 /&gt;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "num",
+            "description": "<p>会员时长（1：一年 2：两年 3：三年 默认为1）&lt;必传 /&gt;</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "vip.status",
+            "description": "<p>会员状态</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "vip.level",
+            "description": "<p>会员等级</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "vip.endDate",
+            "description": "<p>会员时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "vip.price",
+            "description": "<p>价格</p>"
           }
         ]
       }
@@ -7820,62 +7749,6 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "http://4.16.1.158:8080/yqtq_app/api/user/report"
-      }
-    ]
-  },
-  {
-    "type": "post",
-    "url": "/api/user/vipLevelMessage",
-    "title": "会员等级说明",
-    "name": "user_vipLevelMessage",
-    "group": "user",
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "content",
-            "description": "<p>会员等级说明内容</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/UserApi.java",
-    "groupTitle": "user",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/user/vipLevelMessage"
-      }
-    ]
-  },
-  {
-    "type": "post",
-    "url": "/api/user/vipMessage",
-    "title": "会员优惠说明",
-    "name": "user_vipMessage",
-    "group": "user",
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "content",
-            "description": "<p>会员优惠说明内容</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/UserApi.java",
-    "groupTitle": "user",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/user/vipMessage"
       }
     ]
   },
@@ -8327,34 +8200,6 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "http://4.16.1.158:8080/yqtq_app/api/watching/girlInfo"
-      }
-    ]
-  },
-  {
-    "type": "post",
-    "url": "/api/watching/information",
-    "title": "足球宝贝服务说明",
-    "name": "watching_information",
-    "group": "watching",
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "content",
-            "description": "<p>足球宝贝服务说明内容</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/WatchingApi.java",
-    "groupTitle": "watching",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/watching/information"
       }
     ]
   },
