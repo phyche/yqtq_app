@@ -1,6 +1,8 @@
 package com.sixmac.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 2016/5/23 0023.
@@ -47,6 +49,9 @@ public class Girl extends BaseEntity{
 
     @Transient
     private Integer orderNum;
+
+    @Transient
+    private List<GirlImage> girlImageList = new ArrayList<GirlImage>();
 
     @Column
     private Integer status;
@@ -153,5 +158,13 @@ public class Girl extends BaseEntity{
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public List<GirlImage> getGirlImageList() {
+        return girlImageList;
+    }
+
+    public void setGirlImageList(List<GirlImage> girlImageList) {
+        this.girlImageList = girlImageList;
     }
 }

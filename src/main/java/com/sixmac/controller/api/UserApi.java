@@ -663,9 +663,16 @@ public class UserApi extends CommonController {
      * @apiSuccess {Long} list.startDate 预约时间
      *
      * @apiSuccess {Object} list.girl 宝贝
-     * @apiSuccess {String} list.girl.avater 宝贝头像
+     * @apiSuccess {Long} list.girl.id 宝贝id
      * @apiSuccess {String} list.girl,nickname 宝贝昵称
      * @apiSuccess {Double} list.girl.price 宝贝价格
+     * @apiSuccess {Integer} list.girl.age 宝贝年龄
+     * @apiSuccess {Double} list.girl.height 宝贝身高
+     * @apiSuccess {Double} list.girl.weight 宝贝体重
+     *
+     * @apiSuccess {Object} list.girl.girlImageList 宝贝封面列表
+     * @apiSuccess {Long} list.girl.girlImageList.id  宝贝封面id
+     * @apiSuccess {String} list.girl.girlImageList.url  宝贝封面路径
      *
      * @apiSuccess {Object} list.bigRace 赛事
      * @apiSuccess {Long} list.bigRace.id 赛事id
@@ -690,56 +697,12 @@ public class UserApi extends CommonController {
                 if (StringUtils.isNotBlank(girlImage.getUrl())) {
                     girlImage.setUrl(ConfigUtil.getString("upload.url") + girlImage.getUrl());
                 }
+                girlUser.getGirl().getGirlImageList().add(girlImage);
             }
         }
 
         Result obj = new Result(true).data(createMap("list",list));
         String result = JsonUtil.obj2ApiJson(obj,"user");
-        WebUtil.printApi(response, result);
-    }
-
-    /**
-     * 完成
-     *
-     * @api {post} /api/user/watchingInfo 我的约看详情
-     * @apiName user.watchingInfo
-     * @apiGroup user
-     * @apiParam {Long} girlUserId 约看id <必传 />
-     *
-     * @apiSuccess {Object} girlUsers 用户约看列表
-     * @apiSuccess {Double} girlUsers.tip 红包（小费）
-     * @apiSuccess {Double} girlUsers.price 总费用
-     *
-     * @apiSuccess {Object} girlUsers.girl 宝贝
-     * @apiSuccess {String} girlUsers.girl.avater 宝贝头像
-     * @apiSuccess {String} girlUsers.girl,nickname 宝贝昵称
-     * @apiSuccess {Integer} girlUsers.duration 宝贝年龄
-     * @apiSuccess {Double} girlUsers.tip 宝贝身高
-     * @apiSuccess {Double} girlUsers.tip 宝贝体重
-     *
-     * @apiSuccess {Object} girlUsers.bigRace 赛事
-     * @apiSuccess {Long} girlUsers.bigRace.id 赛事id
-     * @apiSuccess {String} girlUsers.bigRace.team1name 球队1的名字
-     * @apiSuccess {String} girlUsers.bigRace.team2name 球队2的名字
-     *
-     */
-    @RequestMapping(value = "/watchingInfo")
-    public void watchingInfo(HttpServletResponse response, Long girlUserId) {
-
-        if (girlUserId == null ) {
-            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
-            return;
-        }
-
-        GirlUser girlUsers = girlUserService.getById(girlUserId);
-        for (GirlImage girlImage : girlImageService.find(girlUsers.getGirl().getId(), 0)) {
-            if (StringUtils.isNotBlank(girlImage.getUrl())) {
-                girlImage.setUrl(ConfigUtil.getString("upload.url") + girlImage.getUrl());
-            }
-        }
-
-        Result obj = new Result(true).data(createMap("girlUsers", girlUsers));
-        String result = JsonUtil.obj2ApiJson(obj,"user","stadium");
         WebUtil.printApi(response, result);
     }
 

@@ -92,61 +92,30 @@ public class WatchingApi extends CommonController {
 
         Map<String, Object> dataMap = APIFactory.fitting(page);
         Result obj = new Result(true).data(dataMap);
-        String result = JsonUtil.obj2ApiJson(obj,"cityId","description");
+        String result = JsonUtil.obj2ApiJson(obj,"cityId");
         WebUtil.printApi(response, result);
     }
 
     /**
      * 完成
      *
-     * @api {post} /api/watching/telecastInfo 直播看球详情
-     * @apiName watching.telecastInfo
+     * @api {post} /api/watching/inviteBall 看球邀请
+     * @apiName watching.inviteBall
      * @apiGroup watching
-     * @apiParam {Long} telecastId 看球id <必传/>
-     *
-     * @apiSuccess {Object}  watchingRace 直播看球列表
-     * @apiSuccess {Long} watchingRace.id 看球id
-     * @apiSuccess {String} watchingRace.name 看球名称
-     * @apiSuccess {String} watchingRace.avater 看球封面
-     * @apiSuccess {String} watchingRace.description 介绍
-     *
-     */
-    @RequestMapping(value = "/telecastInfo")
-    public void telecastInfo(HttpServletResponse response, Long telecastId) {
-
-        if (telecastId == null ) {
-            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
-            return;
-        }
-
-        WatchingRace watchingRace = watchingRaceService.getById(telecastId);
-        if (StringUtils.isNotBlank(watchingRace.getAvater())) {
-            watchingRace.setAvater(ConfigUtil.getString("upload.url") + watchingRace.getAvater());
-        }
-
-        Result obj = new Result(true).data(createMap("watchingRace", watchingRace));
-        String result = JsonUtil.obj2ApiJson(obj);
-        WebUtil.printApi(response, result);
-    }
-
-    /**
-     * 完成
-     *
-     * @api {post} /api/watching/telecastOrder 直播看球邀请
-     * @apiName watching.telecastOrder
-     * @apiGroup watching
-     * @apiParam {Long} telecastId 看球id <必传/>
+     * @apiParam {Integer} type 类型（1：直播看球，0：现场看球） <必传/>
+     * @apiParam {Long} id 看球id <必传/>
      * @apiParam {Long} userId 用户id <必传/>
      * @apiParam {Long} toUserId 好友id <必传/>
      *
      */
-    @RequestMapping(value = "/telecastOrder")
-    public void telecastOrder(HttpServletResponse response,
-                              Long telecastId,
+    @RequestMapping(value = "/inviteBall")
+    public void inviteBall(HttpServletResponse response,
+                              Integer type,
+                              Long id,
                               Long userId,
                               Long toUserId) {
 
-        if (userId == null || telecastId == null || toUserId == null) {
+        if (userId == null || id == null || toUserId == null || type == null) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
@@ -154,9 +123,9 @@ public class WatchingApi extends CommonController {
         MessageWatching messageWatching = new MessageWatching();
 
         messageWatching.setUser(userService.getById(userId));
-        messageWatching.setType(1);
+        messageWatching.setType(type);
         messageWatching.setToUser(userService.getById(toUserId));
-        messageWatching.setWatchingRace(watchingRaceService.getById(telecastId));
+        messageWatching.setWatchingRace(watchingRaceService.getById(id));
 
         messageWatchingService.create(messageWatching);
 
@@ -171,19 +140,20 @@ public class WatchingApi extends CommonController {
      * @apiGroup watching
      * @apiParam {Long} cityId 城市id <必传/>
      *
-     * @apiSuccess {Object}  info.bigRace 现场看球列表
-     * @apiSuccess {Long} info.bigRace.id 看球id
-     * @apiSuccess {String} info.bigRace.team1name 球队1名称
-     * @apiSuccess {String} info.bigRace.avater1 球队1队徽
-     * @apiSuccess {String} info.bigRace.team2name 球队2名称
-     * @apiSuccess {String} info.bigRace.avater2 球队2队徽
-     * @apiSuccess {Long} info.bigRace.startDate 开始时间
-     * @apiSuccess {Object}  info.bigRace.stadium 现场看球球场
-     * @apiSuccess {String} info.bigRace.stadium.name 球场名字
+     * @apiSuccess {Object}  list.bigRace 现场看球列表
+     * @apiSuccess {Long} list.bigRace.id 看球id
+     * @apiSuccess {String} list.bigRace.team1name 球队1名称
+     * @apiSuccess {String} list.bigRace.avater1 球队1队徽
+     * @apiSuccess {String} list.bigRace.team2name 球队2名称
+     * @apiSuccess {String} list.bigRace.avater2 球队2队徽
+     * @apiSuccess {Long} list.bigRace.startDate 开始时间
+     * @apiSuccess {Object}  list.bigRace.stadium 现场看球球场
+     * @apiSuccess {String} list.bigRace.stadium.name 球场名字
+     * @apiSuccess {String} list.bigRace.description 看球描述
      *
-     * @apiSuccess {Object} info.girlImageList.girlImage 宝贝
-     * @apiSuccess {Long} info.girlImageList.girlImage.id 宝贝id
-     * @apiSuccess {String} info.girlImageList.girlImage.url 宝贝封面
+     * @apiSuccess {Object} list.girlImageList.girlImage 宝贝
+     * @apiSuccess {Long} list.girlImageList.girlImage.id 宝贝id
+     * @apiSuccess {String} list.girlImageList.girlImage.url 宝贝封面
      *
      */
     @RequestMapping(value = "/sceneList")
@@ -248,85 +218,9 @@ public class WatchingApi extends CommonController {
         }
 
         //Map<String, Object> dataMap = APIFactory.fitting(page);
-        Result obj = new Result(true).data(createMap("info",map));
+        Result obj = new Result(true).data(createMap("list",map));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
-    }
-
-    /**
-     * 完成
-     *
-     * @api {post} /api/watching/sceneInfo 现场看球详情
-     * @apiName watching.sceneInfo
-     * @apiGroup watching
-     * @apiParam {Long} sceneId 看球id <必传/>
-     *
-     * @apiSuccess {Object}  bigRace 现场看球列表
-     * @apiSuccess {Long} bigRace.id 看球id
-     * @apiSuccess {String} bigRace.name 看球名称
-     * @apiSuccess {String} bigRace.description 看球描述
-     * @apiSuccess {String} bigRace.team1name 球队1名称
-     * @apiSuccess {String} bigRace.avater1 球队1队徽
-     * @apiSuccess {String} bigRace.team2name 球队2名称
-     * @apiSuccess {String} bigRace.avater2 球队2队徽
-     * @apiSuccess {Long} bigRace.startDate 开始时间
-     * @apiSuccess {Object}  bigRace.stadium 现场看球球场
-     * @apiSuccess {String} bigRace.stadium.name 球场名字
-     *
-     */
-    @RequestMapping(value = "/sceneInfo")
-    public void sceneInfo(HttpServletResponse response, Long sceneId) {
-
-        if (sceneId == null ) {
-            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
-            return;
-        }
-
-        BigRace bigRace = bigRaceService.getById(sceneId);
-        if (StringUtils.isNotBlank(bigRace.getAvater1())) {
-            bigRace.setAvater1(ConfigUtil.getString("upload.url") + bigRace.getAvater1());
-        }
-        if (StringUtils.isNotBlank(bigRace.getAvater2())) {
-            bigRace.setAvater2(ConfigUtil.getString("upload.url") + bigRace.getAvater2());
-        }
-
-        Result obj = new Result(true).data(createMap("bigRace",bigRace));
-        String result = JsonUtil.obj2ApiJson(obj);
-        WebUtil.printApi(response, result);
-    }
-
-    /**
-     * 完成
-     *
-     * @api {post} /api/watching/sceneOrder 现场看球邀请
-     * @apiName watching.sceneOrder
-     * @apiGroup watching
-     * @apiParam {Long} sceneId 看球id <必传/>
-     * @apiParam {Long} userId 用户id <必传/>
-     * @apiParam {Long} toUserId 好友id <必传/>
-     *
-     */
-    @RequestMapping(value = "/sceneOrder")
-    public void sceneOrder(HttpServletResponse response,
-                           Long sceneId,
-                           Long userId,
-                           Long toUserId) {
-
-        if (userId == null || sceneId == null || toUserId == null) {
-            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
-            return;
-        }
-
-        MessageWatching messageWatching = new MessageWatching();
-
-        messageWatching.setUser(userService.getById(userId));
-        messageWatching.setType(0);
-        messageWatching.setToUser(userService.getById(toUserId));
-        messageWatching.setBigRace(bigRaceService.getById(sceneId));
-
-        messageWatchingService.create(messageWatching);
-
-        WebUtil.printApi(response, new Result(true).data(0));
     }
 
     /**

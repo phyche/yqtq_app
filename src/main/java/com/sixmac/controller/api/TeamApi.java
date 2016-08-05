@@ -192,7 +192,7 @@ public class TeamApi extends CommonController {
         map.put("userList",userList);
 
         Result obj = new Result(true).data(createMap("teamInfo",map));
-        String result = JsonUtil.obj2ApiJson(obj,"list","declareNum","battleNum","sum","nickname");
+        String result = JsonUtil.obj2ApiJson(obj,"declareNum","battleNum","sum","nickname");
         WebUtil.printApi(response, result);
     }
 
@@ -388,43 +388,6 @@ public class TeamApi extends CommonController {
         teamRaceService.create(teamRace);
 
         WebUtil.printApi(response, new Result(true));
-
-    }
-
-    /**
-     * 完成
-     *
-     * @api {post} /api/team/playerList 球员列表
-     * @apiName team.playerList
-     * @apiGroup team
-     * @apiParam {Long} teamId 球队Id <必传 />
-     *
-     * @apiSuccess {Object}  list 队员
-     * @apiSuccess {Long} list.user.id 队员id
-     * @apiSuccess {String} list.user.name 队员昵称
-     * @apiSuccess {String} list.user.avater 队员头像
-     *
-     */
-    @RequestMapping(value = "/playerList")
-    public void playerList(HttpServletResponse response, Long teamId) {
-
-        if (null == teamId ) {
-            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
-            return;
-        }
-
-        //根据球队id会自动查询用户列表
-        Team team = teamService.getById(teamId);
-        List<User> list = team.getList();
-        for (User user : list) {
-            if (StringUtils.isNotBlank(user.getAvater())) {
-                user.setAvater(ConfigUtil.getString("upload.url") + user.getAvater());
-            }
-        }
-
-        Result obj = new Result(true).data(createMap("list",list));
-        String result = JsonUtil.obj2ApiJson(obj);
-        WebUtil.printApi(response, result);
 
     }
 
