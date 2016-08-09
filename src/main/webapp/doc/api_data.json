@@ -431,6 +431,117 @@
   },
   {
     "type": "post",
+    "url": "/api/interact/commentList",
+    "title": "评论列表",
+    "name": "interact_commentList",
+    "group": "interact",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Long",
+            "optional": false,
+            "field": "postId",
+            "description": "<p>足球圈id &lt;必传 /&gt;</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list",
+            "description": "<p>足球圈评论列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list.fUser",
+            "description": "<p>评论人</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.fUser.id",
+            "description": "<p>评论人id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.fUser.nickname",
+            "description": "<p>评论人昵称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.fUser.avater",
+            "description": "<p>评论人头像</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list.tUser",
+            "description": "<p>评论人</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.tUser.id",
+            "description": "<p>被评论人id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.tUser.nickname",
+            "description": "<p>被评论人昵称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.tUser.avater",
+            "description": "<p>被评论人头像</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.content",
+            "description": "<p>评论内容</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.createDate",
+            "description": "<p>评论时间</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/InteractApi.java",
+    "groupTitle": "interact",
+    "sampleRequest": [
+      {
+        "url": "http://4.16.1.158:8080/yqtq_app/api/interact/commentList"
+      }
+    ]
+  },
+  {
+    "type": "post",
     "url": "/api/interact/listActivity",
     "title": "活动列表",
     "name": "interact_listActivity",
@@ -791,6 +902,13 @@
             "optional": false,
             "field": "list.postCommentList.fUser.nickname",
             "description": "<p>评论人昵称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.postCommentList.fUser.avater",
+            "description": "<p>评论人头像</p>"
           },
           {
             "group": "Success 200",
@@ -7066,22 +7184,43 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "girlInfo.girlImages",
+            "field": "girlInfo.girl.girlImageList",
             "description": "<p>宝贝相册列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "girlInfo.girlImages.id",
+            "field": "girlInfo.girl.girlImageList.id",
             "description": "<p>宝贝相册id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "girlInfo.girlImages.avater",
+            "field": "girlInfo.girl.girlImageList.avater",
             "description": "<p>宝贝相册</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "girlInfo.girlImages",
+            "description": "<p>宝贝相册封面</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "girlInfo.girlImages.id",
+            "description": "<p>宝贝封面id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "girlInfo.girlImages.avater",
+            "description": "<p>宝贝封面</p>"
           }
         ]
       }
@@ -7350,91 +7489,91 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "list.bigRace",
+            "field": "info.bigRace",
             "description": "<p>现场看球列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "list.bigRace.id",
+            "field": "info.bigRace.id",
             "description": "<p>看球id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.bigRace.team1name",
+            "field": "info.bigRace.team1name",
             "description": "<p>球队1名称</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.bigRace.avater1",
+            "field": "info.bigRace.avater1",
             "description": "<p>球队1队徽</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.bigRace.team2name",
+            "field": "info.bigRace.team2name",
             "description": "<p>球队2名称</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.bigRace.avater2",
+            "field": "info.bigRace.avater2",
             "description": "<p>球队2队徽</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "list.bigRace.startDate",
+            "field": "info.bigRace.startDate",
             "description": "<p>开始时间</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "list.bigRace.stadium",
+            "field": "info.bigRace.stadium",
             "description": "<p>现场看球球场</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.bigRace.stadium.name",
+            "field": "info.bigRace.stadium.name",
             "description": "<p>球场名字</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.bigRace.description",
+            "field": "info.bigRace.description",
             "description": "<p>看球描述</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "list.girlImageList.girlImage",
+            "field": "info.girlImageList.girlImage",
             "description": "<p>宝贝</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "list.girlImageList.girlImage.id",
+            "field": "info.girlImageList.girlImage.id",
             "description": "<p>宝贝id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.girlImageList.girlImage.url",
+            "field": "info.girlImageList.girlImage.url",
             "description": "<p>宝贝封面</p>"
           }
         ]

@@ -228,7 +228,7 @@ public class UserApi extends CommonController {
     @RequestMapping(value = "/provinceList")
     public void provinceList(HttpServletResponse response) {
 
-        List<Province> list = provinceService.findAll();
+        /*List<Province> list = provinceService.findAll();
         for (Province province : list) {
             List<City> cityList = cityService.getByProvinceId(province.getProvinceId());
             for (City city : cityList) {
@@ -238,7 +238,8 @@ public class UserApi extends CommonController {
                     city.getAreaList().add(area);
                 }
             }
-        }
+        }*/
+        List<Province> list = provinceService.findList();
 
         Result obj = new Result(true).data(createMap("list",list));
         String result = JsonUtil.obj2ApiJson(obj);

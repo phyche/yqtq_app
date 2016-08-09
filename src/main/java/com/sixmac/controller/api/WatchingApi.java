@@ -140,20 +140,20 @@ public class WatchingApi extends CommonController {
      * @apiGroup watching
      * @apiParam {Long} cityId 城市id <必传/>
      *
-     * @apiSuccess {Object}  list.bigRace 现场看球列表
-     * @apiSuccess {Long} list.bigRace.id 看球id
-     * @apiSuccess {String} list.bigRace.team1name 球队1名称
-     * @apiSuccess {String} list.bigRace.avater1 球队1队徽
-     * @apiSuccess {String} list.bigRace.team2name 球队2名称
-     * @apiSuccess {String} list.bigRace.avater2 球队2队徽
-     * @apiSuccess {Long} list.bigRace.startDate 开始时间
-     * @apiSuccess {Object}  list.bigRace.stadium 现场看球球场
-     * @apiSuccess {String} list.bigRace.stadium.name 球场名字
-     * @apiSuccess {String} list.bigRace.description 看球描述
+     * @apiSuccess {Object}  info.bigRace 现场看球列表
+     * @apiSuccess {Long} info.bigRace.id 看球id
+     * @apiSuccess {String} info.bigRace.team1name 球队1名称
+     * @apiSuccess {String} info.bigRace.avater1 球队1队徽
+     * @apiSuccess {String} info.bigRace.team2name 球队2名称
+     * @apiSuccess {String} info.bigRace.avater2 球队2队徽
+     * @apiSuccess {Long} info.bigRace.startDate 开始时间
+     * @apiSuccess {Object}  info.bigRace.stadium 现场看球球场
+     * @apiSuccess {String} info.bigRace.stadium.name 球场名字
+     * @apiSuccess {String} info.bigRace.description 看球描述
      *
-     * @apiSuccess {Object} list.girlImageList.girlImage 宝贝
-     * @apiSuccess {Long} list.girlImageList.girlImage.id 宝贝id
-     * @apiSuccess {String} list.girlImageList.girlImage.url 宝贝封面
+     * @apiSuccess {Object} info.girlImageList.girlImage 宝贝
+     * @apiSuccess {Long} info.girlImageList.girlImage.id 宝贝id
+     * @apiSuccess {String} info.girlImageList.girlImage.url 宝贝封面
      *
      */
     @RequestMapping(value = "/sceneList")
@@ -218,7 +218,7 @@ public class WatchingApi extends CommonController {
         }
 
         //Map<String, Object> dataMap = APIFactory.fitting(page);
-        Result obj = new Result(true).data(createMap("list",map));
+        Result obj = new Result(true).data(createMap("info",map));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
@@ -238,6 +238,7 @@ public class WatchingApi extends CommonController {
      * @apiSuccess {Double} girlInfo.girl.height 宝贝身高
      * @apiSuccess {Double} girlInfo.girl.weight 宝贝体重
      * @apiSuccess {Double} girlInfo.girl.price 宝贝价格
+     * @apiSuccess {Double} girlInfo.girl.aveStar 宝贝陪看评价
      * @apiSuccess {Integer} girlInfo.girl.orderNum 宝贝预约次数
      * @apiSuccess {String} girlInfo.girl.interest 宝贝兴趣
      * @apiSuccess {String} girlInfo.girl.profession 宝贝职业
@@ -245,9 +246,15 @@ public class WatchingApi extends CommonController {
      * @apiSuccess {String} girlInfo.girl.label 宝贝签名
      * @apiSuccess {Integer} girlInfo.girl.cityId 宝贝陪看区域
      *
-     * @apiSuccess {Object} girlInfo.girlImages 宝贝相册列表
-     * @apiSuccess {Integer} girlInfo.girlImages.id 宝贝相册id
-     * @apiSuccess {String} girlInfo.girlImages.avater 宝贝相册
+     * @apiSuccess {Object} girlInfo.girl.girlImageList 宝贝相册列表
+     * @apiSuccess {Integer} girlInfo.girl.girlImageList.id 宝贝相册id
+     * @apiSuccess {String} girlInfo.girl.girlImageList.avater 宝贝相册
+     *
+     * @apiSuccess {Object} girlInfo.girlImages 宝贝封面列表
+     * @apiSuccess {Integer} girlInfo.girlImages.id 宝贝封面id
+     * @apiSuccess {String} girlInfo.girlImages.avater 宝贝封面
+     *
+     *
      */
     @RequestMapping(value = "/girlInfo")
     public void girlInfo(HttpServletResponse response, Long girlId) {
@@ -262,13 +269,22 @@ public class WatchingApi extends CommonController {
         Girl girl = girlService.getById(girlId);
         girl.setCityName(cityService.getByCityId(girl.getCityId()).getCity());
 
-        //宝贝相册
-        List<GirlImage> girlImages = girlImageService.findByGirlId(girlId);
+        //宝贝封面
+        List<GirlImage> girlImages = girlImageService.find(girlId, 0);
         for (GirlImage girlImage : girlImages) {
             if (StringUtils.isNotBlank(girlImage.getUrl())) {
                 girlImage.setUrl(ConfigUtil.getString("upload.url") + girlImage.getUrl());
             }
         }
+
+        //宝贝相册
+        List<GirlImage> girlImages1 = girlImageService.find(girlId, 1);
+        for (GirlImage girlImage : girlImages1) {
+            if (StringUtils.isNotBlank(girlImage.getUrl())) {
+                girlImage.setUrl(ConfigUtil.getString("upload.url") + girlImage.getUrl());
+            }
+        }
+        girl.setGirlImageList(girlImages1);
 
         //宝贝预约数
         List<GirlUser> girlUserList = girlUserService.findByGirlId(girlId);
@@ -278,11 +294,22 @@ public class WatchingApi extends CommonController {
         girl.setOrderNum(girlUserList.size());
         girlService.update(girl);
 
+        Double star = 0.0;
+        List<GirlComment> girlCommentList = girlCommentService.findByGirlId(girlId);
+        for (GirlComment girlComment : girlCommentList) {
+            star += girlComment.getStar();
+        }
+        if (girlCommentList.size() != 0) {
+            girl.setAveStar(star / girlCommentList.size());
+        }else {
+            girl.setAveStar(0.0);
+        }
+
         map.put("girl",girl);
         map.put("girlImages",girlImages);
 
         Result obj = new Result(true).data(createMap("girlInfo",map));
-        String result = JsonUtil.obj2ApiJson(obj,"girl");
+        String result = JsonUtil.obj2ApiJson(obj,"girl","type");
         WebUtil.printApi(response, result);
     }
 

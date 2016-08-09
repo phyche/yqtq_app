@@ -1,7 +1,11 @@
 package com.sixmac.service.impl;
 
 import com.sixmac.core.Constant;
+import com.sixmac.dao.AreaDao;
+import com.sixmac.dao.CityDao;
 import com.sixmac.dao.ProvinceDao;
+import com.sixmac.entity.Area;
+import com.sixmac.entity.City;
 import com.sixmac.entity.Province;
 import com.sixmac.service.ProvinceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +25,12 @@ public class ProvinceServiceImpl implements ProvinceService {
 
     @Autowired
     private ProvinceDao provinceDao;
+
+    @Autowired
+    private CityDao cityDao;
+
+    @Autowired
+    private AreaDao areaDao;
 
     @Override
     public List<Province> findAll() {
@@ -70,5 +80,21 @@ public class ProvinceServiceImpl implements ProvinceService {
     @Override
     public Province getByProvinceId(Long provinceId) {
         return provinceDao.getByProvinceId(provinceId);
+    }
+
+    @Override
+    public List<Province> findList() {
+        List<Province> list = provinceDao.findAll();
+        for (Province province : list) {
+            List<City> cityList = cityDao.getByProvinceId(province.getProvinceId());
+            for (City city : cityList) {
+                province.getCityList().add(city);
+                List<Area> areaList = areaDao.getByCityId(city.getCityId());
+                for (Area area : areaList) {
+                    city.getAreaList().add(area);
+                }
+            }
+        }
+        return list;
     }
 }

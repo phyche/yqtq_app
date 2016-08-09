@@ -11,6 +11,6 @@ import java.util.List;
  */
 public interface GirlCommentDao extends JpaRepository<GirlComment, Long> {
 
-    @Query("select a from GirlComment a where a.girl.id = ?1 ")
+    @Query("select a from GirlComment a where a.girl.id = ?1 order by a.createDate desc")
     public List<GirlComment> findByGirlId(Long girlId);
 }

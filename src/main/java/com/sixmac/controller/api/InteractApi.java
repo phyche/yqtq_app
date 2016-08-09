@@ -77,6 +77,7 @@ public class InteractApi extends CommonController {
      * @apiSuccess {Object} list.postCommentList.fUser 评论人
      * @apiSuccess {Long} list.postCommentList.fUser.id 评论人id
      * @apiSuccess {String} list.postCommentList.fUser.nickname 评论人昵称
+     * @apiSuccess {String} list.postCommentList.fUser.avater 评论人头像
      * @apiSuccess {String} list.postCommentList.content 评论内容
      *
      * @apiSuccess {Object}  page 翻页信息
@@ -103,6 +104,11 @@ public class InteractApi extends CommonController {
                 }
             }
             post.setPostCommentList(postCommentService.findByPostId(post.getId()));
+            for (PostComment postComment : postCommentService.findByPostId(post.getId())) {
+                if (StringUtils.isNotBlank(postComment.getfUser().getAvater())) {
+                    postComment.getfUser().setAvater(ConfigUtil.getString("upload.url") + postComment.getfUser().getAvater());
+                }
+            }
             post.setCommentNum(post.getPostCommentList().size());
             /*for (int i = 0; i<2; i++) {
                 post.setPostCommentList(post.getPostCommentList());
@@ -115,6 +121,43 @@ public class InteractApi extends CommonController {
         String result = JsonUtil.obj2ApiJson(obj,"mobile", "password", "age", "height", "weight", "position", "credibility", "vipNum", "integral", "experience", "proviceId", "endDate", "cityId", "gender", "birthday");
         WebUtil.printApi(response, result);
 
+    }
+
+    /**
+     *
+     * @api {post} /api/interact/commentList 评论列表
+     * @apiName interact.commentList
+     * @apiGroup interact
+     * @apiParam {Long} postId 足球圈id <必传 />
+     *
+     * @apiSuccess {Object} list 足球圈评论列表
+     * @apiSuccess {Object} list.fUser 评论人
+     * @apiSuccess {Long} list.fUser.id 评论人id
+     * @apiSuccess {String} list.fUser.nickname 评论人昵称
+     * @apiSuccess {String} list.fUser.avater 评论人头像
+     * @apiSuccess {Object} list.tUser 评论人
+     * @apiSuccess {Long} list.tUser.id 被评论人id
+     * @apiSuccess {String} list.tUser.nickname 被评论人昵称
+     * @apiSuccess {String} list.tUser.avater 被评论人头像
+     * @apiSuccess {String} list.content 评论内容
+     * @apiSuccess {Long} list.createDate 评论时间
+     */
+    @RequestMapping(value = "/commentList")
+    public void commentList(HttpServletResponse response,
+                            Long postId) {
+        List<PostComment> list = postCommentService.findByPostId(postId);
+        for (PostComment postComment : list) {
+            if (StringUtils.isNotBlank(postComment.getfUser().getAvater())) {
+                postComment.getfUser().setAvater(ConfigUtil.getString("upload.url") + postComment.getfUser().getAvater());
+            }
+            if (StringUtils.isNotBlank(postComment.gettUser().getAvater())) {
+                postComment.gettUser().setAvater(ConfigUtil.getString("upload.url") + postComment.gettUser().getAvater());
+            }
+        }
+
+        Result obj = new Result(true).data(createMap("list",list));
+        String result = JsonUtil.obj2ApiJson(obj);
+        WebUtil.printApi(response, result);
     }
 
     /**

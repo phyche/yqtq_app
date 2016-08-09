@@ -39,7 +39,7 @@ public class Girl extends BaseEntity{
     private String label;
 
     @Column(name = "age")
-    private String age;
+    private Integer age;
 
     @Column(name = "height")
     private Double height;
@@ -49,6 +49,9 @@ public class Girl extends BaseEntity{
 
     @Transient
     private Integer orderNum;
+
+    @Transient
+    private Double aveStar = 0.0;
 
     @Transient
     private List<GirlImage> girlImageList = new ArrayList<GirlImage>();
@@ -120,11 +123,11 @@ public class Girl extends BaseEntity{
         this.label = label;
     }
 
-    public String getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(String age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 
@@ -166,5 +169,13 @@ public class Girl extends BaseEntity{
 
     public void setGirlImageList(List<GirlImage> girlImageList) {
         this.girlImageList = girlImageList;
+    }
+
+    public Double getAveStar() {
+        return aveStar;
+    }
+
+    public void setAveStar(Double aveStar) {
+        this.aveStar = aveStar;
     }
 }

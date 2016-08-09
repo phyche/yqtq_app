@@ -19,16 +19,16 @@ public class Post extends BaseEntity{
     private String content;
 
     @Column(name = "share_count")
-    private Integer shareNum;
+    private Integer shareNum = 0;
 
     @Column(name = "report_count")
-    private Integer reportNum;
+    private Integer reportNum = 0;
 
     @Column(name = "status")
     private Integer status;
 
     @Transient
-    private Integer commentNum;
+    private Integer commentNum = 0;
 
     @Transient
     List<PostImage> postImages = new ArrayList<PostImage>();
