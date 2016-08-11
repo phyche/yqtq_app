@@ -4,6 +4,7 @@ import com.sixmac.controller.common.CommonController;
 import com.sixmac.core.ErrorCode;
 import com.sixmac.core.bean.Result;
 import com.sixmac.entity.*;
+import com.sixmac.entity.vo.GirlImageVo;
 import com.sixmac.service.*;
 import com.sixmac.utils.*;
 import org.apache.commons.lang.StringUtils;
@@ -90,11 +91,10 @@ public class UserApi extends CommonController {
     /**
      * 完成
      *
-     *  @api {post} /api/user/homePage 用户个人首页
+     * @api {post} /api/user/homePage 用户个人首页
      * @apiName user.homePage
      * @apiGroup user
      * @apiParam {Integer} userId 用户id <必传 />
-     *
      * @apiSuccess {Object}  userInfo 用户
      * @apiSuccess {Object}  userInfo.user 用户
      * @apiSuccess {String} userInfo.user.nickname 用户昵称
@@ -108,7 +108,6 @@ public class UserApi extends CommonController {
      * @apiSuccess {Integer} userInfo.user.position 用户位置 0：前 1：中 2：后 3：守
      * @apiSuccess {Long} userInfo.user.birthday 用户出生日期
      * @apiSuccess {Long} userInfo.user.cityId 用户城市
-     *
      * @apiSuccess {Object}  userInfo.teamList 加入的球队列表
      * @apiSuccess {Long} userInfo.teamList.id 球队id
      * @apiSuccess {String} userInfo.teamList.name 球队名称
@@ -119,7 +118,6 @@ public class UserApi extends CommonController {
      * @apiSuccess {Object} userInfo.teamList.list 我加入的球队的球员列表
      * @apiSuccess {Long} userInfo.teamList.list.id 球员id
      * @apiSuccess {String} userInfo.teamList.list.avater 球员头像
-     *
      * @apiSuccess {Object}  userInfo.myTeam 自己创建的球队
      * @apiSuccess {Long} userInfo.myTeam.id 球队id
      * @apiSuccess {String} userInfo.myTeam.name 球队名称
@@ -134,7 +132,7 @@ public class UserApi extends CommonController {
     @RequestMapping(value = "/homePage")
     public void homePage(HttpServletResponse response, Long userId) {
 
-        if (userId == null ) {
+        if (userId == null) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
@@ -159,7 +157,7 @@ public class UserApi extends CommonController {
                     }
                     teamList.add(teamMember.getTeam());
                 }
-            }else {
+            } else {
                 if (StringUtils.isNotBlank(teamMember.getUser().getAvater())) {
                     teamMember.getUser().setAvater(ConfigUtil.getString("upload.url") + teamMember.getUser().getAvater());
                 }
@@ -181,7 +179,7 @@ public class UserApi extends CommonController {
 
         map.put("user", user);
 
-        Result obj = new Result(true).data(createMap("userInfo",map));
+        Result obj = new Result(true).data(createMap("userInfo", map));
         String result = JsonUtil.obj2ApiJson(obj, "leaderUser");
         WebUtil.printApi(response, result);
     }
@@ -193,9 +191,7 @@ public class UserApi extends CommonController {
      * @apiName user.message
      * @apiGroup user
      * @apiParam {Integer} type 类型 <必传 /> (1:信誉评分说明，2：足球宝贝服务说明，3：保险说明，4：约球须知，5：服务条款说明，6：会员等级说明，7：会员优惠说明，8：看球说明)
-     *
      * @apiSuccess {String} content 内容
-     *
      */
     @RequestMapping(value = "/message")
     public void message(HttpServletResponse response, Integer type) {
@@ -213,11 +209,9 @@ public class UserApi extends CommonController {
     }
 
     /**
-     *
      * @api {post} /api/user/provinceList 查询省份列表
      * @apiName user.provinceList
      * @apiGroup user
-     *
      * @apiSuccess {Object} list 省份列表
      * @apiSuccess {Object} list.province 省份
      * @apiSuccess {Long} list.province.provinceId 省份id
@@ -226,7 +220,6 @@ public class UserApi extends CommonController {
      * @apiSuccess {Object} list.province.cityList.city 城市
      * @apiSuccess {Long} list.province.cityList.city.id 城市id
      * @apiSuccess {String} list.province.cityList.city.city 城市名字
-     *
      */
     @RequestMapping(value = "/provinceList")
     public void provinceList(HttpServletResponse response) {
@@ -244,7 +237,7 @@ public class UserApi extends CommonController {
         }*/
         List<Province> list = provinceService.findList();
 
-        Result obj = new Result(true).data(createMap("list",list));
+        Result obj = new Result(true).data(createMap("list", list));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
 
@@ -265,10 +258,9 @@ public class UserApi extends CommonController {
      * @apiParam {Double} height 身高
      * @apiParam {Double} weight 体重
      * @apiParam {Integer} position 位置（0：前 1：中 2：后 3：守）
-     *
      */
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public void edit(HttpServletRequest request ,
+    public void edit(HttpServletRequest request,
                      HttpServletResponse response,
                      Long userId,
                      String nickname,
@@ -283,12 +275,12 @@ public class UserApi extends CommonController {
         MultipartFile multipartFile = null;
         MultipartRequest multipartRequest = null;
 
-        if(request instanceof MultipartRequest) {
+        if (request instanceof MultipartRequest) {
             multipartRequest = (MultipartRequest) request;
 
         }
 
-        if (userId == null ) {
+        if (userId == null) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
@@ -317,7 +309,7 @@ public class UserApi extends CommonController {
             if (age < 0) age = 0;
         }
 
-        if(multipartRequest != null) {
+        if (multipartRequest != null) {
             multipartFile = multipartRequest.getFile("avater");
             if (null != multipartFile) {
                 FileBo fileBo = null;
@@ -362,12 +354,10 @@ public class UserApi extends CommonController {
      * @apiGroup user
      * @apiParam {Long} userId 用户id <必传 />
      * @apiParam {Integer} num 会员时长（1：一年 2：两年 3：三年 默认为1）<必传 />
-     *
      * @apiSuccess {String} vip.status 会员状态
      * @apiSuccess {Integer} vip.level 会员等级
      * @apiSuccess {String} vip.endDate 会员时间
      * @apiSuccess {Double} vip.price 价格
-     *
      */
     @RequestMapping(value = "/operation")
     public void operation(HttpServletResponse response, Long userId, Integer num) throws ParseException {
@@ -385,39 +375,39 @@ public class UserApi extends CommonController {
             //userVip.setStatus("您不是会员");
             if (num == 1) {
 
-                endDate = DateUtils.longToString(System.currentTimeMillis() + 1000 * 3600 * 365,"yyyy年-MM月-dd日 HH:mm:ss");
+                endDate = DateUtils.longToString(System.currentTimeMillis() + 1000 * 3600 * 365, "yyyy年-MM月-dd日 HH:mm:ss");
                 price = sysVipService.getById(1l).getPrice();
-            }else if (num == 2) {
-                endDate = DateUtils.longToString(System.currentTimeMillis() + 2 * 1000 * 3600 * 365,"yyyy年-MM月-dd日 HH:mm:ss");
+            } else if (num == 2) {
+                endDate = DateUtils.longToString(System.currentTimeMillis() + 2 * 1000 * 3600 * 365, "yyyy年-MM月-dd日 HH:mm:ss");
                 price = sysVipService.getById(1l).getPrice() * 2;
-            }else if (num == 3) {
-                endDate = DateUtils.longToString(System.currentTimeMillis() + 3 * 1000 * 3600 * 365,"yyyy年-MM月-dd日 HH:mm:ss");
+            } else if (num == 3) {
+                endDate = DateUtils.longToString(System.currentTimeMillis() + 3 * 1000 * 3600 * 365, "yyyy年-MM月-dd日 HH:mm:ss");
                 price = sysVipService.getById(1l).getPrice() * 3;
             }
 
 
-        }else {
+        } else {
             level = userService.getById(userId).getVipNum();
-            status = "会员到期时间" + DateUtils.longToString(userVip.getEndDate(),"yyyy年-MM月-dd日 HH:mm:ss");
+            status = "会员到期时间" + DateUtils.longToString(userVip.getEndDate(), "yyyy年-MM月-dd日 HH:mm:ss");
             //userVip.setStatus("会员到期时间" + DateUtils.longToString(userVip.getEndDate(),"yyyy年-MM月-dd日 HH:mm:ss"));
             if (num == 1) {
-                endDate = DateUtils.longToString(userVip.getEndDate() + 1000 * 3600 * 365,"yyyy年-MM月-dd日 HH:mm:ss");
+                endDate = DateUtils.longToString(userVip.getEndDate() + 1000 * 3600 * 365, "yyyy年-MM月-dd日 HH:mm:ss");
                 price = sysVipService.getById(1l).getPrice() * vipLevelService.findBylevel(level).getPreferente();
-            }else if (num == 2) {
-                endDate = DateUtils.longToString(userVip.getEndDate() + 2 * 1000 * 3600 * 365,"yyyy年-MM月-dd日 HH:mm:ss");
+            } else if (num == 2) {
+                endDate = DateUtils.longToString(userVip.getEndDate() + 2 * 1000 * 3600 * 365, "yyyy年-MM月-dd日 HH:mm:ss");
                 price = sysVipService.getById(1l).getPrice() * vipLevelService.findBylevel(level).getPreferente() * 2;
-            }else if (num == 3) {
-                endDate = DateUtils.longToString(userVip.getEndDate() + 3 * 1000 * 3600 * 365,"yyyy年-MM月-dd日 HH:mm:ss");
+            } else if (num == 3) {
+                endDate = DateUtils.longToString(userVip.getEndDate() + 3 * 1000 * 3600 * 365, "yyyy年-MM月-dd日 HH:mm:ss");
                 price = sysVipService.getById(1l).getPrice() * vipLevelService.findBylevel(level).getPreferente() * 3;
             }
         }
 
-        map.put("level",level);
-        map.put("endDate",endDate);
-        map.put("price",price);
-        map.put("status",status);
+        map.put("level", level);
+        map.put("endDate", endDate);
+        map.put("price", price);
+        map.put("status", status);
 
-        Result obj = new Result(true).data(createMap("vip",map));
+        Result obj = new Result(true).data(createMap("vip", map));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
@@ -432,7 +422,6 @@ public class UserApi extends CommonController {
      * @apiParam {Integer} num 会员时长（1：一年 2：两年 3：三年 默认为1）<必传 />
      * @apiParam {String} endDate 会员时间 <必传 />
      * @apiParam {Double} price 价格 <必传 />
-     *
      * @apiSuccess {Object} order 订单
      * @apiSuccess {String} order.userName 用户昵称
      * @apiSuccess {Double} order.price 订单金额
@@ -449,12 +438,12 @@ public class UserApi extends CommonController {
 
         if (userVipService.findByUserId(userId) == null) {
             userVip = new UserVip();
-        }else {
+        } else {
             userVip = userVipService.findByUserId(userId);
         }
         userVip.setUser(userService.getById(userId));
         userVip.setDuration(num);
-        userVip.setEndDate(DateUtils.stringToDate(endDate,"yyyy-MM-dd HH:mm:ss").getTime());
+        userVip.setEndDate(DateUtils.stringToDate(endDate, "yyyy-MM-dd HH:mm:ss").getTime());
 
         /*User user = userService.getById(userId);
         user.setVipNum(level);
@@ -500,20 +489,17 @@ public class UserApi extends CommonController {
      * @apiName user.commentList
      * @apiGroup user
      * @apiParam {Long} userId 用户id <必传 />
-     *
      * @apiSuccess {Object} list 评论
      * @apiSuccess {Object} list.tUser 被评论用户
      * @apiSuccess {Long} list.tUser.id 被评论用户id
      * @apiSuccess {String} list.tUser.nickname 被评论用户昵称
      * @apiSuccess {String} list.content 帖子内容
      * @apiSuccess {String} list.createDate 评论时间
-     *
-     *
      */
     @RequestMapping(value = "/commentList")
     public void commentList(HttpServletResponse response, Long userId) {
 
-        if (userId == null ) {
+        if (userId == null) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
@@ -523,8 +509,8 @@ public class UserApi extends CommonController {
             postComment.gettUser().setAvater(postComment.gettUser().getAvater());
         }
 
-        Result obj = new Result(true).data(createMap("list",list));
-        String result = JsonUtil.obj2ApiJson(obj,"fUser","user","mobile", "password", "age", "height", "weight", "position", "credibility", "vipNum", "integral", "experience", "proviceId", "endDate", "cityId", "status", "gender", "birthday");
+        Result obj = new Result(true).data(createMap("list", list));
+        String result = JsonUtil.obj2ApiJson(obj, "fUser", "user", "mobile", "password", "age", "height", "weight", "position", "credibility", "vipNum", "integral", "experience", "proviceId", "endDate", "cityId", "status", "gender", "birthday");
         WebUtil.printApi(response, result);
     }
 
@@ -537,7 +523,6 @@ public class UserApi extends CommonController {
      * @apiParam {Long} userId 用户id <必传 />
      * @apiParam {Integer} pageNum 当前页
      * @apiParam {Integer} pageSize 每页显示数
-     *
      * @apiSuccess {Object} list 帖子
      * @apiSuccess {Object} list.user 用户
      * @apiSuccess {String} list.user.avater 用户头像
@@ -547,7 +532,6 @@ public class UserApi extends CommonController {
      * @apiSuccess {String} list.content 帖子内容
      * @apiSuccess {Integer} list.commentNum 帖子评论数
      * @apiSuccess {Long} list.createDate 创建时间
-     *
      * @apiSuccess {Object}  page 翻页信息
      * @apiSuccess {Integer} page.totalNum 总记录数
      * @apiSuccess {Integer} page.totalPage 总页数
@@ -559,7 +543,7 @@ public class UserApi extends CommonController {
                          Integer pageNum,
                          Integer pageSize) {
 
-        if (userId == null ) {
+        if (userId == null) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
@@ -592,19 +576,15 @@ public class UserApi extends CommonController {
      * @apiName user.postInfo
      * @apiGroup user
      * @apiParam {Long} postId 帖子id <必传 />
-     *
      * @apiSuccess {Object} postInfo 帖子
      * @apiSuccess {Object} postInfo.post 帖子
      * @apiSuccess {String} postInfo.post.content 帖子内容
      * @apiSuccess {Long} postInfo.post.createDate 帖子创建时间
-     *
      * @apiSuccess {Object} postInfo.post.user 用户列表
      * @apiSuccess {Long} postInfo.post.user.id 用户id
      * @apiSuccess {String} postInfo.post.user.nickname 用户昵称
-     *
      * @apiSuccess {Object} postInfo.postImages 帖子图片列表
      * @apiSuccess {String} postInfo.postImages.avater 帖子图片
-     *
      * @apiSuccess {Object} postInfo.postComments 帖子评论列表
      * @apiSuccess {String} postInfo.postComments.content 帖子内容
      * @apiSuccess {Long} postInfo.postComments.createDate 帖子创建时间
@@ -612,12 +592,11 @@ public class UserApi extends CommonController {
      * @apiSuccess {Long} postInfo.postComments.fUser.id 帖子评论人id
      * @apiSuccess {String} postInfo.postComments.fUser.avater 帖子评论人头像
      * @apiSuccess {String} postInfo.postComments.fUser.nickname 帖子评论人昵称
-     *
      */
     @RequestMapping(value = "/postInfo")
     public void postInfo(HttpServletResponse response, Long postId) {
 
-        if (postId == null ) {
+        if (postId == null) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
@@ -644,29 +623,27 @@ public class UserApi extends CommonController {
             }
         }
 
-        map.put("post",post);
+        map.put("post", post);
         map.put("postImages", postImages);
         map.put("postComments", postComments);
 
-        Result obj = new Result(true).data(createMap("postInfo",map));
-        String result = JsonUtil.obj2ApiJson(obj,"post","tUser","mobile", "password", "age", "height", "weight", "position", "credibility", "vipNum", "integral", "experience", "proviceId", "endDate", "cityId", "status", "gender", "birthday");
+        Result obj = new Result(true).data(createMap("postInfo", map));
+        String result = JsonUtil.obj2ApiJson(obj, "post", "tUser", "mobile", "password", "age", "height", "weight", "position", "credibility", "vipNum", "integral", "experience", "proviceId", "endDate", "cityId", "status", "gender", "birthday");
         WebUtil.printApi(response, result);
     }
 
     /**
      * 完成
      *
-     *  @api {post} /api/user/watchingList 我的看球列表
+     * @api {post} /api/user/watchingList 我的看球列表
      * @apiName user.watchingList
      * @apiGroup user
      * @apiParam {Long} userId 用户id <必传 />
-     *
      * @apiSuccess {Object} list 用户约看列表
      * @apiSuccess {Long} list.id 约看id
      * @apiSuccess {Double} list.tip 红包（小费）
      * @apiSuccess {Long} list.startDate 预约时间
      * @apiSuccess {Integer} list.status 状态（0 ：未确认 1：已确认 2；已评价 ）
-     *
      * @apiSuccess {Object} list.girl 宝贝
      * @apiSuccess {Long} list.girl.id 宝贝id
      * @apiSuccess {String} list.girl,nickname 宝贝昵称
@@ -674,41 +651,47 @@ public class UserApi extends CommonController {
      * @apiSuccess {Integer} list.girl.age 宝贝年龄
      * @apiSuccess {Double} list.girl.height 宝贝身高
      * @apiSuccess {Double} list.girl.weight 宝贝体重
-     *
      * @apiSuccess {Object} list.girl.girlImageList 宝贝封面列表
      * @apiSuccess {Long} list.girl.girlImageList.id  宝贝封面id
      * @apiSuccess {String} list.girl.girlImageList.url  宝贝封面路径
-     *
      * @apiSuccess {Object} list.bigRace 赛事
      * @apiSuccess {Long} list.bigRace.id 赛事id
      * @apiSuccess {String} list.bigRace.team1name 球队1的名字
      * @apiSuccess {String} list.bigRace.team2name 球队2的名字
-     *
      * @apiSuccess {Object} list.stadium 球场
      * @apiSuccess {String} list.stadium.name 球场名字
-     *
      */
     @RequestMapping(value = "/watchingList")
     public void watchingList(HttpServletResponse response, Long userId) {
-
-        if (userId == null ) {
+        GirlImage tempImage = null;
+        if (userId == null) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
 
         List<GirlUser> list = girlUserService.findByUserId(userId);
         for (GirlUser girlUser : list) {
-            for (GirlImage girlImage : girlImageService.find(girlUser.getGirlId(), 0)) {
-                if (StringUtils.isNotBlank(girlImage.getUrl())) {
-                    girlImage.setUrl(ConfigUtil.getString("upload.url") + girlImage.getUrl());
+            Iterator<GirlImage> tempImages = girlUser.getGirl().getGirlImageList().iterator();
+            while (tempImages.hasNext()) {
+                GirlImage girlImage = tempImages.next();
+                if (girlImage.getType() == 1) {
+                    tempImages.remove();
+                } else if (girlImage.getType() == 0) {
+                    if (StringUtils.isNotBlank(girlImage.getUrl())) {
+                        girlImage.setUrl(ConfigUtil.getString("upload.url") + girlImage.getUrl());
+                    }
+
                 }
-                //Girl girl = girlService.getById(girlUser.getGirlId());
-                girlService.getById(girlUser.getGirlId()).getGirlImageList().add(girlImage);
+            }
+            if (girlUser.getGirl().getGirlImageList().size() > 1) {
+                tempImage = girlUser.getGirl().getGirlImageList().iterator().next();
+                girlUser.getGirl().getGirlImageList().clear();
+                girlUser.getGirl().getGirlImageList().add(tempImage);
             }
         }
 
-        Result obj = new Result(true).data(createMap("list",list));
-        String result = JsonUtil.obj2ApiJson(obj,"user");
+        Result obj = new Result(true).data(createMap("list", list));
+        String result = JsonUtil.obj2ApiJson(obj, "user", "girlComments");
         WebUtil.printApi(response, result);
     }
 
@@ -719,12 +702,11 @@ public class UserApi extends CommonController {
      * @apiName user.confirm
      * @apiGroup user
      * @apiParam {Long} watchingId 约看id <必传 />
-     *
      */
     @RequestMapping(value = "/confirm")
     public void confirm(HttpServletResponse response, Long watchingId) {
 
-        if (watchingId == null ) {
+        if (watchingId == null) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
@@ -746,7 +728,6 @@ public class UserApi extends CommonController {
      * @apiParam {Long} watchingId 约看id <必传 />
      * @apiParam {Double} star 服务打分 <必传 />
      * @apiParam {String} content 评论内容 <必传 />
-     *
      */
     @RequestMapping(value = "/comment")
     public void comment(HttpServletResponse response, Double star, String content, Long watchingId) {
@@ -762,7 +743,7 @@ public class UserApi extends CommonController {
 
             GirlComment girlComment = new GirlComment();
             girlComment.setUserId(girlUser.getUserId());
-            girlComment.setGirlId(girlUser.getGirlId());
+            girlComment.setGirlId(girlUser.getGirl().getId());
             girlComment.setStar(star);
             girlComment.setContent(content);
             girlCommentService.create(girlComment);
@@ -780,7 +761,6 @@ public class UserApi extends CommonController {
      * @apiParam {Long} userId 用户id <必传 />
      * @apiParam {String} mobile 联系方式
      * @apiParam {String} content 内容
-     *
      */
     @RequestMapping(value = "/report")
     public void report(HttpServletResponse response, Long userId, String mobile, String content) {
@@ -790,7 +770,7 @@ public class UserApi extends CommonController {
         Report report = new Report();
         if (mobile == null || mobile == "") {
             report.setMobile(user.getMobile());
-        }else {
+        } else {
             report.setMobile(mobile);
         }
         report.setUser(user);

@@ -172,8 +172,8 @@ public class OrderServiceImpl implements OrderService {
 
             if (orders.getReserve().getInsurance() != null) {
                 Insurance insurance = new Insurance();
-                insurance.setUser(orders.getUser());
-                insurance.setReserve(orders.getReserve());
+                insurance.setUserId(orders.getUser().getId());
+                insurance.setReserveId(orders.getReserve().getId());
                 insurance.setSysInsurance(orders.getReserve().getInsurance());
 
                 insurance.setMoney(orders.getReserve().getInsurance().getPrice() * preferente);
@@ -181,8 +181,8 @@ public class OrderServiceImpl implements OrderService {
             }
         } else if (orders.getAction() == 2 && orders.getReserveTeam() != null && orders.getReserveTeam().getInsurance() != null) {
             Insurance insurance = new Insurance();
-            insurance.setUser(orders.getUser());
-            insurance.setReserveTeam(orders.getReserveTeam());
+            insurance.setUserId(orders.getUser().getId());
+            insurance.setReserveTeamId(orders.getReserveTeam().getId());
             insurance.setSysInsurance(orders.getReserveTeam().getInsurance());
             insurance.setMoney(orders.getReserveTeam().getInsurance().getPrice() * preferente);
             insuranceService.create(insurance);

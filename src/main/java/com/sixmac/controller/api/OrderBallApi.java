@@ -450,8 +450,8 @@ public class OrderBallApi extends CommonController {
                 }*/
 
                 money = reserve.getPrice() / reserve.getMatchType();
-                insurance.setUser(userService.getById(userId));
-                insurance.setReserve(reserve);
+                insurance.setUserId(userId);
+                insurance.setReserveId(reserve.getId());
                 insuranceService.create(insurance);
 
                 String sn = CommonUtils.generateSn(); // 订单号

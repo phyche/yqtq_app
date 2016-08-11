@@ -9,17 +9,14 @@ import javax.persistence.*;
 @Table(name = "t_insurance")
 public class Insurance extends BaseEntity{
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "user_id")
+    private Long userId;
 
-    @ManyToOne
-    @JoinColumn(name = "reserve_id")
-    private Reserve reserve;
+    @Column(name = "reserve_id")
+    private Long reserveId;
 
-    @ManyToOne
-    @JoinColumn(name = "reserve_team_id")
-    private ReserveTeam reserveTeam;
+    @Column(name = "reserve_team_id")
+    private Long reserveTeamId;
 
     @ManyToOne
     @JoinColumn(name = "insurance_id")
@@ -30,22 +27,6 @@ public class Insurance extends BaseEntity{
 
     @Column(name = "money")
     private Double money;
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Reserve getReserve() {
-        return reserve;
-    }
-
-    public void setReserve(Reserve reserve) {
-        this.reserve = reserve;
-    }
 
     public Double getMoney() {
         return money;
@@ -71,11 +52,27 @@ public class Insurance extends BaseEntity{
         this.num = num;
     }
 
-    public ReserveTeam getReserveTeam() {
-        return reserveTeam;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setReserveTeam(ReserveTeam reserveTeam) {
-        this.reserveTeam = reserveTeam;
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getReserveId() {
+        return reserveId;
+    }
+
+    public void setReserveId(Long reserveId) {
+        this.reserveId = reserveId;
+    }
+
+    public Long getReserveTeamId() {
+        return reserveTeamId;
+    }
+
+    public void setReserveTeamId(Long reserveTeamId) {
+        this.reserveTeamId = reserveTeamId;
     }
 }

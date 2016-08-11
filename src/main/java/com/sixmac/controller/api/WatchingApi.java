@@ -384,7 +384,7 @@ public class WatchingApi extends CommonController {
 
         GirlUser girlUser = new GirlUser();
         girlUser.setUserId(userId);
-        girlUser.setGirlId(girlId);
+        girlUser.setGirl(girlService.getById(girlId));
         girlUser.setBigRace(bigRaceService.getById(sceneId));
         girlUser.setStartDate(bigRaceService.getById(sceneId).getStartDate());
         girlUser.setStadium(bigRaceService.getById(sceneId).getStadium());

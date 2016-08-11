@@ -15,7 +15,7 @@ public interface GirlUserDao extends JpaRepository<GirlUser, Long>, JpaSpecifica
     @Query("select a from GirlUser a where a.userId = ?1 and a.status != 3")
     public List<GirlUser> findByUserId(Long userId);
 
-    @Query("select a from GirlUser a where a.girlId = ?1 ")
+    @Query("select a from GirlUser a where a.girl.id = ?1 ")
     public List<GirlUser> findByGirlId(Long girlId);
 
 }

@@ -10,8 +10,9 @@ import javax.persistence.*;
 public class GirlUser extends BaseEntity{
 
 
-    @Column(name = "girl_id")
-    private Long girlId;
+    @ManyToOne
+    @JoinColumn(name = "girl_id")
+    private Girl girl;
 
     @Column(name = "user_id")
     private Long userId;
@@ -36,12 +37,12 @@ public class GirlUser extends BaseEntity{
     @Column(name = "status")
     private Integer status = 0;
 
-    public Long getGirlId() {
-        return girlId;
+    public Girl getGirl() {
+        return girl;
     }
 
-    public void setGirlId(Long girlId) {
-        this.girlId = girlId;
+    public void setGirl(Girl girl) {
+        this.girl = girl;
     }
 
     public Long getUserId() {
