@@ -139,7 +139,7 @@ public class MessageApi extends CommonController {
             Reserve reserve = reserveService.getById(userReserve.getReserveId());
             if (reserve.getStatus() == 1 || reserve.getStatus() == 2) {
 
-                userReserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
+                userReserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getSite().getStadium().getName() + "约球了");
                 userReserve.setStatus(reserve.getStatus());
                 userReserveService.update(userReserve);
 

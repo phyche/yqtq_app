@@ -95,12 +95,11 @@ public class OrderBallApi extends CommonController {
                      Integer pageNum,
                      Integer pageSize) {
 
-        initPageable(pageNum, pageSize);
-        //球场、时间筛选有问题
+        //initPageable(pageNum, pageSize);
         Page<Reserve> page = reserveService.page(timelimit, type, areaId, pageNum, pageSize);
         List<Reserve> list = page.getContent();
         for (Reserve reserve : list) {
-            reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
+            reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getSite().getStadium().getName() + "约球了");
 
             if (StringUtils.isNotBlank(reserve.getUser().getAvater())) {
                 reserve.getUser().setAvater(ConfigUtil.getString("upload.url") + reserve.getUser().getAvater());
@@ -158,7 +157,7 @@ public class OrderBallApi extends CommonController {
             }
 
             Reserve reserve = reserveService.getById(reserveId);
-            reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
+            reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getSite().getStadium().getName() + "约球了");
 
             if (StringUtils.isNotBlank(reserve.getUser().getAvater())) {
                 reserve.getUser().setAvater(ConfigUtil.getString("upload.url") + reserve.getUser().getAvater());
@@ -233,7 +232,7 @@ public class OrderBallApi extends CommonController {
             reserveList.add(reserveService.getById(userReserve.getReserveId()));
         }
         for (Reserve reserve : reserveList) {
-            reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
+            reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getSite().getStadium().getName() + "约球了");
             /*reserve.setJoinCount(reserve.getUserReservelist() != null ? reserve.getUserReservelist().size() : 0);
             reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
 */

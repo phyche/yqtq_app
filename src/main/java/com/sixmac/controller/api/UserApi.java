@@ -50,9 +50,6 @@ public class UserApi extends CommonController {
     private TeamService teamService;
 
     @Autowired
-    private GirlUserService girlUserService;
-
-    @Autowired
     private GirlCommentService girlCommentService;
 
     @Autowired
@@ -87,6 +84,9 @@ public class UserApi extends CommonController {
 
     @Autowired
     private GirlService girlService;
+
+    @Autowired
+    private GirlUserService girlUserService;
 
     /**
      * 完成
@@ -748,6 +748,8 @@ public class UserApi extends CommonController {
             girlComment.setContent(content);
             girlCommentService.create(girlComment);
         }
+        girlUser.setStatus(2);
+        girlUserService.update(girlUser);
 
         WebUtil.printApi(response, new Result(true));
     }
@@ -773,7 +775,7 @@ public class UserApi extends CommonController {
         } else {
             report.setMobile(mobile);
         }
-        report.setUser(user);
+        report.setUserId(userId);
         report.setContent(content);
         reportService.create(report);
 

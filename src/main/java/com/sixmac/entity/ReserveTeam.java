@@ -31,10 +31,6 @@ public class ReserveTeam extends BaseEntity{
     private Integer status = 0;
 
     @ManyToOne
-    @JoinColumn(name = "stadium_id")
-    private Stadium stadium;
-
-    @ManyToOne
     @JoinColumn(name = "insurance_id")
     private SysInsurance insurance;
 
@@ -85,14 +81,5 @@ public class ReserveTeam extends BaseEntity{
     public void setStatus(Integer status) {
         this.status = status;
     }
-
-    public Stadium getStadium() {
-        return stadium;
-    }
-
-    public void setStadium(Stadium stadium) {
-        this.stadium = stadium;
-    }
-
 
 }

@@ -12,6 +12,6 @@ import java.util.List;
  */
 public interface SystemMessageDao extends JpaRepository<SystemMessage, Long> {
 
-    @Query("select a from SystemMessage a where a.toUser.id = ?1 ")
+    @Query("select a from SystemMessage a where a.userId = ?1 ")
     public List<SystemMessage> findByToUserId(Long userId);
 }

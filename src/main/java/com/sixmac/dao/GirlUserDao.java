@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface GirlUserDao extends JpaRepository<GirlUser, Long>, JpaSpecificationExecutor<GirlUser> {
 
-    @Query("select a from GirlUser a where a.userId = ?1 and a.status != 3")
+    @Query("select a from GirlUser a where a.userId = ?1 and a.status != 3 order by a.createDate desc")
     public List<GirlUser> findByUserId(Long userId);
 
     @Query("select a from GirlUser a where a.girl.id = ?1 ")

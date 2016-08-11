@@ -165,7 +165,7 @@ public class PlayIndexApi extends CommonController {
 
         List<Reserve> list = reserveService.findAll();
         Reserve reserve = list.get(list.size()-1);
-        reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
+        reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getSite().getStadium().getName() + "约球了");
 
         Result obj = new Result(true).data(createMap("reserve",reserve));
         String result = JsonUtil.obj2ApiJson(obj);

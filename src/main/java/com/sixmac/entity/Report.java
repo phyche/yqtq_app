@@ -9,9 +9,8 @@ import javax.persistence.*;
 @Table(name = "t_system_report")
 public class Report extends BaseEntity {
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "user_id")
+    private Long userId;
 
     @Column(name = "mobile")
     private String mobile;
@@ -19,12 +18,12 @@ public class Report extends BaseEntity {
     @Column(name = "content")
     private String content;
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getMobile() {
