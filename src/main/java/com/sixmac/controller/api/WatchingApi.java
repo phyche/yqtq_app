@@ -4,6 +4,7 @@ import com.sixmac.controller.common.CommonController;
 import com.sixmac.core.ErrorCode;
 import com.sixmac.core.bean.Result;
 import com.sixmac.entity.*;
+import com.sixmac.entity.vo.GirlImageVo;
 import com.sixmac.service.*;
 import com.sixmac.utils.*;
 import org.apache.commons.lang.StringUtils;
@@ -151,9 +152,14 @@ public class WatchingApi extends CommonController {
      * @apiSuccess {String} info.bigRace.stadium.name 球场名字
      * @apiSuccess {String} info.bigRace.description 看球描述
      *
-     * @apiSuccess {Object} info.girlImageList.girlImage 宝贝
-     * @apiSuccess {Long} info.girlImageList.girlImage.id 宝贝id
-     * @apiSuccess {String} info.girlImageList.girlImage.url 宝贝封面
+     * @apiSuccess {Object} info.girlImageList 宝贝
+     * @apiSuccess {Long} info.girlImageList.id 图片id
+     * @apiSuccess {Long} info.girlImageList.girlId 宝贝id
+     * @apiSuccess {String} info.girlImageList.url 宝贝封面
+     * @apiSuccess {String} info.girlImageList.name 宝贝名字
+     * @apiSuccess {Integer} info.girlImageList.age 宝贝年龄
+     * @apiSuccess {Double} info.girlImageList.height 宝贝身高
+     * @apiSuccess {Double} info.girlImageList.weight 宝贝体重
      *
      */
     @RequestMapping(value = "/sceneList")
@@ -194,7 +200,7 @@ public class WatchingApi extends CommonController {
                 bigRace.setAvater2(ConfigUtil.getString("upload.url") + bigRace.getAvater2());
             }
 
-            List<GirlImage> girlImageList = new ArrayList<GirlImage>();
+            List<GirlImageVo> girlImageList = new ArrayList<GirlImageVo>();
             if (bigRace == null) {
                 girlImageList = null;
             }else {
@@ -205,14 +211,22 @@ public class WatchingApi extends CommonController {
                             if (StringUtils.isNotBlank(girlImage.getUrl())) {
                                 girlImage.setUrl(ConfigUtil.getString("upload.url") + girlImage.getUrl());
                             }
-                            girlImageList.add(girlImage);
+                            GirlImageVo girlImageVo = new GirlImageVo();
+                            girlImageVo.setId(girlImage.getId());
+                            girlImageVo.setGirlId(girl.getId());
+                            girlImageVo.setUrl(girlImage.getUrl());
+                            girlImageVo.setName(girl.getName());
+                            girlImageVo.setAge(girl.getAge());
+                            girlImageVo.setHeight(girl.getHeight());
+                            girlImageVo.setWeight(girl.getWeight());
+                            girlImageList.add(girlImageVo);
                         }
                     }
                 }
 
             }
             for (int i=0; i<girlImageList.size(); i++) {
-                GirlImage girlImage = girlImageList.get(i);
+                GirlImageVo girlImage = girlImageList.get(i);
                 if (girlImageList.contains(girlImage)) {
                     girlImageList.remove(i);
                 }
