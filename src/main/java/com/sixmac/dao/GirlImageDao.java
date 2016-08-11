@@ -14,7 +14,7 @@ import java.util.List;
 public interface GirlImageDao extends JpaRepository<GirlImage, Long>, JpaSpecificationExecutor<GirlImage> {
 
     //根据宝贝id筛选相册
-    @Query("select a from GirlImage a where a.girl.id = ?1 ")
+    @Query("select a from GirlImage a where a.girlId = ?1 ")
     public List<GirlImage> findByGirlId(Long girlId);
 
     //根据图片类型筛选图片
@@ -22,11 +22,11 @@ public interface GirlImageDao extends JpaRepository<GirlImage, Long>, JpaSpecifi
     public List<GirlImage> findByType(Integer type);
 
     //根据宝贝id,图片类型筛选图片
-    @Query("select a from GirlImage a where a.type = ?2 and a.girl.id = ?1")
+    @Query("select a from GirlImage a where a.type = ?2 and a.girlId = ?1")
     public List<GirlImage> find(Long girlId, Integer type);
 
     //根据图片类型、状态、城市筛选图片
-    @Query("select a from GirlImage a where a.type = ?1 and a.girl.status = ?2 and a.girl.cityId = ?3")
+    @Query("select a from GirlImage a where a.type = ?1 and a.girlId = ?2 and a.girlId = ?3")
     public List<GirlImage> page(Integer type, Integer status, Long cityId);
 
 }

@@ -107,6 +107,9 @@ public class ReserveServiceImpl implements ReserveService {
                     predicateList.add(pre);
                 }
 
+                Predicate pre = cb.equal(root.get("payStatus").as(Integer.class), 1);
+                predicateList.add(pre);
+
                 if (predicateList.size() > 0) {
                     result = cb.and(predicateList.toArray(new Predicate[]{}));
                 }

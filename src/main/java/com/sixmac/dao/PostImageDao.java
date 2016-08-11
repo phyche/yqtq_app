@@ -12,7 +12,7 @@ import java.util.List;
 public interface PostImageDao extends JpaRepository<PostImage, Long> {
 
     //根据帖子id筛选帖子图片
-    @Query("select a from PostImage a where a.post.id = ?1 ")
+    @Query("select a from PostImage a where a.postId = ?1 ")
     public List<PostImage> findByPostId(Long postId);
 
 }

@@ -9,9 +9,8 @@ import javax.persistence.*;
 @Table(name = "t_girl_image")
 public class GirlImage extends BaseEntity{
 
-    @ManyToOne
-    @JoinColumn(name = "girl_id")
-    private Girl girl;
+    @Column(name = "girl_id")
+    private Long girlId;
 
     @Column(name = "type")
     private Integer type;
@@ -19,12 +18,12 @@ public class GirlImage extends BaseEntity{
     @Column(name = "url")
     private String url;
 
-    public Girl getGirl() {
-        return girl;
+    public Long getGirlId() {
+        return girlId;
     }
 
-    public void setGirl(Girl girl) {
-        this.girl = girl;
+    public void setGirlId(Long girlId) {
+        this.girlId = girlId;
     }
 
     public Integer getType() {

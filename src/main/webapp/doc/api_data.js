@@ -4465,20 +4465,6 @@ define({ "api": [
           },
           {
             "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "order.userName",
-            "description": "<p>用户昵称</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "order.stadiumName",
-            "description": "<p>球场名称</p>"
-          },
-          {
-            "group": "Success 200",
             "type": "Double",
             "optional": false,
             "field": "order.price",
@@ -4940,20 +4926,6 @@ define({ "api": [
             "optional": false,
             "field": "order",
             "description": "<p>订单</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "order.userName",
-            "description": "<p>用户昵称</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "order.stadiumName",
-            "description": "<p>球场名称</p>"
           },
           {
             "group": "Success 200",
@@ -5750,7 +5722,7 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "Integer",
+            "type": "Double",
             "optional": false,
             "field": "star",
             "description": "<p>服务打分 &lt;必传 /&gt;</p>"
@@ -5864,7 +5836,7 @@ define({ "api": [
             "type": "Long",
             "optional": false,
             "field": "watchingId",
-            "description": "<p>约看id</p>"
+            "description": "<p>约看id &lt;必传 /&gt;</p>"
           }
         ]
       }
@@ -6876,6 +6848,13 @@ define({ "api": [
           },
           {
             "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "list.status",
+            "description": "<p>状态（0 ：未确认 1：已确认 2；已评价 ）</p>"
+          },
+          {
+            "group": "Success 200",
             "type": "Object",
             "optional": false,
             "field": "list.girl",
@@ -7006,6 +6985,20 @@ define({ "api": [
             "optional": false,
             "field": "girlId",
             "description": "<p>宝贝id &lt;必传/&gt;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "pageNum",
+            "description": "<p>当前页</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "pageSize",
+            "description": "<p>每页显示数</p>"
           }
         ]
       }
@@ -7054,6 +7047,34 @@ define({ "api": [
             "optional": false,
             "field": "list.GirlComment.createDate",
             "description": "<p>评论时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "page",
+            "description": "<p>翻页信息</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "page.totalNum",
+            "description": "<p>总记录数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "page.totalPage",
+            "description": "<p>总页数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "page.currentPage",
+            "description": "<p>当前页</p>"
           }
         ]
       }
@@ -7140,6 +7161,13 @@ define({ "api": [
           },
           {
             "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "girlInfo.girl.aveStar",
+            "description": "<p>宝贝陪看评价</p>"
+          },
+          {
+            "group": "Success 200",
             "type": "Integer",
             "optional": false,
             "field": "girlInfo.girl.orderNum",
@@ -7184,21 +7212,21 @@ define({ "api": [
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "girlInfo.girl.girlImageList",
+            "field": "girlInfo.girlImages1",
             "description": "<p>宝贝相册列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "girlInfo.girl.girlImageList.id",
+            "field": "girlInfo.girlImages1.id",
             "description": "<p>宝贝相册id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "girlInfo.girl.girlImageList.avater",
+            "field": "girlInfo.girlImages1.avater",
             "description": "<p>宝贝相册</p>"
           },
           {
@@ -7206,7 +7234,7 @@ define({ "api": [
             "type": "Object",
             "optional": false,
             "field": "girlInfo.girlImages",
-            "description": "<p>宝贝相册封面</p>"
+            "description": "<p>宝贝封面列表</p>"
           },
           {
             "group": "Success 200",
@@ -7312,110 +7340,6 @@ define({ "api": [
             "optional": false,
             "field": "sceneId",
             "description": "<p>比赛id &lt;必传/&gt;</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "girlUsers",
-            "description": "<p>用户约看列表</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Double",
-            "optional": false,
-            "field": "girlUsers.tip",
-            "description": "<p>红包（小费）</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Double",
-            "optional": false,
-            "field": "girlUsers.price",
-            "description": "<p>总费用</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "girlUsers.girl",
-            "description": "<p>宝贝</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "girlUsers.girl.avater",
-            "description": "<p>宝贝头像</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "optional": false,
-            "field": "girlUsers.duration",
-            "description": "<p>宝贝年龄</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "girlUsers.bigRace",
-            "description": "<p>赛事</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "optional": false,
-            "field": "girlUsers.bigRace.id",
-            "description": "<p>赛事id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "girlUsers.bigRace.team1name",
-            "description": "<p>球队1的名字</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "girlUsers.bigRace.team2name",
-            "description": "<p>球队2的名字</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/WatchingApi.java",
-    "groupTitle": "watching",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/watching/orderGirl"
-      }
-    ]
-  },
-  {
-    "type": "post",
-    "url": "/api/watching/pay",
-    "title": "约宝贝支付",
-    "name": "watching_pay",
-    "group": "watching",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Long",
-            "optional": false,
-            "field": "girlUserId",
-            "description": "<p>约看id &lt;必传/&gt;</p>"
           },
           {
             "group": "Parameter",
@@ -7434,22 +7358,22 @@ define({ "api": [
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "girlUsers",
-            "description": "<p>用户约看列表</p>"
+            "field": "order",
+            "description": "<p>订单</p>"
           },
           {
             "group": "Success 200",
             "type": "Double",
             "optional": false,
-            "field": "girlUsers.tip",
-            "description": "<p>红包（小费）</p>"
+            "field": "order.price",
+            "description": "<p>订单金额</p>"
           },
           {
             "group": "Success 200",
-            "type": "Double",
+            "type": "Long",
             "optional": false,
-            "field": "girlUsers.price",
-            "description": "<p>总费用</p>"
+            "field": "order.sn",
+            "description": "<p>订单号</p>"
           }
         ]
       }
@@ -7459,7 +7383,7 @@ define({ "api": [
     "groupTitle": "watching",
     "sampleRequest": [
       {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/watching/pay"
+        "url": "http://4.16.1.158:8080/yqtq_app/api/watching/orderGirl"
       }
     ]
   },

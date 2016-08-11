@@ -9,34 +9,32 @@ import javax.persistence.*;
 @Table(name = "t_girl_comment")
 public class GirlComment extends BaseEntity{
 
-    @ManyToOne
-    @JoinColumn(name = "girl_id")
-    private Girl girl;
+    @Column(name = "girl_id")
+    private Long girlId;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "user_id")
+    private Long userId;
 
     @Column(name = "content")
     private String content;
 
     @Column(name = "star")
-    private Integer star;
+    private Double star;
 
-    public Girl getGirl() {
-        return girl;
+    public Long getGirlId() {
+        return girlId;
     }
 
-    public void setGirl(Girl girl) {
-        this.girl = girl;
+    public void setGirlId(Long girlId) {
+        this.girlId = girlId;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getContent() {
@@ -47,11 +45,11 @@ public class GirlComment extends BaseEntity{
         this.content = content;
     }
 
-    public Integer getStar() {
+    public Double getStar() {
         return star;
     }
 
-    public void setStar(Integer star) {
+    public void setStar(Double star) {
         this.star = star;
     }
 }

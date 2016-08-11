@@ -1,5 +1,7 @@
 package com.sixmac.entity;
 
+import com.sixmac.utils.ConfigUtil;
+
 import javax.persistence.*;
 
 /**
@@ -9,9 +11,8 @@ import javax.persistence.*;
 @Table(name = "t_post_image")
 public class PostImage extends BaseEntity{
 
-    @ManyToOne
-    @JoinColumn(name = "post_id")
-    private Post post;
+    @Column(name = "post_id")
+    private Long postId;
 
     @Column(name = "avater")
     private String avater;
@@ -20,16 +21,16 @@ public class PostImage extends BaseEntity{
     private Integer status;
 
 
-    public Post getPost() {
-        return post;
+    public Long getPostId() {
+        return postId;
     }
 
-    public void setPost(Post post) {
-        this.post = post;
+    public void setPostId(Long postId) {
+        this.postId = postId;
     }
 
     public String getAvater() {
-        return avater;
+        return this.avater;
     }
 
     public void setAvater(String avater) {

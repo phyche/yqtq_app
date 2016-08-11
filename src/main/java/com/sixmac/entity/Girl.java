@@ -2,7 +2,9 @@ package com.sixmac.entity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Administrator on 2016/5/23 0023.
@@ -11,9 +13,6 @@ import java.util.List;
 @Table(name = "t_girl")
 public class Girl extends BaseEntity{
 
-    /*@ManyToOne
-    @JoinColumn(name = "city_id",referencedColumnName = "city_id")
-    private City city;*/
     @Column(name = "city_id")
     private Long cityId;
 
@@ -53,8 +52,13 @@ public class Girl extends BaseEntity{
     @Transient
     private Double aveStar = 0.0;
 
-    @Transient
-    private List<GirlImage> girlImageList = new ArrayList<GirlImage>();
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "girl_id")
+    Set<GirlImage> girlImageList = new HashSet<GirlImage>();
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "girl_id")
+    Set<GirlComment> girlComments = new HashSet<GirlComment>();
 
     @Column
     private Integer status;
@@ -163,11 +167,11 @@ public class Girl extends BaseEntity{
         this.status = status;
     }
 
-    public List<GirlImage> getGirlImageList() {
+    public Set<GirlImage> getGirlImageList() {
         return girlImageList;
     }
 
-    public void setGirlImageList(List<GirlImage> girlImageList) {
+    public void setGirlImageList(Set<GirlImage> girlImageList) {
         this.girlImageList = girlImageList;
     }
 
@@ -177,5 +181,13 @@ public class Girl extends BaseEntity{
 
     public void setAveStar(Double aveStar) {
         this.aveStar = aveStar;
+    }
+
+    public Set<GirlComment> getGirlComments() {
+        return girlComments;
+    }
+
+    public void setGirlComments(Set<GirlComment> girlComments) {
+        this.girlComments = girlComments;
     }
 }

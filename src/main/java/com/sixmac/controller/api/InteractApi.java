@@ -2,6 +2,7 @@ package com.sixmac.controller.api;
 
 import com.sixmac.common.DataTableFactory;
 import com.sixmac.controller.common.CommonController;
+import com.sixmac.controller.editor.CustomStringEditor;
 import com.sixmac.core.Constant;
 import com.sixmac.core.ErrorCode;
 import com.sixmac.core.bean.Result;
@@ -12,6 +13,8 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +23,8 @@ import org.springframework.web.multipart.MultipartRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.beans.PropertyEditor;
+import java.beans.PropertyEditorSupport;
 import java.util.*;
 
 /**
@@ -97,14 +102,14 @@ public class InteractApi extends CommonController {
             if (StringUtils.isNotBlank(post.getUser().getAvater())) {
                 post.getUser().setAvater(ConfigUtil.getString("upload.url") + post.getUser().getAvater());
             }
-            post.setPostImages(postImageService.findByPostId(post.getId()));
-            for (PostImage postImage : postImageService.findByPostId(post.getId())) {
+            //post.setPostImages(postImageService.findByPostId(post.getId()));
+            for (PostImage postImage : post.getPostImages()) {
                 if (StringUtils.isNotBlank(postImage.getAvater())) {
                     postImage.setAvater(ConfigUtil.getString("upload.url") + postImage.getAvater());
                 }
             }
-            post.setPostCommentList(postCommentService.findByPostId(post.getId()));
-            for (PostComment postComment : postCommentService.findByPostId(post.getId())) {
+            //post.setPostCommentList(postCommentService.findByPostId(post.getId()));
+            for (PostComment postComment : post.getPostCommentList()) {
                 if (StringUtils.isNotBlank(postComment.getfUser().getAvater())) {
                     postComment.getfUser().setAvater(ConfigUtil.getString("upload.url") + postComment.getfUser().getAvater());
                 }
@@ -211,7 +216,7 @@ public class InteractApi extends CommonController {
                     MultipartFile file = multipartRequest.getFile(fileName);
                     if (null != file) {
                         postImage = new PostImage();
-                        postImage.setPost(post);
+                        postImage.setPostId(post.getId());
                         postImage.setStatus(0);
                         postImage.setAvater(FileUtil.save(file).getPath());
 
@@ -251,7 +256,7 @@ public class InteractApi extends CommonController {
         }
 
         PostComment postComment = new PostComment();
-        postComment.setPost(postService.getById(postId));
+        postComment.setPostId(postId);
         postComment.setfUser(userService.getById(userId));
         postComment.settUser(userService.getById(touserId));
         postComment.setContent(content);

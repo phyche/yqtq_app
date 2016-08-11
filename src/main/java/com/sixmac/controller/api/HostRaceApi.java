@@ -137,6 +137,8 @@ public class HostRaceApi extends CommonController {
     @RequestMapping(value = "/eventInformation")
     public void eventInformation(HttpServletResponse response, Long raceId) {
 
+//        if(ValidateUtis.isEmpty(user,"userId","username")) {
+//        }
         if (null == raceId ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;

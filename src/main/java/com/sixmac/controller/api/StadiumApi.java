@@ -212,6 +212,7 @@ public class StadiumApi extends CommonController {
      * @apiName stadium.order
      * @apiGroup stadium
      * @apiParam {Long} stadiumId 球场ID <必传/>
+     *
      * @apiSuccess {Object}  stadium 球场
      * @apiSuccess {Long} stadium.id 球场id
      * @apiSuccess {String} stadium.name 球场名称
@@ -436,80 +437,44 @@ public class StadiumApi extends CommonController {
 
         Map<String, Object> map = new HashMap<String, Object>();
 
+        preferente = 1.0;
+        if (userService.getById(userId).getVipNum() != 0) {
+            preferente = vipLevelService.findBylevel(userService.getById(userId).getVipNum()).getPreferente();
+        }
+
+        SysInsurance sysInsurance = null;
         if (insuranceId == null) {
-            if (userService.getById(userId).getVipNum() == 0) {
-                preferente = 1.0;
-                num = 0;
-                money = siteTimeService.getById(siteTimeId).getSite().getPrice() * preferente;
-            } else {
-                preferente = vipLevelService.findBylevel(userService.getById(userId).getVipNum()).getPreferente();
-                num = 0;
-                money = siteTimeService.getById(siteTimeId).getSite().getPrice() * preferente;
-            }
-
-            Reserve reserve = new Reserve();
-            reserve.setStadium(siteTimeService.getById(siteTimeId).getSite().getStadium());
-            reserve.setSite(siteTimeService.getById(siteTimeId).getSite());
-            reserve.setUser(userService.getById(userId));
-            reserve.setPrice(money);
-            reserve.setMatchType(siteTimeService.getById(siteTimeId).getSite().getType());
-            reserve.setStartTime(siteTimeService.getById(siteTimeId).getStartTime());
-            reserveService.create(reserve);
-            map.put("reserve", reserve);
-
-            UserReserve userReserve = new UserReserve();
-            userReserve.setUser(userService.getById(userId));
-            userReserve.setReserveId(reserve.getId());
-
-
-            //userReserve.setReserve(reserve);
-            userReserve.setStatus(1);
-            userReserveService.create(userReserve);
+            money = siteTimeService.getById(siteTimeId).getSite().getPrice() * preferente;
 
         } else {
-            SysInsurance sysInsurance = sysInsuranceService.getById(insuranceId);
-            if (userService.getById(userId).getVipNum() == 0) {
-                preferente = 1.0;
-            } else {
-                preferente = vipLevelService.findBylevel(userService.getById(userId).getVipNum()).getPreferente();
-            }
-
+            sysInsurance = sysInsuranceService.getById(insuranceId);
             money = (siteTimeService.getById(siteTimeId).getSite().getPrice() + sysInsurance.getPrice() * num) * preferente;
 
-            Reserve reserve = new Reserve();
-            reserve.setStadium(siteTimeService.getById(siteTimeId).getSite().getStadium());
-            reserve.setSite(siteTimeService.getById(siteTimeId).getSite());
-            reserve.setUser(userService.getById(userId));
-            reserve.setInsurance(sysInsurance);
-            reserve.setPrice(money);
-            reserve.setMatchType(siteTimeService.getById(siteTimeId).getSite().getType());
-            reserve.setStartTime(siteTimeService.getById(siteTimeId).getStartTime());
-            reserveService.create(reserve);
-            map.put("reserve", reserve);
-
-            UserReserve userReserve = new UserReserve();
-            userReserve.setUser(userService.getById(userId));
-
-
-            userReserve.setReserveId(reserve.getId());
-            //userReserve.setReserve(reserve);
-            userReserve.setStatus(1);
-            userReserveService.create(userReserve);
-
-            Insurance insurance = new Insurance();
+            /*Insurance insurance = new Insurance();
             insurance.setUser(userService.getById(userId));
             insurance.setReserve(reserve);
             insurance.setSysInsurance(sysInsurance);
             insurance.setMoney(sysInsurance.getPrice() * num * preferente);
-            insuranceService.create(insurance);
-
-            map.put("sysInsurance", sysInsurance);
+            insuranceService.create(insurance);*/
         }
 
+        Reserve reserve = new Reserve();
+        reserve.setStadium(siteTimeService.getById(siteTimeId).getSite().getStadium());
+        reserve.setSite(siteTimeService.getById(siteTimeId).getSite());
+        reserve.setUser(userService.getById(userId));
+        reserve.setInsurance(sysInsurance);
+        reserve.setPrice(money);
+        reserve.setMatchType(siteTimeService.getById(siteTimeId).getSite().getType());
+        reserve.setStartTime(siteTimeService.getById(siteTimeId).getStartTime());
+        reserve.setPayStatus(0);
+        reserveService.create(reserve);
+
+        map.put("reserve", reserve);
         map.put("preferente", preferente);
         map.put("money", money);
         map.put("siteMoney", siteTimeService.getById(siteTimeId).getSite().getPrice());
         map.put("vipNum", userService.getById(userId).getVipNum());
+        map.put("sysInsurance", sysInsurance);
 
         Result obj = new Result(true).data(createMap("payInfo",map));
         String result = JsonUtil.obj2ApiJson(obj);
@@ -524,9 +489,8 @@ public class StadiumApi extends CommonController {
      * @apiGroup stadium
      * @apiParam {Long} reserveId 预定ID <必传/>
      * @apiParam {Integer} type 支付类型（0：全额支付  1：AA支付） <必传/>
+     *
      * @apiSuccess {Object} order 订单
-     * @apiSuccess {String} order.userName 用户昵称
-     * @apiSuccess {String} order.stadiumName 球场名称
      * @apiSuccess {Double} order.price 订单金额
      * @apiSuccess {Long} order.sn 订单号
      */
@@ -544,7 +508,7 @@ public class StadiumApi extends CommonController {
 
         Order order = new Order();
         order.setUser(reserve.getUser());
-        order.setStadiumname(reserve.getSite().getStadium().getName());
+        order.setStadium(reserve.getSite().getStadium());
         order.setPrice(reserve.getPrice());
         order.setAction(2);
         order.setSn(sn);
@@ -553,12 +517,14 @@ public class StadiumApi extends CommonController {
         if (type == 0) {
             //将球场预订表的支付方式设置为全额支付
             reserve.setPayment(0);
-        }
-
-        if (type == 1) {
+        }else if (type == 1) {
             //将球场预订表的支付方式设置为AA支付
             reserve.setPayment(1);
         }
+
+        // 当前没有支付接口，因此状态直接为已支付
+        PayCallBackApi payCallBackApi = new PayCallBackApi();
+        payCallBackApi.changeOrderStatus(order.getSn(), null, response);
 
         Result obj = new Result(true).data(createMap("order",order));
         String result = JsonUtil.obj2ApiJson(obj);
@@ -602,60 +568,40 @@ public class StadiumApi extends CommonController {
 
         Map<String, Object> map = new HashMap<String, Object>();
 
+        preferente = 1.0;
+        if (userService.getById(userId).getVipNum() != 0) {
+            preferente = vipLevelService.findBylevel(userService.getById(userId).getVipNum()).getPreferente();
+        }
+        SysInsurance sysInsurance = null;
         if (insuranceId == null) {
-            if (userService.getById(userId).getVipNum() == 0) {
-                preferente = 1.0;
-                num = 0;
-                money =siteTimeService.getById(siteTimeId).getSite().getPrice() * preferente;
-            } else {
-                preferente = vipLevelService.findBylevel(userService.getById(userId).getVipNum()).getPreferente();
-                num = 0;
-                money = siteTimeService.getById(siteTimeId).getSite().getPrice() * preferente;
-            }
-
-            ReserveTeam reserveTeam = new ReserveTeam();
-
-            reserveTeam.setStatus(0);
-            reserveTeam.setStadium(siteTimeService.getById(siteTimeId).getSite().getStadium());
-            reserveTeam.setSite(siteTimeService.getById(siteTimeId).getSite());
-            reserveTeam.setUser(userService.getById(userId));
-            reserveTeam.setPrice(money);
-            reserveTeamService.create(reserveTeam);
-
-            map.put("reserveTeam", reserveTeam);
+            money = siteTimeService.getById(siteTimeId).getSite().getPrice() * preferente;
         } else {
-            SysInsurance sysInsurance = sysInsuranceService.getById(insuranceId);
-            if (userService.getById(userId).getVipNum() == 0) {
-                preferente = 1.0;
-            } else {
-                preferente = vipLevelService.findBylevel(userService.getById(userId).getVipNum()).getPreferente();
-            }
+            sysInsurance = sysInsuranceService.getById(insuranceId);
             money = (siteTimeService.getById(siteTimeId).getSite().getPrice() + sysInsurance.getPrice() * num) * preferente;
 
-            ReserveTeam reserveTeam = new ReserveTeam();
-            reserveTeam.setStatus(0);
-            reserveTeam.setStadium(siteTimeService.getById(siteTimeId).getSite().getStadium());
-            reserveTeam.setSite(siteTimeService.getById(siteTimeId).getSite());
-            reserveTeam.setUser(userService.getById(userId));
-            reserveTeam.setInsurance(sysInsurance);
-            reserveTeam.setPrice(money);
-            reserveTeamService.create(reserveTeam);
-
-            Insurance insurance = new Insurance();
+            /*Insurance insurance = new Insurance();
             insurance.setUser(userService.getById(userId));
             insurance.setReserveTeam(reserveTeam);
             insurance.setSysInsurance(sysInsurance);
             insurance.setMoney(sysInsurance.getPrice() * num * preferente);
-            insuranceService.create(insurance);
+            insuranceService.create(insurance);*/
 
-            map.put("reserveTeam", reserveTeam);
-            map.put("sysInsurance", sysInsurance);
         }
 
+        ReserveTeam reserveTeam = new ReserveTeam();
+        reserveTeam.setStatus(0);
+        reserveTeam.setStadium(siteTimeService.getById(siteTimeId).getSite().getStadium());
+        reserveTeam.setSite(siteTimeService.getById(siteTimeId).getSite());
+        reserveTeam.setUser(userService.getById(userId));
+        reserveTeam.setPrice(money);
+        reserveTeamService.create(reserveTeam);
+
+        map.put("reserveTeam", reserveTeam);
         map.put("preferente", preferente);
         map.put("money", money);
         map.put("siteMoney", siteTimeService.getById(siteTimeId).getSite().getPrice());
         map.put("vipNum", userService.getById(userId).getVipNum());
+        map.put("sysInsurance", sysInsurance);
 
         Result obj = new Result(true).data(createMap("payInfo",map));
         String result = JsonUtil.obj2ApiJson(obj);
@@ -669,14 +615,13 @@ public class StadiumApi extends CommonController {
      * @apiName stadium.teamPayConfirm
      * @apiGroup stadium
      * @apiParam {Long} reserveTeamId 预定ID <必传/>
+     *
      * @apiSuccess {Object} order 订单
-     * @apiSuccess {String} order.userName 用户昵称
-     * @apiSuccess {String} order.stadiumName 球场名称
      * @apiSuccess {Double} order.price 订单金额
      * @apiSuccess {Long} order.sn 订单号
      */
     @RequestMapping(value = "/teamPayConfirm")
-    public void teamPayConfirm(HttpServletResponse response, Long reserveTeamId, Double money) {
+    public void teamPayConfirm(HttpServletResponse response, Long reserveTeamId) {
 
         if (null == reserveTeamId ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -688,13 +633,15 @@ public class StadiumApi extends CommonController {
 
         Order order = new Order();
         order.setUser(reserveTeam.getUser());
-        order.setStadiumname(reserveTeam.getSite().getStadium().getName());
+        order.setStadium(reserveTeam.getSite().getStadium());
         order.setPrice(reserveTeam.getPrice());
         order.setSn(sn);
         order.setAction(2);
         orderService.create(order);
 
-        money = order.getPrice();
+        // 当前没有支付接口，因此状态直接为已支付
+        PayCallBackApi payCallBackApi = new PayCallBackApi();
+        payCallBackApi.changeOrderStatus(order.getSn(), null, response);
 
         Result obj = new Result(true).data(createMap("order",order));
         String result = JsonUtil.obj2ApiJson(obj);

@@ -8,10 +8,8 @@ import javax.persistence.*;
 @Entity
 @Table(name = "t_post_comment")
 public class PostComment extends BaseEntity{
-
-    @ManyToOne
-    @JoinColumn(name = "post_id")
-    private Post post;
+    @Column(name = "post_id")
+    private Long postId;
 
     @ManyToOne
     @JoinColumn(name = "from_user_id")
@@ -30,12 +28,12 @@ public class PostComment extends BaseEntity{
     @Transient
     private String title;
 
-    public Post getPost() {
-        return post;
+    public Long getPostId() {
+        return postId;
     }
 
-    public void setPost(Post post) {
-        this.post = post;
+    public void setPostId(Long postId) {
+        this.postId = postId;
     }
 
     public User getfUser() {

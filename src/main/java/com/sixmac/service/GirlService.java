@@ -5,10 +5,12 @@ import com.sixmac.entity.WatchingRace;
 import com.sixmac.service.common.ICommonService;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 /**
  * Created by Administrator on 2016/5/23 0023 下午 1:57.
  */
 public interface GirlService extends ICommonService<Girl> {
 
-
+    public List<Girl> page(Integer status, Long cityId);
 }

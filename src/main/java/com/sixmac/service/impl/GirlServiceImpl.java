@@ -74,4 +74,8 @@ public class GirlServiceImpl implements GirlService {
         }
     }
 
+    @Override
+    public List<Girl> page(Integer status, Long cityId) {
+        return girlDao.page(status, cityId);
+    }
 }

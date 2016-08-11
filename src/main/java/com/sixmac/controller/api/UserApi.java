@@ -564,7 +564,7 @@ public class UserApi extends CommonController {
         Page<Post> page = postService.page(userId, pageNum, pageSize);
         for (Post post : page.getContent()) {
             post.setCommentNum(postCommentService.findByPostId(post.getId()).size());
-            post.setPostImages(postImageService.findByPostId(post.getId()));
+            //post.setPostImages(postImageService.findByPostId(post.getId()));
             for (PostImage postImage : postImageService.findByPostId(post.getId())) {
                 if (StringUtils.isNotBlank(postImage.getAvater())) {
                     postImage.setAvater(ConfigUtil.getString("upload.url") + postImage.getAvater());
@@ -662,6 +662,7 @@ public class UserApi extends CommonController {
      * @apiSuccess {Long} list.id 约看id
      * @apiSuccess {Double} list.tip 红包（小费）
      * @apiSuccess {Long} list.startDate 预约时间
+     * @apiSuccess {Integer} list.status 状态（0 ：未确认 1：已确认 2；已评价 ）
      *
      * @apiSuccess {Object} list.girl 宝贝
      * @apiSuccess {Long} list.girl.id 宝贝id
@@ -713,7 +714,7 @@ public class UserApi extends CommonController {
      * @api {post} /api/user/confirm 我的看球确认
      * @apiName user.confirm
      * @apiGroup user
-     * @apiParam {Long} watchingId 约看id
+     * @apiParam {Long} watchingId 约看id <必传 />
      *
      */
     @RequestMapping(value = "/confirm")
@@ -739,12 +740,12 @@ public class UserApi extends CommonController {
      * @apiName user.comment
      * @apiGroup user
      * @apiParam {Long} watchingId 约看id <必传 />
-     * @apiParam {Integer} star 服务打分 <必传 />
+     * @apiParam {Double} star 服务打分 <必传 />
      * @apiParam {String} content 评论内容 <必传 />
      *
      */
     @RequestMapping(value = "/comment")
-    public void comment(HttpServletResponse response, Integer star, String content, Long watchingId) {
+    public void comment(HttpServletResponse response, Double star, String content, Long watchingId) {
 
         if (watchingId == null || star == null || content == null || content == " ") {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -756,8 +757,8 @@ public class UserApi extends CommonController {
         if (girlUser.getStatus() == 1) {
 
             GirlComment girlComment = new GirlComment();
-            girlComment.setUser(girlUser.getUser());
-            girlComment.setGirl(girlUser.getGirl());
+            girlComment.setUserId(girlUser.getUser().getId());
+            girlComment.setGirlId(girlUser.getGirl().getId());
             girlComment.setStar(star);
             girlComment.setContent(content);
             girlCommentService.create(girlComment);

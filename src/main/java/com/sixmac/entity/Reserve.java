@@ -69,6 +69,9 @@ public class Reserve extends BaseEntity{
     @Transient
     private Double sumPrice;
 
+    @Column(name = "pay_status")
+    private Integer payStatus;
+
     public Integer getJoinCount() {
         return joinCount;
     }
@@ -197,5 +200,11 @@ public class Reserve extends BaseEntity{
         this.title = title;
     }
 
+    public Integer getPayStatus() {
+        return payStatus;
+    }
 
+    public void setPayStatus(Integer payStatus) {
+        this.payStatus = payStatus;
+    }
 }

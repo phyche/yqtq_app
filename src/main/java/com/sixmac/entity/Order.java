@@ -13,8 +13,21 @@ public class Order extends BaseEntity{
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "stadiumname")
-    private String stadiumname;
+    @ManyToOne
+    @JoinColumn(name = "reserve_id")
+    private Reserve reserve;
+
+    @ManyToOne
+    @JoinColumn(name = "reserve_team_id")
+    private ReserveTeam reserveTeam;
+
+    @ManyToOne
+    @JoinColumn(name = "stadium_id")
+    private Stadium stadium;
+
+    @ManyToOne
+    @JoinColumn(name = "site_id")
+    private Site site;
 
     @Column(name = "price")
     private Double price;
@@ -34,6 +47,10 @@ public class Order extends BaseEntity{
     @Column(name = "action")
     private Integer action;
 
+    @ManyToOne
+    @JoinColumn(name = "girl_user_id")
+    private GirlUser girlUser;
+
     public User getUser() {
         return user;
     }
@@ -42,12 +59,12 @@ public class Order extends BaseEntity{
         this.user = user;
     }
 
-    public String getStadiumname() {
-        return stadiumname;
+    public Stadium getStadium() {
+        return stadium;
     }
 
-    public void setStadiumname(String stadiumname) {
-        this.stadiumname = stadiumname;
+    public void setStadium(Stadium stadium) {
+        this.stadium = stadium;
     }
 
     public Double getPrice() {
@@ -96,5 +113,37 @@ public class Order extends BaseEntity{
 
     public void setAction(Integer action) {
         this.action = action;
+    }
+
+    public GirlUser getGirlUser() {
+        return girlUser;
+    }
+
+    public void setGirlUser(GirlUser girlUser) {
+        this.girlUser = girlUser;
+    }
+
+    public Site getSite() {
+        return site;
+    }
+
+    public void setSite(Site site) {
+        this.site = site;
+    }
+
+    public Reserve getReserve() {
+        return reserve;
+    }
+
+    public void setReserve(Reserve reserve) {
+        this.reserve = reserve;
+    }
+
+    public ReserveTeam getReserveTeam() {
+        return reserveTeam;
+    }
+
+    public void setReserveTeam(ReserveTeam reserveTeam) {
+        this.reserveTeam = reserveTeam;
     }
 }

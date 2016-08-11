@@ -169,23 +169,24 @@ public class WatchingApi extends CommonController {
 
         List<Long> numList = new ArrayList<Long>();
         //NumVo numVo = new NumVo();
+
+        Long systemTime = System.currentTimeMillis();
         for (BigRace bigRace : bigRaceList) {
 
-            if (bigRace.getStartDate() - System.currentTimeMillis() > 0) {
-                numList.add(bigRace.getStartDate() - System.currentTimeMillis());
+            Long time = bigRace.getStartDate() - systemTime;
+            if (time  > 0) {
+                numList.add(time);
             }
         }
 
         if (numList.size() > 0){
             Long minnum = numList.get(0);
             for (int i=0; i<numList.size(); i ++) {
-                if (numList.get(i) >= minnum) {
+                if (numList.get(i) > minnum) {
                     minnum = numList.get(i);
                 }
             }
-
-            BigRace bigRace = bigRaceService.getByStartDate(minnum + System.currentTimeMillis());
-
+            BigRace bigRace = bigRaceService.getByStartDate(minnum + systemTime);
             if (StringUtils.isNotBlank(bigRace.getAvater1())) {
                 bigRace.setAvater1(ConfigUtil.getString("upload.url") + bigRace.getAvater1());
             }
@@ -197,14 +198,18 @@ public class WatchingApi extends CommonController {
             if (bigRace == null) {
                 girlImageList = null;
             }else {
-                //Page<GirlImage> pageGirlImage = girlImageService.page(0, 0, cityId, pageNum, pageSize);
-                List<GirlImage> list = girlImageService.page(0, 0, cityId);
-                for (GirlImage girlImage : list) {
-                    if (StringUtils.isNotBlank(girlImage.getUrl())) {
-                        girlImage.setUrl(ConfigUtil.getString("upload.url") + girlImage.getUrl());
+                List<Girl> list = girlService.page(0, cityId);
+                for (Girl girl : list) {
+                    for (GirlImage girlImage : girl.getGirlImageList()) {
+                        if (girlImage.getType() == 0) {
+                            if (StringUtils.isNotBlank(girlImage.getUrl())) {
+                                girlImage.setUrl(ConfigUtil.getString("upload.url") + girlImage.getUrl());
+                            }
+                            girlImageList.add(girlImage);
+                        }
                     }
-                    girlImageList.add(girlImage);
                 }
+
             }
             for (int i=0; i<girlImageList.size(); i++) {
                 GirlImage girlImage = girlImageList.get(i);
@@ -246,9 +251,9 @@ public class WatchingApi extends CommonController {
      * @apiSuccess {String} girlInfo.girl.label 宝贝签名
      * @apiSuccess {Integer} girlInfo.girl.cityId 宝贝陪看区域
      *
-     * @apiSuccess {Object} girlInfo.girl.girlImageList 宝贝相册列表
-     * @apiSuccess {Integer} girlInfo.girl.girlImageList.id 宝贝相册id
-     * @apiSuccess {String} girlInfo.girl.girlImageList.avater 宝贝相册
+     * @apiSuccess {Object} girlInfo.girlImages1 宝贝相册列表
+     * @apiSuccess {Integer} girlInfo.girlImages1.id 宝贝相册id
+     * @apiSuccess {String} girlInfo.girlImages1.avater 宝贝相册
      *
      * @apiSuccess {Object} girlInfo.girlImages 宝贝封面列表
      * @apiSuccess {Integer} girlInfo.girlImages.id 宝贝封面id
@@ -269,22 +274,29 @@ public class WatchingApi extends CommonController {
         Girl girl = girlService.getById(girlId);
         girl.setCityName(cityService.getByCityId(girl.getCityId()).getCity());
 
+        //List<GirlImage> girlImages = girlImageService.find(girlId, 0);
         //宝贝封面
-        List<GirlImage> girlImages = girlImageService.find(girlId, 0);
-        for (GirlImage girlImage : girlImages) {
+        List<GirlImage> girlImages = new ArrayList<GirlImage>();
+        //宝贝相册
+        List<GirlImage> girlImages1 = new ArrayList<GirlImage>();
+        for (GirlImage girlImage : girl.getGirlImageList()) {
             if (StringUtils.isNotBlank(girlImage.getUrl())) {
                 girlImage.setUrl(ConfigUtil.getString("upload.url") + girlImage.getUrl());
+                if (girlImage.getType() == 0) {
+                    girlImages.add(girlImage);
+                }else if (girlImage.getType() == 1) {
+                    girlImages1.add(girlImage);
+                }
             }
         }
 
-        //宝贝相册
-        List<GirlImage> girlImages1 = girlImageService.find(girlId, 1);
+        /*List<GirlImage> girlImages1 = girlImageService.find(girlId, 1);
         for (GirlImage girlImage : girlImages1) {
             if (StringUtils.isNotBlank(girlImage.getUrl())) {
                 girlImage.setUrl(ConfigUtil.getString("upload.url") + girlImage.getUrl());
             }
         }
-        girl.setGirlImageList(girlImages1);
+        girl.setGirlImageList(girlImages1);*/
 
         //宝贝预约数
         List<GirlUser> girlUserList = girlUserService.findByGirlId(girlId);
@@ -295,21 +307,21 @@ public class WatchingApi extends CommonController {
         girlService.update(girl);
 
         Double star = 0.0;
-        List<GirlComment> girlCommentList = girlCommentService.findByGirlId(girlId);
-        for (GirlComment girlComment : girlCommentList) {
+        for (GirlComment girlComment : girl.getGirlComments()) {
             star += girlComment.getStar();
         }
-        if (girlCommentList.size() != 0) {
-            girl.setAveStar(star / girlCommentList.size());
+        if (girl.getGirlComments().size() != 0) {
+            girl.setAveStar(star / girl.getGirlComments().size());
         }else {
             girl.setAveStar(0.0);
         }
 
         map.put("girl",girl);
         map.put("girlImages",girlImages);
+        map.put("girlImages1",girlImages1);
 
         Result obj = new Result(true).data(createMap("girlInfo",map));
-        String result = JsonUtil.obj2ApiJson(obj,"girl","type");
+        String result = JsonUtil.obj2ApiJson(obj,"girl","type","girlImageList");
         WebUtil.printApi(response, result);
     }
 
@@ -320,6 +332,8 @@ public class WatchingApi extends CommonController {
      * @apiName watching.girlComment
      * @apiGroup watching
      * @apiParam {Long} girlId 宝贝id <必传/>
+     * @apiParam {Integer} pageNum 当前页
+     * @apiParam {Integer} pageSize 每页显示数
      *
      * @apiSuccess {Object}  list 宝贝陪看评价列表
      * @apiSuccess {Object}  list.GirlComment 宝贝陪看评价列表
@@ -328,19 +342,28 @@ public class WatchingApi extends CommonController {
      * @apiSuccess {String} list.GirlComment.content 评论内容
      * @apiSuccess {Long} list.GirlComment.createDate 评论时间
      *
+     * @apiSuccess {Object}  page 翻页信息
+     * @apiSuccess {Integer} page.totalNum 总记录数
+     * @apiSuccess {Integer} page.totalPage 总页数
+     * @apiSuccess {Integer} page.currentPage 当前页
+     *
      */
     @RequestMapping(value = "/girlComment")
-    public void girlComment(HttpServletResponse response, Long girlId) {
+    public void girlComment(HttpServletResponse response,
+                            Long girlId,
+                            Integer pageNum,
+                            Integer pageSize) {
 
         if (girlId == null ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
 
-        List<GirlComment> list = girlCommentService.findByGirlId(girlId);
+        Page<GirlComment> page = girlCommentService.page(girlId, pageNum, pageSize);
 
-        Result obj = new Result(true).data(createMap("list",list));
-        String result = JsonUtil.obj2ApiJson(obj,"girl","user");
+        Map<String, Object> dataMap = APIFactory.fitting(page);
+        Result obj = new Result(true).data(dataMap);
+        String result = JsonUtil.obj2ApiJson(obj,"cityId");
         WebUtil.printApi(response, result);
     }
 
@@ -353,97 +376,43 @@ public class WatchingApi extends CommonController {
      * @apiParam {Long} userId 用户id <必传/>
      * @apiParam {Long} girlId 宝贝id <必传/>
      * @apiParam {Long} sceneId 比赛id <必传/>
+     * @apiParam {Double} tip 红包费
      *
+     * @apiSuccess {Object} order 订单
+     * @apiSuccess {Double} order.price 订单金额
+     * @apiSuccess {Long} order.sn 订单号
      *
-     * @apiSuccess {Object} girlUsers 用户约看列表
-     * @apiSuccess {Double} girlUsers.tip 红包（小费）
-     * @apiSuccess {Double} girlUsers.price 总费用
-     *
-     * @apiSuccess {Object} girlUsers.girl 宝贝
-     * @apiSuccess {String} girlUsers.girl.avater 宝贝头像
-     * @apiSuccess {String} girlUsers.girl,nickname 宝贝昵称
-     * @apiSuccess {Integer} girlUsers.duration 宝贝年龄
-     * @apiSuccess {Double} girlUsers.tip 宝贝身高
-     * @apiSuccess {Double} girlUsers.tip 宝贝体重
-     *
-     * @apiSuccess {Object} girlUsers.bigRace 赛事
-     * @apiSuccess {Integer} girlUsers.bigRace.id 赛事id
-     * @apiSuccess {Long} girlUsers.bigRace.team1name 球队1的名字
-     * @apiSuccess {Object} girlUsers.bigRace.team2name 球队2的名字
      */
     @RequestMapping(value = "/orderGirl")
     public void orderGirl(HttpServletResponse response,
                           Long userId,
                           Long girlId,
-                          Long sceneId) {
+                          Long sceneId,
+                          Double tip) {
 
-        if (userId == null || girlId == null || sceneId == null) {
+        if (userId == null || girlId == null || sceneId == null || tip == null) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
-
-        Map<String,Object> map = new HashMap<String,Object>();
-
-        User user = userService.getById(userId);
-        //宝贝个人信息
-        Girl girl = girlService.getById(girlId);
-        //赛事的信息
-        BigRace bigRace = bigRaceService.getById(sceneId);
 
         GirlUser girlUser = new GirlUser();
-        girlUser.setUser(user);
-        girlUser.setGirl(girl);
-        girlUser.setBigRace(bigRace);
-        girlUser.setStartDate(bigRace.getStartDate());
-        girlUser.setStadium(bigRace.getStadium());
-        girlUser.setPrice(girl.getPrice());
+        girlUser.setUser(userService.getById(userId));
+        girlUser.setGirl(girlService.getById(girlId));
+        girlUser.setBigRace(bigRaceService.getById(sceneId));
+        girlUser.setStartDate(bigRaceService.getById(sceneId).getStartDate());
+        girlUser.setStadium(bigRaceService.getById(sceneId).getStadium());
+        girlUser.setPrice(girlService.getById(girlId).getPrice());
+        girlUser.setTip(tip);
+        girlUser.setStatus(3);
         girlUserService.create(girlUser);
 
-        map.put("girlUser",girlUser);
-
-        Result obj = new Result(true).data(createMap("girlUser",map));
-        String result = JsonUtil.obj2ApiJson(obj,"user","stadium");
-        WebUtil.printApi(response, result);
-    }
-
-    /**
-     * 支付（完成）
-     *
-     * @api {post} /api/watching/pay 约宝贝支付
-     * @apiName watching.pay
-     * @apiGroup watching
-     * @apiParam {Long} girlUserId 约看id <必传/>
-     * @apiParam {Double} tip 红包费
-     *
-     * @apiSuccess {Object} girlUsers 用户约看列表
-     * @apiSuccess {Double} girlUsers.tip 红包（小费）
-     * @apiSuccess {Double} girlUsers.price 总费用
-     */
-    @RequestMapping(value = "/pay")
-    public void pay(HttpServletResponse response,
-                    Double tip,
-                    Long girlUserId,
-                    Double money) {
-
-        if (girlUserId == null ) {
-            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
-            return;
-        }
-
-        GirlUser girlUser = girlUserService.getById(girlUserId);
-        if (tip == null) {
-            girlUser.setTip(0.0);
-        }else {
-            girlUser.setTip(tip);
-        }
-
-        girlUserService.update(girlUser);
-
+        // 生成订单
         String sn = CommonUtils.generateSn(); // 订单号
 
         Order order = new Order();
         order.setUser(girlUser.getUser());
-        order.setStadiumname(girlUser.getStadium().getName());
+        order.setStadium(girlUser.getStadium());
+        order.setGirlUser(girlUser);
 
         VipLevel vipLevel = vipLevelService.findBylevel(girlUser.getUser().getVipNum());
         if (girlUser.getUser().getVipNum() != 0) {
@@ -455,8 +424,13 @@ public class WatchingApi extends CommonController {
         order.setAction(3);
         orderService.create(order);
 
+        // 当前没有支付接口，因此状态直接为已支付
+        PayCallBackApi payCallBackApi = new PayCallBackApi();
+        payCallBackApi.changeOrderStatus(order.getSn(), null, response);
+
         Result obj = new Result(true).data(createMap("order",order));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
+
 }

@@ -35,9 +35,7 @@ public class GirlUser extends BaseEntity{
     private Double tip;
 
     @Column(name = "status")
-    private Integer status;
-
-
+    private Integer status = 0;
 
     public Girl getGirl() {
         return girl;

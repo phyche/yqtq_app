@@ -3,14 +3,21 @@ package com.sixmac.service.impl;
 import com.sixmac.core.Constant;
 import com.sixmac.dao.GirlCommentDao;
 import com.sixmac.entity.GirlComment;
+import com.sixmac.entity.WatchingRace;
 import com.sixmac.service.GirlCommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -70,5 +77,35 @@ public class GirlCommentServiceImpl implements GirlCommentService {
     @Override
     public List<GirlComment> findByGirlId(Long girlId) {
         return girlCommentDao.findByGirlId(girlId);
+    }
+
+    @Override
+    public Page<GirlComment> page(final Long girlId, Integer pageNum, Integer pageSize) {
+        PageRequest pageRequest = new PageRequest(pageNum - 1, pageSize, Sort.Direction.DESC, "id");
+
+        Page<GirlComment> page = girlCommentDao.findAll(new Specification<GirlComment>() {
+            @Override
+            public Predicate toPredicate(Root<GirlComment> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                Predicate result = null;
+                List<Predicate> predicateList = new ArrayList<Predicate>();
+
+                if (girlId != null) {
+                    Predicate pre = cb.equal(root.get("girl").get("id").as(Long.class), girlId);
+                    predicateList.add(pre);
+                }
+
+                if (predicateList.size() > 0) {
+                    result = cb.and(predicateList.toArray(new Predicate[]{}));
+                }
+
+                if (result != null) {
+                    query.where(result);
+                }
+                return query.getGroupRestriction();
+            }
+
+        }, pageRequest);
+
+        return page;
     }
 }

@@ -2,7 +2,9 @@ package com.sixmac.entity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Administrator on 2016/5/19 0019.
@@ -30,11 +32,13 @@ public class Post extends BaseEntity{
     @Transient
     private Integer commentNum = 0;
 
-    @Transient
-    List<PostImage> postImages = new ArrayList<PostImage>();
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "post_id")
+    Set<PostImage> postImages = new HashSet<PostImage>();
 
-    @Transient
-    List<PostComment> postCommentList = new ArrayList<PostComment>();
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "post_id")
+    Set<PostComment> postCommentList = new HashSet<PostComment>();
 
     public User getUser() {
         return user;
@@ -84,19 +88,19 @@ public class Post extends BaseEntity{
         this.commentNum = commentNum;
     }
 
-    public List<PostImage> getPostImages() {
+    public Set<PostImage> getPostImages() {
         return postImages;
     }
 
-    public void setPostImages(List<PostImage> postImages) {
+    public void setPostImages(Set<PostImage> postImages) {
         this.postImages = postImages;
     }
 
-    public List<PostComment> getPostCommentList() {
+    public Set<PostComment> getPostCommentList() {
         return postCommentList;
     }
 
-    public void setPostCommentList(List<PostComment> postCommentList) {
+    public void setPostCommentList(Set<PostComment> postCommentList) {
         this.postCommentList = postCommentList;
     }
 }

@@ -71,6 +71,7 @@ public class OrderBallApi extends CommonController {
      * @apiParam {Long} areaId 区域ID
      * @apiParam {Integer} pageNum 当前页
      * @apiParam {Integer} pageSize 每页显示数
+     *
      * @apiSuccess {Object}  list 约球列表
      * @apiSuccess {Integer} list.id 约球id
      * @apiSuccess {String} list.content 约球内容
@@ -84,6 +85,7 @@ public class OrderBallApi extends CommonController {
      * @apiSuccess {String} list.stadium.name 球场名字
      * @apiSuccess {Integer} list.stadium.type 球场类型 (0:私人球场 1:公共球场)
      * @apiSuccess {Long} list.startTime 开始时间
+     *
      * @apiSuccess {Object}  page 翻页信息
      * @apiSuccess {Integer} page.totalNum 总记录数
      * @apiSuccess {Integer} page.totalPage 总页数
@@ -438,23 +440,6 @@ public class OrderBallApi extends CommonController {
         Order order = null;
         if (reserve.getJoinCount() < reserve.getMatchType()*2) {
 
-            reserve.setJoinCount(reserve.getJoinCount() + 1);
-            reserveService.update(reserve);
-            if (reserve.getJoinCount() == reserve.getMatchType()*2) {
-
-                List<UserReserve> userReserveList = userReserveService.findByReserverId(reserveId);
-                for (UserReserve userReserve : userReserveList) {
-
-                    SysExperience sysExperience = sysExperienceService.findByAction(1);
-                    userReserve.getUser().setExperience(userReserve.getUser().getExperience() + sysExperience.getExperience());
-                    userService.changeIntegral(userReserve.getUser());
-                    SysCredibility sysCredibility = sysCredibilityService.findByAction(1);
-                    userReserve.getUser().setCredibility(userReserve.getUser().getCredibility() + sysCredibility.getCredibility());
-
-                    userService.update(userReserve.getUser());
-                }
-            }
-
             Insurance insurance = new Insurance();
 
             //球场已经全额付款的
@@ -480,20 +465,18 @@ public class OrderBallApi extends CommonController {
 
                 order = new Order();
                 order.setUser(userService.getById(userId));
-                order.setStadiumname(reserve.getStadium().getName());
+                order.setReserve(reserve);
+                order.setStadium(reserve.getStadium());
+                order.setSite(reserve.getSite());
                 order.setPrice(money);
-                //order.setAction(1);
+                order.setAction(1);
                 order.setSn(sn);
                 orderService.create(order);
+
+                // 当前没有支付接口，因此状态直接为已支付
+                PayCallBackApi payCallBackApi = new PayCallBackApi();
+                payCallBackApi.changeOrderStatus(order.getSn(), null, response);
             }
-
-            UserReserve userReserve = new UserReserve();
-            userReserve.setUser(userService.getById(userId));
-
-            userReserve.setReserveId(reserveId);
-            //userReserve.setReserve(reserve);
-            userReserve.setStatus(0);
-            userReserveService.create(userReserve);
         }
 
         Result obj = new Result(true).data(createMap("order", order));

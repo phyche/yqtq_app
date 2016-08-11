@@ -15,7 +15,7 @@ import java.util.List;
 public interface PostCommentDao extends JpaRepository<PostComment, Long>, JpaSpecificationExecutor<PostComment> {
 
     //根据帖子id筛选评论
-    @Query("select a from PostComment a where a.post.id = ?1 order by a.createDate desc ")
+    @Query("select a from PostComment a where a.postId = ?1 order by a.createDate desc ")
     public List<PostComment> findByPostId(Long postId);
 
     //根据评论人Id筛选评论
