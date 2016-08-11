@@ -18,4 +18,7 @@ public interface OrderService extends ICommonService<Order> {
 
     // 根据订单流水号获取订单详情
     public Order iFindOneByOrderNum(String orderNum);
+
+    // 支付回调修改订单状态
+    public void changeOrderStatus(String orderNum, Integer type);
 }

@@ -21,14 +21,6 @@ public class Order extends BaseEntity{
     @JoinColumn(name = "reserve_team_id")
     private ReserveTeam reserveTeam;
 
-    @ManyToOne
-    @JoinColumn(name = "stadium_id")
-    private Stadium stadium;
-
-    @ManyToOne
-    @JoinColumn(name = "site_id")
-    private Site site;
-
     @Column(name = "price")
     private Double price;
 
@@ -57,14 +49,6 @@ public class Order extends BaseEntity{
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public Stadium getStadium() {
-        return stadium;
-    }
-
-    public void setStadium(Stadium stadium) {
-        this.stadium = stadium;
     }
 
     public Double getPrice() {
@@ -121,14 +105,6 @@ public class Order extends BaseEntity{
 
     public void setGirlUser(GirlUser girlUser) {
         this.girlUser = girlUser;
-    }
-
-    public Site getSite() {
-        return site;
-    }
-
-    public void setSite(Site site) {
-        this.site = site;
     }
 
     public Reserve getReserve() {

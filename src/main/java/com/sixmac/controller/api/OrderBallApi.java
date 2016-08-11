@@ -69,7 +69,6 @@ public class OrderBallApi extends CommonController {
      * @apiParam {Long} areaId 区域ID
      * @apiParam {Integer} pageNum 当前页
      * @apiParam {Integer} pageSize 每页显示数
-     *
      * @apiSuccess {Object}  list 约球列表
      * @apiSuccess {Integer} list.id 约球id
      * @apiSuccess {String} list.content 约球内容
@@ -83,7 +82,6 @@ public class OrderBallApi extends CommonController {
      * @apiSuccess {String} list.stadium.name 球场名字
      * @apiSuccess {Integer} list.stadium.type 球场类型 (0:私人球场 1:公共球场)
      * @apiSuccess {Long} list.startTime 开始时间
-     *
      * @apiSuccess {Object}  page 翻页信息
      * @apiSuccess {Integer} page.totalNum 总记录数
      * @apiSuccess {Integer} page.totalPage 总页数
@@ -124,7 +122,6 @@ public class OrderBallApi extends CommonController {
      * @apiName orderBall.orderInfo
      * @apiGroup orderBall
      * @apiParam {Long} reserveId 约球ID <必传 />
-     *
      * @apiSuccess {Object}  reserve.reserve 约球列表
      * @apiSuccess {Long} reserve.reserve.id 约球id
      * @apiSuccess {String} reserve.reserve.content 约球内容
@@ -190,7 +187,7 @@ public class OrderBallApi extends CommonController {
             map.put("userList", userList);
             map.put("reserve", reserve);
 
-            Result obj = new Result(true).data(createMap("reserve",map));
+            Result obj = new Result(true).data(createMap("reserve", map));
             String result = JsonUtil.obj2ApiJson(obj, "set", "site", "list");
             WebUtil.printApi(response, result);
         } catch (Exception e) {
@@ -247,7 +244,7 @@ public class OrderBallApi extends CommonController {
 
         map.put("reserveList", reserveList);
 
-        Result obj = new Result(true).data(createMap("list",map));
+        Result obj = new Result(true).data(createMap("list", map));
         String result = JsonUtil.obj2ApiJson(obj, "set", "insurance", "site", "list");
         WebUtil.printApi(response, result);
     }
@@ -301,7 +298,6 @@ public class OrderBallApi extends CommonController {
      * @apiSuccess {Long} schedule.watchBallVos.startTime 开始时间
      * @apiSuccess {Long} schedule.watchBallVos.createDate 发起时间
      * @apiSuccess {String} schedule.watchBallVos.mobile 手机号
-     *
      * @apiSuccess {Object}  schedule.watchBallVoList 球员所在球队为客队赛事列表
      * @apiSuccess {String} schedule.watchBallVoList.homeTeamName 主队队名
      * @apiSuccess {String} schedule.watchBallVoList.homeTeamAvater 主队队徽
@@ -399,7 +395,7 @@ public class OrderBallApi extends CommonController {
             e.printStackTrace();
         }
 
-        Result obj = new Result(true).data(createMap("schedule",map));
+        Result obj = new Result(true).data(createMap("schedule", map));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
@@ -419,7 +415,6 @@ public class OrderBallApi extends CommonController {
      * @apiGroup orderBall
      * @apiParam {Long} reserveId 约球ID <必传 />
      * @apiParam {Long} userId 用户ID <必传 />
-     *
      * @apiSuccess {Object} order 订单
      * @apiSuccess {String} order.userName 用户昵称
      * @apiSuccess {String} order.stadiumName 球场名称
@@ -436,7 +431,7 @@ public class OrderBallApi extends CommonController {
 
         Reserve reserve = reserveService.getById(reserveId);
         Order order = null;
-        if (reserve.getJoinCount() < reserve.getMatchType()*2) {
+        if (reserve.getJoinCount() < reserve.getMatchType() * 2) {
 
             Insurance insurance = new Insurance();
 
@@ -464,21 +459,20 @@ public class OrderBallApi extends CommonController {
                 order = new Order();
                 order.setUser(userService.getById(userId));
                 order.setReserve(reserve);
-                order.setStadium(reserve.getStadium());
-                order.setSite(reserve.getSite());
+                /*order.setStadium(reserve.getStadium());
+                order.setSite(reserve.getSite());*/
                 order.setPrice(money);
                 order.setAction(1);
                 order.setSn(sn);
                 orderService.create(order);
 
                 // 当前没有支付接口，因此状态直接为已支付
-                PayCallBackApi payCallBackApi = new PayCallBackApi();
-                payCallBackApi.changeOrderStatus(order.getSn(), null, response);
+                PayCallBackApi.changeOrderStatus(orderService, order.getSn(), null, response);
             }
         }
 
         Result obj = new Result(true).data(createMap("order", order));
-        String result = JsonUtil.obj2ApiJson(obj);
+        String result = JsonUtil.obj2ApiJson(obj, "reserve", "user", "reserveTeam", "girlUser", "stadium");
         WebUtil.printApi(response, result);
     }
 }

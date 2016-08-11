@@ -34,29 +34,6 @@ public class PayCallBackApi extends CommonController {
     @Autowired
     private OrderService orderService;
 
-    @Autowired
-    private SysExperienceService sysExperienceService;
-
-    @Autowired
-    private SysCredibilityService sysCredibilityService;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private GirlUserService girlUserService;
-
-    @Autowired
-    private ReserveService reserveService;
-
-    @Autowired
-    private UserReserveService userReserveService;
-
-    @Autowired
-    private VipLevelService vipLevelService;
-
-    @Autowired
-    private InsuranceService insuranceService;
 
     /**
      * @api {post} /api/pay/getPayInfo 拼接微信支付参数
@@ -125,7 +102,7 @@ public class PayCallBackApi extends CommonController {
             if ("TRADE_SUCCESS".equals(trade_status) || "TRADE_FINISHED".equals(trade_status)) {
                 // 修改订单状态
                 try {
-                    changeOrderStatus(out_trade_no, 1, response);
+                    changeOrderStatus(orderService, out_trade_no, 1, response);
 
                     System.out.println("---------------------修改订单状态成功");
                 } catch (Exception e) {
@@ -197,7 +174,7 @@ public class PayCallBackApi extends CommonController {
                 total_fee = Float.parseFloat(total_fee) / 100 + "";
                 System.out.println("---------------total_fee：" + total_fee);
                 // 修改订单状态
-                changeOrderStatus(out_trade_no, 2, response);
+                changeOrderStatus(orderService, out_trade_no, 2, response);
 
                 System.out.println("---------------------修改订单状态成功");
             }
@@ -218,90 +195,15 @@ public class PayCallBackApi extends CommonController {
      * @param orderNum
      * @return
      */
-    public void changeOrderStatus(String orderNum, Integer type, HttpServletResponse response) {
+    public static void changeOrderStatus(OrderService orderService, String orderNum, Integer type, HttpServletResponse response) {
         try {
-            Order orders = orderService.iFindOneByOrderNum(orderNum);
-            orders.setStatus(Constant.ORDERS_STATUS_001);
-            orders.setType(type);
-            orders.setPayTime(new Date().getTime());
-            orderService.update(orders);
+            orderService.changeOrderStatus(orderNum, type);
 
-            if (orders.getAction() != 1) {
-                User user = orders.getUser();
-                user.setCredibility(user.getCredibility() + sysCredibilityService.findByAction(orders.getAction()).getCredibility());
-                user.setExperience(user.getExperience() + sysExperienceService.findByAction(orders.getAction()).getExperience());
-
-                userService.update(user);
-                userService.changeIntegral(user);
-            }
-
-            if (orders.getAction() == 1) {
-                orders.getReserve().setJoinCount(orders.getReserve().getJoinCount() + 1);
-                reserveService.update(orders.getReserve());
-                if (orders.getReserve().getJoinCount() == orders.getReserve().getMatchType()*2) {
-
-                    List<UserReserve> userReserveList = userReserveService.findByReserverId(orders.getReserve().getId());
-                    for (UserReserve userReserve : userReserveList) {
-
-                        SysExperience sysExperience = sysExperienceService.findByAction(1);
-                        userReserve.getUser().setExperience(userReserve.getUser().getExperience() + sysExperience.getExperience());
-                        SysCredibility sysCredibility = sysCredibilityService.findByAction(1);
-                        userReserve.getUser().setCredibility(userReserve.getUser().getCredibility() + sysCredibility.getCredibility());
-
-                        userService.changeIntegral(userReserve.getUser());
-                        userService.update(userReserve.getUser());
-                    }
-                }
-
-                UserReserve userReserve = new UserReserve();
-                userReserve.setUser(orders.getUser());
-                userReserve.setReserveId(orders.getReserve().getId());
-                //userReserve.setReserve(reserve);
-                userReserve.setStatus(0);
-                userReserveService.create(userReserve);
-            }
-
-            Double preferente = 1.0;
-            if (orders.getUser().getVipNum() != 0) {
-                preferente = vipLevelService.findBylevel(orders.getUser().getVipNum()).getPreferente();
-            }
-            if (orders.getAction() == 2 && orders.getReserve() != null) {
-
-                UserReserve userReserve = new UserReserve();
-                userReserve.setUser(orders.getUser());
-                userReserve.setReserveId(orders.getReserve().getId());
-                //userReserve.setReserve(reserve);
-                userReserve.setStatus(1);
-                userReserveService.create(userReserve);
-
-                if (orders.getReserve().getInsurance() != null) {
-                    Insurance insurance = new Insurance();
-                    insurance.setUser(orders.getUser());
-                    insurance.setReserve(orders.getReserve());
-                    insurance.setSysInsurance(orders.getReserve().getInsurance());
-
-                    insurance.setMoney(orders.getReserve().getInsurance().getPrice() * preferente);
-                    insuranceService.create(insurance);
-                }
-            }else if (orders.getAction() == 2 && orders.getReserveTeam() != null && orders.getReserveTeam().getInsurance() != null) {
-                Insurance insurance = new Insurance();
-                insurance.setUser(orders.getUser());
-                insurance.setReserveTeam(orders.getReserveTeam());
-                insurance.setSysInsurance(orders.getReserveTeam().getInsurance());
-                insurance.setMoney(orders.getReserveTeam().getInsurance().getPrice() * preferente);
-                insuranceService.create(insurance);
-            }
-
-            if (orders.getAction() == 3) {
-                orders.getGirlUser().setStatus(0);
-                girlUserService.update(orders.getGirlUser());
-            }
-
-            WebUtil.printApi(response, new Result(true));
+            //WebUtil.printApi(response, new Result(true));
         } catch (Exception e) {
             e.printStackTrace();
 
-            WebUtil.printApi(response, new Result(false));
+            //WebUtil.printApi(response, new Result(false));
         }
     }
 }

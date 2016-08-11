@@ -77,7 +77,6 @@ public class StadiumApi extends CommonController {
      * @apiParam {Long} areaId 区域ID
      * @apiParam {Integer} pageNum 当前页
      * @apiParam {Integer} pageSize 每页显示数
-     *
      * @apiSuccess {Object}  list 球场列表
      * @apiSuccess {Integer} list.id 球场id
      * @apiSuccess {String} list.name 球场名称
@@ -102,7 +101,7 @@ public class StadiumApi extends CommonController {
                      Integer pageNum,
                      Integer pageSize) throws IOException {
 
-        if (null == latitude || longitude == null ) {
+        if (null == latitude || longitude == null) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
@@ -114,7 +113,7 @@ public class StadiumApi extends CommonController {
             stadium.setAreaName(areaService.getByAreaId(stadium.getAreaId()).getArea());
             if (longitude == 0.0 && latitude == 0.0) {
                 stadium.setDistance(-1);
-            }else {
+            } else {
                 stadium.setDistance(CountDistance.GetDistance(longitude, latitude, stadium.getLongitude(), stadium.getLatitude()));
             }
             if (stadium.getAvater() != null) {
@@ -137,7 +136,6 @@ public class StadiumApi extends CommonController {
      * @apiName stadium.info
      * @apiGroup stadium
      * @apiParam {Long} stadiumId 球场ID  <必传/>
-     *
      * @apiSuccess {Object}  info.stadium 球场
      * @apiSuccess {Long} info.stadium.id 球场id
      * @apiSuccess {String} info.stadium.name 球场名称
@@ -150,7 +148,6 @@ public class StadiumApi extends CommonController {
      * @apiSuccess {Integer} info.stadium.park 停车场（0：有停车场 1；没有停车场）
      * @apiSuccess {String} info.stadium.giving 赠送
      * @apiSuccess {String} info.stadium.description 球场简介
-     *
      * @apiSuccess {Object} info.time 时间
      * @apiSuccess {String} info.time.week 星期
      * @apiSuccess {String} info.time.date 日期
@@ -159,7 +156,7 @@ public class StadiumApi extends CommonController {
     @RequestMapping(value = "/info")
     public void info(HttpServletResponse response, Long stadiumId) throws ParseException {
 
-        if (null == stadiumId ) {
+        if (null == stadiumId) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
@@ -197,7 +194,7 @@ public class StadiumApi extends CommonController {
         }
 
         map.put("stadium", stadium);
-        Result obj = new Result(true).data(createMap("info",map));
+        Result obj = new Result(true).data(createMap("info", map));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
@@ -209,7 +206,6 @@ public class StadiumApi extends CommonController {
      * @apiName stadium.order
      * @apiGroup stadium
      * @apiParam {Long} stadiumId 球场ID <必传/>
-     *
      * @apiSuccess {Object}  stadium 球场
      * @apiSuccess {Long} stadium.id 球场id
      * @apiSuccess {String} stadium.name 球场名称
@@ -219,7 +215,7 @@ public class StadiumApi extends CommonController {
     @RequestMapping(value = "/order")
     public void order(HttpServletResponse response, Long stadiumId) {
 
-        if (null == stadiumId ) {
+        if (null == stadiumId) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
@@ -230,7 +226,7 @@ public class StadiumApi extends CommonController {
             stadium.setAvater(ConfigUtil.getString("upload.url") + stadium.getAvater());
         }
 
-        Result obj = new Result(true).data(createMap("stadium",stadium));
+        Result obj = new Result(true).data(createMap("stadium", stadium));
         String result = JsonUtil.obj2ApiJson(obj, "type", "description", "siteType", "sodType", "light", "park", "giving");
         WebUtil.printApi(response, result);
     }
@@ -245,7 +241,6 @@ public class StadiumApi extends CommonController {
      * @apiParam {Long} userId 用户ID <必传/>
      * @apiParam {String} title 标题  <必传/>
      * @apiParam {Long} time 约球时间 <必传/>
-     *
      * @apiSuccess {Object}  stadium 球场
      * @apiSuccess {Long} stadium.id 球场id
      * @apiSuccess {String} stadium.name 球场名称
@@ -291,7 +286,6 @@ public class StadiumApi extends CommonController {
      * @apiGroup stadium
      * @apiParam {Long} stadiumId 球场ID <必传/>
      * @apiParam {Long} time 当天时间戳 <必传/>
-     *
      * @apiSuccess {Object}  site 场地
      * @apiSuccess {String}  site.code 场地编号
      * @apiSuccess {Integer} site.type 场地类型  N人制
@@ -300,7 +294,7 @@ public class StadiumApi extends CommonController {
     @RequestMapping(value = "/siteSelect")
     public void siteSelect(HttpServletResponse response, Long time, Long stadiumId) {
 
-        if (null == stadiumId || time == null ) {
+        if (null == stadiumId || time == null) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
@@ -315,11 +309,11 @@ public class StadiumApi extends CommonController {
             list = new ArrayList<String>();
             for (int i = 8; i < 24; i++) {
 
-                SiteTime siteTime = siteTimeService.findBySiteAndTime(site.getId(),time + i * 1000 * 3600);
-                SiteManage siteManage = siteManageService.findBySiteAndTime(site.getId(),time + i * 1000 * 3600);
+                SiteTime siteTime = siteTimeService.findBySiteAndTime(site.getId(), time + i * 1000 * 3600);
+                SiteManage siteManage = siteManageService.findBySiteAndTime(site.getId(), time + i * 1000 * 3600);
                 if (siteTime == null && siteManage == null) {
                     list.add("1");
-                }else {
+                } else {
                     list.add("0");
                 }
             }
@@ -329,7 +323,7 @@ public class StadiumApi extends CommonController {
 
         map.put("siteList", siteList);
 
-        Result obj = new Result(true).data(createMap("site",map));
+        Result obj = new Result(true).data(createMap("site", map));
         String result = JsonUtil.obj2ApiJson(obj, "stadium");
         WebUtil.printApi(response, result);
     }
@@ -345,7 +339,6 @@ public class StadiumApi extends CommonController {
      * @apiParam {Long} time 时间戳  <必传/>
      * @apiParam {Integer} start 开始时间点  <必传/>
      * @apiParam {Integer} end 结束时间点  <必传/>
-     *
      * @apiSuccess {Object}  siteIfo.siteTime 场地预定
      * @apiSuccess {Long} siteIfo.siteTime.id 预定id
      * @apiSuccess {Object} siteIfo.siteTime.site 预定场地
@@ -356,7 +349,6 @@ public class StadiumApi extends CommonController {
      * @apiSuccess {Object} siteIfo.siteTime.site.stadium 预定球场
      * @apiSuccess {String} siteIfo.siteTime.site.stadium.name 预定球场名字
      * @apiSuccess {String} siteIfo.area 预定球场地区
-     *
      */
     @RequestMapping(value = "/siteOrder")
     public void siteOrder(HttpServletResponse response,
@@ -366,7 +358,7 @@ public class StadiumApi extends CommonController {
                           Integer start,
                           Integer end) {
 
-        if (null == siteId || status == null || time == null || start == null || end == null ) {
+        if (null == siteId || status == null || time == null || start == null || end == null) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
@@ -388,10 +380,10 @@ public class StadiumApi extends CommonController {
         }
 
         String area = areaService.getByAreaId(site.getStadium().getAreaId()).getArea();
-        map.put("area",area);
+        map.put("area", area);
         map.put("siteTime", siteTime);
 
-        Result obj = new Result(true).data(createMap("siteIfo",map));
+        Result obj = new Result(true).data(createMap("siteIfo", map));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
@@ -406,7 +398,6 @@ public class StadiumApi extends CommonController {
      * @apiParam {Long} userId 用户ID <必传/>
      * @apiParam {Long} insuranceId 保险ID
      * @apiParam {Integer} num 购买保险数
-     *
      * @apiSuccess {Object}  payInfo.sysInsurance 保险
      * @apiSuccess {Long} payInfo.sysInsurance.id 保险id
      * @apiSuccess {Integer} payInfo.sysInsurance.name 保险名称
@@ -473,7 +464,7 @@ public class StadiumApi extends CommonController {
         map.put("vipNum", userService.getById(userId).getVipNum());
         map.put("sysInsurance", sysInsurance);
 
-        Result obj = new Result(true).data(createMap("payInfo",map));
+        Result obj = new Result(true).data(createMap("payInfo", map));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
@@ -486,7 +477,6 @@ public class StadiumApi extends CommonController {
      * @apiGroup stadium
      * @apiParam {Long} reserveId 预定ID <必传/>
      * @apiParam {Integer} type 支付类型（0：全额支付  1：AA支付） <必传/>
-     *
      * @apiSuccess {Object} order 订单
      * @apiSuccess {Double} order.price 订单金额
      * @apiSuccess {Long} order.sn 订单号
@@ -494,7 +484,7 @@ public class StadiumApi extends CommonController {
     @RequestMapping(value = "/payConfirm")
     public void payConfirm(HttpServletResponse response, Long reserveId, Integer type, Double money) {
 
-        if (null == reserveId || type == null ) {
+        if (null == reserveId || type == null) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
@@ -505,7 +495,8 @@ public class StadiumApi extends CommonController {
 
         Order order = new Order();
         order.setUser(reserve.getUser());
-        order.setStadium(reserve.getSite().getStadium());
+        //order.setStadium(reserve.getSite().getStadium());
+        order.setReserve(reserve);
         order.setPrice(reserve.getPrice());
         order.setAction(2);
         order.setSn(sn);
@@ -514,17 +505,16 @@ public class StadiumApi extends CommonController {
         if (type == 0) {
             //将球场预订表的支付方式设置为全额支付
             reserve.setPayment(0);
-        }else if (type == 1) {
+        } else if (type == 1) {
             //将球场预订表的支付方式设置为AA支付
             reserve.setPayment(1);
         }
 
         // 当前没有支付接口，因此状态直接为已支付
-        PayCallBackApi payCallBackApi = new PayCallBackApi();
-        payCallBackApi.changeOrderStatus(order.getSn(), null, response);
+        PayCallBackApi.changeOrderStatus(orderService, order.getSn(), null, response);
 
-        Result obj = new Result(true).data(createMap("order",order));
-        String result = JsonUtil.obj2ApiJson(obj);
+        Result obj = new Result(true).data(createMap("order", order));
+        String result = JsonUtil.obj2ApiJson(obj, "reserve", "user", "reserveTeam", "girlUser", "stadium");
         WebUtil.printApi(response, result);
     }
 
@@ -538,7 +528,6 @@ public class StadiumApi extends CommonController {
      * @apiParam {Long} userId 用户ID <必传/>
      * @apiParam {Long} insuranceId 保险ID
      * @apiParam {Integer} num 购买保险数
-     *
      * @apiSuccess {Object}  payInfo.sysInsurance 保险
      * @apiSuccess {String} payInfo.sysInsurance.name 保险名称
      * @apiSuccess {Double} payInfo.sysInsurance.price 保险金额
@@ -600,7 +589,7 @@ public class StadiumApi extends CommonController {
         map.put("vipNum", userService.getById(userId).getVipNum());
         map.put("sysInsurance", sysInsurance);
 
-        Result obj = new Result(true).data(createMap("payInfo",map));
+        Result obj = new Result(true).data(createMap("payInfo", map));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
@@ -612,7 +601,6 @@ public class StadiumApi extends CommonController {
      * @apiName stadium.teamPayConfirm
      * @apiGroup stadium
      * @apiParam {Long} reserveTeamId 预定ID <必传/>
-     *
      * @apiSuccess {Object} order 订单
      * @apiSuccess {Double} order.price 订单金额
      * @apiSuccess {Long} order.sn 订单号
@@ -620,7 +608,7 @@ public class StadiumApi extends CommonController {
     @RequestMapping(value = "/teamPayConfirm")
     public void teamPayConfirm(HttpServletResponse response, Long reserveTeamId) {
 
-        if (null == reserveTeamId ) {
+        if (null == reserveTeamId) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
@@ -630,18 +618,18 @@ public class StadiumApi extends CommonController {
 
         Order order = new Order();
         order.setUser(reserveTeam.getUser());
-        order.setStadium(reserveTeam.getSite().getStadium());
+        //order.setStadium(reserveTeam.getSite().getStadium());
         order.setPrice(reserveTeam.getPrice());
         order.setSn(sn);
         order.setAction(2);
+        order.setReserveTeam(reserveTeam);
         orderService.create(order);
 
         // 当前没有支付接口，因此状态直接为已支付
-        PayCallBackApi payCallBackApi = new PayCallBackApi();
-        payCallBackApi.changeOrderStatus(order.getSn(), null, response);
+        PayCallBackApi.changeOrderStatus(orderService, order.getSn(), null, response);
 
-        Result obj = new Result(true).data(createMap("order",order));
-        String result = JsonUtil.obj2ApiJson(obj);
+        Result obj = new Result(true).data(createMap("order", order));
+        String result = JsonUtil.obj2ApiJson(obj, "reserve", "user", "reserveTeam", "girlUser", "stadium");
         WebUtil.printApi(response, result);
     }
 }

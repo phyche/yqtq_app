@@ -2,9 +2,9 @@ package com.sixmac.service.impl;
 
 import com.sixmac.core.Constant;
 import com.sixmac.dao.OrderDao;
-import com.sixmac.entity.Order;
+import com.sixmac.entity.*;
 import com.sixmac.pay.excute.PayRequest;
-import com.sixmac.service.OrderService;
+import com.sixmac.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +26,30 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderDao orderDao;
+
+    @Autowired
+    private SysExperienceService sysExperienceService;
+
+    @Autowired
+    private SysCredibilityService sysCredibilityService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private GirlUserService girlUserService;
+
+    @Autowired
+    private ReserveService reserveService;
+
+    @Autowired
+    private UserReserveService userReserveService;
+
+    @Autowired
+    private VipLevelService vipLevelService;
+
+    @Autowired
+    private InsuranceService insuranceService;
 
     @Override
     public List<Order> findAll() {
@@ -88,5 +113,84 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order iFindOneByOrderNum(String orderNum) {
         return orderDao.iFindOneByOrderNum(orderNum);
+    }
+
+    @Override
+    public void changeOrderStatus(String orderNum, Integer type) {
+        Order orders = iFindOneByOrderNum(orderNum);
+        orders.setStatus(Constant.ORDERS_STATUS_001);
+        orders.setType(type);
+        orders.setPayTime(new Date().getTime());
+
+        if (orders.getAction() != 1) {
+            User user = orders.getUser();
+            user.setCredibility(user.getCredibility() + sysCredibilityService.findByAction(orders.getAction()).getCredibility());
+            user.setExperience(user.getExperience() + sysExperienceService.findByAction(orders.getAction()).getExperience());
+
+            userService.update(user);
+            userService.changeIntegral(user);
+        }
+
+        if (orders.getAction() == 1) {
+            orders.getReserve().setJoinCount(orders.getReserve().getJoinCount() + 1);
+            reserveService.update(orders.getReserve());
+            if (orders.getReserve().getJoinCount() == orders.getReserve().getMatchType() * 2) {
+
+                List<UserReserve> userReserveList = userReserveService.findByReserverId(orders.getReserve().getId());
+                for (UserReserve userReserve : userReserveList) {
+
+                    SysExperience sysExperience = sysExperienceService.findByAction(1);
+                    userReserve.getUser().setExperience(userReserve.getUser().getExperience() + sysExperience.getExperience());
+                    SysCredibility sysCredibility = sysCredibilityService.findByAction(1);
+                    userReserve.getUser().setCredibility(userReserve.getUser().getCredibility() + sysCredibility.getCredibility());
+
+                    userService.changeIntegral(userReserve.getUser());
+                    userService.update(userReserve.getUser());
+                }
+            }
+
+            UserReserve userReserve = new UserReserve();
+            userReserve.setUser(orders.getUser());
+            userReserve.setReserveId(orders.getReserve().getId());
+            //userReserve.setReserve(reserve);
+            userReserve.setStatus(0);
+            userReserveService.create(userReserve);
+        }
+
+        Double preferente = 1.0;
+        if (orders.getUser().getVipNum() != 0) {
+            preferente = vipLevelService.findBylevel(orders.getUser().getVipNum()).getPreferente();
+        }
+        if (orders.getAction() == 2 && orders.getReserve() != null) {
+
+            UserReserve userReserve = new UserReserve();
+            userReserve.setUser(orders.getUser());
+            userReserve.setReserveId(orders.getReserve().getId());
+            //userReserve.setReserve(reserve);
+            userReserve.setStatus(1);
+            userReserveService.create(userReserve);
+
+            if (orders.getReserve().getInsurance() != null) {
+                Insurance insurance = new Insurance();
+                insurance.setUser(orders.getUser());
+                insurance.setReserve(orders.getReserve());
+                insurance.setSysInsurance(orders.getReserve().getInsurance());
+
+                insurance.setMoney(orders.getReserve().getInsurance().getPrice() * preferente);
+                insuranceService.create(insurance);
+            }
+        } else if (orders.getAction() == 2 && orders.getReserveTeam() != null && orders.getReserveTeam().getInsurance() != null) {
+            Insurance insurance = new Insurance();
+            insurance.setUser(orders.getUser());
+            insurance.setReserveTeam(orders.getReserveTeam());
+            insurance.setSysInsurance(orders.getReserveTeam().getInsurance());
+            insurance.setMoney(orders.getReserveTeam().getInsurance().getPrice() * preferente);
+            insuranceService.create(insurance);
+        }
+
+        if (orders.getAction() == 3) {
+            orders.getGirlUser().setStatus(0);
+            girlUserService.update(orders.getGirlUser());
+        }
     }
 }
