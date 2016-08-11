@@ -164,9 +164,7 @@ public class WatchingApi extends CommonController {
      */
     @RequestMapping(value = "/sceneList")
     public void sceneList(HttpServletResponse response,
-                          Long cityId,
-                          Integer pageNum,
-                          Integer pageSize) {
+                          Long cityId) {
 
         List<BigRace> bigRaceList = bigRaceService.page(cityId, 0);
        // Page<BigRace> page = bigRaceService.page(cityId, 0, pageNum, pageSize);
@@ -174,8 +172,6 @@ public class WatchingApi extends CommonController {
         Map<String,Object> map = new HashMap<String,Object>();
 
         List<Long> numList = new ArrayList<Long>();
-        //NumVo numVo = new NumVo();
-
         Long systemTime = System.currentTimeMillis();
         for (BigRace bigRace : bigRaceList) {
 
@@ -304,14 +300,6 @@ public class WatchingApi extends CommonController {
             }
         }
 
-        /*List<GirlImage> girlImages1 = girlImageService.find(girlId, 1);
-        for (GirlImage girlImage : girlImages1) {
-            if (StringUtils.isNotBlank(girlImage.getUrl())) {
-                girlImage.setUrl(ConfigUtil.getString("upload.url") + girlImage.getUrl());
-            }
-        }
-        girl.setGirlImageList(girlImages1);*/
-
         //宝贝预约数
         List<GirlUser> girlUserList = girlUserService.findByGirlId(girlId);
         if (girlUserList == null) {
@@ -410,8 +398,8 @@ public class WatchingApi extends CommonController {
         }
 
         GirlUser girlUser = new GirlUser();
-        girlUser.setUser(userService.getById(userId));
-        girlUser.setGirl(girlService.getById(girlId));
+        girlUser.setUserId(userId);
+        girlUser.setGirlId(girlId);
         girlUser.setBigRace(bigRaceService.getById(sceneId));
         girlUser.setStartDate(bigRaceService.getById(sceneId).getStartDate());
         girlUser.setStadium(bigRaceService.getById(sceneId).getStadium());
@@ -423,13 +411,14 @@ public class WatchingApi extends CommonController {
         // 生成订单
         String sn = CommonUtils.generateSn(); // 订单号
 
+        User user = userService.getById(girlUser.getUserId());
         Order order = new Order();
-        order.setUser(girlUser.getUser());
+        order.setUser(user);
         order.setStadium(girlUser.getStadium());
         order.setGirlUser(girlUser);
 
-        VipLevel vipLevel = vipLevelService.findBylevel(girlUser.getUser().getVipNum());
-        if (girlUser.getUser().getVipNum() != 0) {
+        VipLevel vipLevel = vipLevelService.findBylevel(user.getVipNum());
+        if (user.getVipNum() != 0) {
             order.setPrice((girlUser.getPrice() + girlUser.getTip()) * vipLevel.getPreferente());
         }else {
             order.setPrice(girlUser.getPrice() + girlUser.getTip());

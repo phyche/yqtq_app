@@ -9,13 +9,12 @@ import javax.persistence.*;
 @Table(name = "t_girl_user")
 public class GirlUser extends BaseEntity{
 
-    @ManyToOne
-    @JoinColumn(name = "girl_id")
-    private Girl girl;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "girl_id")
+    private Long girlId;
+
+    @Column(name = "user_id")
+    private Long userId;
 
     @ManyToOne
     @JoinColumn(name = "stadium_id")
@@ -37,20 +36,20 @@ public class GirlUser extends BaseEntity{
     @Column(name = "status")
     private Integer status = 0;
 
-    public Girl getGirl() {
-        return girl;
+    public Long getGirlId() {
+        return girlId;
     }
 
-    public void setGirl(Girl girl) {
-        this.girl = girl;
+    public void setGirlId(Long girlId) {
+        this.girlId = girlId;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Stadium getStadium() {

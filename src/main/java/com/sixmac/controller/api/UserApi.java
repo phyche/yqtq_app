@@ -84,6 +84,9 @@ public class UserApi extends CommonController {
     @Autowired
     private ReportService reportService;
 
+    @Autowired
+    private GirlService girlService;
+
     /**
      * 完成
      *
@@ -695,11 +698,12 @@ public class UserApi extends CommonController {
 
         List<GirlUser> list = girlUserService.findByUserId(userId);
         for (GirlUser girlUser : list) {
-            for (GirlImage girlImage : girlImageService.find(girlUser.getGirl().getId(), 0)) {
+            for (GirlImage girlImage : girlImageService.find(girlUser.getGirlId(), 0)) {
                 if (StringUtils.isNotBlank(girlImage.getUrl())) {
                     girlImage.setUrl(ConfigUtil.getString("upload.url") + girlImage.getUrl());
                 }
-                girlUser.getGirl().getGirlImageList().add(girlImage);
+                //Girl girl = girlService.getById(girlUser.getGirlId());
+                girlService.getById(girlUser.getGirlId()).getGirlImageList().add(girlImage);
             }
         }
 
@@ -757,8 +761,8 @@ public class UserApi extends CommonController {
         if (girlUser.getStatus() == 1) {
 
             GirlComment girlComment = new GirlComment();
-            girlComment.setUserId(girlUser.getUser().getId());
-            girlComment.setGirlId(girlUser.getGirl().getId());
+            girlComment.setUserId(girlUser.getUserId());
+            girlComment.setGirlId(girlUser.getGirlId());
             girlComment.setStar(star);
             girlComment.setContent(content);
             girlCommentService.create(girlComment);
