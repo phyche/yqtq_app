@@ -115,7 +115,7 @@ public class StadiumApi extends CommonController {
             if (longitude == 0.0 && latitude == 0.0) {
                 stadium.setDistance(-1);
             }else {
-                stadium.setDistance(Distance.GetDistance(longitude, latitude, stadium.getLongitude(), stadium.getLatitude()));
+                stadium.setDistance(CountDistance.GetDistance(longitude, latitude, stadium.getLongitude(), stadium.getLatitude()));
             }
             if (stadium.getAvater() != null) {
                 if (StringUtils.isNotBlank(stadium.getAvater())) {

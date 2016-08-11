@@ -1,4 +1,4 @@
-package com.sixmac.entity;
+package com.sixmac.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,7 +11,26 @@ import java.net.URLConnection;
 /**
  * Created by Administrator on 2016/6/1 0001.
  */
-public class LatAndLng {
+public class CountDistance {
+
+    private static double rad(double d)
+    {
+        return d * Math.PI / 180.0;
+    }
+    public static double GetDistance(double lat1, double lng1, double lat2, double lng2)
+    {
+        double EARTH_RADIUS = 6378.137;
+
+        double radLat1 = rad(lat1);
+        double radLat2 = rad(lat2);
+        double a = radLat1 - radLat2;
+        double b = rad(lng1) - rad(lng2);
+        double s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a/2),2) +
+                Math.cos(radLat1)*Math.cos(radLat2)*Math.pow(Math.sin(b/2),2)));
+        s = s * EARTH_RADIUS;
+        s = Math.round(s * 10000) / 10000;
+        return s;
+    }
 
     /**
      * @param addr

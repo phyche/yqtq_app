@@ -13,7 +13,7 @@ import java.util.List;
 public interface HostJoinDao extends JpaRepository<HostJoin, Long>, JpaSpecificationExecutor<HostJoin> {
 
     //根据赛事筛选报名参加的球队
-    @Query("select a from HostJoin a where a.hostRace.id = ?1 ")
+    @Query("select a from HostJoin a where a.hostRaceId = ?1 ")
     public List<HostJoin> findByHostRaceId(Long raceId);
 
 }

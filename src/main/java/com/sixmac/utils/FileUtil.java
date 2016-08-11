@@ -1,7 +1,6 @@
 package com.sixmac.utils;
 
 import com.sixmac.core.Configue;
-import com.sixmac.entity.FileBo;
 import org.apache.commons.io.FileUtils;
 import org.springframework.web.multipart.MultipartFile;
 

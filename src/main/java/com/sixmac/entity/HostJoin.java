@@ -1,9 +1,6 @@
 package com.sixmac.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by Administrator on 2016/5/25 0025.
@@ -12,20 +9,19 @@ import javax.persistence.Table;
 @Table(name = "t_host_race_join")
 public class HostJoin extends BaseEntity{
 
-    @ManyToOne
-    @JoinColumn(name = "host_race_id")
-    private HostRace hostRace;
+    @Column(name = "host_race_id")
+    private Long hostRaceId;
 
     @ManyToOne
     @JoinColumn(name = "team_id")
     private Team team;
 
-    public HostRace getHostRace() {
-        return hostRace;
+    public Long getHostRaceId() {
+        return hostRaceId;
     }
 
-    public void setHostRace(HostRace hostRace) {
-        this.hostRace = hostRace;
+    public void setHostRaceId(Long hostRaceId) {
+        this.hostRaceId = hostRaceId;
     }
 
     public Team getTeam() {

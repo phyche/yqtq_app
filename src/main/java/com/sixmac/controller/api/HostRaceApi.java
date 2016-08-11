@@ -181,7 +181,7 @@ public class HostRaceApi extends CommonController {
 
             HostJoin hostJoin = new HostJoin();
             hostJoin.setTeam(team);
-            hostJoin.setHostRace(hostRace);
+            hostJoin.setHostRaceId(hostRace.getId());
             hostRaceService.create(hostRace);
         }
 

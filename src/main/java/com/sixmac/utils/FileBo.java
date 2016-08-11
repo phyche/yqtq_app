@@ -1,4 +1,4 @@
-package com.sixmac.entity;
+package com.sixmac.utils;
 
 import java.io.File;
 
