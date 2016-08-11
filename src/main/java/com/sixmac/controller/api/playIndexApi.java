@@ -48,6 +48,9 @@ public class PlayIndexApi extends CommonController {
     @Autowired
     private ReserveService reserveService;
 
+    @Autowired
+    private TeamService teamService;
+
     /**
      * 完成
      *
@@ -316,7 +319,7 @@ public class PlayIndexApi extends CommonController {
         }
 
         for (TeamMember teamMember : teamMemberList) {
-            teamMember.getUser().setAvater(teamMember.getUser().getAvater());
+            //teamMember.getUser().setAvater(teamMember.getUser().getAvater());
             teams.add(teamMember.getTeam());
         }
 

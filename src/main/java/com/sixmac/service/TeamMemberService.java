@@ -12,5 +12,5 @@ public interface TeamMemberService extends ICommonService<TeamMember> {
 
     public List<TeamMember> findByUserId(Long userId);
 
-    public List<TeamMember> findByTeamId(Long teamId);
+    //public List<TeamMember> findByTeamId(Long teamId);
 }

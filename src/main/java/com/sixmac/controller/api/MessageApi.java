@@ -60,6 +60,9 @@ public class MessageApi extends CommonController {
     @Autowired
     private MessageTeamService messageTeamService;
 
+    @Autowired
+    private UserService userService;
+
     /**
      * 完成
      *

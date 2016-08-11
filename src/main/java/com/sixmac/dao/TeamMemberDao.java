@@ -16,7 +16,7 @@ public interface TeamMemberDao extends JpaRepository<TeamMember, Long> {
     @Query("select a from TeamMember a where a.user.id = ?1 ")
     public List<TeamMember> findByUserId(Long userId);
 
-    //根据球队id筛选球队成员
-    @Query("select a from TeamMember a where a.team.id = ?1 ")
-    public List<TeamMember> findByTeamId(Long teamId);
+    /*//根据球队id筛选球队成员
+    @Query("select a from TeamMember a where a.teamId = ?1 ")
+    public List<TeamMember> findByTeamId(Long teamId);*/
 }

@@ -151,7 +151,7 @@ public class TeamApi extends CommonController {
         }
 
         List<User> userList = new ArrayList<User>();
-        if (teamMemberService.findByTeamId(teamId).size() != 0) {
+        if (team.getList().size() != 0) {
             for (sum = 0; sum < team.getList().size(); sum++) {
                 sumAge += team.getList().get(sum).getAge();
                 sumHeight += team.getList().get(sum).getHeight();
