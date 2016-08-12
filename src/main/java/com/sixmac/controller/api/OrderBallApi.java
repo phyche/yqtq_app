@@ -57,6 +57,9 @@ public class OrderBallApi extends CommonController {
     @Autowired
     private VipLevelService vipLevelService;
 
+    @Autowired
+    private TeamService teamService;
+
 
     /**
      * 完成
@@ -320,11 +323,13 @@ public class OrderBallApi extends CommonController {
 
         List<Team> teams = new ArrayList<Team>();
         List<TeamMember> teamMemberList = teamMemberService.findByUserId(playerId);
+        User user = null;
         for (TeamMember teamMember : teamMemberList) {
-            if (StringUtils.isNotBlank(teamMember.getUser().getAvater())) {
-                teamMember.getUser().setAvater(ConfigUtil.getString("upload.url") + teamMember.getUser().getAvater());
+            user = userService.getById(teamMember.getUserId());
+            if (StringUtils.isNotBlank(user.getAvater())) {
+                user.setAvater(ConfigUtil.getString("upload.url") + user.getAvater());
             }
-            teams.add(teamMember.getTeam());
+            teams.add(teamService.getById(teamMember.getTeamId()));
         }
 
         String teamIds = "";

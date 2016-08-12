@@ -320,7 +320,7 @@ public class PlayIndexApi extends CommonController {
 
         for (TeamMember teamMember : teamMemberList) {
             //teamMember.getUser().setAvater(teamMember.getUser().getAvater());
-            teams.add(teamMember.getTeam());
+            teams.add(teamService.getById(teamMember.getTeamId()));
         }
 
         String teamIds = "";

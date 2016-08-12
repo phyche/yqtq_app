@@ -13,7 +13,7 @@ import java.util.List;
 public interface TeamMemberDao extends JpaRepository<TeamMember, Long> {
 
     //根据用户id筛选球队成员
-    @Query("select a from TeamMember a where a.user.id = ?1 ")
+    @Query("select a from TeamMember a where a.userId = ?1 ")
     public List<TeamMember> findByUserId(Long userId);
 
     /*//根据球队id筛选球队成员

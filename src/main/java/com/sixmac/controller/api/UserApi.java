@@ -147,23 +147,27 @@ public class UserApi extends CommonController {
         //加入的球队
         List<Team> teamList = new ArrayList<Team>();
         List<TeamMember> teamMemberList = teamMemberService.findByUserId(userId);
+        User user1 = null;
+        Team team = null;
         for (TeamMember teamMember : teamMemberList) {
 
+            user1 = userService.getById(teamMember.getUserId());
+            team = teamService.getById(teamMember.getTeamId());
             if (teamService.findListByLeaderId(userId) != null) {
 
-                if (teamMember.getTeam().getId() != teamService.findListByLeaderId(userId).getId()) {
-                    if (StringUtils.isNotBlank(teamMember.getUser().getAvater())) {
-                        teamMember.getUser().setAvater(ConfigUtil.getString("upload.url") + teamMember.getUser().getAvater());
+                if (teamMember.getTeamId() != teamService.findListByLeaderId(userId).getId()) {
+                    if (StringUtils.isNotBlank(user1.getAvater())) {
+                        user1.setAvater(ConfigUtil.getString("upload.url") + user1.getAvater());
                     }
-                    teamList.add(teamMember.getTeam());
+                    teamList.add(team);
                 }
             } else {
-                if (StringUtils.isNotBlank(teamMember.getUser().getAvater())) {
-                    teamMember.getUser().setAvater(ConfigUtil.getString("upload.url") + teamMember.getUser().getAvater());
+                if (StringUtils.isNotBlank(user1.getAvater())) {
+                    user1.setAvater(ConfigUtil.getString("upload.url") + user1.getAvater());
                 }
-                teamList.add(teamMember.getTeam());
+                teamList.add(team);
             }
-            teamMember.getTeam().setCount(teamMember.getTeam().getList().size() + 1);
+            team.setCount(team.getList().size() + 1);
         }
         map.put("teamList", teamList);
 

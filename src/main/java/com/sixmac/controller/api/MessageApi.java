@@ -204,8 +204,8 @@ public class MessageApi extends CommonController {
 
             if (status == 1) {
                 TeamMember teamMember = new TeamMember();
-                teamMember.setUser(messageJoin.getUser());
-                teamMember.setTeam(messageJoin.getTeam());
+                teamMember.setUserId(messageJoin.getUser().getId());
+                teamMember.setTeamId(messageJoin.getTeam().getId());
                 teamMemberService.create(teamMember);
             }
         }else if (type == 4) {
@@ -527,13 +527,15 @@ public class MessageApi extends CommonController {
 
         List<Team> teamList = new ArrayList<Team>();
         List<TeamMember> teamMemberList = teamMemberService.findByUserId(userId);
+        User user = null;
         for (TeamMember teamMember : teamMemberList) {
 
-            if (StringUtils.isNotBlank(teamMember.getUser().getAvater())) {
-                teamMember.getUser().setAvater(ConfigUtil.getString("upload.url") + teamMember.getUser().getAvater());
+            user = userService.getById(teamMember.getUserId());
+            if (StringUtils.isNotBlank(user.getAvater())) {
+                user.setAvater(ConfigUtil.getString("upload.url") + user.getAvater());
             }
 
-            teamList.add(teamMember.getTeam());
+            teamList.add(teamService.getById(teamMember.getTeamId()));
         }
 
         List<TeamRace> list = new ArrayList<TeamRace>();
