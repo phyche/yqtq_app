@@ -11,9 +11,8 @@ import javax.persistence.*;
 @Table(name = "t_user_vip")
 public class UserVip extends BaseEntity {
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "user_id")
+    private Long userId;
 
     @Column(name = "duration")
     private Integer duration;
@@ -24,12 +23,12 @@ public class UserVip extends BaseEntity {
     @Transient
     private String status;
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Integer getDuration() {

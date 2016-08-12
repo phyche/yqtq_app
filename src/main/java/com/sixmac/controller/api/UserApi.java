@@ -445,7 +445,7 @@ public class UserApi extends CommonController {
         } else {
             userVip = userVipService.findByUserId(userId);
         }
-        userVip.setUser(userService.getById(userId));
+        userVip.setUserId(userId);
         userVip.setDuration(num);
         userVip.setEndDate(DateUtils.stringToDate(endDate, "yyyy-MM-dd HH:mm:ss").getTime());
 
@@ -493,29 +493,46 @@ public class UserApi extends CommonController {
      * @apiName user.commentList
      * @apiGroup user
      * @apiParam {Long} userId 用户id <必传 />
+     * @apiParam {Integer} pageNum 当前页
+     * @apiParam {Integer} pageSize 每页显示数
+     *
      * @apiSuccess {Object} list 评论
      * @apiSuccess {Object} list.tUser 被评论用户
      * @apiSuccess {Long} list.tUser.id 被评论用户id
      * @apiSuccess {String} list.tUser.nickname 被评论用户昵称
-     * @apiSuccess {String} list.content 帖子内容
+     * @apiSuccess {Object} list.post 被评论帖子
+     * @apiSuccess {String} list.post.content 帖子内容
      * @apiSuccess {String} list.createDate 评论时间
+     *
+     * @apiSuccess {Object}  page 翻页信息
+     * @apiSuccess {Integer} page.totalNum 总记录数
+     * @apiSuccess {Integer} page.totalPage 总页数
+     * @apiSuccess {Integer} page.currentPage 当前页
      */
     @RequestMapping(value = "/commentList")
-    public void commentList(HttpServletResponse response, Long userId) {
+    public void commentList(HttpServletResponse response,
+                            Long userId,
+                            Integer pageNum,
+                            Integer pageSize ) {
 
         if (userId == null) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
 
-        List<PostComment> list = postCommentService.findByFuserId(userId);
-        for (PostComment postComment : list) {
-            postComment.gettUser().setAvater(postComment.gettUser().getAvater());
+        Page<PostComment> page = postCommentService.findByFuserId(userId, pageNum, pageSize);
+        Post post = null;
+        for (PostComment postComment : page.getContent()) {
+            post = postService.getById(postComment.getPostId());
+            postComment.setPost(post);
         }
 
-        Result obj = new Result(true).data(createMap("list", list));
-        String result = JsonUtil.obj2ApiJson(obj, "fUser", "user", "mobile", "password", "age", "height", "weight", "position", "credibility", "vipNum", "integral", "experience", "proviceId", "endDate", "cityId", "status", "gender", "birthday");
+        Map<String, Object> dataMap = APIFactory.fitting(page);
+
+        Result obj = new Result(true).data(dataMap);
+        String result = JsonUtil.obj2ApiJson(obj,"postId", "postImages", "postCommentList", "fUser", "user", "mobile", "password", "age", "height", "weight", "position", "credibility", "vipNum", "integral", "experience", "proviceId", "endDate", "cityId", "gender", "birthday");
         WebUtil.printApi(response, result);
+
     }
 
     /**
@@ -527,6 +544,7 @@ public class UserApi extends CommonController {
      * @apiParam {Long} userId 用户id <必传 />
      * @apiParam {Integer} pageNum 当前页
      * @apiParam {Integer} pageSize 每页显示数
+     *
      * @apiSuccess {Object} list 帖子
      * @apiSuccess {Object} list.user 用户
      * @apiSuccess {String} list.user.avater 用户头像
@@ -536,6 +554,7 @@ public class UserApi extends CommonController {
      * @apiSuccess {String} list.content 帖子内容
      * @apiSuccess {Integer} list.commentNum 帖子评论数
      * @apiSuccess {Long} list.createDate 创建时间
+     *
      * @apiSuccess {Object}  page 翻页信息
      * @apiSuccess {Integer} page.totalNum 总记录数
      * @apiSuccess {Integer} page.totalPage 总页数
@@ -581,12 +600,11 @@ public class UserApi extends CommonController {
      * @apiGroup user
      * @apiParam {Long} postId 帖子id <必传 />
      * @apiSuccess {Object} postInfo 帖子
-     * @apiSuccess {Object} postInfo.post 帖子
-     * @apiSuccess {String} postInfo.post.content 帖子内容
-     * @apiSuccess {Long} postInfo.post.createDate 帖子创建时间
-     * @apiSuccess {Object} postInfo.post.user 用户列表
-     * @apiSuccess {Long} postInfo.post.user.id 用户id
-     * @apiSuccess {String} postInfo.post.user.nickname 用户昵称
+     * @apiSuccess {String} postInfo.content 帖子内容
+     * @apiSuccess {Long} postInfo.createDate 帖子创建时间
+     * @apiSuccess {Object} postInfo.user 用户列表
+     * @apiSuccess {Long} postInfo.user.id 用户id
+     * @apiSuccess {String} postInfo.user.nickname 用户昵称
      * @apiSuccess {Object} postInfo.postImages 帖子图片列表
      * @apiSuccess {String} postInfo.postImages.avater 帖子图片
      * @apiSuccess {Object} postInfo.postComments 帖子评论列表
@@ -605,34 +623,11 @@ public class UserApi extends CommonController {
             return;
         }
 
-        Map<String, Object> map = new HashMap<String, Object>();
-
         //我的帖子
         Post post = postService.getById(postId);
-        //我的帖子图片列表
-        List<PostImage> postImages = postImageService.findByPostId(postId);
-        for (PostImage postImage : postImages) {
-            if (StringUtils.isNotBlank(postImage.getAvater())) {
-                postImage.setAvater(ConfigUtil.getString("upload.url") + postImage.getAvater());
-            }
-        }
-        //我的帖子评论列表
-        List<PostComment> postComments = postCommentService.findByPostId(postId);
-        for (PostComment postComment : postComments) {
-            if (postComment.gettUser().getAvater() != null) {
-                postComment.gettUser().setAvater(postComment.gettUser().getAvater());
-            }
-            if (postComment.getfUser().getAvater() != null) {
-                postComment.getfUser().setAvater(postComment.getfUser().getAvater());
-            }
-        }
 
-        map.put("post", post);
-        map.put("postImages", postImages);
-        map.put("postComments", postComments);
-
-        Result obj = new Result(true).data(createMap("postInfo", map));
-        String result = JsonUtil.obj2ApiJson(obj, "post", "tUser", "mobile", "password", "age", "height", "weight", "position", "credibility", "vipNum", "integral", "experience", "proviceId", "endDate", "cityId", "status", "gender", "birthday");
+        Result obj = new Result(true).data(createMap("postInfo", post));
+        String result = JsonUtil.obj2ApiJson(obj, "post", "mobile", "password", "age", "height", "weight", "position", "credibility", "vipNum", "integral", "experience", "proviceId", "endDate", "cityId", "gender", "birthday");
         WebUtil.printApi(response, result);
     }
 
@@ -643,6 +638,7 @@ public class UserApi extends CommonController {
      * @apiName user.watchingList
      * @apiGroup user
      * @apiParam {Long} userId 用户id <必传 />
+     *
      * @apiSuccess {Object} list 用户约看列表
      * @apiSuccess {Long} list.id 约看id
      * @apiSuccess {Double} list.tip 红包（小费）
@@ -784,5 +780,63 @@ public class UserApi extends CommonController {
         reportService.create(report);
 
         WebUtil.printApi(response, new Result(true));
+    }
+
+    /**
+     * 完成
+     *
+     * @api {post} /api/user/siteList 我的场地
+     * @apiName user.siteList
+     * @apiGroup user
+     * @apiParam {Long} userId 用户id <必传 />
+     *
+     * @apiSuccess {Object} site 用户场地列表
+     * @apiSuccess {Object} site.reserveList 用户散客场地列表
+     * @apiSuccess {Long} site.reserveList.startTime 预约时间
+     * @apiSuccess {Object} site.reserveList.site 用户散客场地
+     * @apiSuccess {Double} site.reserveList.site.price 场地价格
+     * @apiSuccess {Object} site.reserveList.site.stadium 用户散客球场
+     * @apiSuccess {Long} site.reserveList.site.stadium.id 球场id
+     * @apiSuccess {String} site.reserveList.site.stadium.name 球场名字
+     * @apiSuccess {String} site.reserveList.site.stadium.address 球场地址
+     * @apiSuccess {String} site.reserveList.site.stadium.areaName 球场区域
+     * @apiSuccess {String} site.reserveList.site.stadium.avater 球场封面
+     *
+     * @apiSuccess {Object} site.reserveTeamList 用户球队场地列表
+     * @apiSuccess {Long} site.reserveTeamList.startTime 预约时间
+     * @apiSuccess {Object} site.reserveTeamList.site 用户球队场地
+     * @apiSuccess {Double} site.reserveTeamList.site.price 场地价格
+     * @apiSuccess {Object} site.reserveTeamList.site.stadium 用户球队球场
+     * @apiSuccess {Long} site.reserveTeamList.site.stadium.id 球场id
+     * @apiSuccess {String} site.reserveTeamList.site.stadium.name 球场名字
+     * @apiSuccess {String} site.reserveTeamList.site.stadium.address 球场地址
+     * @apiSuccess {String} site.reserveTeamList.site.stadium.areaName 球场区域
+     * @apiSuccess {String} site.reserveTeamList.site.stadium.avater 球场封面
+     *
+     */
+    @RequestMapping(value = "/siteList")
+    public void siteList(HttpServletResponse response, Long userId) {
+
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        List<Order> orderList = orderService.findByUserIdAndAction(2, userId);
+        List<Reserve> reserveList = new ArrayList<Reserve>();
+        List<ReserveTeam> reserveTeamList = new ArrayList<ReserveTeam>();
+        for (Order order : orderList) {
+            if (order.getReserve() != null) {
+                String areaname = areaService.getByAreaId(order.getReserve().getSite().getStadium().getAreaId()).getArea();
+                order.getReserve().getSite().getStadium().setAreaName(areaname);
+                reserveList.add(order.getReserve());
+            }else if (order.getReserveTeam() != null) {
+                order.getReserveTeam().getSite().getStadium().setAreaName(areaService.getByAreaId(order.getReserveTeam().getSite().getStadium().getAreaId()).getArea());
+                reserveTeamList.add(order.getReserveTeam());
+            }
+        }
+
+        map.put("reserveList", reserveList);
+        map.put("reserveTeamList", reserveTeamList);
+        Result obj = new Result(true).data(createMap("site", map));
+        String result = JsonUtil.obj2ApiJson(obj, "user", "insurance", "userReservelist");
+        WebUtil.printApi(response, result);
     }
 }

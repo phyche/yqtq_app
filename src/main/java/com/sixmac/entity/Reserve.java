@@ -64,6 +64,9 @@ public class Reserve extends BaseEntity{
     private Integer joinCount;
 
     @Transient
+    private Integer lackCount;
+
+    @Transient
     private Double avePrice;
 
     @Transient
@@ -71,6 +74,9 @@ public class Reserve extends BaseEntity{
 
     @Column(name = "pay_status")
     private Integer payStatus;
+
+    @Column(name = "type")
+    private Integer type;
 
     public Integer getJoinCount() {
         return joinCount;
@@ -206,5 +212,21 @@ public class Reserve extends BaseEntity{
 
     public void setPayStatus(Integer payStatus) {
         this.payStatus = payStatus;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public Integer getLackCount() {
+        return lackCount;
+    }
+
+    public void setLackCount(Integer lackCount) {
+        this.lackCount = lackCount;
     }
 }

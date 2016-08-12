@@ -3,13 +3,15 @@ package com.sixmac.utils;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.sixmac.entity.BigRace;
+import com.sixmac.entity.Girl;
+import com.sixmac.entity.GirlImage;
+import com.sixmac.entity.Stadium;
 import com.sixmac.utils.gson.DmsExclusionStrategy;
 import net.sf.json.JSONObject;
 
 import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by wangbin on 14-10-17.
@@ -91,6 +93,14 @@ public class JsonUtil {
         return filterJson(json);
     }
 
+    public static void main(String[] args) {
+        BigRace bigRace = new BigRace();
+        Stadium stadium = null;
+        bigRace.setStadium(stadium);
+        System.out.println(JsonUtil.obj2ApiJson(bigRace));
+
+    }
+
     /**
      * 过滤字符串 -> true转换成0，false转换成1,null转换成""或者{}
      *
@@ -127,7 +137,5 @@ public class JsonUtil {
     }
 
 
-    public static void main(String[] args) {
 
-    }
 }

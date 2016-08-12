@@ -14,7 +14,7 @@ public interface PostCommentService extends ICommonService<PostComment> {
 
     public List<PostComment> findByPostId(Long postId);
 
-    public List<PostComment> findByFuserId(Long userId);
+    public Page<PostComment> findByFuserId(Long userId, Integer pageNum, Integer pageSize);
 
     public List<PostComment> findByToUserId(Long userId);
 

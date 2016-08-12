@@ -21,4 +21,7 @@ public interface OrderService extends ICommonService<Order> {
 
     // 支付回调修改订单状态
     public void changeOrderStatus(String orderNum, Integer type);
+
+    // 根据用户id和支付动作筛选订单
+    public List<Order> findByUserIdAndAction(Integer action, Long userId);
 }

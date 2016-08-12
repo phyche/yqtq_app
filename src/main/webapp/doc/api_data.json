@@ -5761,6 +5761,20 @@
             "optional": false,
             "field": "userId",
             "description": "<p>用户id &lt;必传 /&gt;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "pageNum",
+            "description": "<p>当前页</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "pageSize",
+            "description": "<p>每页显示数</p>"
           }
         ]
       }
@@ -5798,9 +5812,16 @@
           },
           {
             "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list.post",
+            "description": "<p>被评论帖子</p>"
+          },
+          {
+            "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.content",
+            "field": "list.post.content",
             "description": "<p>帖子内容</p>"
           },
           {
@@ -5809,6 +5830,34 @@
             "optional": false,
             "field": "list.createDate",
             "description": "<p>评论时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "page",
+            "description": "<p>翻页信息</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "page.totalNum",
+            "description": "<p>总记录数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "page.totalPage",
+            "description": "<p>总页数</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "page.currentPage",
+            "description": "<p>当前页</p>"
           }
         ]
       }
@@ -6423,44 +6472,37 @@
           },
           {
             "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "postInfo.post",
-            "description": "<p>帖子</p>"
-          },
-          {
-            "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "postInfo.post.content",
+            "field": "postInfo.content",
             "description": "<p>帖子内容</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "postInfo.post.createDate",
+            "field": "postInfo.createDate",
             "description": "<p>帖子创建时间</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "postInfo.post.user",
+            "field": "postInfo.user",
             "description": "<p>用户列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "postInfo.post.user.id",
+            "field": "postInfo.user.id",
             "description": "<p>用户id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "postInfo.post.user.nickname",
+            "field": "postInfo.user.nickname",
             "description": "<p>用户昵称</p>"
           },
           {
@@ -6793,6 +6835,187 @@
     "sampleRequest": [
       {
         "url": "http://4.16.1.158:8080/yqtq_app/api/user/report"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/api/user/siteList",
+    "title": "我的场地",
+    "name": "user_siteList",
+    "group": "user",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Long",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>用户id &lt;必传 /&gt;</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "site",
+            "description": "<p>用户场地列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "site.reserveList",
+            "description": "<p>用户散客场地列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "site.reserveList.startTime",
+            "description": "<p>预约时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "site.reserveList.site",
+            "description": "<p>用户散客场地</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "site.reserveList.site.price",
+            "description": "<p>场地价格</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "site.reserveList.site.stadium",
+            "description": "<p>用户散客球场</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "site.reserveList.site.stadium.id",
+            "description": "<p>球场id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "site.reserveList.site.stadium.name",
+            "description": "<p>球场名字</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "site.reserveList.site.stadium.address",
+            "description": "<p>球场地址</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "site.reserveList.site.stadium.areaName",
+            "description": "<p>球场区域</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "site.reserveList.site.stadium.avater",
+            "description": "<p>球场封面</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "site.reserveTeamList",
+            "description": "<p>用户球队场地列表</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "site.reserveTeamList.startTime",
+            "description": "<p>预约时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "site.reserveTeamList.site",
+            "description": "<p>用户球队场地</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "site.reserveTeamList.site.price",
+            "description": "<p>场地价格</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "site.reserveTeamList.site.stadium",
+            "description": "<p>用户球队球场</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "site.reserveTeamList.site.stadium.id",
+            "description": "<p>球场id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "site.reserveTeamList.site.stadium.name",
+            "description": "<p>球场名字</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "site.reserveTeamList.site.stadium.address",
+            "description": "<p>球场地址</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "site.reserveTeamList.site.stadium.areaName",
+            "description": "<p>球场区域</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "site.reserveTeamList.site.stadium.avater",
+            "description": "<p>球场封面</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/UserApi.java",
+    "groupTitle": "user",
+    "sampleRequest": [
+      {
+        "url": "http://4.16.1.158:8080/yqtq_app/api/user/siteList"
       }
     ]
   },

@@ -83,11 +83,16 @@ public class PlayIndexApi extends CommonController {
 
         Map<String, Object> map = new HashMap<String, Object>();
 
-        //球友参与的约球
         List<Reserve> reserveList = new ArrayList<Reserve>();
         List<UserReserve> userReserves = userReserveService.findByUserId(userId);
+        Reserve reserve = null;
         for (UserReserve userReserve : userReserves) {
-            reserveList.add(reserveService.getById(userReserve.getReserveId()));
+            reserve = reserveService.getById(userReserve.getReserveId());
+            reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
+            if (reserve.getStadium() == null) {
+                reserve.setStadium(new Stadium());
+            }
+            reserveList.add(reserve);
         }
 
         if (reserveList == null) {
@@ -146,7 +151,7 @@ public class PlayIndexApi extends CommonController {
             //map.put("list", list);
 
             Result obj = new Result(true).data(createMap("list",list));
-            String result = JsonUtil.obj2ApiJson(obj,"site","userReservelist","insurance");
+            String result = JsonUtil.obj2ApiJson(obj,"userReservelist","insurance");
             WebUtil.printApi(response, result);
         }
     }
@@ -168,7 +173,12 @@ public class PlayIndexApi extends CommonController {
 
         List<Reserve> list = reserveService.findAll();
         Reserve reserve = list.get(list.size()-1);
-        reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getSite().getStadium().getName() + "约球了");
+        if (reserve.getType() == 0) {
+            reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getSite().getStadium().getName() + "约球了");
+        }else if (reserve.getType() == 1) {
+            reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
+        }
+
 
         Result obj = new Result(true).data(createMap("reserve",reserve));
         String result = JsonUtil.obj2ApiJson(obj);

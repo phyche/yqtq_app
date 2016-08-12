@@ -34,6 +34,9 @@ public class ReserveTeam extends BaseEntity{
     @JoinColumn(name = "insurance_id")
     private SysInsurance insurance;
 
+    @Column(name = "start_date")
+    private Long startTime;
+
     public User getUser() {
         return user;
     }
@@ -82,4 +85,11 @@ public class ReserveTeam extends BaseEntity{
         this.status = status;
     }
 
+    public Long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Long startTime) {
+        this.startTime = startTime;
+    }
 }

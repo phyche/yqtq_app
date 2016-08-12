@@ -115,7 +115,7 @@ public class PostServiceImpl implements PostService {
                 List<Predicate> predicateList = new ArrayList<Predicate>();
 
                 if (userId != null) {
-                    Predicate pre = cb.equal(root.get("user").get("id").as(Integer.class), userId);
+                    Predicate pre = cb.equal(root.get("user").get("id").as(Long.class), userId);
                     predicateList.add(pre);
                 }
 

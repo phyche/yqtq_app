@@ -14,4 +14,7 @@ public interface OrderDao extends JpaRepository<Order, Long>, JpaSpecificationEx
 
     @Query("select a from Order a where a.sn= ?1")
     public Order iFindOneByOrderNum(String orderNum);
+
+    @Query("select a from Order a where a.action = ?1 and a.user.id = ?2")
+    public List<Order> findByUserIdAndAction(Integer action, Long userId);
 }

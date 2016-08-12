@@ -28,6 +28,9 @@ public class PostComment extends BaseEntity{
     @Transient
     private String title;
 
+    @Transient
+    private Post post;
+
     public Long getPostId() {
         return postId;
     }
@@ -74,5 +77,13 @@ public class PostComment extends BaseEntity{
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
     }
 }

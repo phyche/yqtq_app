@@ -10,6 +10,6 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface UserVipDao extends JpaRepository<UserVip, Long> {
 
-    @Query("select a from UserVip a where a.user.id = ?1 ")
+    @Query("select a from UserVip a where a.userId = ?1 ")
     public UserVip findByUserId(Long userId);
 }

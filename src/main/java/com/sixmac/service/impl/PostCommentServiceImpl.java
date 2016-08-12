@@ -3,6 +3,7 @@ package com.sixmac.service.impl;
 import com.sixmac.core.Constant;
 import com.sixmac.dao.PostCommentDao;
 import com.sixmac.entity.BigRace;
+import com.sixmac.entity.Post;
 import com.sixmac.entity.PostComment;
 import com.sixmac.service.PostCommentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,8 +81,33 @@ public class PostCommentServiceImpl implements PostCommentService {
     }
 
     @Override
-    public List<PostComment> findByFuserId(Long userId) {
-        return postCommentDao.findByFuserId(userId);
+    public Page<PostComment> findByFuserId(final Long userId, Integer pageNum, Integer pageSize) {
+        PageRequest pageRequest = new PageRequest(pageNum - 1, pageSize, Sort.Direction.DESC, "id");
+
+        Page<PostComment> page = postCommentDao.findAll(new Specification<PostComment>() {
+            @Override
+            public Predicate toPredicate(Root<PostComment> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                Predicate result = null;
+                List<Predicate> predicateList = new ArrayList<Predicate>();
+
+                if (userId != null) {
+                    Predicate pre = cb.equal(root.get("fUser").get("id").as(Long.class), userId);
+                    predicateList.add(pre);
+                }
+
+                if (predicateList.size() > 0) {
+                    result = cb.and(predicateList.toArray(new Predicate[]{}));
+                }
+
+                if (result != null) {
+                    query.where(result);
+                }
+                return query.getGroupRestriction();
+            }
+
+        }, pageRequest);
+
+        return page;
     }
 
     @Override

@@ -193,4 +193,9 @@ public class OrderServiceImpl implements OrderService {
             girlUserService.update(orders.getGirlUser());
         }
     }
+
+    @Override
+    public List<Order> findByUserIdAndAction(Integer action, Long userId) {
+        return orderDao.findByUserIdAndAction(action, userId);
+    }
 }

@@ -267,6 +267,7 @@ public class StadiumApi extends CommonController {
         reserve.setStadium(stadium);
         reserve.setStartTime(time);
         reserve.setTitle(title);
+        reserve.setType(1);
         reserveService.create(reserve);
 
         UserReserve userReserve = new UserReserve();
@@ -456,6 +457,7 @@ public class StadiumApi extends CommonController {
         reserve.setStartTime(siteTimeService.getById(siteTimeId).getStartTime());
         reserve.setPayStatus(0);
         reserve.setCityId(siteTimeService.getById(siteTimeId).getSite().getStadium().getCityId());
+        reserve.setType(0);
         reserveService.create(reserve);
 
         map.put("reserve", reserve);
@@ -580,6 +582,7 @@ public class StadiumApi extends CommonController {
         //reserveTeam.setStadium(siteTimeService.getById(siteTimeId).getSite().getStadium());
         reserveTeam.setSite(siteTimeService.getById(siteTimeId).getSite());
         reserveTeam.setUser(userService.getById(userId));
+        reserveTeam.setStartTime(siteTimeService.getById(siteTimeId).getStartTime());
         reserveTeam.setPrice(money);
         reserveTeamService.create(reserveTeam);
 
