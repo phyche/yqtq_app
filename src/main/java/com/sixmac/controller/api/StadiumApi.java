@@ -448,7 +448,7 @@ public class StadiumApi extends CommonController {
         }
 
         Reserve reserve = new Reserve();
-        //reserve.setStadium(siteTimeService.getById(siteTimeId).getSite().getStadium());
+        reserve.setStadium(siteTimeService.getById(siteTimeId).getSite().getStadium());
         reserve.setSite(siteTimeService.getById(siteTimeId).getSite());
         reserve.setUser(userService.getById(userId));
         reserve.setInsurance(sysInsurance);

@@ -246,8 +246,13 @@ public class OrderBallApi extends CommonController {
         //map.put("reserveList", reserveList);
 
         Result obj = new Result(true).data(createMap("list", reserveList));
-        String result = JsonUtil.obj2ApiJson(obj, "set", "insurance", "site", "list");
+        String result = JsonUtil.obj2ApiJson(obj, "set", "insurance", "list", "userReservelist");
         WebUtil.printApi(response, result);
+    }
+
+    private Map<String, Object> setMap(Stadium stadium) {
+
+        return null;
     }
 
     /**

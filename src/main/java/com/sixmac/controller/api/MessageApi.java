@@ -4,6 +4,7 @@ import com.sixmac.controller.common.CommonController;
 import com.sixmac.core.ErrorCode;
 import com.sixmac.core.bean.Result;
 import com.sixmac.entity.*;
+import com.sixmac.entity.vo.MessageVo;
 import com.sixmac.utils.ConfigUtil;
 import com.sixmac.utils.DateUtils;
 import com.sixmac.utils.JsonUtil;
@@ -350,9 +351,8 @@ public class MessageApi extends CommonController {
         Map<String, Object> map = new HashMap<String, Object>();
 
         List<SystemMessage> list1 = systemMessageService.findByToUserId(userId);
-
         List<MessageAdd> list2 = messageAddService.findByUserId(userId);
-        for (MessageAdd messageAdd : list2) {
+        /*for (MessageAdd messageAdd : list2) {
 
             if (messageAdd.getStatus() == 1) {
                 messageAdd.setContent("user" + "同意了您的好友请求");
@@ -360,20 +360,50 @@ public class MessageApi extends CommonController {
             if (messageAdd.getStatus() == 2) {
                 messageAdd.setContent("user" + "拒绝了您的好友请求");
             }
-        }
-
+        }*/
         List<MessageAdd> list3 = messageAddService.findByToUserId(userId);
-        for (MessageAdd messageAdd : list3) {
+        /*for (MessageAdd messageAdd : list3) {
 
             messageAdd.setContent("user" + "添加您为好友");
 
+        }*/
+        List<MessageVo> list = new ArrayList<MessageVo>();
+        MessageVo messageVo = null;
+        for (SystemMessage systemMessage : list1) {
+            messageVo = new MessageVo();
+            messageVo.setId(systemMessage.getId());
+            messageVo.setContent(systemMessage.getTitle());
+            messageVo.setCreateDate(systemMessage.getCreateDate());
+            messageVo.setType(1);
+            list.add(messageVo);
+        }
+        for (MessageAdd messageAdd : list2) {
+            if (messageAdd.getUser().getId() == userId  && messageAdd.getStatus() != 0) {
+
+                messageVo = new MessageVo();
+                messageVo.setToUserId(userId);
+                messageVo.setNicknme(messageAdd.getToUser().getNickname());
+                messageVo.setCreateDate(messageAdd.getCreateDate());
+                if (messageAdd.getStatus() == 1) {
+                    messageVo.setContent("user" + "同意了您的好友请求");
+                }else if (messageAdd.getStatus() == 2) {
+                    messageVo.setContent("user" + "拒绝了您的好友请求");
+                }
+
+            }else if (messageAdd.getToUser().getId() == userId  && messageAdd.getStatus() == 0) {
+                messageVo = new MessageVo();
+                messageVo.setUserId(userId);
+                messageVo.setNicknme(messageAdd.getUser().getNickname());
+                messageVo.setCreateDate(messageAdd.getCreateDate());
+                messageAdd.setContent("user" + "添加您为好友");
+            }
         }
 
-        map.put("list1",list1);
+        /*map.put("list1",list1);
         map.put("list2",list2);
-        map.put("list3",list3);
+        map.put("list3",list3);*/
 
-        Result obj = new Result(true).data(createMap("list",map));
+        Result obj = new Result(true).data(createMap("list",list));
         String result = JsonUtil.obj2ApiJson(obj,"toUser");
         WebUtil.printApi(response, result);
     }

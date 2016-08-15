@@ -1,16 +1,14 @@
 package com.sixmac.entity;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Administrator on 2016/5/19 0019.
  */
 @Entity
 @Table(name = "t_reserve")
-public class Reserve extends BaseEntity{
+public class Reserve extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -32,7 +30,7 @@ public class Reserve extends BaseEntity{
     private Long cityId;
 
     @Column(name = "match_type")
-    private Integer matchType =3;
+    private Integer matchType = 3;
 
     @Column(name = "price")
     private double price;
@@ -48,7 +46,7 @@ public class Reserve extends BaseEntity{
     private Long startTime;
 
     @Column(name = "status")
-    private Integer status =0;
+    private Integer status = 0;
 
     @Column(name = "title")
     private String title;
@@ -77,6 +75,9 @@ public class Reserve extends BaseEntity{
 
     @Column(name = "type")
     private Integer type;
+
+    @Transient
+    private Map<String, Object> stadiumMap = new HashMap<String, Object>();
 
     public Integer getJoinCount() {
         return joinCount;
@@ -228,5 +229,13 @@ public class Reserve extends BaseEntity{
 
     public void setLackCount(Integer lackCount) {
         this.lackCount = lackCount;
+    }
+
+    public Map<String, Object> getStadiumMap() {
+        return stadiumMap;
+    }
+
+    public void setStadiumMap(Map<String, Object> stadiumMap) {
+        this.stadiumMap = stadiumMap;
     }
 }
