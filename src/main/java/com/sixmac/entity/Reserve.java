@@ -18,9 +18,8 @@ public class Reserve extends BaseEntity {
     @JoinColumn(name = "stadium_id")
     private Stadium stadium;
 
-    @OneToOne
-    @JoinColumn(name = "site_id")
-    private Site site;
+    @Column(name = "site_id")
+    private Long siteId;
 
     /*@ManyToOne
     @JoinColumn(name = "city_id",referencedColumnName = "city_id")
@@ -111,12 +110,12 @@ public class Reserve extends BaseEntity {
         this.user = user;
     }
 
-    public Site getSite() {
-        return site;
+    public Long getSiteId() {
+        return siteId;
     }
 
-    public void setSite(Site site) {
-        this.site = site;
+    public void setSiteId(Long siteId) {
+        this.siteId = siteId;
     }
 
     public Integer getMatchType() {

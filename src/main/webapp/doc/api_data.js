@@ -2825,6 +2825,13 @@ define({ "api": [
           },
           {
             "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "list.type",
+            "description": "<p>约球类型（0：散客，1：公共）</p>"
+          },
+          {
+            "group": "Success 200",
             "type": "String",
             "optional": false,
             "field": "reserve.reserve.content",
@@ -2993,6 +3000,13 @@ define({ "api": [
           {
             "group": "Success 200",
             "type": "Integer",
+            "optional": false,
+            "field": "list.type",
+            "description": "<p>约球类型（0：散客，1：公共）</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
             "optional": false,
             "field": "list.content",
             "description": "<p>约球内容</p>"
@@ -6885,57 +6899,50 @@ define({ "api": [
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "site.reserveList.site",
-            "description": "<p>用户散客场地</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Double",
-            "optional": false,
-            "field": "site.reserveList.site.price",
-            "description": "<p>场地价格</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "site.reserveList.site.stadium",
+            "field": "site.reserveList.stadium",
             "description": "<p>用户散客球场</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "site.reserveList.site.stadium.id",
+            "field": "site.reserveList.stadium.id",
             "description": "<p>球场id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "site.reserveList.site.stadium.name",
+            "field": "site.reserveList.stadium.name",
             "description": "<p>球场名字</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "site.reserveList.site.stadium.address",
+            "field": "site.reserveList.stadium.address",
             "description": "<p>球场地址</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "site.reserveList.site.stadium.areaName",
+            "field": "site.reserveList.stadium.areaName",
             "description": "<p>球场区域</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "site.reserveList.site.stadium.avater",
+            "field": "site.reserveList.stadium.avater",
             "description": "<p>球场封面</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "site.reserveList.stadium.price",
+            "description": "<p>场地价格</p>"
           },
           {
             "group": "Success 200",

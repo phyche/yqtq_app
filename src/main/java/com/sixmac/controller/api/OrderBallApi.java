@@ -102,8 +102,12 @@ public class OrderBallApi extends CommonController {
         Page<Reserve> page = reserveService.page(timelimit, type, areaId, pageNum, pageSize);
         List<Reserve> list = page.getContent();
         for (Reserve reserve : list) {
-            reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getSite().getStadium().getName() + "约球了");
-
+            reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
+            if (StringUtils.isNotBlank(reserve.getUser().getAvater())) {
+                reserve.getUser().setAvater(ConfigUtil.getString("upload.url") + reserve.getUser().getAvater());
+            }
+            reserve.setJoinCount(reserve.getUserReservelist() != null ? reserve.getUserReservelist().size() : 0);
+            reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
             if (StringUtils.isNotBlank(reserve.getUser().getAvater())) {
                 reserve.getUser().setAvater(ConfigUtil.getString("upload.url") + reserve.getUser().getAvater());
             }
@@ -112,7 +116,7 @@ public class OrderBallApi extends CommonController {
         Map<String, Object> dataMap = APIFactory.fitting(page);
 
         Result obj = new Result(true).data(dataMap);
-        String result = JsonUtil.obj2ApiJson(obj, "set", "insurance", "site", "list");
+        String result = JsonUtil.obj2ApiJson(obj, "set", "insurance", "list");
         WebUtil.printApi(response, result);
     }
 
@@ -126,6 +130,7 @@ public class OrderBallApi extends CommonController {
      * @apiParam {Long} reserveId 约球ID <必传 />
      * @apiSuccess {Object}  reserve.reserve 约球列表
      * @apiSuccess {Long} reserve.reserve.id 约球id
+     * @apiSuccess {Integer} list.type 约球类型（0：散客，1：公共）
      * @apiSuccess {String} reserve.reserve.content 约球内容
      * @apiSuccess {Integer} reserve.reserve.matchType 赛制
      * @apiSuccess {Integer} reserve.reserve.joinCount 已报人数
@@ -160,7 +165,7 @@ public class OrderBallApi extends CommonController {
             }
 
             Reserve reserve = reserveService.getById(reserveId);
-            reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getSite().getStadium().getName() + "约球了");
+            reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
 
             if (StringUtils.isNotBlank(reserve.getUser().getAvater())) {
                 reserve.getUser().setAvater(ConfigUtil.getString("upload.url") + reserve.getUser().getAvater());
@@ -206,7 +211,8 @@ public class OrderBallApi extends CommonController {
      * @apiParam {Long} playerId 球友ID <必传 />
      * @apiSuccess {Object}  list 约球列表
      * @apiSuccess {Long} list.id 约球id
-     * @apiSuccess {Integer} list.content 约球内容
+     * @apiSuccess {Integer} list.type 约球类型（0：散客，1：公共）
+     * @apiSuccess {String} list.content 约球内容
      * @apiSuccess {Integer} list.matchType 赛制
      * @apiSuccess {Integer} list.joinCount 已报人数
      * @apiSuccess {Integer} list.lackCount 剩余人数
@@ -235,7 +241,7 @@ public class OrderBallApi extends CommonController {
             reserveList.add(reserveService.getById(userReserve.getReserveId()));
         }
         for (Reserve reserve : reserveList) {
-            reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getSite().getStadium().getName() + "约球了");
+            reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
             reserve.setJoinCount(reserve.getUserReservelist() != null ? reserve.getUserReservelist().size() : 0);
             reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
             if (StringUtils.isNotBlank(reserve.getUser().getAvater())) {

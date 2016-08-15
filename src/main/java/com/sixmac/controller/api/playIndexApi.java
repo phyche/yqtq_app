@@ -174,7 +174,7 @@ public class PlayIndexApi extends CommonController {
         List<Reserve> list = reserveService.findAll();
         Reserve reserve = list.get(list.size()-1);
         if (reserve.getType() == 0) {
-            reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getSite().getStadium().getName() + "约球了");
+            reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
         }else if (reserve.getType() == 1) {
             reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
         }

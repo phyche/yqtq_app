@@ -88,6 +88,9 @@ public class UserApi extends CommonController {
     @Autowired
     private GirlUserService girlUserService;
 
+    @Autowired
+    private SiteService siteService;
+
     /**
      * 完成
      *
@@ -793,14 +796,13 @@ public class UserApi extends CommonController {
      * @apiSuccess {Object} site 用户场地列表
      * @apiSuccess {Object} site.reserveList 用户散客场地列表
      * @apiSuccess {Long} site.reserveList.startTime 预约时间
-     * @apiSuccess {Object} site.reserveList.site 用户散客场地
-     * @apiSuccess {Double} site.reserveList.site.price 场地价格
-     * @apiSuccess {Object} site.reserveList.site.stadium 用户散客球场
-     * @apiSuccess {Long} site.reserveList.site.stadium.id 球场id
-     * @apiSuccess {String} site.reserveList.site.stadium.name 球场名字
-     * @apiSuccess {String} site.reserveList.site.stadium.address 球场地址
-     * @apiSuccess {String} site.reserveList.site.stadium.areaName 球场区域
-     * @apiSuccess {String} site.reserveList.site.stadium.avater 球场封面
+     * @apiSuccess {Object} site.reserveList.stadium 用户散客球场
+     * @apiSuccess {Long} site.reserveList.stadium.id 球场id
+     * @apiSuccess {String} site.reserveList.stadium.name 球场名字
+     * @apiSuccess {String} site.reserveList.stadium.address 球场地址
+     * @apiSuccess {String} site.reserveList.stadium.areaName 球场区域
+     * @apiSuccess {String} site.reserveList.stadium.avater 球场封面
+     * @apiSuccess {Double} site.reserveList.stadium.price 场地价格
      *
      * @apiSuccess {Object} site.reserveTeamList 用户球队场地列表
      * @apiSuccess {Long} site.reserveTeamList.startTime 预约时间
@@ -824,8 +826,9 @@ public class UserApi extends CommonController {
         List<ReserveTeam> reserveTeamList = new ArrayList<ReserveTeam>();
         for (Order order : orderList) {
             if (order.getReserve() != null) {
-                String areaname = areaService.getByAreaId(order.getReserve().getSite().getStadium().getAreaId()).getArea();
-                order.getReserve().getSite().getStadium().setAreaName(areaname);
+                order.getReserve().getStadium().setPrice(siteService.getById(order.getReserve().getSiteId()).getPrice());
+                String areaname = areaService.getByAreaId(order.getReserve().getStadium().getAreaId()).getArea();
+                order.getReserve().getStadium().setAreaName(areaname);
                 reserveList.add(order.getReserve());
             }else if (order.getReserveTeam() != null) {
                 order.getReserveTeam().getSite().getStadium().setAreaName(areaService.getByAreaId(order.getReserveTeam().getSite().getStadium().getAreaId()).getArea());

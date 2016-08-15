@@ -68,6 +68,9 @@ public class Stadium extends BaseEntity{
     @Transient
     private double distance;
 
+    @Transient
+    private Double price;
+
     public String getCityName() {
         return cityName;
     }
@@ -204,5 +207,11 @@ public class Stadium extends BaseEntity{
         this.latitude = latitude;
     }
 
+    public Double getPrice() {
+        return price;
+    }
 
+    public void setPrice(Double price) {
+        this.price = price;
+    }
 }
