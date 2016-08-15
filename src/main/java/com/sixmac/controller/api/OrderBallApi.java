@@ -225,7 +225,7 @@ public class OrderBallApi extends CommonController {
             return;
         }
 
-        Map<String, Object> map = new HashMap<String, Object>();
+        //Map<String, Object> map = new HashMap<String, Object>();
 
         List<Reserve> reserveList = new ArrayList<Reserve>();
         List<UserReserve> userReserves = userReserveService.findByUserId(playerId);
@@ -236,17 +236,16 @@ public class OrderBallApi extends CommonController {
         }
         for (Reserve reserve : reserveList) {
             reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getSite().getStadium().getName() + "约球了");
-            /*reserve.setJoinCount(reserve.getUserReservelist() != null ? reserve.getUserReservelist().size() : 0);
+            reserve.setJoinCount(reserve.getUserReservelist() != null ? reserve.getUserReservelist().size() : 0);
             reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
-*/
             if (StringUtils.isNotBlank(reserve.getUser().getAvater())) {
                 reserve.getUser().setAvater(ConfigUtil.getString("upload.url") + reserve.getUser().getAvater());
             }
         }
 
-        map.put("reserveList", reserveList);
+        //map.put("reserveList", reserveList);
 
-        Result obj = new Result(true).data(createMap("list", map));
+        Result obj = new Result(true).data(createMap("list", reserveList));
         String result = JsonUtil.obj2ApiJson(obj, "set", "insurance", "site", "list");
         WebUtil.printApi(response, result);
     }
