@@ -128,26 +128,28 @@ public class OrderBallApi extends CommonController {
      * @apiName orderBall.orderInfo
      * @apiGroup orderBall
      * @apiParam {Long} reserveId 约球ID <必传 />
-     * @apiSuccess {Object}  reserve.reserve 约球列表
-     * @apiSuccess {Long} reserve.reserve.id 约球id
-     * @apiSuccess {Integer} list.type 约球类型（0：散客，1：公共）
-     * @apiSuccess {String} reserve.reserve.content 约球内容
-     * @apiSuccess {Integer} reserve.reserve.matchType 赛制
-     * @apiSuccess {Integer} reserve.reserve.joinCount 已报人数
-     * @apiSuccess {Integer} reserve.reserve.lackCount 剩余人数
-     * @apiSuccess {Object} reserve.reserve.user 创建人
-     * @apiSuccess {String} reserve.reserve.user.nickname 创建人昵称
-     * @apiSuccess {String} reserve.reserve.user.avater 创建人头像
-     * @apiSuccess {Object} reserve.reserve.stadium 球场
-     * @apiSuccess {Long} reserve.reserve.stadium.id 球场id
-     * @apiSuccess {String} reserve.reserve.stadium.name 球场名字
-     * @apiSuccess {Double} reserve.reserve.avePrice AA制金额
-     * @apiSuccess {Double} reserve.reserve.sumPrice 支付总金额
-     * @apiSuccess {Object} reserve.userList 已报名球友列表
-     * @apiSuccess {Long} reserve.userList.id 报名球友id
-     * @apiSuccess {String} reserve.userList.nickname 报名球友昵称
-     * @apiSuccess {String} reserve.userList.avater 报名球友头像
-     * @apiSuccess {Long} reserve.reserve.startTime 开始时间
+     * @apiSuccess {Object}  reserve 约球列表
+     * @apiSuccess {Long} reserve.id 约球id
+     * @apiSuccess {Integer} reserve.type 约球类型（0：散客，1：公共）
+     * @apiSuccess {Integer} reserve.status 状态（0:正在组队1:组队成功2:组队失败3:比赛结束）
+     * @apiSuccess {Integer} reserve.payment 付款方式 （0:AA 1:全额）
+     * @apiSuccess {String} reserve.content 约球内容
+     * @apiSuccess {Integer} reserve.matchType 赛制
+     * @apiSuccess {Integer} reserve.joinCount 已报人数
+     * @apiSuccess {Integer} reserve.lackCount 剩余人数
+     * @apiSuccess {Object} reserve.user 创建人
+     * @apiSuccess {String} reserve.user.nickname 创建人昵称
+     * @apiSuccess {String} reserve.user.avater 创建人头像
+     * @apiSuccess {Object} reserve.stadium 球场
+     * @apiSuccess {Long} reserve.stadium.id 球场id
+     * @apiSuccess {String} reserve.stadium.name 球场名字
+     * @apiSuccess {Double} reserve.avePrice AA制金额
+     * @apiSuccess {Double} reserve.sumPrice 支付总金额
+     * @apiSuccess {Object} reserve.userReservelist 已报名球友列表
+     * @apiSuccess {Long} reserve.userReservelist.id 报名球友id
+     * @apiSuccess {String} reserve.userReservelist.nickname 报名球友昵称
+     * @apiSuccess {String} reserve.userReservelist.avater 报名球友头像
+     * @apiSuccess {Long} reserve.userReservelist.startTime 开始时间
      */
     @RequestMapping(value = "/orderInfo")
     public void orderInfo(HttpServletResponse response, Long reserveId) {
@@ -176,7 +178,7 @@ public class OrderBallApi extends CommonController {
                 return;
             }
 
-            //已报名该预定的用户
+            /*//已报名该预定的用户
             List<User> userList = new ArrayList<User>();
             List<UserReserve> userReserves = userReserveService.findByReserverId(reserveId);
             for (UserReserve userReserve : userReserves) {
@@ -185,16 +187,16 @@ public class OrderBallApi extends CommonController {
                     userReserve.getUser().setAvater(ConfigUtil.getString("upload.url") + userReserve.getUser().getAvater());
                 }
                 userList.add(userReserve.getUser());
-            }
+            }*/
 
             reserve.setAvePrice(reserve.getPrice() / reserve.getMatchType());
             reserve.setSumPrice(reserve.getAvePrice() + reserve.getInsurance().getPrice());
             reserveService.update(reserve);
 
-            map.put("userList", userList);
-            map.put("reserve", reserve);
+            //map.put("userList", userList);
+            //map.put("reserve", reserve);
 
-            Result obj = new Result(true).data(createMap("reserve", map));
+            Result obj = new Result(true).data(createMap("reserve", reserve));
             String result = JsonUtil.obj2ApiJson(obj, "set", "site", "list");
             WebUtil.printApi(response, result);
         } catch (Exception e) {
@@ -343,12 +345,11 @@ public class OrderBallApi extends CommonController {
         }
 
         String teamIds = "";
-        StringBuffer buffer = null;
+        StringBuffer buffer = new StringBuffer("");
         for (Team team : teams) {
             //根据球队列表查询球队赛事
             // select * from t_race r  where r.host_id in(1,2,3) or r.visitingid in (1,2,3)
-            buffer = new StringBuffer("");
-            buffer.append(team.getId()).append(",");
+            buffer.append(team.getId() + ",");
         }
         teamIds = buffer.toString().substring(0, buffer.length() - 1);
 

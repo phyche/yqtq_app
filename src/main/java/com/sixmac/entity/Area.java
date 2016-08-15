@@ -1,6 +1,8 @@
 package com.sixmac.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 2016/5/31 0031.
@@ -21,6 +23,9 @@ public class Area {
 
     @Column(name = "city_id")
     private Long cityId;
+
+    @Transient
+    private List<Stadium> stadiumList = new ArrayList<Stadium>();
 
     public Long getId() {
         return id;
@@ -52,5 +57,13 @@ public class Area {
 
     public void setCityId(Long cityId) {
         this.cityId = cityId;
+    }
+
+    public List<Stadium> getStadiumList() {
+        return stadiumList;
+    }
+
+    public void setStadiumList(List<Stadium> stadiumList) {
+        this.stadiumList = stadiumList;
     }
 }

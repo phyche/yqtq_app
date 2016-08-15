@@ -91,7 +91,7 @@ public class TeamRaceServiceImpl implements TeamRaceService {
     public List<TeamRace> findByVisitingId(String visitingId) {
         EntityManager em = factory.createEntityManager();
 
-        String sql = "select a from TeamRace a where a.homeTeam.id in (" + visitingId + ") and a.status = 1";
+        String sql = "select a from TeamRace a where a.visitingTeam.id in (" + visitingId + ") and a.status = 1";
         Query query = em.createQuery(sql);
         List<TeamRace> list = (List<TeamRace>) query.getResultList();
 

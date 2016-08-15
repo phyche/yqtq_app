@@ -18,6 +18,14 @@ public class Reserve extends BaseEntity {
     @JoinColumn(name = "stadium_id")
     private Stadium stadium;
 
+    @ManyToOne
+    @JoinColumn(name = "insurance_id")
+    private SysInsurance insurance;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "reserve_id")
+    private List<UserReserve> userReservelist;
+
     @Column(name = "site_id")
     private Long siteId;
 
@@ -37,10 +45,6 @@ public class Reserve extends BaseEntity {
     @Column(name = "payment")
     private Integer payment = 0;
 
-    @ManyToOne
-    @JoinColumn(name = "insurance_id")
-    private SysInsurance insurance;
-
     @Column(name = "start_date")
     private Long startTime;
 
@@ -49,10 +53,6 @@ public class Reserve extends BaseEntity {
 
     @Column(name = "title")
     private String title;
-
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "reserve_id")
-    private List<UserReserve> userReservelist;
 
     @Transient
     private String content;
@@ -75,8 +75,8 @@ public class Reserve extends BaseEntity {
     @Column(name = "type")
     private Integer type;
 
-    @Transient
-    private Map<String, Object> stadiumMap = new HashMap<String, Object>();
+    /*@Transient
+    private Map<String, Object> stadiumMap = new HashMap<String, Object>();*/
 
     public Integer getJoinCount() {
         return joinCount;
@@ -230,11 +230,11 @@ public class Reserve extends BaseEntity {
         this.lackCount = lackCount;
     }
 
-    public Map<String, Object> getStadiumMap() {
+    /*public Map<String, Object> getStadiumMap() {
         return stadiumMap;
     }
 
     public void setStadiumMap(Map<String, Object> stadiumMap) {
         this.stadiumMap = stadiumMap;
-    }
+    }*/
 }

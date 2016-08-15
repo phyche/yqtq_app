@@ -74,9 +74,11 @@ public class StadiumApi extends CommonController {
      * @apiParam {Integer} type 球赛类型 N人制 N代表数量
      * @apiParam {Double} longitude 经度  <必传/>
      * @apiParam {Double} latitude 纬度  <必传/>
+     * @apiParam {Long} cityId 城市ID
      * @apiParam {Long} areaId 区域ID
      * @apiParam {Integer} pageNum 当前页
      * @apiParam {Integer} pageSize 每页显示数
+     *
      * @apiSuccess {Object}  list 球场列表
      * @apiSuccess {Integer} list.id 球场id
      * @apiSuccess {String} list.name 球场名称
@@ -94,6 +96,7 @@ public class StadiumApi extends CommonController {
      */
     @RequestMapping(value = "/list")
     public void list(HttpServletResponse response,
+                     Long cityId,
                      Double longitude,
                      Double latitude,
                      Long areaId,
@@ -108,6 +111,15 @@ public class StadiumApi extends CommonController {
 
         Page<Stadium> page = stadiumService.page(areaId, type, pageNum, pageSize);
         List<Stadium> stadiumList = page.getContent();
+        List<Area> areaList = areaService.getByCityId(cityId);
+        for (Area area : areaList) {
+            for (Stadium stadium : stadiumList) {
+                if (stadium.getAreaId() == area.getAreaId()) {
+                    area.getStadiumList().add(stadium);
+                }
+            }
+        }
+        /*List<Stadium> stadiumList = page.getContent();
         for (Stadium stadium : stadiumList) {
 
             stadium.setAreaName(areaService.getByAreaId(stadium.getAreaId()).getArea());
@@ -121,10 +133,10 @@ public class StadiumApi extends CommonController {
                     stadium.setAvater(ConfigUtil.getString("upload.url") + stadium.getAvater());
                 }
             }
-        }
+        }*/
 
-        Map<String, Object> dataMap = APIFactory.fitting(page);
-        Result obj = new Result(true).data(dataMap);
+        //Map<String, Object> dataMap = APIFactory.fitting(page);
+        Result obj = new Result(true).data(createMap("areaList", areaList));
         String result = JsonUtil.obj2ApiJson(obj, "description", "siteType", "sodType");
         WebUtil.printApi(response, result);
     }

@@ -5,11 +5,8 @@ import com.sixmac.core.ErrorCode;
 import com.sixmac.core.bean.Result;
 import com.sixmac.entity.*;
 import com.sixmac.entity.vo.MessageVo;
-import com.sixmac.utils.ConfigUtil;
-import com.sixmac.utils.DateUtils;
-import com.sixmac.utils.JsonUtil;
+import com.sixmac.utils.*;
 import com.sixmac.service.*;
-import com.sixmac.utils.WebUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -233,6 +230,7 @@ public class MessageApi extends CommonController {
      *
      * @apiSuccess {Object}  list 约看列表
      * @apiSuccess {Long} list.id 约看id
+     * @apiSuccess {Integer} list.type 类型（0：现场看球，1：直播看球）
      * @apiSuccess {Object} list.user 好友
      * @apiSuccess {Long} list.user.id 好友id
      * @apiSuccess {String} list.user.nickname 好友昵称
@@ -317,27 +315,17 @@ public class MessageApi extends CommonController {
      * @apiGroup message
      * @apiParam {Long} userId 用户id <必传/>
      *
-     * @apiSuccess {Object}  list.list1 系统消息列表
-     * @apiSuccess {Long} list.list1.id 消息id
-     * @apiSuccess {String} list.list1.title 消息标题
-     * @apiSuccess {Long} list.list1.createDate 消息时间
-     *
-     * @apiSuccess {Object}  list.list2 消息列表
-     * @apiSuccess {Long} list.list2.id 消息id
-     * @apiSuccess {String} list.list2.content 消息内容
-     * @apiSuccess {Object} list.list2.toUser 好友
-     * @apiSuccess {Long} list.list2.toUser.id 好友id
-     * @apiSuccess {String} list.list2.toUser.nickname 好友昵称
-     * @apiSuccess {Long} list.list2.createDate 消息时间
-     *
-     * @apiSuccess {Object}  list.list3 消息列表
-     * @apiSuccess {Long} list.list3.id 消息id
-     * @apiSuccess {String} list.list3.content 消息内容
-     * @apiSuccess {Object} list.list3.user 好友
-     * @apiSuccess {Long} list.list3.user.id 好友id
-     * @apiSuccess {String} list.list3.user.nickname 好友昵称
-     * @apiSuccess {Long} list.list3.createDate 消息时间
-     *
+     * @apiSuccess {Object}  list 消息列表
+     * @apiSuccess {Long} list.id 消息id
+     * @apiSuccess {Long} list.id 消息id
+     * @apiSuccess {Integer} list.type 消息类型（1：系统消息，2：添加好友消息，3：好友请求消息）
+     * @apiSuccess {String} list.content 消息内容
+     * @apiSuccess {Long} list.createDate 消息时间
+     * @apiSuccess {Object} list.toUser 好友
+     * @apiSuccess {Long} list.toUser.id 好友id
+     * @apiSuccess {String} list.nickname 好友昵称
+     * @apiSuccess {Object} list.user 好友
+     * @apiSuccess {Long} list.user.id 好友id
      *
      */
     @RequestMapping(value = "/system")
@@ -352,21 +340,7 @@ public class MessageApi extends CommonController {
 
         List<SystemMessage> list1 = systemMessageService.findByToUserId(userId);
         List<MessageAdd> list2 = messageAddService.findByUserId(userId);
-        /*for (MessageAdd messageAdd : list2) {
-
-            if (messageAdd.getStatus() == 1) {
-                messageAdd.setContent("user" + "同意了您的好友请求");
-            }
-            if (messageAdd.getStatus() == 2) {
-                messageAdd.setContent("user" + "拒绝了您的好友请求");
-            }
-        }*/
         List<MessageAdd> list3 = messageAddService.findByToUserId(userId);
-        /*for (MessageAdd messageAdd : list3) {
-
-            messageAdd.setContent("user" + "添加您为好友");
-
-        }*/
         List<MessageVo> list = new ArrayList<MessageVo>();
         MessageVo messageVo = null;
         for (SystemMessage systemMessage : list1) {
@@ -378,30 +352,38 @@ public class MessageApi extends CommonController {
             list.add(messageVo);
         }
         for (MessageAdd messageAdd : list2) {
-            if (messageAdd.getUser().getId() == userId  && messageAdd.getStatus() != 0) {
+            if (messageAdd.getUser().getId() == userId && messageAdd.getStatus() != 0) {
 
                 messageVo = new MessageVo();
+                messageVo.setId(messageAdd.getId());
                 messageVo.setToUserId(userId);
-                messageVo.setNicknme(messageAdd.getToUser().getNickname());
+                messageVo.setNickname(messageAdd.getToUser().getNickname());
                 messageVo.setCreateDate(messageAdd.getCreateDate());
+                messageVo.setType(2);
                 if (messageAdd.getStatus() == 1) {
                     messageVo.setContent("user" + "同意了您的好友请求");
-                }else if (messageAdd.getStatus() == 2) {
+
+                } else if (messageAdd.getStatus() == 2) {
                     messageVo.setContent("user" + "拒绝了您的好友请求");
                 }
+                list.add(messageVo);
 
-            }else if (messageAdd.getToUser().getId() == userId  && messageAdd.getStatus() == 0) {
+            }
+        }
+        for (MessageAdd messageAdd : list3) {
+            if (messageAdd.getToUser().getId() == userId  && messageAdd.getStatus() == 0) {
                 messageVo = new MessageVo();
+                messageVo.setId(messageAdd.getId());
                 messageVo.setUserId(userId);
-                messageVo.setNicknme(messageAdd.getUser().getNickname());
+                messageVo.setNickname(messageAdd.getUser().getNickname());
                 messageVo.setCreateDate(messageAdd.getCreateDate());
-                messageAdd.setContent("user" + "添加您为好友");
+                messageVo.setType(3);
+                messageVo.setContent("user" + "添加您为好友");
+                list.add(messageVo);
             }
         }
 
-        /*map.put("list1",list1);
-        map.put("list2",list2);
-        map.put("list3",list3);*/
+        Collections.sort(list,new Compare());
 
         Result obj = new Result(true).data(createMap("list",list));
         String result = JsonUtil.obj2ApiJson(obj,"toUser");

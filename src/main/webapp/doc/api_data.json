@@ -2097,127 +2097,71 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "list.list1",
-            "description": "<p>系统消息列表</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.list1.id",
-            "description": "<p>消息id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "list.list1.title",
-            "description": "<p>消息标题</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.list1.createDate",
-            "description": "<p>消息时间</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "list.list2",
+            "field": "list",
             "description": "<p>消息列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "list.list2.id",
+            "field": "list.id",
             "description": "<p>消息id</p>"
           },
           {
             "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "list.type",
+            "description": "<p>消息类型（1：系统消息，2：添加好友消息，3：好友请求消息）</p>"
+          },
+          {
+            "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.list2.content",
+            "field": "list.content",
             "description": "<p>消息内容</p>"
           },
           {
             "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "list.list2.toUser",
-            "description": "<p>好友</p>"
-          },
-          {
-            "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "list.list2.toUser.id",
-            "description": "<p>好友id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "list.list2.toUser.nickname",
-            "description": "<p>好友昵称</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.list2.createDate",
+            "field": "list.createDate",
             "description": "<p>消息时间</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "list.list3",
-            "description": "<p>消息列表</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.list3.id",
-            "description": "<p>消息id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "list.list3.content",
-            "description": "<p>消息内容</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "list.list3.user",
+            "field": "list.toUser",
             "description": "<p>好友</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "list.list3.user.id",
+            "field": "list.toUser.id",
             "description": "<p>好友id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.list3.user.nickname",
+            "field": "list.nickname",
             "description": "<p>好友昵称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list.user",
+            "description": "<p>好友</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "list.list3.createDate",
-            "description": "<p>消息时间</p>"
+            "field": "list.user.id",
+            "description": "<p>好友id</p>"
           }
         ]
       }
@@ -2460,6 +2404,13 @@
             "optional": false,
             "field": "list.id",
             "description": "<p>约看id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "list.type",
+            "description": "<p>类型（0：现场看球，1：直播看球）</p>"
           },
           {
             "group": "Success 200",
@@ -2813,140 +2764,154 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "reserve.reserve",
+            "field": "reserve",
             "description": "<p>约球列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "reserve.reserve.id",
+            "field": "reserve.id",
             "description": "<p>约球id</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "list.type",
+            "field": "reserve.type",
             "description": "<p>约球类型（0：散客，1：公共）</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "reserve.status",
+            "description": "<p>状态（0:正在组队1:组队成功2:组队失败3:比赛结束）</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "reserve.payment",
+            "description": "<p>付款方式 （0:AA 1:全额）</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "reserve.reserve.content",
+            "field": "reserve.content",
             "description": "<p>约球内容</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "reserve.reserve.matchType",
+            "field": "reserve.matchType",
             "description": "<p>赛制</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "reserve.reserve.joinCount",
+            "field": "reserve.joinCount",
             "description": "<p>已报人数</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "reserve.reserve.lackCount",
+            "field": "reserve.lackCount",
             "description": "<p>剩余人数</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "reserve.reserve.user",
+            "field": "reserve.user",
             "description": "<p>创建人</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "reserve.reserve.user.nickname",
+            "field": "reserve.user.nickname",
             "description": "<p>创建人昵称</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "reserve.reserve.user.avater",
+            "field": "reserve.user.avater",
             "description": "<p>创建人头像</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "reserve.reserve.stadium",
+            "field": "reserve.stadium",
             "description": "<p>球场</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "reserve.reserve.stadium.id",
+            "field": "reserve.stadium.id",
             "description": "<p>球场id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "reserve.reserve.stadium.name",
+            "field": "reserve.stadium.name",
             "description": "<p>球场名字</p>"
           },
           {
             "group": "Success 200",
             "type": "Double",
             "optional": false,
-            "field": "reserve.reserve.avePrice",
+            "field": "reserve.avePrice",
             "description": "<p>AA制金额</p>"
           },
           {
             "group": "Success 200",
             "type": "Double",
             "optional": false,
-            "field": "reserve.reserve.sumPrice",
+            "field": "reserve.sumPrice",
             "description": "<p>支付总金额</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "reserve.userList",
+            "field": "reserve.userReservelist",
             "description": "<p>已报名球友列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "reserve.userList.id",
+            "field": "reserve.userReservelist.id",
             "description": "<p>报名球友id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "reserve.userList.nickname",
+            "field": "reserve.userReservelist.nickname",
             "description": "<p>报名球友昵称</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "reserve.userList.avater",
+            "field": "reserve.userReservelist.avater",
             "description": "<p>报名球友头像</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "reserve.reserve.startTime",
+            "field": "reserve.userReservelist.startTime",
             "description": "<p>开始时间</p>"
           }
         ]
@@ -4109,6 +4074,13 @@
             "optional": false,
             "field": "latitude",
             "description": "<p>纬度  &lt;必传/&gt;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Long",
+            "optional": false,
+            "field": "cityId",
+            "description": "<p>城市ID</p>"
           },
           {
             "group": "Parameter",

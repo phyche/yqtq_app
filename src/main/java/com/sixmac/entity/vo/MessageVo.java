@@ -11,7 +11,7 @@ public class MessageVo {
     private String content;
     private Long createDate;
     private Integer type;
-    private String nicknme;
+    private String nickname;
 
     public Long getId() {
         return id;
@@ -61,11 +61,11 @@ public class MessageVo {
         this.type = type;
     }
 
-    public String getNicknme() {
-        return nicknme;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setNicknme(String nicknme) {
-        this.nicknme = nicknme;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 }
