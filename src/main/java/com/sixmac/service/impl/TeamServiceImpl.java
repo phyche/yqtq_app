@@ -74,7 +74,7 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public Page<Team> page(final String name, Integer pageNum, Integer pageSize) {
+    public Page<Team> page(final String name, final Long cityId, Integer pageNum, Integer pageSize) {
         PageRequest pageRequest = new PageRequest(pageNum - 1, pageSize, Sort.Direction.DESC, "id");
 
         Page<Team> page = teamDao.findAll(new Specification<Team>() {
@@ -85,6 +85,11 @@ public class TeamServiceImpl implements TeamService {
 
                 if (name != null) {
                     Predicate pre = cb.like(root.get("name").as(String.class), "%" + name + "%");
+                    predicateList.add(pre);
+                }
+
+                if (cityId != null) {
+                    Predicate pre = cb.equal(root.get("cityId").as(Long.class), cityId);
                     predicateList.add(pre);
                 }
 

@@ -4088,20 +4088,6 @@
             "optional": false,
             "field": "areaId",
             "description": "<p>区域ID</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Integer",
-            "optional": false,
-            "field": "pageNum",
-            "description": "<p>当前页</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Integer",
-            "optional": false,
-            "field": "pageSize",
-            "description": "<p>每页显示数</p>"
           }
         ]
       }
@@ -4114,98 +4100,91 @@
             "type": "Object",
             "optional": false,
             "field": "list",
-            "description": "<p>球场列表</p>"
+            "description": "<p>区域列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
             "field": "list.id",
+            "description": "<p>区域id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.areaId",
+            "description": "<p>区域名称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.stadiumList",
+            "description": "<p>区域球场</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.stadiumList.id",
             "description": "<p>球场id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.name",
+            "field": "list.stadiumList.name",
             "description": "<p>球场名称</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "list.type",
+            "field": "list.stadiumList.type",
             "description": "<p>球场类型 （0:私人球场 1:公共球场）</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "list.park",
+            "field": "list.stadiumList.park",
             "description": "<p>是否有停车场 (0:无 1:免费 2:收费)</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.light",
+            "field": "list.stadiumList.light",
             "description": "<p>灯光类型</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.giving",
+            "field": "list.stadiumList.giving",
             "description": "<p>赠送</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "stadium.areaName",
+            "field": "list.stadiumList.areaName",
             "description": "<p>球场地区名字</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.address",
+            "field": "list.stadiumList.address",
             "description": "<p>球场地址</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "list.avater",
+            "field": "list.stadiumList.avater",
             "description": "<p>球场封面</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "page",
-            "description": "<p>翻页信息</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "optional": false,
-            "field": "page.totalNum",
-            "description": "<p>总记录数</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "optional": false,
-            "field": "page.totalPage",
-            "description": "<p>总页数</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "optional": false,
-            "field": "page.currentPage",
-            "description": "<p>当前页</p>"
           }
         ]
       }
@@ -5232,6 +5211,13 @@
             "optional": false,
             "field": "name",
             "description": "<p>球队名字</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Long",
+            "optional": false,
+            "field": "cityId",
+            "description": "<p>城市id &lt;必传/&gt;</p>"
           },
           {
             "group": "Parameter",

@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface TeamService extends ICommonService<Team> {
 
-    public Page<Team> page(String name, Integer pageNum, Integer pageSize);
+    public Page<Team> page(String name, Long cityId, Integer pageNum, Integer pageSize);
 
     public Team findListByLeaderId(Long leaderId);
 

@@ -76,23 +76,21 @@ public class StadiumApi extends CommonController {
      * @apiParam {Double} latitude 纬度  <必传/>
      * @apiParam {Long} cityId 城市ID
      * @apiParam {Long} areaId 区域ID
-     * @apiParam {Integer} pageNum 当前页
-     * @apiParam {Integer} pageSize 每页显示数
      *
-     * @apiSuccess {Object}  list 球场列表
-     * @apiSuccess {Integer} list.id 球场id
-     * @apiSuccess {String} list.name 球场名称
-     * @apiSuccess {Integer} list.type 球场类型 （0:私人球场 1:公共球场）
-     * @apiSuccess {Integer} list.park 是否有停车场 (0:无 1:免费 2:收费)
-     * @apiSuccess {String} list.light 灯光类型
-     * @apiSuccess {String} list.giving 赠送
-     * @apiSuccess {String} stadium.areaName 球场地区名字
-     * @apiSuccess {String} list.address 球场地址
-     * @apiSuccess {String} list.avater 球场封面
-     * @apiSuccess {Object}  page 翻页信息
-     * @apiSuccess {Integer} page.totalNum 总记录数
-     * @apiSuccess {Integer} page.totalPage 总页数
-     * @apiSuccess {Integer} page.currentPage 当前页
+     * @apiSuccess {Object}  list 区域列表
+     * @apiSuccess {Integer} list.id 区域id
+     * @apiSuccess {String} list.areaId 区域名称
+     * @apiSuccess {String} list.stadiumList 区域球场
+     * @apiSuccess {String} list.stadiumList.id 球场id
+     * @apiSuccess {String} list.stadiumList.name 球场名称
+     * @apiSuccess {Integer} list.stadiumList.type 球场类型 （0:私人球场 1:公共球场）
+     * @apiSuccess {Integer} list.stadiumList.park 是否有停车场 (0:无 1:免费 2:收费)
+     * @apiSuccess {String} list.stadiumList.light 灯光类型
+     * @apiSuccess {String} list.stadiumList.giving 赠送
+     * @apiSuccess {String} list.stadiumList.areaName 球场地区名字
+     * @apiSuccess {String} list.stadiumList.address 球场地址
+     * @apiSuccess {String} list.stadiumList.avater 球场封面
+     *
      */
     @RequestMapping(value = "/list")
     public void list(HttpServletResponse response,
@@ -100,21 +98,30 @@ public class StadiumApi extends CommonController {
                      Double longitude,
                      Double latitude,
                      Long areaId,
-                     Integer type,
-                     Integer pageNum,
-                     Integer pageSize) throws IOException {
+                     Integer type) throws IOException {
 
         if (null == latitude || longitude == null) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
 
-        Page<Stadium> page = stadiumService.page(areaId, type, pageNum, pageSize);
+        Page<Stadium> page = stadiumService.page(areaId, type, 1, 100);
         List<Stadium> stadiumList = page.getContent();
         List<Area> areaList = areaService.getByCityId(cityId);
         for (Area area : areaList) {
             for (Stadium stadium : stadiumList) {
-                if (stadium.getAreaId() == area.getAreaId()) {
+                if (stadium.getAreaId().toString().equals(area.getAreaId().toString())) {
+                    stadium.setAreaName(areaService.getByAreaId(stadium.getAreaId()).getArea());
+                    if (longitude == 0.0 && latitude == 0.0) {
+                        stadium.setDistance(-1);
+                    } else {
+                        stadium.setDistance(CountDistance.GetDistance(longitude, latitude, stadium.getLongitude(), stadium.getLatitude()));
+                    }
+                    if (stadium.getAvater() != null) {
+                        if (StringUtils.isNotBlank(stadium.getAvater())) {
+                            stadium.setAvater(ConfigUtil.getString("upload.url") + stadium.getAvater());
+                        }
+                    }
                     area.getStadiumList().add(stadium);
                 }
             }
@@ -136,7 +143,7 @@ public class StadiumApi extends CommonController {
         }*/
 
         //Map<String, Object> dataMap = APIFactory.fitting(page);
-        Result obj = new Result(true).data(createMap("areaList", areaList));
+        Result obj = new Result(true).data(createMap("list", areaList));
         String result = JsonUtil.obj2ApiJson(obj, "description", "siteType", "sodType");
         WebUtil.printApi(response, result);
     }

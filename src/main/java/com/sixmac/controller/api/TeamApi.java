@@ -60,6 +60,7 @@ public class TeamApi extends CommonController {
      * @apiName team.list
      * @apiGroup team
      * @apiParam {String} name 球队名字
+     * @apiParam {Long} cityId 城市id <必传/>
      * @apiParam {Integer} pageNum 当前页
      * @apiParam {Integer} pageSize 每页显示数
      *
@@ -81,11 +82,12 @@ public class TeamApi extends CommonController {
     @RequestMapping(value = "/list")
     public void list(HttpServletResponse response,
                      String name,
+                     Long cityId,
                      Integer pageNum,
                      Integer pageSize) {
 
 
-        Page<Team> page = teamService.page(name, pageNum, pageSize);
+        Page<Team> page = teamService.page(name, cityId, pageNum, pageSize);
         List<Team> list = page.getContent();
         for (Team team : list) {
             team.setNum(team.getBattleNum() + team.getDeclareNum());
