@@ -43,6 +43,7 @@ public class DateUtils {
 
 //		System.out.println(longToString(System.currentTimeMillis(),"MM月-dd日"));
 
+		System.out.println(chinaDayOfWeekAndAM(stringToDate("2016-08-20 11:00:00","yyyy-MM-dd HH:mm:ss")));
 		System.out.println(stringToDate("2016-06-06 11:00:00","yyyy-MM-dd HH:mm:ss"));
 		System.out.println((dateToDateWithFormat(new Date(),"yyyy-MM-dd HH:mm:ss").getTime() - dateToDateWithFormat(new Date(),"yyyy-MM-dd").getTime())  / 1000 / 3600);
 	}

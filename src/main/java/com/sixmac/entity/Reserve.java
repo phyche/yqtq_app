@@ -37,7 +37,7 @@ public class Reserve extends BaseEntity {
     private Long cityId;
 
     @Column(name = "match_type")
-    private Integer matchType = 3;
+    private Integer matchType;
 
     @Column(name = "price")
     private double price;
@@ -46,7 +46,7 @@ public class Reserve extends BaseEntity {
     private Integer payment = 0;
 
     @Column(name = "start_date")
-    private Long startTime;
+    private long startTime;
 
     @Column(name = "status")
     private Integer status = 0;
@@ -58,7 +58,7 @@ public class Reserve extends BaseEntity {
     private String content;
 
     @Column(name = "joinCount")
-    private Integer joinCount;
+    private Integer joinCount = 0;
 
     @Transient
     private Integer lackCount;
@@ -74,6 +74,9 @@ public class Reserve extends BaseEntity {
 
     @Column(name = "type")
     private Integer type;
+
+    @Transient
+    private double distance;
 
     /*@Transient
     private Map<String, Object> stadiumMap = new HashMap<String, Object>();*/
@@ -237,4 +240,12 @@ public class Reserve extends BaseEntity {
     public void setStadiumMap(Map<String, Object> stadiumMap) {
         this.stadiumMap = stadiumMap;
     }*/
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
 }

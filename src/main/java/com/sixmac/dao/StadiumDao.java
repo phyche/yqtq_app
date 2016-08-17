@@ -11,8 +11,8 @@ import java.util.List;
  */
 public interface StadiumDao extends JpaRepository<Stadium, Long>, JpaSpecificationExecutor<Stadium> {
 
-    //根据区域、类型筛选场地
+    /*//根据区域、类型筛选场地
     @Query("select a from Stadium a where a.cityId = ?1 and a.type = ?2")
-    public List<Stadium> findByArea(Long area,Integer type);
+    public List<Stadium> findByArea(Long area,Integer type);*/
 
 }

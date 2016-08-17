@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface StadiumService extends ICommonService<Stadium> {
 
-    //根据区域、类型筛选场地
-    public Page<Stadium> page(Long areaId, Integer type, Integer pageNum, Integer pageSize);
+    /*//根据区域、类型筛选场地
+    public List<Stadium> page(Integer type);*/
 
 }

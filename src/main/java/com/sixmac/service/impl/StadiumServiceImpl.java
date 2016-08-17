@@ -3,6 +3,7 @@ package com.sixmac.service.impl;
 import com.sixmac.core.Constant;
 import com.sixmac.dao.StadiumDao;
 import com.sixmac.entity.Stadium;
+import com.sixmac.entity.TeamRace;
 import com.sixmac.service.StadiumService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -73,39 +77,15 @@ public class StadiumServiceImpl implements StadiumService {
         }
     }
 
-    @Override
-    public Page<Stadium> page(final Long areaId, final Integer type, Integer pageNum, Integer pageSize) {
+    /*@Override
+    public List<Stadium> page(final Integer type) {
+        EntityManager em = factory.createEntityManager();
 
-        PageRequest pageRequest = new PageRequest(pageNum - 1, pageSize, Sort.Direction.DESC, "id");
+        String sql = "select a from Site where a.type in (" + type + ") and a.stadium.id is not null";
+        Query query = em.createQuery(sql);
+        //List<Stadium> list = (List<Stadium>) query.getResultList();
 
-        Page<Stadium> page = stadiumDao.findAll(new Specification<Stadium>() {
-            @Override
-            public Predicate toPredicate(Root<Stadium> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                Predicate result = null;
-                List<Predicate> predicateList = new ArrayList<Predicate>();
-
-                if (areaId != null) {
-                    Predicate pre = cb.equal(root.get("areaId").as(Long.class), areaId);
-                    predicateList.add(pre);
-                }
-
-                /*if (type != null) {
-                    Predicate pre = cb.equal(root.get("type").as(Integer.class), type);
-                    predicateList.add(pre);
-                }*/
-                if (predicateList.size() > 0) {
-                    result = cb.and(predicateList.toArray(new Predicate[]{}));
-                }
-
-                if (result != null) {
-                    query.where(result);
-                }
-                return query.getGroupRestriction();
-            }
-
-        }, pageRequest);
-
-        return page;
-    }
+        //return list;
+    }*/
 
 }

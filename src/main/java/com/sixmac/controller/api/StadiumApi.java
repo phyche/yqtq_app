@@ -4,6 +4,8 @@ import com.sixmac.controller.common.CommonController;
 import com.sixmac.core.ErrorCode;
 import com.sixmac.core.bean.Result;
 import com.sixmac.entity.*;
+import com.sixmac.entity.vo.GirlImageVo;
+import com.sixmac.entity.vo.NumVo;
 import com.sixmac.entity.vo.TimeVo;
 import com.sixmac.service.*;
 import com.sixmac.utils.*;
@@ -75,7 +77,6 @@ public class StadiumApi extends CommonController {
      * @apiParam {Double} longitude 经度  <必传/>
      * @apiParam {Double} latitude 纬度  <必传/>
      * @apiParam {Long} cityId 城市ID
-     * @apiParam {Long} areaId 区域ID
      *
      * @apiSuccess {Object}  list 区域列表
      * @apiSuccess {Integer} list.id 区域id
@@ -83,6 +84,7 @@ public class StadiumApi extends CommonController {
      * @apiSuccess {String} list.stadiumList 区域球场
      * @apiSuccess {String} list.stadiumList.id 球场id
      * @apiSuccess {String} list.stadiumList.name 球场名称
+     * @apiSuccess {Double} list.stadiumList.distance 球场距离
      * @apiSuccess {Integer} list.stadiumList.type 球场类型 （0:私人球场 1:公共球场）
      * @apiSuccess {Integer} list.stadiumList.park 是否有停车场 (0:无 1:免费 2:收费)
      * @apiSuccess {String} list.stadiumList.light 灯光类型
@@ -97,7 +99,6 @@ public class StadiumApi extends CommonController {
                      Long cityId,
                      Double longitude,
                      Double latitude,
-                     Long areaId,
                      Integer type) throws IOException {
 
         if (null == latitude || longitude == null) {
@@ -105,8 +106,21 @@ public class StadiumApi extends CommonController {
             return;
         }
 
-        Page<Stadium> page = stadiumService.page(areaId, type, 1, 100);
-        List<Stadium> stadiumList = page.getContent();
+        List<Stadium> stadiumList = new ArrayList<Stadium>();
+        if (type == null) {
+            stadiumList = stadiumService.findAll();
+        }else {
+            List<Site> siteList = siteService.page(type);
+            for (Site site : siteList) {
+                stadiumList.add(site.getStadium());
+            }
+            for (int i = 0; i < stadiumList.size(); i++) {
+                Stadium stadium = stadiumList.get(i);
+                if (stadiumList.contains(stadium)) {
+                    stadiumList.remove(i);
+                }
+            }
+        }
         List<Area> areaList = areaService.getByCityId(cityId);
         for (Area area : areaList) {
             for (Stadium stadium : stadiumList) {
@@ -115,7 +129,7 @@ public class StadiumApi extends CommonController {
                     if (longitude == 0.0 && latitude == 0.0) {
                         stadium.setDistance(-1);
                     } else {
-                        stadium.setDistance(CountDistance.GetDistance(longitude, latitude, stadium.getLongitude(), stadium.getLatitude()));
+                        stadium.setDistance(CountDistance.gps2m(latitude, longitude, stadium.getLatitude(), stadium.getLongitude()));
                     }
                     if (stadium.getAvater() != null) {
                         if (StringUtils.isNotBlank(stadium.getAvater())) {
@@ -126,6 +140,12 @@ public class StadiumApi extends CommonController {
                 }
             }
         }
+
+        /*Iterator<Area> areaIterator = areaList.iterator();
+        while (areaIterator.hasNext() && areaId != areaIterator.next().getAreaId()) {
+            areaList.remove(areaIterator.next());
+        }*/
+
         /*List<Stadium> stadiumList = page.getContent();
         for (Stadium stadium : stadiumList) {
 
@@ -155,22 +175,24 @@ public class StadiumApi extends CommonController {
      * @apiName stadium.info
      * @apiGroup stadium
      * @apiParam {Long} stadiumId 球场ID  <必传/>
-     * @apiSuccess {Object}  info.stadium 球场
-     * @apiSuccess {Long} info.stadium.id 球场id
-     * @apiSuccess {String} info.stadium.name 球场名称
-     * @apiSuccess {String} info.stadium.areaName 球场地区名字
-     * @apiSuccess {String} info.stadium.address 球场地址
-     * @apiSuccess {String} info.stadium.avater 球场封面
-     * @apiSuccess {String} info.stadium.siteType 场地类型
-     * @apiSuccess {String} info.stadium.sodType 草皮类型
-     * @apiSuccess {String} info.stadium.light 灯光
-     * @apiSuccess {Integer} info.stadium.park 停车场（0：有停车场 1；没有停车场）
-     * @apiSuccess {String} info.stadium.giving 赠送
-     * @apiSuccess {String} info.stadium.description 球场简介
-     * @apiSuccess {Object} info.time 时间
-     * @apiSuccess {String} info.time.week 星期
-     * @apiSuccess {String} info.time.date 日期
-     * @apiSuccess {Long} info.time.time 具体时间
+     * @apiSuccess {Object}  stadiumInfo 球场
+     * @apiSuccess {Object}  stadiumInfo.stadium 球场详情
+     * @apiSuccess {Long} stadiumInfo.stadium.id 球场id
+     * @apiSuccess {String} stadiumInfo.stadium.name 球场名称
+     * @apiSuccess {String} stadiumInfo.stadium.mobile 球场联系方式
+     * @apiSuccess {String} stadiumInfo.stadium.areaName 球场地区名字
+     * @apiSuccess {String} stadiumInfo.stadium.address 球场地址
+     * @apiSuccess {String} stadiumInfo.stadium.avater 球场封面
+     * @apiSuccess {Integer} stadiumInfo.stadium.siteType 场地类型 (0:室内 1:室外)
+     * @apiSuccess {String} stadiumInfo.stadium.sodType 草皮类型
+     * @apiSuccess {String} stadiumInfo.stadium.light 灯光
+     * @apiSuccess {Integer} stadiumInfo.stadium.park 停车场（ 0:无 1:免费 2:收费）
+     * @apiSuccess {String} stadiumInfo.stadium.giving 赠送
+     * @apiSuccess {String} stadiumInfo.stadium.description 球场简介
+     * @apiSuccess {Object} stadiumInfo.time 时间
+     * @apiSuccess {String} stadiumInfo.time.week 星期
+     * @apiSuccess {String} stadiumInfo.time.date 日期
+     * @apiSuccess {Long} stadiumInfo.time.time 具体时间
      */
     @RequestMapping(value = "/info")
     public void info(HttpServletResponse response, Long stadiumId) throws ParseException {
@@ -183,24 +205,28 @@ public class StadiumApi extends CommonController {
         Map<String, Object> map = new HashMap<String, Object>();
 
         Stadium stadium = stadiumService.getById(stadiumId);
+        if (stadium.getType() == 0) {
+            stadium.setMobile(userService.getById(stadium.getUserId()).getMobile());
+        }
         stadium.setAreaName(areaService.getByAreaId(stadium.getAreaId()).getArea());
         if (StringUtils.isNotBlank(stadium.getAvater())) {
             stadium.setAvater(ConfigUtil.getString("upload.url") + stadium.getAvater());
         }
 
-        if (stadiumService.getById(stadiumId).getType() == 1) {
+        List<TimeVo> list = new ArrayList<TimeVo>();
+        if (stadiumService.getById(stadiumId).getType() == 0) {
 
             String week = null;
             String date = null;
             Long time = null;
 
-            List<TimeVo> list = new ArrayList<TimeVo>();
+
             for (int i = 0; i < 7; i++) {
                 TimeVo timeVo = new TimeVo();
 
                 time = DateUtils.dateAddDay(DateUtils.longToDate(System.currentTimeMillis(), "yyyy-MM-dd"), i).getTime();
-                week = DateUtils.dateToStringWithFormat(DateUtils.dateAddDay(DateUtils.longToDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss"), i), "MM月dd日");
-                date = DateUtils.chinaDayOfWeek(DateUtils.dateAddDay(DateUtils.longToDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss"), i));
+                date = DateUtils.dateToStringWithFormat(DateUtils.dateAddDay(DateUtils.longToDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss"), i), "MM月dd日");
+                week = DateUtils.chinaDayOfWeek(DateUtils.dateAddDay(DateUtils.longToDate(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss"), i));
 
                 timeVo.setDate(date);
                 timeVo.setWeek(week);
@@ -208,12 +234,11 @@ public class StadiumApi extends CommonController {
 
                 list.add(timeVo);
             }
-            map.put("time", list);
-
         }
+        map.put("time", list);
 
         map.put("stadium", stadium);
-        Result obj = new Result(true).data(createMap("info", map));
+        Result obj = new Result(true).data(createMap("stadiumInfo", map));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
@@ -287,6 +312,8 @@ public class StadiumApi extends CommonController {
         reserve.setStartTime(time);
         reserve.setTitle(title);
         reserve.setType(1);
+        reserve.setCityId(stadium.getCityId());
+        reserve.setPayStatus(1);
         reserveService.create(reserve);
 
         UserReserve userReserve = new UserReserve();
@@ -306,10 +333,12 @@ public class StadiumApi extends CommonController {
      * @apiGroup stadium
      * @apiParam {Long} stadiumId 球场ID <必传/>
      * @apiParam {Long} time 当天时间戳 <必传/>
-     * @apiSuccess {Object}  site 场地
-     * @apiSuccess {String}  site.code 场地编号
-     * @apiSuccess {Integer} site.type 场地类型  N人制
-     * @apiSuccess {String} site.numList 预定字符串 (0：不可预定 1：可预订)
+     *
+     * @apiSuccess {Object}  list 场地
+     * @apiSuccess {String}  list.code 场地编号
+     * @apiSuccess {Integer} list.type 场地类型  N人制
+     * @apiSuccess {String} list.numList 预定字符串
+     * @apiSuccess {String} list.numList.status 状态 (0：不可预定 1：可预订)
      */
     @RequestMapping(value = "/siteSelect")
     public void siteSelect(HttpServletResponse response, Long time, Long stadiumId) {
@@ -319,32 +348,55 @@ public class StadiumApi extends CommonController {
             return;
         }
 
-        Map<String, Object> map = new HashMap<String, Object>();
-        List<String> list = new ArrayList<String>();
+        //Map<String, Object> map = new HashMap<String, Object>();
+        List<NumVo> list = new ArrayList<NumVo>();
+        NumVo numVo = null;
 
         // 查询所有可用场地
         List<Site> siteList = siteService.findByStadiumId(stadiumId);
         for (Site site : siteList) {
             // 根据场地id查询所有被预定的场地的时间
-            list = new ArrayList<String>();
-            for (int i = 8; i < 24; i++) {
+            list = new ArrayList<NumVo>();
+            for (int i = 8; i < 24; i+=2) {
 
+                numVo = new NumVo();
                 SiteTime siteTime = siteTimeService.findBySiteAndTime(site.getId(), time + i * 1000 * 3600);
                 SiteManage siteManage = siteManageService.findBySiteAndTime(site.getId(), time + i * 1000 * 3600);
                 if (siteTime == null && siteManage == null) {
-                    list.add("1");
+                    numVo.setStatus(1);
+                    list.add(numVo);
                 } else {
-                    list.add("0");
+                    numVo.setStatus(0);
+                    list.add(numVo);
                 }
             }
             site.setNumList(list);
 
         }
 
-        map.put("siteList", siteList);
+        //map.put("siteList", siteList);
 
-        Result obj = new Result(true).data(createMap("site", map));
+        Result obj = new Result(true).data(createMap("list", siteList));
         String result = JsonUtil.obj2ApiJson(obj, "stadium");
+        WebUtil.printApi(response, result);
+    }
+
+    /**
+     *
+     * @api {post} /api/stadium/insurance 保险
+     * @apiName stadium.insurance
+     * @apiGroup stadium
+     *
+     * @apiSuccess {Object}  list 保险
+     * @apiSuccess {Long} list.id 预定id
+     * @apiSuccess {String} list.name 保险名字
+     * @apiSuccess {Double} list.price 保险价格
+     *
+     */
+    public void insurance(HttpServletResponse response) {
+        List<SysInsurance> sysInsurances = sysInsuranceService.findAll();
+        Result obj = new Result(true).data(createMap("list", sysInsurances));
+        String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
 

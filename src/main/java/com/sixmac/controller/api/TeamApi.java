@@ -128,6 +128,7 @@ public class TeamApi extends CommonController {
      * @apiSuccess {Object}  teamInfo.userList 队员
      * @apiSuccess {Long} teamInfo.userList.id 队员id
      * @apiSuccess {String} teamInfo.userList.avater 队员头像
+     * @apiSuccess {String} teamInfo.userList.nickname 队员昵称
      *
      */
     @RequestMapping(value = "/info")
@@ -191,7 +192,7 @@ public class TeamApi extends CommonController {
         map.put("userList",userList);
 
         Result obj = new Result(true).data(createMap("teamInfo",map));
-        String result = JsonUtil.obj2ApiJson(obj,"declareNum","battleNum","sum","nickname");
+        String result = JsonUtil.obj2ApiJson(obj,"declareNum","battleNum","sum");
         WebUtil.printApi(response, result);
     }
 

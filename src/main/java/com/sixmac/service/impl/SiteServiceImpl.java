@@ -11,6 +11,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import java.util.List;
 
 /**
@@ -21,6 +24,9 @@ public class SiteServiceImpl implements SiteService {
 
     @Autowired
     private SiteDao siteDao;
+
+    @Autowired
+    private EntityManagerFactory factory;
 
     @Override
     public List<Site> findAll() {
@@ -70,5 +76,16 @@ public class SiteServiceImpl implements SiteService {
     @Override
     public List<Site> findByStadiumId(Long stadiumId) {
         return siteDao.findByStadiumId(stadiumId);
+    }
+
+    @Override
+    public List<Site> page(Integer type) {
+        /*EntityManager em = factory.createEntityManager();
+
+        String sql = "select a from Site where a.type ?= (" + type + ") and a.stadium.id is not null";
+        Query query = em.createQuery(sql);
+        List<Site> list = (List<Site>) query.getResultList();*/
+
+        return siteDao.findByType(type);
     }
 }

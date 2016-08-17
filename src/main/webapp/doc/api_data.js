@@ -2547,6 +2547,20 @@ define({ "api": [
           },
           {
             "group": "Parameter",
+            "type": "Double",
+            "optional": false,
+            "field": "longitude",
+            "description": "<p>经度  &lt;必传/&gt;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Double",
+            "optional": false,
+            "field": "latitude",
+            "description": "<p>纬度  &lt;必传/&gt;</p>"
+          },
+          {
+            "group": "Parameter",
             "type": "Integer",
             "optional": false,
             "field": "pageNum",
@@ -2634,6 +2648,13 @@ define({ "api": [
             "optional": false,
             "field": "list.stadium",
             "description": "<p>球场</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "list.stadium.distance",
+            "description": "<p>距离</p>"
           },
           {
             "group": "Success 200",
@@ -3925,112 +3946,126 @@ define({ "api": [
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "info.stadium",
+            "field": "stadiumInfo",
             "description": "<p>球场</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "stadiumInfo.stadium",
+            "description": "<p>球场详情</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "info.stadium.id",
+            "field": "stadiumInfo.stadium.id",
             "description": "<p>球场id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "info.stadium.name",
+            "field": "stadiumInfo.stadium.name",
             "description": "<p>球场名称</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "info.stadium.areaName",
+            "field": "stadiumInfo.stadium.mobile",
+            "description": "<p>球场联系方式</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "stadiumInfo.stadium.areaName",
             "description": "<p>球场地区名字</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "info.stadium.address",
+            "field": "stadiumInfo.stadium.address",
             "description": "<p>球场地址</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "info.stadium.avater",
+            "field": "stadiumInfo.stadium.avater",
             "description": "<p>球场封面</p>"
           },
           {
             "group": "Success 200",
-            "type": "String",
+            "type": "Integer",
             "optional": false,
-            "field": "info.stadium.siteType",
-            "description": "<p>场地类型</p>"
+            "field": "stadiumInfo.stadium.siteType",
+            "description": "<p>场地类型 (0:室内 1:室外)</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "info.stadium.sodType",
+            "field": "stadiumInfo.stadium.sodType",
             "description": "<p>草皮类型</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "info.stadium.light",
+            "field": "stadiumInfo.stadium.light",
             "description": "<p>灯光</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "info.stadium.park",
-            "description": "<p>停车场（0：有停车场 1；没有停车场）</p>"
+            "field": "stadiumInfo.stadium.park",
+            "description": "<p>停车场（ 0:无 1:免费 2:收费）</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "info.stadium.giving",
+            "field": "stadiumInfo.stadium.giving",
             "description": "<p>赠送</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "info.stadium.description",
+            "field": "stadiumInfo.stadium.description",
             "description": "<p>球场简介</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "info.time",
+            "field": "stadiumInfo.time",
             "description": "<p>时间</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "info.time.week",
+            "field": "stadiumInfo.time.week",
             "description": "<p>星期</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "info.time.date",
+            "field": "stadiumInfo.time.date",
             "description": "<p>日期</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "info.time.time",
+            "field": "stadiumInfo.time.time",
             "description": "<p>具体时间</p>"
           }
         ]
@@ -4081,13 +4116,6 @@ define({ "api": [
             "optional": false,
             "field": "cityId",
             "description": "<p>城市ID</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Long",
-            "optional": false,
-            "field": "areaId",
-            "description": "<p>区域ID</p>"
           }
         ]
       }
@@ -4136,6 +4164,13 @@ define({ "api": [
             "optional": false,
             "field": "list.stadiumList.name",
             "description": "<p>球场名称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "list.stadiumList.distance",
+            "description": "<p>球场距离</p>"
           },
           {
             "group": "Success 200",
@@ -4709,29 +4744,36 @@ define({ "api": [
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "site",
+            "field": "list",
             "description": "<p>场地</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "site.code",
+            "field": "list.code",
             "description": "<p>场地编号</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "site.type",
+            "field": "list.type",
             "description": "<p>场地类型  N人制</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "site.numList",
-            "description": "<p>预定字符串 (0：不可预定 1：可预订)</p>"
+            "field": "list.numList",
+            "description": "<p>预定字符串</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.numList.status",
+            "description": "<p>状态 (0：不可预定 1：可预订)</p>"
           }
         ]
       }
@@ -5183,6 +5225,13 @@ define({ "api": [
             "optional": false,
             "field": "teamInfo.userList.avater",
             "description": "<p>队员头像</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "teamInfo.userList.nickname",
+            "description": "<p>队员昵称</p>"
           }
         ]
       }

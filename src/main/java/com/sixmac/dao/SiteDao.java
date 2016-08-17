@@ -14,4 +14,7 @@ public interface SiteDao extends JpaRepository<Site, Long>, JpaSpecificationExec
 
     @Query("select a from Site a where a.stadium.id = ?1 ")
     public List<Site> findByStadiumId(Long stadiumId);
+
+    @Query("select a from Site a where a.type = ?1 and a.stadium.id != null ")
+    public List<Site> findByType(Integer type);
 }

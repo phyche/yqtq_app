@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletResponse;
+import java.text.ParseException;
 import java.util.*;
 
 /**
@@ -70,8 +71,11 @@ public class OrderBallApi extends CommonController {
      * @apiParam {Integer} timelimit 时间期限
      * @apiParam {Integer} type 球赛类型 N人制 N代表数量
      * @apiParam {Long} areaId 区域ID
+     * @apiParam {Double} longitude 经度  <必传/>
+     * @apiParam {Double} latitude 纬度  <必传/>
      * @apiParam {Integer} pageNum 当前页
      * @apiParam {Integer} pageSize 每页显示数
+     *
      * @apiSuccess {Object}  list 约球列表
      * @apiSuccess {Integer} list.id 约球id
      * @apiSuccess {String} list.content 约球内容
@@ -82,6 +86,7 @@ public class OrderBallApi extends CommonController {
      * @apiSuccess {String} list.user.nickname 创建人昵称
      * @apiSuccess {String} list.user.avater 创建人头像
      * @apiSuccess {Object} list.stadium 球场
+     * @apiSuccess {Double} list.stadium.distance 距离
      * @apiSuccess {String} list.stadium.name 球场名字
      * @apiSuccess {Integer} list.stadium.type 球场类型 (0:私人球场 1:公共球场)
      * @apiSuccess {Long} list.startTime 开始时间
@@ -92,22 +97,31 @@ public class OrderBallApi extends CommonController {
      */
     @RequestMapping(value = "/list")
     public void list(HttpServletResponse response,
+                     Double longitude,
+                     Double latitude,
                      Integer timelimit,
                      Integer type,
                      Long areaId,
                      Integer pageNum,
-                     Integer pageSize) {
+                     Integer pageSize) throws ParseException {
 
         //initPageable(pageNum, pageSize);
         Page<Reserve> page = reserveService.page(timelimit, type, areaId, pageNum, pageSize);
         List<Reserve> list = page.getContent();
         for (Reserve reserve : list) {
-            reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
+            if (longitude == 0.0 && latitude == 0.0) {
+                reserve.getStadium().setDistance(-1);
+            } else {
+                reserve.getStadium().setDistance(CountDistance.gps2m(latitude, longitude, reserve.getStadium().getLatitude(), reserve.getStadium().getLongitude()));
+            }
+            reserve.setContent(DateUtils.chinaDayOfWeekAndAM(DateUtils.longToDate(reserve.getStartTime(),"yyyy-MM-dd HH:mm:ss")) + "," + reserve.getStadium().getName() + "约球了");
             if (StringUtils.isNotBlank(reserve.getUser().getAvater())) {
                 reserve.getUser().setAvater(ConfigUtil.getString("upload.url") + reserve.getUser().getAvater());
             }
-            reserve.setJoinCount(reserve.getUserReservelist() != null ? reserve.getUserReservelist().size() : 0);
-            reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
+            if (reserve.getType() == 0) {
+                reserve.setJoinCount(reserve.getUserReservelist() != null ? reserve.getUserReservelist().size() : 0);
+                reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
+            }
             if (StringUtils.isNotBlank(reserve.getUser().getAvater())) {
                 reserve.getUser().setAvater(ConfigUtil.getString("upload.url") + reserve.getUser().getAvater());
             }
@@ -167,7 +181,12 @@ public class OrderBallApi extends CommonController {
             }
 
             Reserve reserve = reserveService.getById(reserveId);
-            reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
+            reserve.setContent(DateUtils.chinaDayOfWeekAndAM(DateUtils.longToDate(reserve.getStartTime(),"yyyy-MM-dd HH:mm:ss")) + "," + reserve.getStadium().getName() + "约球了");
+
+            if (reserve.getType() == 0) {
+                reserve.setJoinCount(reserve.getUserReservelist() != null ? reserve.getUserReservelist().size() : 0);
+                reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
+            }
 
             if (StringUtils.isNotBlank(reserve.getUser().getAvater())) {
                 reserve.getUser().setAvater(ConfigUtil.getString("upload.url") + reserve.getUser().getAvater());
@@ -226,7 +245,7 @@ public class OrderBallApi extends CommonController {
      * @apiSuccess {Long} list.startTime 开始时间
      */
     @RequestMapping(value = "/orderList")
-    public void orderList(HttpServletResponse response, Long playerId) {
+    public void orderList(HttpServletResponse response, Long playerId) throws ParseException {
 
         if (null == playerId) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -243,9 +262,11 @@ public class OrderBallApi extends CommonController {
             reserveList.add(reserveService.getById(userReserve.getReserveId()));
         }
         for (Reserve reserve : reserveList) {
-            reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
-            reserve.setJoinCount(reserve.getUserReservelist() != null ? reserve.getUserReservelist().size() : 0);
-            reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
+            reserve.setContent(DateUtils.chinaDayOfWeekAndAM(DateUtils.longToDate(reserve.getStartTime(),"yyyy-MM-dd HH:mm:ss")) + "," + reserve.getStadium().getName() + "约球了");
+            if (reserve.getType() == 0) {
+                reserve.setJoinCount(reserve.getUserReservelist() != null ? reserve.getUserReservelist().size() : 0);
+                reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
+            }
             if (StringUtils.isNotBlank(reserve.getUser().getAvater())) {
                 reserve.getUser().setAvater(ConfigUtil.getString("upload.url") + reserve.getUser().getAvater());
             }

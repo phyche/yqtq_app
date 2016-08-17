@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletResponse;
+import java.text.ParseException;
 import java.util.*;
 
 /**
@@ -74,7 +75,7 @@ public class PlayIndexApi extends CommonController {
      * @apiSuccess {Long} list.createDate 创建时间
      */
     @RequestMapping(value = "orderballList")
-    public void orderballList(HttpServletResponse response, Long userId) {
+    public void orderballList(HttpServletResponse response, Long userId) throws ParseException {
 
         if (null == userId ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -88,7 +89,10 @@ public class PlayIndexApi extends CommonController {
         Reserve reserve = null;
         for (UserReserve userReserve : userReserves) {
             reserve = reserveService.getById(userReserve.getReserveId());
-            reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
+            reserve.setContent(DateUtils.chinaDayOfWeekAndAM(DateUtils.longToDate(reserve.getStartTime(),"yyyy-MM-dd HH:mm:ss")) + "," + reserve.getStadium().getName() + "约球了");
+            if (reserve.getType() == 0) {
+                reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
+            }
             if (reserve.getStadium() == null) {
                 reserve.setStadium(new Stadium());
             }
@@ -169,15 +173,11 @@ public class PlayIndexApi extends CommonController {
      *
      */
     @RequestMapping(value = "/notice")
-    public void notice(HttpServletResponse response) {
+    public void notice(HttpServletResponse response) throws ParseException {
 
         List<Reserve> list = reserveService.findAll();
         Reserve reserve = list.get(list.size()-1);
-        if (reserve.getType() == 0) {
-            reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
-        }else if (reserve.getType() == 1) {
-            reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
-        }
+        reserve.setContent(DateUtils.chinaDayOfWeekAndAM(DateUtils.longToDate(reserve.getStartTime(),"yyyy-MM-dd HH:mm:ss")) + "," + reserve.getStadium().getName() + "约球了");
 
 
         Result obj = new Result(true).data(createMap("reserve",reserve));

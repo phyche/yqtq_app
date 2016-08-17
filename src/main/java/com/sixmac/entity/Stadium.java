@@ -16,6 +16,8 @@ public class Stadium extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "area_id",referencedColumnName = "area_id")
     private Area area;*/
+    @Column(name = "stadium_user_id")
+    private Long userId;
 
     @Column(name = "city_id")
     private Long cityId;
@@ -70,6 +72,9 @@ public class Stadium extends BaseEntity{
 
     @Transient
     private Double price;
+
+    @Transient
+    private String mobile;
 
     public String getCityName() {
         return cityName;
@@ -213,5 +218,21 @@ public class Stadium extends BaseEntity{
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 }

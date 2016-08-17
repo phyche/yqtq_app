@@ -1,5 +1,7 @@
 package com.sixmac.entity;
 
+import com.sixmac.entity.vo.NumVo;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -24,7 +26,7 @@ public class Site extends BaseEntity{
     private Stadium stadium;
 
     @Transient
-    private List<String> numList;
+    private List<NumVo> numList;
 
     public String getCode() {
         return code;
@@ -58,11 +60,11 @@ public class Site extends BaseEntity{
         this.stadium = stadium;
     }
 
-    public List<String> getNumList() {
+    public List<NumVo> getNumList() {
         return numList;
     }
 
-    public void setNumList(List<String> numList) {
+    public void setNumList(List<NumVo> numList) {
         this.numList = numList;
     }
 }
