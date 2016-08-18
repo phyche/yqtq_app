@@ -13,6 +13,6 @@ import java.util.List;
 public interface MessageWatchingDao extends JpaRepository<MessageWatching, Long> {
 
     //根据用户id查询邀请用户看球消息
-    @Query("select a from MessageWatching a where a.toUser.id = ?1 ")
+    @Query("select a from MessageWatching a where a.toUser.id = ?1 order by a.createDate desc ")
     public List<MessageWatching> findByToUserId(Long userId);
 }

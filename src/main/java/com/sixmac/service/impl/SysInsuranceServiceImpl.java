@@ -66,4 +66,9 @@ public class SysInsuranceServiceImpl implements SysInsuranceService {
             deleteById(id);
         }
     }
+
+    @Override
+    public List<SysInsurance> findList() {
+        return sysInsuranceDao.findList(1);
+    }
 }

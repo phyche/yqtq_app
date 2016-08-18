@@ -335,6 +335,7 @@ public class StadiumApi extends CommonController {
      * @apiParam {Long} time 当天时间戳 <必传/>
      *
      * @apiSuccess {Object}  list 场地
+     * @apiSuccess {Long}  list.id 场地id
      * @apiSuccess {String}  list.code 场地编号
      * @apiSuccess {Integer} list.type 场地类型  N人制
      * @apiSuccess {String} list.numList 预定字符串
@@ -393,311 +394,165 @@ public class StadiumApi extends CommonController {
      * @apiSuccess {Double} list.price 保险价格
      *
      */
+    @RequestMapping(value = "/insurance")
     public void insurance(HttpServletResponse response) {
-        List<SysInsurance> sysInsurances = sysInsuranceService.findAll();
+        List<SysInsurance> sysInsurances = sysInsuranceService.findList();
         Result obj = new Result(true).data(createMap("list", sysInsurances));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
 
     /**
-     * 完成,缺场地编号时间等，同私人球场详情
+     * 完成
      *
-     * @api {post} /api/stadium/siteOrder 场地预订
-     * @apiName stadium.siteOrder
+     * @api {post} /api/stadium/pay 支付订单
+     * @apiName stadium.pay
      * @apiGroup stadium
-     * @apiParam {Long} siteId 场地ID <必传/>
-     * @apiParam {Integer} status 运动保险状态（0：不买  1：买） <必传/>
-     * @apiParam {Long} time 时间戳  <必传/>
-     * @apiParam {Integer} start 开始时间点  <必传/>
-     * @apiParam {Integer} end 结束时间点  <必传/>
-     * @apiSuccess {Object}  siteIfo.siteTime 场地预定
-     * @apiSuccess {Long} siteIfo.siteTime.id 预定id
-     * @apiSuccess {Object} siteIfo.siteTime.site 预定场地
-     * @apiSuccess {String} siteIfo.siteTime.site.code 场地编号
-     * @apiSuccess {String} siteIfo.siteTime.site.type 场地类型
-     * @apiSuccess {Long} siteIfo.siteTime.startTime 开始时间
-     * @apiSuccess {Long} siteIfo.siteTime.endTime 结束时间
-     * @apiSuccess {Object} siteIfo.siteTime.site.stadium 预定球场
-     * @apiSuccess {String} siteIfo.siteTime.site.stadium.name 预定球场名字
-     * @apiSuccess {String} siteIfo.area 预定球场地区
+     * @apiParam {Long} siteId 预定场地ID <必传/>
+     * @apiParam {Long} userId 用户ID <必传/>
+     * @apiParam {Long} insuranceId 保险ID
+     * @apiParam {Integer} num 购买保险数
+     * @apiSuccess {Object}  pay.sysInsurance 保险
+     * @apiSuccess {Long} pay.sysInsurance.id 保险id
+     * @apiSuccess {Integer} pay.sysInsurance.name 保险名称
+     * @apiSuccess {String} pay.sysInsurance.price 保险金额
+     * @apiSuccess {Integer} pay.siteMoney 场地费
+     * @apiSuccess {Object}  pay.vipNum 会员等级
+     * @apiSuccess {Integer} pay.preferente 会员折扣
+     * @apiSuccess {String} pay.money 总金额
+     *
      */
-    @RequestMapping(value = "/siteOrder")
-    public void siteOrder(HttpServletResponse response,
-                          Long siteId,
-                          Integer status,
-                          Long time,
-                          Integer start,
-                          Integer end) {
+    @RequestMapping(value = "/pay")
+    public void pay(HttpServletResponse response,
+                    Long userId,
+                    Long siteId,
+                    Long insuranceId,
+                    Integer num,
+                    Double preferente,
+                    Double money) {
 
-        if (null == siteId || status == null || time == null || start == null || end == null) {
+        if (null == userId || siteId == null) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
 
         Map<String, Object> map = new HashMap<String, Object>();
 
-        Site site = siteService.getById(siteId);
+        preferente = 10.0;
+        if (userService.getById(userId).getVipNum() != 0) {
+            preferente = vipLevelService.findBylevel(userService.getById(userId).getVipNum()).getPreferente();
+        }
 
+        SysInsurance sysInsurance = null;
+        if (insuranceId == null) {
+            money = siteService.getById(siteId).getPrice() * preferente / 10;
+
+        } else {
+            sysInsurance = sysInsuranceService.getById(insuranceId);
+            money = (siteService.getById(siteId).getPrice() + sysInsurance.getPrice() * num) * preferente / 10;
+        }
+
+        map.put("preferente", preferente);
+        map.put("money", money);
+        map.put("siteMoney", siteService.getById(siteId).getPrice());
+        map.put("vipNum", userService.getById(userId).getVipNum());
+        map.put("sysInsurance", sysInsurance);
+
+        Result obj = new Result(true).data(createMap("pay", map));
+        String result = JsonUtil.obj2ApiJson(obj);
+        WebUtil.printApi(response, result);
+    }
+
+    /**
+     * 完成
+     *
+     * @api {post} /api/stadium/payConfirm 确认支付订单
+     * @apiName stadium.payConfirm
+     * @apiGroup stadium
+     * @apiParam {Long} siteId 预定场地ID <必传/>
+     * @apiParam {Long} userId 用户ID <必传/>
+     * @apiParam {Long} time 时间戳  <必传/>
+     * @apiParam {Integer} start 开始时间点  <必传/>
+     * @apiParam {Integer} end 结束时间点  <必传/>
+     * @apiParam {Integer} type 支付类型（0：全额支付  1：AA支付） <必传/>
+     * @apiParam {Double} price 金额 <必传/>
+     * @apiParam {Long} insuranceId 保险ID
+     * @apiParam {Integer} status 状态（0：散客  1：球队） <必传/>
+     * @apiSuccess {Object} order 订单
+     * @apiSuccess {Double} order.price 订单金额
+     * @apiSuccess {Long} order.sn 订单号
+     */
+    @RequestMapping(value = "/payConfirm")
+    public void payConfirm(HttpServletResponse response,
+                           Long userId,
+                           Long siteId,
+                           Integer start,
+                           Long time,
+                           Integer end,
+                           Integer type,
+                           Long insuranceId,
+                           Integer status,
+                           Double money) {
+
+        if (status == null || null == userId || siteId == null || time == null || start == null || end == null || type == null || money == null) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
+        String sn = CommonUtils.generateSn(); // 订单号
+
+        Site site = siteService.getById(siteId);
         SiteTime siteTime = new SiteTime();
         siteTime.setSite(site);
         siteTime.setStartTime(time + start * 1000 * 3600);
         siteTime.setEndTime(time + end * 1000 * 3600);
         siteTimeService.create(siteTime);
 
-        //status == 1 代表顾客要买保险
-        if (status == 1) {
-            List<SysInsurance> sysInsurances = sysInsuranceService.findAll();
-            map.put("sysInsurances", sysInsurances);
+        Reserve reserve = null;
+        ReserveTeam reserveTeam = null;
+        if (status == 0) {
+            reserve = new Reserve();
+            reserve.setStadium(siteService.getById(siteId).getStadium());
+            reserve.setSiteId(siteId);
+            reserve.setUser(userService.getById(userId));
+            if (insuranceId != null) {
+                reserve.setInsurance(sysInsuranceService.getById(insuranceId));
+            }
+            if (type == 0) {
+                //将球场预订表的支付方式设置为全额支付
+                reserve.setPayment(0);
+            } else if (type == 1) {
+                //将球场预订表的支付方式设置为AA支付
+                reserve.setPayment(1);
+            }
+            reserve.setPrice(money);
+            reserve.setMatchType(siteService.getById(siteId).getType());
+            reserve.setStartTime(siteTime.getStartTime());
+            reserve.setPayStatus(0);
+            reserve.setCityId(siteService.getById(siteId).getStadium().getCityId());
+            reserve.setType(0);
+            reserveService.create(reserve);
+        }else if (status == 1) {
+            reserveTeam = new ReserveTeam();
+            reserveTeam.setStatus(0);
+            reserveTeam.setSite(site);
+            reserveTeam.setUser(userService.getById(userId));
+            reserveTeam.setStartTime(siteTime.getStartTime());
+            if (insuranceId != null) {
+                reserveTeam.setInsurance(sysInsuranceService.getById(insuranceId));
+            }
+            reserveTeam.setPrice(money);
+            reserveTeamService.create(reserveTeam);
         }
-
-        String area = areaService.getByAreaId(site.getStadium().getAreaId()).getArea();
-        map.put("area", area);
-        map.put("siteTime", siteTime);
-
-        Result obj = new Result(true).data(createMap("siteIfo", map));
-        String result = JsonUtil.obj2ApiJson(obj);
-        WebUtil.printApi(response, result);
-    }
-
-    /**
-     * 完成
-     *
-     * @api {post} /api/stadium/pay 散客支付订单
-     * @apiName stadium.pay
-     * @apiGroup stadium
-     * @apiParam {Long} siteTimeId 预定场地ID <必传/>
-     * @apiParam {Long} userId 用户ID <必传/>
-     * @apiParam {Long} insuranceId 保险ID
-     * @apiParam {Integer} num 购买保险数
-     * @apiSuccess {Object}  payInfo.sysInsurance 保险
-     * @apiSuccess {Long} payInfo.sysInsurance.id 保险id
-     * @apiSuccess {Integer} payInfo.sysInsurance.name 保险名称
-     * @apiSuccess {String} payInfo.sysInsurance.price 保险金额
-     * @apiSuccess {Integer} payInfo.siteMoney 场地费
-     * @apiSuccess {Object}  payInfo.vipNum 会员等级
-     * @apiSuccess {Integer} payInfo.preferente 会员折扣
-     * @apiSuccess {String} payInfo.money 总金额
-     * @apiSuccess {Object}  payInfo.reserve 散客预定（约球）
-     * @apiSuccess {Long} payInfo.reserve.id 预定id
-     */
-    @RequestMapping(value = "/pay")
-    public void pay(HttpServletResponse response,
-                    Long userId,
-                    Long siteTimeId,
-                    Long insuranceId,
-                    Integer num,
-                    Double preferente,
-                    Double money) {
-
-        if (null == userId || siteTimeId == null) {
-            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
-            return;
-        }
-
-        Map<String, Object> map = new HashMap<String, Object>();
-
-        preferente = 1.0;
-        if (userService.getById(userId).getVipNum() != 0) {
-            preferente = vipLevelService.findBylevel(userService.getById(userId).getVipNum()).getPreferente();
-        }
-
-        SysInsurance sysInsurance = null;
-        if (insuranceId == null) {
-            money = siteTimeService.getById(siteTimeId).getSite().getPrice() * preferente;
-
-        } else {
-            sysInsurance = sysInsuranceService.getById(insuranceId);
-            money = (siteTimeService.getById(siteTimeId).getSite().getPrice() + sysInsurance.getPrice() * num) * preferente;
-
-            /*Insurance insurance = new Insurance();
-            insurance.setUser(userService.getById(userId));
-            insurance.setReserve(reserve);
-            insurance.setSysInsurance(sysInsurance);
-            insurance.setMoney(sysInsurance.getPrice() * num * preferente);
-            insuranceService.create(insurance);*/
-        }
-
-        Reserve reserve = new Reserve();
-        reserve.setStadium(siteTimeService.getById(siteTimeId).getSite().getStadium());
-        reserve.setSiteId(siteTimeService.getById(siteTimeId).getSite().getId());
-        reserve.setUser(userService.getById(userId));
-        reserve.setInsurance(sysInsurance);
-        reserve.setPrice(money);
-        reserve.setMatchType(siteTimeService.getById(siteTimeId).getSite().getType());
-        reserve.setStartTime(siteTimeService.getById(siteTimeId).getStartTime());
-        reserve.setPayStatus(0);
-        reserve.setCityId(siteTimeService.getById(siteTimeId).getSite().getStadium().getCityId());
-        reserve.setType(0);
-        reserveService.create(reserve);
-
-        map.put("reserve", reserve);
-        map.put("preferente", preferente);
-        map.put("money", money);
-        map.put("siteMoney", siteTimeService.getById(siteTimeId).getSite().getPrice());
-        map.put("vipNum", userService.getById(userId).getVipNum());
-        map.put("sysInsurance", sysInsurance);
-
-        Result obj = new Result(true).data(createMap("payInfo", map));
-        String result = JsonUtil.obj2ApiJson(obj);
-        WebUtil.printApi(response, result);
-    }
-
-    /**
-     * 完成
-     *
-     * @api {post} /api/stadium/payConfirm 散客确认支付订单
-     * @apiName stadium.payConfirm
-     * @apiGroup stadium
-     * @apiParam {Long} reserveId 预定ID <必传/>
-     * @apiParam {Integer} type 支付类型（0：全额支付  1：AA支付） <必传/>
-     * @apiSuccess {Object} order 订单
-     * @apiSuccess {Double} order.price 订单金额
-     * @apiSuccess {Long} order.sn 订单号
-     */
-    @RequestMapping(value = "/payConfirm")
-    public void payConfirm(HttpServletResponse response, Long reserveId, Integer type, Double money) {
-
-        if (null == reserveId || type == null) {
-            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
-            return;
-        }
-
-        Reserve reserve = reserveService.getById(reserveId);
-
-        String sn = CommonUtils.generateSn(); // 订单号
 
         Order order = new Order();
-        order.setUser(reserve.getUser());
+        order.setUser(userService.getById(userId));
         //order.setStadium(reserve.getSite().getStadium());
         order.setReserve(reserve);
+        order.setReserveTeam(reserveTeam);
         order.setPrice(reserve.getPrice());
         order.setAction(2);
         order.setSn(sn);
-        orderService.create(order);
-
-        if (type == 0) {
-            //将球场预订表的支付方式设置为全额支付
-            reserve.setPayment(0);
-        } else if (type == 1) {
-            //将球场预订表的支付方式设置为AA支付
-            reserve.setPayment(1);
-        }
-
-        // 当前没有支付接口，因此状态直接为已支付
-        PayCallBackApi.changeOrderStatus(orderService, order.getSn(), null, response);
-
-        Result obj = new Result(true).data(createMap("order", order));
-        String result = JsonUtil.obj2ApiJson(obj, "reserve", "user", "reserveTeam", "girlUser", "stadium");
-        WebUtil.printApi(response, result);
-    }
-
-    /**
-     * 完成
-     *
-     * @api {post} /api/stadium/teamPay 球队支付订单
-     * @apiName stadium.teamPay
-     * @apiGroup stadium
-     * @apiParam {Long} siteTimeId 预定场地ID <必传/>
-     * @apiParam {Long} userId 用户ID <必传/>
-     * @apiParam {Long} insuranceId 保险ID
-     * @apiParam {Integer} num 购买保险数
-     * @apiSuccess {Object}  payInfo.sysInsurance 保险
-     * @apiSuccess {String} payInfo.sysInsurance.name 保险名称
-     * @apiSuccess {Double} payInfo.sysInsurance.price 保险金额
-     * @apiSuccess {Double} payInfo.siteMoney 场地费
-     * @apiSuccess {Integer}  payInfo.vipNum 会员等级
-     * @apiSuccess {Double} payInfo.preferente 会员折扣
-     * @apiSuccess {Double} payInfo.money 总金额
-     * @apiSuccess {Object}  payInfo.reserveTeam 球队预定
-     * @apiSuccess {Long} payInfo.reserveTeam.id 预定id
-     */
-    @RequestMapping(value = "/teamPay")
-    public void teamPay(HttpServletResponse response,
-                        Long userId,
-                        Long siteTimeId,
-                        Long insuranceId,
-                        Integer num,
-                        Double preferente,
-                        Double money) {
-
-        if (null == userId || siteTimeId == null) {
-            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
-            return;
-        }
-
-        Map<String, Object> map = new HashMap<String, Object>();
-
-        preferente = 1.0;
-        if (userService.getById(userId).getVipNum() != 0) {
-            preferente = vipLevelService.findBylevel(userService.getById(userId).getVipNum()).getPreferente();
-        }
-        SysInsurance sysInsurance = null;
-        if (insuranceId == null) {
-            money = siteTimeService.getById(siteTimeId).getSite().getPrice() * preferente;
-        } else {
-            sysInsurance = sysInsuranceService.getById(insuranceId);
-            money = (siteTimeService.getById(siteTimeId).getSite().getPrice() + sysInsurance.getPrice() * num) * preferente;
-
-            /*Insurance insurance = new Insurance();
-            insurance.setUser(userService.getById(userId));
-            insurance.setReserveTeam(reserveTeam);
-            insurance.setSysInsurance(sysInsurance);
-            insurance.setMoney(sysInsurance.getPrice() * num * preferente);
-            insuranceService.create(insurance);*/
-
-        }
-
-        ReserveTeam reserveTeam = new ReserveTeam();
-        reserveTeam.setStatus(0);
-        //reserveTeam.setStadium(siteTimeService.getById(siteTimeId).getSite().getStadium());
-        reserveTeam.setSite(siteTimeService.getById(siteTimeId).getSite());
-        reserveTeam.setUser(userService.getById(userId));
-        reserveTeam.setStartTime(siteTimeService.getById(siteTimeId).getStartTime());
-        reserveTeam.setPrice(money);
-        reserveTeamService.create(reserveTeam);
-
-        map.put("reserveTeam", reserveTeam);
-        map.put("preferente", preferente);
-        map.put("money", money);
-        map.put("siteMoney", siteTimeService.getById(siteTimeId).getSite().getPrice());
-        map.put("vipNum", userService.getById(userId).getVipNum());
-        map.put("sysInsurance", sysInsurance);
-
-        Result obj = new Result(true).data(createMap("payInfo", map));
-        String result = JsonUtil.obj2ApiJson(obj);
-        WebUtil.printApi(response, result);
-    }
-
-    /**
-     * 完成
-     *
-     * @api {post} /api/stadium/teamPayConfirm 球队确认支付订单
-     * @apiName stadium.teamPayConfirm
-     * @apiGroup stadium
-     * @apiParam {Long} reserveTeamId 预定ID <必传/>
-     * @apiSuccess {Object} order 订单
-     * @apiSuccess {Double} order.price 订单金额
-     * @apiSuccess {Long} order.sn 订单号
-     */
-    @RequestMapping(value = "/teamPayConfirm")
-    public void teamPayConfirm(HttpServletResponse response, Long reserveTeamId) {
-
-        if (null == reserveTeamId) {
-            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
-            return;
-        }
-        ReserveTeam reserveTeam = reserveTeamService.getById(reserveTeamId);
-
-        String sn = CommonUtils.generateSn(); // 订单号
-
-        Order order = new Order();
-        order.setUser(reserveTeam.getUser());
-        //order.setStadium(reserveTeam.getSite().getStadium());
-        order.setPrice(reserveTeam.getPrice());
-        order.setSn(sn);
-        order.setAction(2);
-        order.setReserveTeam(reserveTeam);
         orderService.create(order);
 
         // 当前没有支付接口，因此状态直接为已支付

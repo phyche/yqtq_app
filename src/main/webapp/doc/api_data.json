@@ -4082,6 +4082,55 @@
   },
   {
     "type": "post",
+    "url": "/api/stadium/insurance",
+    "title": "保险",
+    "name": "stadium_insurance",
+    "group": "stadium",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list",
+            "description": "<p>保险</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.id",
+            "description": "<p>预定id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.name",
+            "description": "<p>保险名字</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "list.price",
+            "description": "<p>保险价格</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/StadiumApi.java",
+    "groupTitle": "stadium",
+    "sampleRequest": [
+      {
+        "url": "http://4.16.1.158:8080/yqtq_app/api/stadium/insurance"
+      }
+    ]
+  },
+  {
+    "type": "post",
     "url": "/api/stadium/list",
     "title": "球场列表",
     "name": "stadium_list",
@@ -4305,7 +4354,7 @@
   {
     "type": "post",
     "url": "/api/stadium/pay",
-    "title": "散客支付订单",
+    "title": "支付订单",
     "name": "stadium_pay",
     "group": "stadium",
     "parameter": {
@@ -4315,7 +4364,7 @@
             "group": "Parameter",
             "type": "Long",
             "optional": false,
-            "field": "siteTimeId",
+            "field": "siteId",
             "description": "<p>预定场地ID &lt;必传/&gt;</p>"
           },
           {
@@ -4349,71 +4398,57 @@
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "payInfo.sysInsurance",
+            "field": "pay.sysInsurance",
             "description": "<p>保险</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "payInfo.sysInsurance.id",
+            "field": "pay.sysInsurance.id",
             "description": "<p>保险id</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "payInfo.sysInsurance.name",
+            "field": "pay.sysInsurance.name",
             "description": "<p>保险名称</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "payInfo.sysInsurance.price",
+            "field": "pay.sysInsurance.price",
             "description": "<p>保险金额</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "payInfo.siteMoney",
+            "field": "pay.siteMoney",
             "description": "<p>场地费</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "payInfo.vipNum",
+            "field": "pay.vipNum",
             "description": "<p>会员等级</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "payInfo.preferente",
+            "field": "pay.preferente",
             "description": "<p>会员折扣</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "payInfo.money",
+            "field": "pay.money",
             "description": "<p>总金额</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "payInfo.reserve",
-            "description": "<p>散客预定（约球）</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "payInfo.reserve.id",
-            "description": "<p>预定id</p>"
           }
         ]
       }
@@ -4430,7 +4465,7 @@
   {
     "type": "post",
     "url": "/api/stadium/payConfirm",
-    "title": "散客确认支付订单",
+    "title": "确认支付订单",
     "name": "stadium_payConfirm",
     "group": "stadium",
     "parameter": {
@@ -4440,8 +4475,36 @@
             "group": "Parameter",
             "type": "Long",
             "optional": false,
-            "field": "reserveId",
-            "description": "<p>预定ID &lt;必传/&gt;</p>"
+            "field": "siteId",
+            "description": "<p>预定场地ID &lt;必传/&gt;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Long",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>用户ID &lt;必传/&gt;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Long",
+            "optional": false,
+            "field": "time",
+            "description": "<p>时间戳  &lt;必传/&gt;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "start",
+            "description": "<p>开始时间点  &lt;必传/&gt;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "end",
+            "description": "<p>结束时间点  &lt;必传/&gt;</p>"
           },
           {
             "group": "Parameter",
@@ -4449,6 +4512,27 @@
             "optional": false,
             "field": "type",
             "description": "<p>支付类型（0：全额支付  1：AA支付） &lt;必传/&gt;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Double",
+            "optional": false,
+            "field": "price",
+            "description": "<p>金额 &lt;必传/&gt;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Long",
+            "optional": false,
+            "field": "insuranceId",
+            "description": "<p>保险ID</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "status",
+            "description": "<p>状态（0：散客  1：球队） &lt;必传/&gt;</p>"
           }
         ]
       }
@@ -4581,138 +4665,6 @@
   },
   {
     "type": "post",
-    "url": "/api/stadium/siteOrder",
-    "title": "场地预订",
-    "name": "stadium_siteOrder",
-    "group": "stadium",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Long",
-            "optional": false,
-            "field": "siteId",
-            "description": "<p>场地ID &lt;必传/&gt;</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Integer",
-            "optional": false,
-            "field": "status",
-            "description": "<p>运动保险状态（0：不买  1：买） &lt;必传/&gt;</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Long",
-            "optional": false,
-            "field": "time",
-            "description": "<p>时间戳  &lt;必传/&gt;</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Integer",
-            "optional": false,
-            "field": "start",
-            "description": "<p>开始时间点  &lt;必传/&gt;</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Integer",
-            "optional": false,
-            "field": "end",
-            "description": "<p>结束时间点  &lt;必传/&gt;</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "siteIfo.siteTime",
-            "description": "<p>场地预定</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "siteIfo.siteTime.id",
-            "description": "<p>预定id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "siteIfo.siteTime.site",
-            "description": "<p>预定场地</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "siteIfo.siteTime.site.code",
-            "description": "<p>场地编号</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "siteIfo.siteTime.site.type",
-            "description": "<p>场地类型</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "siteIfo.siteTime.startTime",
-            "description": "<p>开始时间</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "siteIfo.siteTime.endTime",
-            "description": "<p>结束时间</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "siteIfo.siteTime.site.stadium",
-            "description": "<p>预定球场</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "siteIfo.siteTime.site.stadium.name",
-            "description": "<p>预定球场名字</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "siteIfo.area",
-            "description": "<p>预定球场地区</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/StadiumApi.java",
-    "groupTitle": "stadium",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/stadium/siteOrder"
-      }
-    ]
-  },
-  {
-    "type": "post",
     "url": "/api/stadium/siteSelect",
     "title": "场次选择",
     "name": "stadium_siteSelect",
@@ -4746,6 +4698,13 @@
             "optional": false,
             "field": "list",
             "description": "<p>场地</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.id",
+            "description": "<p>场地id</p>"
           },
           {
             "group": "Success 200",
@@ -4784,179 +4743,6 @@
     "sampleRequest": [
       {
         "url": "http://4.16.1.158:8080/yqtq_app/api/stadium/siteSelect"
-      }
-    ]
-  },
-  {
-    "type": "post",
-    "url": "/api/stadium/teamPay",
-    "title": "球队支付订单",
-    "name": "stadium_teamPay",
-    "group": "stadium",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Long",
-            "optional": false,
-            "field": "siteTimeId",
-            "description": "<p>预定场地ID &lt;必传/&gt;</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Long",
-            "optional": false,
-            "field": "userId",
-            "description": "<p>用户ID &lt;必传/&gt;</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Long",
-            "optional": false,
-            "field": "insuranceId",
-            "description": "<p>保险ID</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Integer",
-            "optional": false,
-            "field": "num",
-            "description": "<p>购买保险数</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "payInfo.sysInsurance",
-            "description": "<p>保险</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "payInfo.sysInsurance.name",
-            "description": "<p>保险名称</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Double",
-            "optional": false,
-            "field": "payInfo.sysInsurance.price",
-            "description": "<p>保险金额</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Double",
-            "optional": false,
-            "field": "payInfo.siteMoney",
-            "description": "<p>场地费</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "optional": false,
-            "field": "payInfo.vipNum",
-            "description": "<p>会员等级</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Double",
-            "optional": false,
-            "field": "payInfo.preferente",
-            "description": "<p>会员折扣</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Double",
-            "optional": false,
-            "field": "payInfo.money",
-            "description": "<p>总金额</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "payInfo.reserveTeam",
-            "description": "<p>球队预定</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "payInfo.reserveTeam.id",
-            "description": "<p>预定id</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/StadiumApi.java",
-    "groupTitle": "stadium",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/stadium/teamPay"
-      }
-    ]
-  },
-  {
-    "type": "post",
-    "url": "/api/stadium/teamPayConfirm",
-    "title": "球队确认支付订单",
-    "name": "stadium_teamPayConfirm",
-    "group": "stadium",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Long",
-            "optional": false,
-            "field": "reserveTeamId",
-            "description": "<p>预定ID &lt;必传/&gt;</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "order",
-            "description": "<p>订单</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Double",
-            "optional": false,
-            "field": "order.price",
-            "description": "<p>订单金额</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "order.sn",
-            "description": "<p>订单号</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/StadiumApi.java",
-    "groupTitle": "stadium",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/stadium/teamPayConfirm"
       }
     ]
   },
@@ -6313,6 +6099,75 @@
   {
     "type": "post",
     "url": "/api/user/operation",
+    "title": "会员操作",
+    "name": "user_operation",
+    "group": "user",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Long",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>用户id &lt;必传 /&gt;</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "num",
+            "description": "<p>会员时长（1：一年 2：两年 3：三年 默认为1）&lt;必传 /&gt;</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "vip.status",
+            "description": "<p>会员状态</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "vip.level",
+            "description": "<p>会员等级</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "vip.endDate",
+            "description": "<p>会员时间</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "vip.price",
+            "description": "<p>价格</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/UserApi.java",
+    "groupTitle": "user",
+    "sampleRequest": [
+      {
+        "url": "http://4.16.1.158:8080/yqtq_app/api/user/operation"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/api/user/operation",
     "title": "会员付款",
     "name": "user_operation",
     "group": "user",
@@ -6380,75 +6235,6 @@
             "optional": false,
             "field": "order.sn",
             "description": "<p>订单号</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/UserApi.java",
-    "groupTitle": "user",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/user/operation"
-      }
-    ]
-  },
-  {
-    "type": "post",
-    "url": "/api/user/operation",
-    "title": "会员操作",
-    "name": "user_operation",
-    "group": "user",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Long",
-            "optional": false,
-            "field": "userId",
-            "description": "<p>用户id &lt;必传 /&gt;</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Integer",
-            "optional": false,
-            "field": "num",
-            "description": "<p>会员时长（1：一年 2：两年 3：三年 默认为1）&lt;必传 /&gt;</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "vip.status",
-            "description": "<p>会员状态</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "optional": false,
-            "field": "vip.level",
-            "description": "<p>会员等级</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "vip.endDate",
-            "description": "<p>会员时间</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Double",
-            "optional": false,
-            "field": "vip.price",
-            "description": "<p>价格</p>"
           }
         ]
       }

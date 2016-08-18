@@ -145,7 +145,7 @@ public class MessageApi extends CommonController {
                 userReserveService.update(userReserve);
 
             }else {
-                WebUtil.printApi(response, new Result(true).data("不用显示"));
+                WebUtil.printApi(response, new Result(true));
             }
         }
 
@@ -258,9 +258,10 @@ public class MessageApi extends CommonController {
 
         List<MessageWatching> list = messageWatchingService.findByToUserId(userId);
         for (MessageWatching messageWatching : list) {
-
             messageWatching.setContent("user" + "约您看球");
-            messageWatching.getWatchingRace().setAvater(messageWatching.getWatchingRace().getAvater());
+            if (messageWatching.getWatchingRace()!= null && StringUtils.isNotBlank(messageWatching.getWatchingRace().getAvater())) {
+                messageWatching.getWatchingRace().setAvater(messageWatching.getWatchingRace().getAvater());
+            }
         }
 
         Result obj = new Result(true).data(createMap("list",list));
