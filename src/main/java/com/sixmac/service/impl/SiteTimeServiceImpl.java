@@ -73,7 +73,7 @@ public class SiteTimeServiceImpl implements SiteTimeService {
     }
 
     @Override
-    public SiteTime findBySiteAndTime(Long siteId, Long time) {
+    public List<SiteTime> findBySiteAndTime(Long siteId, Long time) {
         return siteTimeDao.findBySiteAndTime(siteId,time);
     }
 }

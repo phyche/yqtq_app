@@ -175,10 +175,6 @@ public class OrderBallApi extends CommonController {
 
         try {
             Map<String, Object> map = new HashMap<String, Object>();
-            if (null == reserveId) {
-                WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
-                return;
-            }
 
             Reserve reserve = reserveService.getById(reserveId);
             reserve.setContent(DateUtils.chinaDayOfWeekAndAM(DateUtils.longToDate(reserve.getStartTime(),"yyyy-MM-dd HH:mm:ss")) + "," + reserve.getStadium().getName() + "约球了");
@@ -209,7 +205,11 @@ public class OrderBallApi extends CommonController {
             }*/
 
             reserve.setAvePrice(reserve.getPrice() / reserve.getMatchType());
-            reserve.setSumPrice(reserve.getAvePrice() + reserve.getInsurance().getPrice());
+            if (reserve.getInsurance() != null) {
+                reserve.setSumPrice(reserve.getAvePrice() + reserve.getInsurance().getPrice());
+            }else {
+                reserve.setSumPrice(reserve.getAvePrice());
+            }
             reserveService.update(reserve);
 
             //map.put("userList", userList);

@@ -12,5 +12,5 @@ public interface SiteTimeService extends ICommonService<SiteTime> {
 
     public List<SiteTime> findBySiteId(Long siteId);
 
-    public SiteTime findBySiteAndTime(Long siteId, Long time);
+    public List<SiteTime> findBySiteAndTime(Long siteId, Long time);
 }

@@ -12,6 +12,12 @@ public class MessageVo {
     private Long createDate;
     private Integer type;
     private String nickname;
+    private String stadiumName;
+    private Long startTime;
+    private Integer status;
+    private Long teamId;
+    private String teamName;
+    private String teamAvater;
 
     public Long getId() {
         return id;
@@ -67,5 +73,53 @@ public class MessageVo {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public String getStadiumName() {
+        return stadiumName;
+    }
+
+    public void setStadiumName(String stadiumName) {
+        this.stadiumName = stadiumName;
+    }
+
+    public Long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Long startTime) {
+        this.startTime = startTime;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Long getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(Long teamId) {
+        this.teamId = teamId;
+    }
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
+    }
+
+    public String getTeamAvater() {
+        return teamAvater;
+    }
+
+    public void setTeamAvater(String teamAvater) {
+        this.teamAvater = teamAvater;
     }
 }

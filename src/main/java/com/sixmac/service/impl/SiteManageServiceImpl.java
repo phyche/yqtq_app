@@ -68,7 +68,7 @@ public class SiteManageServiceImpl implements SiteManageService {
     }
 
     @Override
-    public SiteManage findBySiteAndTime(Long siteId, Long time) {
+    public List<SiteManage> findBySiteAndTime(Long siteId, Long time) {
         return siteManageDao.findBySiteAndTime(siteId,time);
     }
 }

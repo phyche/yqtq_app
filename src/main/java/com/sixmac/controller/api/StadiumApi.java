@@ -350,7 +350,7 @@ public class StadiumApi extends CommonController {
         }
 
         //Map<String, Object> map = new HashMap<String, Object>();
-        List<NumVo> list = new ArrayList<NumVo>();
+        List<NumVo> list = null;
         NumVo numVo = null;
 
         // 查询所有可用场地
@@ -361,9 +361,9 @@ public class StadiumApi extends CommonController {
             for (int i = 8; i < 24; i+=2) {
 
                 numVo = new NumVo();
-                SiteTime siteTime = siteTimeService.findBySiteAndTime(site.getId(), time + i * 1000 * 3600);
-                SiteManage siteManage = siteManageService.findBySiteAndTime(site.getId(), time + i * 1000 * 3600);
-                if (siteTime == null && siteManage == null) {
+                List<SiteTime> siteTime = siteTimeService.findBySiteAndTime(site.getId(), time + i * 1000 * 3600);
+                List<SiteManage> siteManage = siteManageService.findBySiteAndTime(site.getId(), time + i * 1000 * 3600);
+                if (siteTime.size() == 0 && siteManage.size() == 0) {
                     numVo.setStatus(1);
                     list.add(numVo);
                 } else {
@@ -445,6 +445,7 @@ public class StadiumApi extends CommonController {
 
         SysInsurance sysInsurance = null;
         if (insuranceId == null) {
+            sysInsurance = new SysInsurance();
             money = siteService.getById(siteId).getPrice() * preferente / 10;
 
         } else {
@@ -478,9 +479,9 @@ public class StadiumApi extends CommonController {
      * @apiParam {Double} price 金额 <必传/>
      * @apiParam {Long} insuranceId 保险ID
      * @apiParam {Integer} status 状态（0：散客  1：球队） <必传/>
-     * @apiSuccess {Object} order 订单
-     * @apiSuccess {Double} order.price 订单金额
-     * @apiSuccess {Long} order.sn 订单号
+     * @apiSuccess {Object} payInfo 订单
+     * @apiSuccess {Double} payInfo.price 订单金额
+     * @apiSuccess {Long} payInfo.sn 订单号
      */
     @RequestMapping(value = "/payConfirm")
     public void payConfirm(HttpServletResponse response,
@@ -492,9 +493,9 @@ public class StadiumApi extends CommonController {
                            Integer type,
                            Long insuranceId,
                            Integer status,
-                           Double money) {
+                           Double price) {
 
-        if (status == null || null == userId || siteId == null || time == null || start == null || end == null || type == null || money == null) {
+        if (status == null || null == userId || siteId == null || time == null || start == null || end == null || type == null || price == null) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
@@ -525,7 +526,7 @@ public class StadiumApi extends CommonController {
                 //将球场预订表的支付方式设置为AA支付
                 reserve.setPayment(1);
             }
-            reserve.setPrice(money);
+            reserve.setPrice(price);
             reserve.setMatchType(siteService.getById(siteId).getType());
             reserve.setStartTime(siteTime.getStartTime());
             reserve.setPayStatus(0);
@@ -541,7 +542,7 @@ public class StadiumApi extends CommonController {
             if (insuranceId != null) {
                 reserveTeam.setInsurance(sysInsuranceService.getById(insuranceId));
             }
-            reserveTeam.setPrice(money);
+            reserveTeam.setPrice(price);
             reserveTeamService.create(reserveTeam);
         }
 
@@ -550,7 +551,7 @@ public class StadiumApi extends CommonController {
         //order.setStadium(reserve.getSite().getStadium());
         order.setReserve(reserve);
         order.setReserveTeam(reserveTeam);
-        order.setPrice(reserve.getPrice());
+        order.setPrice(price);
         order.setAction(2);
         order.setSn(sn);
         orderService.create(order);
@@ -558,7 +559,7 @@ public class StadiumApi extends CommonController {
         // 当前没有支付接口，因此状态直接为已支付
         PayCallBackApi.changeOrderStatus(orderService, order.getSn(), null, response);
 
-        Result obj = new Result(true).data(createMap("order", order));
+        Result obj = new Result(true).data(createMap("payInfo", order));
         String result = JsonUtil.obj2ApiJson(obj, "reserve", "user", "reserveTeam", "girlUser", "stadium");
         WebUtil.printApi(response, result);
     }

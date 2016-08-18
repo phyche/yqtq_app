@@ -15,5 +15,5 @@ public interface SiteTimeDao extends JpaRepository<SiteTime, Long> {
     public List<SiteTime> findBySiteId(Long siteId);
 
     @Query("select a from SiteTime a where a.site.id = ?1 and a.startTime <= ?2 and a.endTime >= ?2 ")
-    public SiteTime findBySiteAndTime(Long siteId, Long time);
+    public List<SiteTime> findBySiteAndTime(Long siteId, Long time);
 }

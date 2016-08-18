@@ -69,42 +69,16 @@ public class MessageApi extends CommonController {
      * @apiGroup message
      * @apiParam {Integer} userId 用户id <必传 />
      *
-     * @apiSuccess {Object}  list.list1 好友约球消息列表
-     * @apiSuccess {Long} list.list1.id 消息id
-     * @apiSuccess {String} list.list1.content 消息内容
-     * @apiSuccess {Object} list.list1.user 好友
-     * @apiSuccess {Long} list.list1.user.id 好友d
-     * @apiSuccess {String} list.list1.user.nickname 好友昵称
-     * @apiSuccess {Object} list.list1.reserve 约球
-     * @apiSuccess {Long} list.list1.reserve.id 约球d
-     * @apiSuccess {Object} list.list1.reserve.stadium 约球球场
-     * @apiSuccess {String} list.list1.reserve.stadium.name 约球球场名字
-     * @apiSuccess {Long} list.list1.reserve.startTime 开始时间
-     * @apiSuccess {Long} list.list1.createDate 记录生成时间
-     *
-     * @apiSuccess {Object}  list.list2 加入约球消息列表
-     * @apiSuccess {Long} list.list2.id 加入约球id
-     * @apiSuccess {String} list.list2.content 约球内容
-     * @apiSuccess {Object} list.list2.user 加入约球人
-     * @apiSuccess {Long} list.list2.user.id 加入约球人id
-     * @apiSuccess {String} list.list2.user.nickname 加入约球人昵称
-     * @apiSuccess {Object} list.list2.reserve 加入约球预约
-     * @apiSuccess {Long} list.list2.reserve.id 加入约球预约id
-     * @apiSuccess {Object} list.list2.reserve.stadium 约球球场
-     * @apiSuccess {String} list.list2.reserve.stadium.name 约球球场名字
-     * @apiSuccess {Long} list.list2.reserve.startTime 开始时间
-     * @apiSuccess {Long} list.list2.createDate 记录生成时间
-     *
-     * @apiSuccess {Object}  list.list3 约球列表
-     * @apiSuccess {Long} list.list3.id 约球id
-     * @apiSuccess {String} list.list3.content 约球内容
-     * @apiSuccess {Integer} list.list3.status 约球状态（1:组队成功2:组队失败）
-     * @apiSuccess {Object} list.list3.reserve 约球预约
-     * @apiSuccess {Long} list.list3.reserve.id 约球预约id
-     * @apiSuccess {Object} list.list3.reserve.stadium 约球球场
-     * @apiSuccess {String} list.list3.reserve.stadium.name 约球球场名字
-     * @apiSuccess {Long} list.list3.reserve.startTime 开始时间
-     * @apiSuccess {Long} list.list3.createDate 记录生成时间
+     * @apiSuccess {Object}  list 消息列表
+     * @apiSuccess {Long} list.id 消息id
+     * @apiSuccess {Integer} list.type 消息类型（4：好友约球消息，5：好友加入约球消息，6：约球成功或失败消息）
+     * @apiSuccess {String} list.content 消息内容
+     * @apiSuccess {Long} list.createDate 消息时间
+     * @apiSuccess {Long} list.startTime 约球开始时间
+     * @apiSuccess {Long} list.userId 好友id (好友请求)
+     * @apiSuccess {String} list.nickname 好友昵称
+     * @apiSuccess {String} list.stadiumname 球场名称
+     * @apiSuccess {Integer} list.status 约球状态（1：成功，2：失败）
      *
      */
     @RequestMapping(value = "/orderBall")
@@ -115,12 +89,21 @@ public class MessageApi extends CommonController {
             return;
         }
 
-        Map<String, Object> map = new HashMap<String, Object>();
-
+        List<MessageVo> messageVoList = new ArrayList<MessageVo>();
+        MessageVo messageVo = null;
         List<MessageOrderBall> list1 = messageOrderBallService.findByToUserId(userId);
         for (MessageOrderBall messageOrderBall : list1) {
 
-            messageOrderBall.setContent("您的好友" + "user" + "约您去踢球啦！");
+            messageVo = new MessageVo();
+            messageVo.setId(messageOrderBall.getId());
+            messageVo.setUserId(messageOrderBall.getUser().getId());
+            messageVo.setNickname(messageOrderBall.getUser().getNickname());
+            messageVo.setContent("您的好友" + "user" + "约您去踢球啦！");
+            messageVo.setCreateDate(messageOrderBall.getCreateDate());
+            messageVo.setStartTime(messageOrderBall.getReserve().getStartTime());
+            messageVo.setStadiumName(messageOrderBall.getReserve().getStadium().getName());
+            messageVo.setType(4);
+            messageVoList.add(messageVo);
 
         }
 
@@ -129,31 +112,38 @@ public class MessageApi extends CommonController {
         for (Reserve reserve : reserveList) {
             for (UserReserve userReserve : userReserveService.findByReserverId(reserve.getId())){
 
-                userReserve.setContent("user" + "加入了您的约球");
-                list2.add(userReserve);
+                messageVo = new MessageVo();
+                messageVo.setUserId(userReserve.getUser().getId());
+                messageVo.setNickname(userReserve.getUser().getNickname());
+                messageVo.setContent("user" + "加入了您的约球");
+                messageVo.setCreateDate(userReserve.getCreateDate());
+                messageVo.setStartTime(reserve.getStartTime());
+                messageVo.setStadiumName(reserve.getStadium().getName());
+                messageVo.setType(5);
+                messageVoList.add(messageVo);
             }
         }
 
         List<UserReserve> list3 = userReserveService.findByUserId(userId);
+        Reserve reserve = null;
         for (UserReserve userReserve : list3) {
 
-            Reserve reserve = reserveService.getById(userReserve.getReserveId());
+            reserve = reserveService.getById(userReserve.getReserveId());
             if (reserve.getStatus() == 1 || reserve.getStatus() == 2) {
-
-                userReserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
-                userReserve.setStatus(reserve.getStatus());
-                userReserveService.update(userReserve);
-
-            }else {
-                WebUtil.printApi(response, new Result(true));
+                messageVo = new MessageVo();
+                messageVo.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
+                messageVo.setCreateDate(userReserve.getCreateDate());
+                messageVo.setStartTime(reserve.getStartTime());
+                messageVo.setStadiumName(reserve.getStadium().getName());
+                messageVo.setType(6);
+                messageVo.setStatus(reserve.getStatus());
+                messageVoList.add(messageVo);
             }
         }
 
-        map.put("list1",list1);
-        map.put("list2",list2);
-        map.put("list3",list3);
+        Collections.sort(messageVoList,new Compare());
 
-        Result obj = new Result(true).data(createMap("list",map));
+        Result obj = new Result(true).data(createMap("list",messageVoList));
         String result = JsonUtil.obj2ApiJson(obj,"set","site","insurance","toUser");
         WebUtil.printApi(response, result);
     }
@@ -259,6 +249,11 @@ public class MessageApi extends CommonController {
         List<MessageWatching> list = messageWatchingService.findByToUserId(userId);
         for (MessageWatching messageWatching : list) {
             messageWatching.setContent("user" + "约您看球");
+            if (messageWatching.getType() == 0) {
+                messageWatching.setWatchingRace(new WatchingRace());
+            }else if (messageWatching.getType() == 1) {
+                messageWatching.setBigRace(new BigRace());
+            }
             if (messageWatching.getWatchingRace()!= null && StringUtils.isNotBlank(messageWatching.getWatchingRace().getAvater())) {
                 messageWatching.getWatchingRace().setAvater(messageWatching.getWatchingRace().getAvater());
             }
@@ -318,15 +313,12 @@ public class MessageApi extends CommonController {
      *
      * @apiSuccess {Object}  list 消息列表
      * @apiSuccess {Long} list.id 消息id
-     * @apiSuccess {Long} list.id 消息id
      * @apiSuccess {Integer} list.type 消息类型（1：系统消息，2：添加好友消息，3：好友请求消息）
      * @apiSuccess {String} list.content 消息内容
      * @apiSuccess {Long} list.createDate 消息时间
-     * @apiSuccess {Object} list.toUser 好友
-     * @apiSuccess {Long} list.toUser.id 好友id
+     * @apiSuccess {Long} list.toUserId 好友id (添加好友)
      * @apiSuccess {String} list.nickname 好友昵称
-     * @apiSuccess {Object} list.user 好友
-     * @apiSuccess {Long} list.user.id 好友id
+     * @apiSuccess {Long} list.userId 好友id (好友请求)
      *
      */
     @RequestMapping(value = "/system")
@@ -359,7 +351,7 @@ public class MessageApi extends CommonController {
                 messageVo.setId(messageAdd.getId());
                 messageVo.setToUserId(userId);
                 messageVo.setNickname(messageAdd.getToUser().getNickname());
-                messageVo.setCreateDate(messageAdd.getCreateDate());
+                messageVo.setCreateDate(messageAdd.getUpdateDate());
                 messageVo.setType(2);
                 if (messageAdd.getStatus() == 1) {
                     messageVo.setContent("user" + "同意了您的好友请求");
@@ -425,83 +417,152 @@ public class MessageApi extends CommonController {
     /**
      * 完成
      *
-     * @api {post} /api/message/joinTeam 加入球队消息
-     * @apiName message.joinTeam
+     * @api {post} /api/message/team 球队消息
+     * @apiName message.team
      * @apiGroup message
      * @apiParam {Long} userId 用户id <必传/>
      *
      * @apiSuccess {Object}  list 消息列表
-     * @apiSuccess {Object}  list.beJoinTeamList 被邀请列表
-     * @apiSuccess {Long} list.beJoinTeamList.id 被邀请消息id
-     * @apiSuccess {String} list.beJoinTeamList.content 被邀请消息内容
-     * @apiSuccess {Object} list.beJoinTeamList.user 邀请加入球队的用户
-     * @apiSuccess {Long} list.beJoinTeamList.user.id 用户id
-     * @apiSuccess {String} list.beJoinTeamList.user.nickname 用户昵称
-     * @apiSuccess {Object} list.beJoinTeamList.team 邀请加入的球队
-     * @apiSuccess {Long} list.beJoinTeamList.team.id 球队id
-     * @apiSuccess {String} list.beJoinTeamList.team.name 球队名称
-     * @apiSuccess {Long} list.beJoinTeamList.createDate 消息时间
-     *
-     * @apiSuccess {Object}  list.joinList 邀请列表
-     * @apiSuccess {Long} list.joinList.id 邀请消息id
-     * @apiSuccess {String} list.joinList.content 邀请消息内容
-     * @apiSuccess {Object} list.joinList.toUser 邀请加入球队的用户
-     * @apiSuccess {Long} list.joinList.toUser.id 用户id
-     * @apiSuccess {String} list.joinList.toUser.nickname 用户昵称
-     * @apiSuccess {Object} list.joinList.team 邀请加入的球队
-     * @apiSuccess {Long} list.joinList.team.id 球队id
-     * @apiSuccess {String} list.joinList.team.name 球队名称
-     * @apiSuccess {Long} list.joinList.createDate 消息时间
-     *
-     * @apiSuccess {Object}  list.joinTeamList 申请列表
-     * @apiSuccess {Long} list.joinTeamList.id 消息id
-     * @apiSuccess {String} list.joinTeamList.content 消息内容
-     * @apiSuccess {Object} list.joinTeamList.user 申请加入球队的用户
-     * @apiSuccess {Long} list.joinTeamList.user.id 用户id
-     * @apiSuccess {String} list.joinTeamList.user.nickname 用户昵称
-     * @apiSuccess {Long} list.joinTeamList.createDate 消息时间
+     * @apiSuccess {Long} list.id 消息id
+     * @apiSuccess {Integer} list.type 消息类型（7：被邀请加入球队消息，8：邀请加入球队，9：申请加入球队, 10：约战成功,11：约战失败,12：申请约战）
+     * @apiSuccess {String} list.content 消息内容
+     * @apiSuccess {Long} list.createDate 消息时间
+     * @apiSuccess {Long} list.toUserId 好友id (邀请加入球队)
+     * @apiSuccess {String} list.nickname 好友昵称
+     * @apiSuccess {Long} list.userId 好友id (被邀请加入球队、申请加入球队)
+     * @apiSuccess {Long} list.userId 球队id
+     * @apiSuccess {String} list.nickname 球队名称
+     * @apiSuccess {String} list.nickname 球队队徽
      *
      */
-    @RequestMapping(value = "/joinTeam")
-    public void joinTeam(HttpServletResponse response, Long userId) {
+    @RequestMapping(value = "/team")
+    public void team(HttpServletResponse response, Long userId) {
 
         if (null == userId ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
-        Map<String, Object> map = new HashMap<String, Object>();
 
+        List<MessageVo> messageVoList = new ArrayList<MessageVo>();
+        MessageVo messageVo = null;
         List<MessageTeam> list = messageTeamService.findByToUserId(userId);
         for (MessageTeam messageTeam : list) {
-            messageTeam.setContent("user" + "邀请您加入" + "team");
+
+            messageVo = new MessageVo();
+            messageVo.setId(messageTeam.getId());
+            messageVo.setUserId(messageTeam.getTeam().getLeaderUser().getId());
+            messageVo.setNickname(messageTeam.getTeam().getLeaderUser().getNickname());
+            messageVo.setTeamId(messageTeam.getTeam().getId());
+            messageVo.setTeamName(messageTeam.getTeam().getName());
+            messageVo.setType(7);
+            messageVo.setCreateDate(messageTeam.getCreateDate());
+            messageVo.setContent("user" + "邀请您加入" + "team");
+            messageVoList.add(messageVo);
         }
-        map.put("beJoinTeamList", list);
 
         Team team = teamService.findListByLeaderId(userId);
         if (team == null) {
-            WebUtil.printApi(response, new Result(true).data("不是队长，不能查看"));
+            WebUtil.printApi(response, new Result(true));
         }else {
 
             List<MessageTeam> list1 = messageTeamService.findByTeam(team);
             for (MessageTeam messageTeam : list1) {
+                messageVo = new MessageVo();
+                messageVo.setToUserId(messageTeam.getUser().getId());
+                messageVo.setNickname(messageTeam.getUser().getNickname());
+                messageVo.setStatus(messageTeam.getStatus());
                 if (messageTeam.getStatus() == 1) {
-
-                    messageTeam.setContent("user" + "同意加入您的球队");
+                    messageVo.setContent("user" + "同意加入您的球队");
                 } else if (messageTeam.getStatus() == 2) {
-
-                    messageTeam.setContent("user" + "拒绝加入您的球队");
+                    messageVo.setContent("user" + "拒绝加入您的球队");
                 }
+                messageVo.setType(8);
+                messageVo.setCreateDate(messageTeam.getUpdateDate());
+                messageVoList.add(messageVo);
             }
-            map.put("joinList", list1);
+
 
             List<MessageJoin> list2 = messageJoinService.findByTeam(team);
             for (MessageJoin messageJoin : list2) {
-                messageJoin.setContent("user" + "申请加入您的球队");
+                messageVo = new MessageVo();
+                messageVo.setUserId(messageJoin.getUser().getId());
+                messageVo.setNickname(messageJoin.getUser().getNickname());
+                messageVo.setContent("user" + "申请加入您的球队");
+                messageVo.setType(9);
+                messageVo.setCreateDate(messageJoin.getCreateDate());
+                messageVoList.add(messageVo);
             }
-            map.put("joinTeamList", list2);
+
         }
 
-        Result obj = new Result(true).data(createMap("list",map));
+        List<Team> teamList = new ArrayList<Team>();
+        List<TeamMember> teamMemberList = teamMemberService.findByUserId(userId);
+        User user = null;
+        for (TeamMember teamMember : teamMemberList) {
+            teamList.add(teamService.getById(teamMember.getTeamId()));
+        }
+
+        for (Team team1 : teamList) {
+            List<TeamRace> teamRaceList1 = teamRaceService.findHomeId(team1.getId());
+            for (TeamRace teamRace : teamRaceList1) {
+                if (teamRace.getStatus() == 1) {
+                    messageVo = new MessageVo();
+                    messageVo.setTeamId(teamRace.getVisitingTeam().getId());
+                    messageVo.setTeamName(teamRace.getVisitingTeam().getName());
+                    messageVo.setTeamAvater(ConfigUtil.getString("upload.url") + teamRace.getVisitingTeam().getAvater());
+                    messageVo.setContent("您的队伍和" + "visitingTeam" + "约战成功");
+                    messageVo.setType(10);
+                    messageVo.setCreateDate(teamRace.getUpdateDate());
+                    messageVoList.add(messageVo);
+                }
+            }
+            List<TeamRace> teamRaceList2 = teamRaceService.findVisitingId(team.getId());
+            for (TeamRace teamRace : teamRaceList2) {
+                if (teamRace.getStatus() == 1) {
+                    messageVo = new MessageVo();
+                    messageVo.setTeamId(teamRace.getHomeTeam().getId());
+                    messageVo.setTeamName(teamRace.getHomeTeam().getName());
+                    messageVo.setTeamAvater(ConfigUtil.getString("upload.url") + teamRace.getHomeTeam().getAvater());
+                    messageVo.setContent("您的队伍和" + "homeTeam" + "约战成功");
+                    messageVo.setType(10);
+                    messageVo.setCreateDate(teamRace.getUpdateDate());
+                    messageVoList.add(messageVo);
+                }
+            }
+        }
+
+        List<TeamRace> teamRaceList1 = teamRaceService.findHomeId(team.getId());
+        for (TeamRace teamRace : teamRaceList1) {
+            if (teamRace.getStatus() == 2) {
+
+                messageVo = new MessageVo();
+                messageVo.setTeamId(teamRace.getVisitingTeam().getId());
+                messageVo.setTeamName(teamRace.getVisitingTeam().getName());
+                messageVo.setTeamAvater(ConfigUtil.getString("upload.url") + teamRace.getVisitingTeam().getAvater());
+                messageVo.setContent("visitingTeam" + "拒绝了和您约战");
+                messageVo.setType(11);
+                messageVo.setCreateDate(teamRace.getUpdateDate());
+                messageVoList.add(messageVo);
+            }
+        }
+        List<TeamRace> teamRaceList2 = teamRaceService.findVisitingId(team.getId());
+        for (TeamRace teamRace : teamRaceList2) {
+            if (teamRace.getStatus() == 0) {
+
+                messageVo = new MessageVo();
+                messageVo.setTeamId(teamRace.getHomeTeam().getId());
+                messageVo.setTeamName(teamRace.getHomeTeam().getName());
+                messageVo.setTeamAvater(ConfigUtil.getString("upload.url") + teamRace.getHomeTeam().getAvater());
+                messageVo.setContent("homeTeam" + "约您对战");
+                messageVo.setType(12);
+                messageVo.setCreateDate(teamRace.getCreateDate());
+                messageVoList.add(messageVo);
+            }
+        }
+
+        Collections.sort(messageVoList, new Compare());
+
+        Result obj = new Result(true).data(createMap("list",messageVoList));
         String result = JsonUtil.obj2ApiJson(obj,"leaderUser","toUser");
         WebUtil.printApi(response, result);
 
