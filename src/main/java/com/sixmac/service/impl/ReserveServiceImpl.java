@@ -3,6 +3,7 @@ package com.sixmac.service.impl;
 import com.sixmac.controller.common.CommonController;
 import com.sixmac.core.Constant;
 import com.sixmac.dao.ReserveDao;
+import com.sixmac.entity.HostRace;
 import com.sixmac.entity.Reserve;
 import com.sixmac.entity.UserReserve;
 import com.sixmac.entity.WatchingRace;
@@ -16,6 +17,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -31,6 +35,9 @@ public class ReserveServiceImpl implements ReserveService {
 
     @Autowired
     private ReserveDao reserveDao;
+
+    @Autowired
+    private EntityManagerFactory factory;
 
     @Override
     public List<Reserve> findAll() {
@@ -110,6 +117,9 @@ public class ReserveServiceImpl implements ReserveService {
                 Predicate pre = cb.equal(root.get("payStatus").as(Integer.class), 1);
                 predicateList.add(pre);
 
+                Predicate pre2 = cb.equal(root.get("reserveType").as(Integer.class), 0);
+                predicateList.add(pre2);
+
                 if (predicateList.size() > 0) {
                     result = cb.and(predicateList.toArray(new Predicate[]{}));
                 }
@@ -123,6 +133,16 @@ public class ReserveServiceImpl implements ReserveService {
         }, pageRequest);
 
         return page;
+    }
+
+    @Override
+    public List<Reserve> findNew() {
+        EntityManager em = factory.createEntityManager();
+        String params = "0,1";
+        Query query = em.createQuery("SELECT r from Reserve r where r.status in (" + params +") and r.reserveType = 0 order by r.id desc",Reserve.class);
+        query.setMaxResults(1);
+        List<Reserve> reserveList = query.getResultList();
+        return reserveList;
     }
 
 }

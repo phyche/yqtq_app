@@ -65,8 +65,11 @@ public class HostRaceApi extends CommonController {
     @RequestMapping(value = "/list")
     public void list(HttpServletResponse response) {
 
-        List<HostRace> hostRaceList = hostRaceService.findAll();
-        HostRace hostRace = hostRaceList.get(hostRaceList.size()-1);
+        long start = System.currentTimeMillis();
+        long end = System.currentTimeMillis();
+        System.out.println("api/hostRace/list:耗时" + (end - start) / 1000.0 + "");
+        List<HostRace> hostRaceList = hostRaceService.findNew();
+        HostRace hostRace = hostRaceList.get(0);
 
         if (StringUtils.isNotBlank(hostRace.getAvater())) {
             hostRace.setAvater(ConfigUtil.getString("upload.url") + hostRace.getAvater());

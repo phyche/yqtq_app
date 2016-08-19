@@ -16,4 +16,6 @@ public interface ReserveService extends ICommonService<Reserve> {
 
     public Page<Reserve> page(Integer timelimit, Integer type, Long areaId, Integer pageNum, Integer pageSize);
 
+    public List<Reserve> findNew();
+
 }

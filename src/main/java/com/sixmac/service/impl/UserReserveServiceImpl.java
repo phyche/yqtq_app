@@ -13,6 +13,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -28,6 +31,9 @@ public class UserReserveServiceImpl implements UserReserveService {
 
     @Autowired
     private UserReserveDao userReserveDao;
+
+    @Autowired
+    private EntityManagerFactory factory;
 
     @Override
     public List<UserReserve> findAll() {
@@ -81,6 +87,11 @@ public class UserReserveServiceImpl implements UserReserveService {
 
     @Override
     public List<UserReserve> findByUserId(Long userId) {
-        return userReserveDao.findByUserId(userId);
+        EntityManager em = factory.createEntityManager();
+        Query query = em.createQuery("SELECT ur from UserReserve ur where ur.user.id = ?1 order by ur.id desc",UserReserve.class);
+        query.setParameter(1,userId);
+        query.setMaxResults(3);
+        List<UserReserve> list = query.getResultList();
+        return list;
     }
 }

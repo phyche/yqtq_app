@@ -367,7 +367,7 @@
                     <artifactId>maven-war-plugin</artifactId>
                     <version>2.3</version>
                     <configuration>
-                        <warName>tiqiu</warName>
+                        <warName>yqtq_app</warName>
                     </configuration>
                 </plugin>
                 <plugin>

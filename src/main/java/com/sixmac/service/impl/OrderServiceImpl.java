@@ -151,8 +151,8 @@ public class OrderServiceImpl implements OrderService {
 
             UserReserve userReserve = new UserReserve();
             userReserve.setUser(orders.getUser());
-            userReserve.setReserveId(orders.getReserve().getId());
-            //userReserve.setReserve(reserve);
+//            userReserve.setReserveId(orders.getReserve().getId());
+            userReserve.setReserve(orders.getReserve());
             userReserve.setStatus(0);
             userReserveService.create(userReserve);
         }
@@ -165,8 +165,8 @@ public class OrderServiceImpl implements OrderService {
 
             UserReserve userReserve = new UserReserve();
             userReserve.setUser(orders.getUser());
-            userReserve.setReserveId(orders.getReserve().getId());
-            //userReserve.setReserve(reserve);
+//            userReserve.setReserveId(orders.getReserve().getId());
+            userReserve.setReserve(orders.getReserve());
             userReserve.setStatus(1);
             userReserveService.create(userReserve);
 
@@ -175,18 +175,19 @@ public class OrderServiceImpl implements OrderService {
                 insurance.setUserId(orders.getUser().getId());
                 insurance.setReserveId(orders.getReserve().getId());
                 insurance.setSysInsurance(orders.getReserve().getInsurance());
-
+                insurance.setInsuranceNum(orders.getInsuranceNum());
                 insurance.setMoney(orders.getReserve().getInsurance().getPrice() * preferente);
                 insuranceService.create(insurance);
             }
-        } else if (orders.getAction() == 2 && orders.getReserveTeam() != null && orders.getReserveTeam().getInsurance() != null) {
+        } /*else if (orders.getAction() == 2 && orders.getReserveTeam() != null && orders.getReserveTeam().getInsurance() != null) {
             Insurance insurance = new Insurance();
             insurance.setUserId(orders.getUser().getId());
+            insurance.setNum(0);
             insurance.setReserveTeamId(orders.getReserveTeam().getId());
             insurance.setSysInsurance(orders.getReserveTeam().getInsurance());
             insurance.setMoney(orders.getReserveTeam().getInsurance().getPrice() * preferente);
             insuranceService.create(insurance);
-        }
+        }*/
 
         if (orders.getAction() == 3) {
             orders.getGirlUser().setStatus(0);

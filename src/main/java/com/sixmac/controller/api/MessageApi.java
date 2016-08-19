@@ -128,7 +128,8 @@ public class MessageApi extends CommonController {
         Reserve reserve = null;
         for (UserReserve userReserve : list3) {
 
-            reserve = reserveService.getById(userReserve.getReserveId());
+//            reserve = reserveService.getById(userReserve.getReserveId());
+            reserve = userReserve.getReserve();
             if (reserve.getStatus() == 1 || reserve.getStatus() == 2) {
                 messageVo = new MessageVo();
                 messageVo.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
@@ -176,8 +177,8 @@ public class MessageApi extends CommonController {
                 UserReserve userReserve = new UserReserve();
                 userReserve.setUser(messageOrderBall.getToUser());
 
-                userReserve.setReserveId(messageOrderBall.getReserve().getId());
-                //userReserve.setReserve(messageOrderBall.getReserve());
+//                userReserve.setReserveId(messageOrderBall.getReserve().getId());
+                userReserve.setReserve(messageOrderBall.getReserve());
 
                 userReserveService.create(userReserve);
             }
@@ -349,7 +350,7 @@ public class MessageApi extends CommonController {
 
                 messageVo = new MessageVo();
                 messageVo.setId(messageAdd.getId());
-                messageVo.setToUserId(userId);
+                messageVo.setToUserId(messageAdd.getToUser().getId());
                 messageVo.setNickname(messageAdd.getToUser().getNickname());
                 messageVo.setCreateDate(messageAdd.getUpdateDate());
                 messageVo.setType(2);
@@ -367,7 +368,7 @@ public class MessageApi extends CommonController {
             if (messageAdd.getToUser().getId() == userId  && messageAdd.getStatus() == 0) {
                 messageVo = new MessageVo();
                 messageVo.setId(messageAdd.getId());
-                messageVo.setUserId(userId);
+                messageVo.setUserId(messageAdd.getUser().getId());
                 messageVo.setNickname(messageAdd.getUser().getNickname());
                 messageVo.setCreateDate(messageAdd.getCreateDate());
                 messageVo.setType(3);
@@ -544,6 +545,16 @@ public class MessageApi extends CommonController {
                 messageVo.setCreateDate(teamRace.getUpdateDate());
                 messageVoList.add(messageVo);
             }
+            if (teamRace.getStatus() == 1) {
+                messageVo = new MessageVo();
+                messageVo.setTeamId(teamRace.getVisitingTeam().getId());
+                messageVo.setTeamName(teamRace.getVisitingTeam().getName());
+                messageVo.setTeamAvater(ConfigUtil.getString("upload.url") + teamRace.getVisitingTeam().getAvater());
+                messageVo.setContent("您的队伍和" + "visitingTeam" + "约战成功");
+                messageVo.setType(10);
+                messageVo.setCreateDate(teamRace.getUpdateDate());
+                messageVoList.add(messageVo);
+            }
         }
         List<TeamRace> teamRaceList2 = teamRaceService.findVisitingId(team.getId());
         for (TeamRace teamRace : teamRaceList2) {
@@ -555,7 +566,18 @@ public class MessageApi extends CommonController {
                 messageVo.setTeamAvater(ConfigUtil.getString("upload.url") + teamRace.getHomeTeam().getAvater());
                 messageVo.setContent("homeTeam" + "约您对战");
                 messageVo.setType(12);
+                messageVo.setStartTime(teamRace.getStartTime());
                 messageVo.setCreateDate(teamRace.getCreateDate());
+                messageVoList.add(messageVo);
+            }
+            if (teamRace.getStatus() == 1) {
+                messageVo = new MessageVo();
+                messageVo.setTeamId(teamRace.getHomeTeam().getId());
+                messageVo.setTeamName(teamRace.getHomeTeam().getName());
+                messageVo.setTeamAvater(ConfigUtil.getString("upload.url") + teamRace.getHomeTeam().getAvater());
+                messageVo.setContent("您的队伍和" + "homeTeam" + "约战成功");
+                messageVo.setType(10);
+                messageVo.setCreateDate(teamRace.getUpdateDate());
                 messageVoList.add(messageVo);
             }
         }

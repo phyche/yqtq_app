@@ -16,15 +16,24 @@ public class UserReserve extends BaseEntity{
     @JoinColumn(name = "user_id")
     private User user;
 
-    /*@ManyToOne
+    /**/
+    @ManyToOne
     @JoinColumn(name = "reserve_id")
-    private Reserve reserve;*/
+    private Reserve reserve;
 
-    @Column(name = "reserve_id")
-    private Long reserveId;
+//    @Column(name = "reserve_id")
+//    private Long reserveId;
 
     @Transient
     private String content;
+
+    public Reserve getReserve() {
+        return reserve;
+    }
+
+    public void setReserve(Reserve reserve) {
+        this.reserve = reserve;
+    }
 
     public Integer getStatus() {
         return status;
@@ -51,13 +60,13 @@ public class UserReserve extends BaseEntity{
         this.reserve = reserve;
     }*/
 
-    public Long getReserveId() {
-        return reserveId;
-    }
-
-    public void setReserveId(Long reserveId) {
-        this.reserveId = reserveId;
-    }
+//    public Long getReserveId() {
+//        return reserveId;
+//    }
+//
+//    public void setReserveId(Long reserveId) {
+//        this.reserveId = reserveId;
+//    }
 
     public String getContent() {
         return content;

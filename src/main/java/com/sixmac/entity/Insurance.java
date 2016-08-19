@@ -23,10 +23,13 @@ public class Insurance extends BaseEntity{
     private SysInsurance sysInsurance;
 
     @Column(name = "num")
-    private Integer num;
+    private Integer num = 0;
 
     @Column(name = "money")
-    private Double money;
+    private Double money = 0.0;
+
+    @Column(name = "insurance_num")
+    private Integer insuranceNum;
 
     public Double getMoney() {
         return money;
@@ -74,5 +77,13 @@ public class Insurance extends BaseEntity{
 
     public void setReserveTeamId(Long reserveTeamId) {
         this.reserveTeamId = reserveTeamId;
+    }
+
+    public Integer getInsuranceNum() {
+        return insuranceNum;
+    }
+
+    public void setInsuranceNum(Integer insuranceNum) {
+        this.insuranceNum = insuranceNum;
     }
 }

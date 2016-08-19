@@ -15,7 +15,7 @@ import java.util.List;
 public interface UserReserveDao extends JpaRepository<UserReserve, Long>, JpaSpecificationExecutor<UserReserve> {
 
     //根据球场预定id查询所有加入的用户
-    @Query("select a from UserReserve a where a.reserveId = ?1")
+    @Query("select a from UserReserve a where a.reserve.id = ?1")
     public List<UserReserve> findByReserverId(Long reserveId);
 
     //根据用户id查询所有的预定

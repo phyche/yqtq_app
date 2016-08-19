@@ -79,6 +79,9 @@ public class User extends BaseEntity{
     @Transient
     private Long teamId;
 
+    @Transient
+    private Integer endDays;
+
     public String getMobile() {
         return mobile;
     }
@@ -229,5 +232,13 @@ public class User extends BaseEntity{
 
     public void setTeamId(Long teamId) {
         this.teamId = teamId;
+    }
+
+    public Integer getEndDays() {
+        return endDays;
+    }
+
+    public void setEndDays(Integer endDays) {
+        this.endDays = endDays;
     }
 }

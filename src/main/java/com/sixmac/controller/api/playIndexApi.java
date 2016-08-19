@@ -76,7 +76,7 @@ public class PlayIndexApi extends CommonController {
      */
     @RequestMapping(value = "orderballList")
     public void orderballList(HttpServletResponse response, Long userId) throws ParseException {
-
+        long start = System.currentTimeMillis();
         if (null == userId ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
@@ -88,7 +88,7 @@ public class PlayIndexApi extends CommonController {
         List<UserReserve> userReserves = userReserveService.findByUserId(userId);
         Reserve reserve = null;
         for (UserReserve userReserve : userReserves) {
-            reserve = reserveService.getById(userReserve.getReserveId());
+            reserve = userReserve.getReserve();
             reserve.setContent(DateUtils.chinaDayOfWeekAndAM(DateUtils.longToDate(reserve.getStartTime(),"yyyy-MM-dd HH:mm:ss")) + "," + reserve.getStadium().getName() + "约球了");
             if (reserve.getType() == 0) {
                 reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
@@ -97,13 +97,15 @@ public class PlayIndexApi extends CommonController {
                 reserve.setStadium(new Stadium());
             }
             reserveList.add(reserve);
+            reserveList.add(userReserve.getReserve());
+
         }
 
         if (reserveList == null) {
             WebUtil.printApi(response, new Result(true).data("无赛事信息"));
         }else {
             //查询约球的前三条信息
-            List<Reserve> list = new ArrayList<Reserve>();
+//            List<Reserve> list = new ArrayList<Reserve>();
             /*if (reserveList.size() >= 3) {
                 list.add(reserveList.get(reserveList.size()-3));
                 for (Reserve reserve : list) {
@@ -140,20 +142,22 @@ public class PlayIndexApi extends CommonController {
                     reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());*//*
                 }
             }*/
-            if (reserveList != null) {
-                if (reserveList.size() >= 1) {
-                    list.add(reserveList.get(0));
-                }
-                if (reserveList.size() >= 2) {
-                    list.add(reserveList.get(1));
-                }
-                if (reserveList.size() >= 3) {
-                    list.add(reserveList.get(2));
-                }
-            }
+//            if (reserveList != null) {
+//                if (reserveList.size() >= 1) {
+//                    list.add(reserveList.get(0));
+//                }
+//                if (reserveList.size() >= 2) {
+//                    list.add(reserveList.get(1));
+//                }
+//                if (reserveList.size() >= 3) {
+//                    list.add(reserveList.get(2));
+//                }
+//            }
 
-            Result obj = new Result(true).data(createMap("list",list));
-            String result = JsonUtil.obj2ApiJson(obj,"userReservelist","insurance");
+            Result obj = new Result(true).data(createMap("list",reserveList));
+            String result = JsonUtil.obj2ApiJson(obj,"userReservelist","insurance","user");
+            long end = System.currentTimeMillis();
+            System.out.println("api/playIndex/orderballList:耗时" + (end - start) / 1000.0 + "秒");
             WebUtil.printApi(response, result);
         }
     }
@@ -172,13 +176,15 @@ public class PlayIndexApi extends CommonController {
      */
     @RequestMapping(value = "/notice")
     public void notice(HttpServletResponse response) throws ParseException {
-
-        List<Reserve> list = reserveService.findAll();
+        long start = System.currentTimeMillis();
+        List<Reserve> list = reserveService.findNew();
         Reserve reserve = list.get(list.size()-1);
         reserve.setContent(DateUtils.chinaDayOfWeekAndAM(DateUtils.longToDate(reserve.getStartTime(),"yyyy-MM-dd HH:mm:ss")) + "," + reserve.getStadium().getName() + "约球了");
 
         Result obj = new Result(true).data(createMap("reserve",reserve));
         String result = JsonUtil.obj2ApiJson(obj);
+        long end = System.currentTimeMillis();
+        System.out.println("api/playIndex/notice:耗时" + (end - start) / 1000.0 + "秒");
         WebUtil.printApi(response, result);
     }
     /**
@@ -312,7 +318,7 @@ public class PlayIndexApi extends CommonController {
      */
     @RequestMapping(value = "/teamRace")
     public void teamRace(HttpServletResponse response, Long userId) {
-
+        long start = System.currentTimeMillis();
         if (null == userId ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
@@ -324,50 +330,60 @@ public class PlayIndexApi extends CommonController {
         if (teamMemberList == null) {
             WebUtil.printApi(response, new Result(true).data("没有球队约战"));
         }
-
-        for (TeamMember teamMember : teamMemberList) {
-            //teamMember.getUser().setAvater(teamMember.getUser().getAvater());
-            teams.add(teamService.getById(teamMember.getTeamId()));
+        List<TeamRace> teamRaceList = teamRaceService.findByTeamId(teamMemberList);
+        for (TeamRace teamRace : teamRaceList) {
+            teams.add(teamRace.getVisitingTeam());
         }
 
-        String teamIds = "";
-        StringBuffer buffer = new StringBuffer("");
-        for (Team team : teams) {
-            //根据球队列表查询球队赛事
-            // select * from t_race r  where r.host_id in(1,2,3) or r.visitingid in (1,2,3)
-            buffer.append(team.getId()).append(",");
-        }
-        teamIds = buffer.toString().substring(0, buffer.length() - 1);
 
-        List<TeamRace> raceList = teamRaceService.findByHomeTeamId(teamIds);
-        List<Team> list = new ArrayList<Team>();
-        for (TeamRace teamRace : raceList) {
 
-            if (StringUtils.isNotBlank(teamRace.getHomeTeam().getAvater())) {
-                teamRace.getHomeTeam().setAvater(ConfigUtil.getString("upload.url") + teamRace.getHomeTeam().getAvater());
-            }
-            if (StringUtils.isNotBlank(teamRace.getVisitingTeam().getAvater())) {
-                teamRace.getVisitingTeam().setAvater(ConfigUtil.getString("upload.url") + teamRace.getVisitingTeam().getAvater());
-            }
+        // =======================================================
 
-            list.add(teamRace.getVisitingTeam());
-        }
+//        for (TeamMember teamMember : teamMemberList) {
+//            //teamMember.getUser().setAvater(teamMember.getUser().getAvater());
+//            teams.add(teamService.getById(teamMember.getTeamId()));
+//        }
+//
+//        String teamIds = "";
+//        StringBuffer buffer = new StringBuffer("");
+//        for (Team team : teams) {
+//            //根据球队列表查询球队赛事
+//            // select * from t_race r  where r.host_id in(1,2,3) or r.visitingid in (1,2,3)
+//            buffer.append(team.getId()).append(",");
+//        }
+//        teamIds = buffer.toString().substring(0, buffer.length() - 1);
+//
+//        List<TeamRace> raceList = teamRaceService.findByHomeTeamId(teamIds);
+//        List<Team> list = new ArrayList<Team>();
+//        for (TeamRace teamRace : raceList) {
+//
+//            if (StringUtils.isNotBlank(teamRace.getHomeTeam().getAvater())) {
+//                teamRace.getHomeTeam().setAvater(ConfigUtil.getString("upload.url") + teamRace.getHomeTeam().getAvater());
+//            }
+//            if (StringUtils.isNotBlank(teamRace.getVisitingTeam().getAvater())) {
+//                teamRace.getVisitingTeam().setAvater(ConfigUtil.getString("upload.url") + teamRace.getVisitingTeam().getAvater());
+//            }
+//
+//            list.add(teamRace.getVisitingTeam());
+//        }
+//
+//        List<TeamRace> listrace = teamRaceService.findByVisitingId(teamIds);
+//        for (TeamRace teamRace : listrace) {
+//
+//            if (StringUtils.isNotBlank(teamRace.getHomeTeam().getAvater())) {
+//                teamRace.getHomeTeam().setAvater(ConfigUtil.getString("upload.url") + teamRace.getHomeTeam().getAvater());
+//            }
+//            if (StringUtils.isNotBlank(teamRace.getVisitingTeam().getAvater())) {
+//                teamRace.getVisitingTeam().setAvater(ConfigUtil.getString("upload.url") + teamRace.getVisitingTeam().getAvater());
+//            }
+//
+//            list.add(teamRace.getHomeTeam());
+//        }
 
-        List<TeamRace> listrace = teamRaceService.findByVisitingId(teamIds);
-        for (TeamRace teamRace : listrace) {
-
-            if (StringUtils.isNotBlank(teamRace.getHomeTeam().getAvater())) {
-                teamRace.getHomeTeam().setAvater(ConfigUtil.getString("upload.url") + teamRace.getHomeTeam().getAvater());
-            }
-            if (StringUtils.isNotBlank(teamRace.getVisitingTeam().getAvater())) {
-                teamRace.getVisitingTeam().setAvater(ConfigUtil.getString("upload.url") + teamRace.getVisitingTeam().getAvater());
-            }
-
-            list.add(teamRace.getHomeTeam());
-        }
-
-        Result obj = new Result(true).data(createMap("list",list));
+        Result obj = new Result(true).data(createMap("list",teams));
         String result = JsonUtil.obj2ApiJson(obj,"leaderUser");
+        long end = System.currentTimeMillis();
+        System.out.println("api/playIndex/teamRace:耗时" + (end - start) / 1000.0 + "秒");
         WebUtil.printApi(response, result);
     }
 }

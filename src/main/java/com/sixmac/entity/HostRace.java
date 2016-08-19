@@ -25,6 +25,9 @@ public class HostRace extends BaseEntity{
     @Column(name = "start_date")
     private Long startDate;
 
+    @Column(name = "status")
+    private Integer status;
+
     @Column(name = "match_type")
     private Integer type;
 
@@ -74,5 +77,13 @@ public class HostRace extends BaseEntity{
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

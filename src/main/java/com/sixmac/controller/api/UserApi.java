@@ -8,6 +8,7 @@ import com.sixmac.entity.vo.GirlImageVo;
 import com.sixmac.service.*;
 import com.sixmac.utils.*;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.SystemUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -103,6 +104,7 @@ public class UserApi extends CommonController {
      * @apiSuccess {String} userInfo.user.nickname 用户昵称
      * @apiSuccess {String} userInfo.user.avater 用户头像
      * @apiSuccess {Integer} userInfo.user.vipNum 用户会员等级
+     * @apiSuccess {Integer} userInfo.user.endDays 用户会员天数
      * @apiSuccess {Integer} userInfo.user.credibility 用户信誉评分
      * @apiSuccess {Integer} userInfo.user.age 用户年龄
      * @apiSuccess {Integer} userInfo.user.gender 用户性别 0:男 1：女
@@ -182,6 +184,11 @@ public class UserApi extends CommonController {
             }
             myTeam.setCount(myTeam.getList().size() + 1);
             map.put("myTeam", myTeam);
+        }
+
+        UserVip userVip = userVipService.findByUserId(userId);
+        if (userVip != null && user.getVipNum() != 0) {
+            user.setEndDays((int) ((userVip.getEndDate() - System.currentTimeMillis())/1000/3600/24));
         }
 
         map.put("user", user);
@@ -361,13 +368,21 @@ public class UserApi extends CommonController {
      * @apiGroup user
      * @apiParam {Long} userId 用户id <必传 />
      * @apiParam {Integer} num 会员时长（1：一年 2：两年 3：三年 默认为1）<必传 />
+     *
      * @apiSuccess {String} vip.status 会员状态
      * @apiSuccess {Integer} vip.level 会员等级
      * @apiSuccess {String} vip.endDate 会员时间
      * @apiSuccess {Double} vip.price 价格
+     * @apiSuccess {Integer} vip.experience 当前经验值
+     * @apiSuccess {Integer} vip.leftExperience 到下一级经验值
      */
     @RequestMapping(value = "/operation")
     public void operation(HttpServletResponse response, Long userId, Integer num) throws ParseException {
+
+        if (userId == null || num == null) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
 
         Map<String, Object> map = new HashMap<String, Object>();
         Integer level = 0;
@@ -378,41 +393,56 @@ public class UserApi extends CommonController {
 
         if (userVip == null || userVip.getEndDate() < System.currentTimeMillis()) {
             level = 0;
-            status = "您不是会员";
+            //status = "您不是会员";
             //userVip.setStatus("您不是会员");
             if (num == 1) {
 
-                endDate = DateUtils.longToString(System.currentTimeMillis() + 1000 * 3600 * 365, "yyyy年-MM月-dd日 HH:mm:ss");
+                //endDate = DateUtils.longToString(System.currentTimeMillis() + 1000 * 3600 * 365, "yyyy年-MM月-dd日 HH:mm:ss");
                 price = sysVipService.getById(1l).getPrice();
             } else if (num == 2) {
-                endDate = DateUtils.longToString(System.currentTimeMillis() + 2 * 1000 * 3600 * 365, "yyyy年-MM月-dd日 HH:mm:ss");
+                //endDate = DateUtils.longToString(System.currentTimeMillis() + 2 * 1000 * 3600 * 365, "yyyy年-MM月-dd日 HH:mm:ss");
                 price = sysVipService.getById(1l).getPrice() * 2;
             } else if (num == 3) {
-                endDate = DateUtils.longToString(System.currentTimeMillis() + 3 * 1000 * 3600 * 365, "yyyy年-MM月-dd日 HH:mm:ss");
+                //endDate = DateUtils.longToString(System.currentTimeMillis() + 3 * 1000 * 3600 * 365, "yyyy年-MM月-dd日 HH:mm:ss");
                 price = sysVipService.getById(1l).getPrice() * 3;
             }
 
 
         } else {
             level = userService.getById(userId).getVipNum();
-            status = "会员到期时间" + DateUtils.longToString(userVip.getEndDate(), "yyyy年-MM月-dd日 HH:mm:ss");
+            status = DateUtils.longToString(userVip.getEndDate(), "yyyy年-MM月-dd日");
             //userVip.setStatus("会员到期时间" + DateUtils.longToString(userVip.getEndDate(),"yyyy年-MM月-dd日 HH:mm:ss"));
             if (num == 1) {
-                endDate = DateUtils.longToString(userVip.getEndDate() + 1000 * 3600 * 365, "yyyy年-MM月-dd日 HH:mm:ss");
-                price = sysVipService.getById(1l).getPrice() * vipLevelService.findBylevel(level).getPreferente();
+                /*endDate = DateUtils.longToString(userVip.getEndDate() + 1000 * 3600 * 365 * 24, "yyyy年-MM月-dd日 HH:mm:ss");
+                Date secord = DateUtils.dateAddYear(DateUtils.longToDate(userVip.getEndDate(),"yyyy-MM-dd HH:mm:ss"),1);
+                System.out.println("续费第二年日期:" + DateUtils.dateToStringWithFormat(secord,"yyyy-MM-dd HH:mm:ss"));*/
+
+                price = sysVipService.getById(level.longValue()).getPrice() * vipLevelService.findBylevel(level).getPreferente();
             } else if (num == 2) {
-                endDate = DateUtils.longToString(userVip.getEndDate() + 2 * 1000 * 3600 * 365, "yyyy年-MM月-dd日 HH:mm:ss");
+                //endDate = DateUtils.longToString(userVip.getEndDate() + 2 * 1000 * 3600 * 365, "yyyy年-MM月-dd日 HH:mm:ss");
                 price = sysVipService.getById(1l).getPrice() * vipLevelService.findBylevel(level).getPreferente() * 2;
             } else if (num == 3) {
-                endDate = DateUtils.longToString(userVip.getEndDate() + 3 * 1000 * 3600 * 365, "yyyy年-MM月-dd日 HH:mm:ss");
+                //endDate = DateUtils.longToString(userVip.getEndDate() + 3 * 1000 * 3600 * 365, "yyyy年-MM月-dd日 HH:mm:ss");
                 price = sysVipService.getById(1l).getPrice() * vipLevelService.findBylevel(level).getPreferente() * 3;
             }
         }
 
+        Integer experience = 0;
+        Integer leftExperience = 0;
+        if (level != 0) {
+            VipLevel vipLevel = vipLevelService.findBylevel(level);
+            experience = vipLevel.getExperience();
+            leftExperience = vipLevelService.findBylevel(level + 1).getExperience() - vipLevel.getExperience();
+        }else {
+            leftExperience = vipLevelService.findBylevel(level + 1).getExperience();
+        }
+
         map.put("level", level);
-        map.put("endDate", endDate);
+        //map.put("endDate", endDate);
         map.put("price", price);
         map.put("status", status);
+        map.put("experience", experience);
+        map.put("leftExperience", leftExperience);
 
         Result obj = new Result(true).data(createMap("vip", map));
         String result = JsonUtil.obj2ApiJson(obj);
@@ -422,23 +452,22 @@ public class UserApi extends CommonController {
     /**
      * 计算几年后时间戳有问题
      *
-     * @api {post} /api/user/operation 会员付款
-     * @apiName user.operation
+     * @api {post} /api/user/pay 会员付款
+     * @apiName user.pay
      * @apiGroup user
      * @apiParam {Long} userId 用户id <必传 />
      * @apiParam {Integer} num 会员时长（1：一年 2：两年 3：三年 默认为1）<必传 />
-     * @apiParam {String} endDate 会员时间 <必传 />
      * @apiParam {Double} price 价格 <必传 />
-     * @apiSuccess {Object} order 订单
-     * @apiSuccess {String} order.userName 用户昵称
-     * @apiSuccess {Double} order.price 订单金额
-     * @apiSuccess {Long} order.sn 订单号
+     * @apiSuccess {Object} payInfo 订单
+     * @apiSuccess {String} payInfo.userName 用户昵称
+     * @apiSuccess {Double} payInfo.price 订单金额
+     * @apiSuccess {Long} payInfo.sn 订单号
      */
     @RequestMapping(value = "/pay")
     public void pay(HttpServletResponse response,
                     Long userId,
                     Integer num,
-                    String endDate,
+                    Long endDate,
                     Double price) throws ParseException {
 
         UserVip userVip = null;
@@ -450,7 +479,31 @@ public class UserApi extends CommonController {
         }
         userVip.setUserId(userId);
         userVip.setDuration(num);
-        userVip.setEndDate(DateUtils.stringToDate(endDate, "yyyy-MM-dd HH:mm:ss").getTime());
+        if (num == 1) {
+            if (userVip != null && userVip.getEndDate()!= null && userVip.getEndDate() >= System.currentTimeMillis()) {
+                endDate = DateUtils.dateAddYear(DateUtils.longToDate(userVip.getEndDate(),"yyyy-MM-dd HH:mm:ss"),1).getTime();
+            }else {
+                endDate = DateUtils.dateAddYear(DateUtils.longToDate(System.currentTimeMillis(),"yyyy-MM-dd HH:mm:ss"),1).getTime();
+            }
+
+        } else if (num == 2) {
+            if (userVip != null && userVip.getEndDate() >= System.currentTimeMillis()) {
+                endDate = DateUtils.dateAddYear(DateUtils.longToDate(userVip.getEndDate(),"yyyy-MM-dd HH:mm:ss"),1).getTime();
+            }else {
+                endDate = DateUtils.dateAddYear(DateUtils.longToDate(System.currentTimeMillis(),"yyyy-MM-dd HH:mm:ss"),1).getTime();
+            }
+        } else if (num == 3) {
+            if (userVip != null && userVip.getEndDate() >= System.currentTimeMillis()) {
+                endDate = DateUtils.dateAddYear(DateUtils.longToDate(userVip.getEndDate(),"yyyy-MM-dd HH:mm:ss"),1).getTime();
+            }else {
+                endDate = DateUtils.dateAddYear(DateUtils.longToDate(System.currentTimeMillis(),"yyyy-MM-dd HH:mm:ss"),1).getTime();
+            }
+        }
+        userVip.setEndDate(endDate);
+        userVipService.update(userVip);
+        User user = userService.getById(userId);
+        user.setEndDate(endDate);
+        userService.update(user);
 
         /*User user = userService.getById(userId);
         user.setVipNum(level);
@@ -473,7 +526,7 @@ public class UserApi extends CommonController {
         order.setSn(sn);
         orderService.create(order);
 
-        Result obj = new Result(true).data(createMap("order", order));
+        Result obj = new Result(true).data(createMap("payInfo", order));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
     }
@@ -794,7 +847,7 @@ public class UserApi extends CommonController {
      * @apiParam {Long} userId 用户id <必传 />
      *
      * @apiSuccess {Object} site 用户场地列表
-     * @apiSuccess {Object} site.reserveList 用户散客场地列表
+     * @apiSuccess {Object} site.reserveList 场地列表
      * @apiSuccess {Long} site.reserveList.startTime 预约时间
      * @apiSuccess {Object} site.reserveList.stadium 用户散客球场
      * @apiSuccess {Long} site.reserveList.stadium.id 球场id
@@ -804,17 +857,6 @@ public class UserApi extends CommonController {
      * @apiSuccess {String} site.reserveList.stadium.avater 球场封面
      * @apiSuccess {Double} site.reserveList.stadium.price 场地价格
      *
-     * @apiSuccess {Object} site.reserveTeamList 用户球队场地列表
-     * @apiSuccess {Long} site.reserveTeamList.startTime 预约时间
-     * @apiSuccess {Object} site.reserveTeamList.site 用户球队场地
-     * @apiSuccess {Double} site.reserveTeamList.site.price 场地价格
-     * @apiSuccess {Object} site.reserveTeamList.site.stadium 用户球队球场
-     * @apiSuccess {Long} site.reserveTeamList.site.stadium.id 球场id
-     * @apiSuccess {String} site.reserveTeamList.site.stadium.name 球场名字
-     * @apiSuccess {String} site.reserveTeamList.site.stadium.address 球场地址
-     * @apiSuccess {String} site.reserveTeamList.site.stadium.areaName 球场区域
-     * @apiSuccess {String} site.reserveTeamList.site.stadium.avater 球场封面
-     *
      */
     @RequestMapping(value = "/siteList")
     public void siteList(HttpServletResponse response, Long userId) {
@@ -823,21 +865,14 @@ public class UserApi extends CommonController {
 
         List<Order> orderList = orderService.findByUserIdAndAction(2, userId);
         List<Reserve> reserveList = new ArrayList<Reserve>();
-        List<ReserveTeam> reserveTeamList = new ArrayList<ReserveTeam>();
         for (Order order : orderList) {
-            if (order.getReserve() != null) {
-                order.getReserve().getStadium().setPrice(siteService.getById(order.getReserve().getSiteId()).getPrice());
-                String areaname = areaService.getByAreaId(order.getReserve().getStadium().getAreaId()).getArea();
-                order.getReserve().getStadium().setAreaName(areaname);
-                reserveList.add(order.getReserve());
-            }else if (order.getReserveTeam() != null) {
-                order.getReserveTeam().getSite().getStadium().setAreaName(areaService.getByAreaId(order.getReserveTeam().getSite().getStadium().getAreaId()).getArea());
-                reserveTeamList.add(order.getReserveTeam());
-            }
+            order.getReserve().getStadium().setPrice(siteService.getById(order.getReserve().getSiteId()).getPrice());
+            String areaname = areaService.getByAreaId(order.getReserve().getStadium().getAreaId()).getArea();
+            order.getReserve().getStadium().setAreaName(areaname);
+            reserveList.add(order.getReserve());
         }
 
         map.put("reserveList", reserveList);
-        map.put("reserveTeamList", reserveTeamList);
         Result obj = new Result(true).data(createMap("site", map));
         String result = JsonUtil.obj2ApiJson(obj, "user", "insurance", "userReservelist");
         WebUtil.printApi(response, result);

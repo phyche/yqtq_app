@@ -264,7 +264,7 @@ public class OrderBallApi extends CommonController {
         for (UserReserve userReserve : userReserves) {
 
             userReserve.getUser().setAvater(userReserve.getUser().getAvater());
-            reserveList.add(reserveService.getById(userReserve.getReserveId()));
+            reserveList.add(userReserve.getReserve());
         }
         for (Reserve reserve : reserveList) {
             reserve.setContent(DateUtils.chinaDayOfWeekAndAM(DateUtils.longToDate(reserve.getStartTime(),"yyyy-MM-dd HH:mm:ss")) + "," + reserve.getStadium().getName() + "约球了");
@@ -481,8 +481,8 @@ public class OrderBallApi extends CommonController {
                 if (reserve.getPayment() == 0) {
                     UserReserve userReserve = new UserReserve();
                     userReserve.setUser(userService.getById(userId));
-                    userReserve.setReserveId(reserveId);
-                    //userReserve.setReserve(reserve);
+//                    userReserve.setReserveId(reserveId);
+                    userReserve.setReserve(reserve);
                     userReserve.setStatus(0);
                     userReserveService.create(userReserve);
 
@@ -522,8 +522,8 @@ public class OrderBallApi extends CommonController {
         }else if (reserve.getType() == 1){
             UserReserve userReserve = new UserReserve();
             userReserve.setUser(userService.getById(userId));
-            userReserve.setReserveId(reserveId);
-            //userReserve.setReserve(reserve);
+//            userReserve.setReserveId(reserveId);
+            userReserve.setReserve(reserve);
             userReserve.setStatus(0);
             userReserveService.create(userReserve);
 

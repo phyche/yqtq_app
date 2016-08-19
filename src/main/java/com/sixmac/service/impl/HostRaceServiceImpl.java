@@ -5,6 +5,7 @@ import com.sixmac.core.Constant;
 import com.sixmac.dao.HostRaceDao;
 import com.sixmac.entity.HostRace;
 import com.sixmac.entity.Reserve;
+import com.sixmac.entity.UserReserve;
 import com.sixmac.service.HostRaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -29,6 +33,9 @@ public class HostRaceServiceImpl implements HostRaceService {
 
     @Autowired
     private HostRaceDao hostRaceDao;
+
+    @Autowired
+    private EntityManagerFactory factory;
 
     @Override
     public List<HostRace> findAll() {
@@ -75,4 +82,13 @@ public class HostRaceServiceImpl implements HostRaceService {
         }
     }
 
+    @Override
+    public List<HostRace> findNew() {
+        EntityManager em = factory.createEntityManager();
+        String params = "0,1";
+        Query query = em.createQuery("SELECT hr from HostRace hr where hr.status in (" + params +") order by hr.id desc",HostRace.class);
+        query.setMaxResults(1);
+        List<HostRace> hostRaceList = query.getResultList();
+        return hostRaceList;
+    }
 }

@@ -48,8 +48,8 @@ public class StadiumApi extends CommonController {
     @Autowired
     private OrderService orderService;
 
-    @Autowired
-    private ReserveTeamService reserveTeamService;
+   /* @Autowired
+    private ReserveTeamService reserveTeamService;*/
 
     @Autowired
     private UserReserveService userReserveService;
@@ -312,14 +312,15 @@ public class StadiumApi extends CommonController {
         reserve.setStartTime(time);
         reserve.setTitle(title);
         reserve.setType(1);
+        reserve.setReserveType(0);
         reserve.setCityId(stadium.getCityId());
         reserve.setPayStatus(1);
         reserveService.create(reserve);
 
         UserReserve userReserve = new UserReserve();
         userReserve.setUser(user);
-        userReserve.setReserveId(reserve.getId());
-        //userReserve.setReserve(reserve);
+//        userReserve.setReserveId(reserve.getId());
+        userReserve.setReserve(reserve);
         userReserve.setStatus(1);
 
         userReserveService.create(userReserve);
@@ -480,6 +481,7 @@ public class StadiumApi extends CommonController {
      * @apiParam {Integer} type 支付类型（0：全额支付  1：AA支付） <必传/>
      * @apiParam {Double} price 金额 <必传/>
      * @apiParam {Long} insuranceId 保险ID
+     * @apiParam {Integer} num 保险数 默认为0<必传/>
      * @apiParam {Integer} status 状态（0：散客  1：球队） <必传/>
      * @apiSuccess {Object} payInfo 订单
      * @apiSuccess {Double} payInfo.price 订单金额
@@ -495,9 +497,10 @@ public class StadiumApi extends CommonController {
                            Integer type,
                            Long insuranceId,
                            Integer status,
-                           Double price) {
+                           Double price,
+                           Integer num) {
 
-        if (status == null || null == userId || siteId == null || time == null || start == null || end == null || type == null || price == null) {
+        if (status == null || null == userId || siteId == null || time == null || start == null || end == null || type == null || price == null || num == null) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
@@ -511,30 +514,31 @@ public class StadiumApi extends CommonController {
         siteTime.setEndTime(time + end * 1000 * 3600);
         siteTimeService.create(siteTime);
 
-        Reserve reserve = null;
-        ReserveTeam reserveTeam = null;
-        if (status == 0) {
-            reserve = new Reserve();
-            reserve.setStadium(siteService.getById(siteId).getStadium());
-            reserve.setSiteId(siteId);
-            reserve.setUser(userService.getById(userId));
-            if (insuranceId != null) {
-                reserve.setInsurance(sysInsuranceService.getById(insuranceId));
-            }
-            if (type == 0) {
-                //将球场预订表的支付方式设置为全额支付
-                reserve.setPayment(0);
-            } else if (type == 1) {
-                //将球场预订表的支付方式设置为AA支付
-                reserve.setPayment(1);
-            }
-            reserve.setPrice(price);
-            reserve.setMatchType(siteService.getById(siteId).getType());
-            reserve.setStartTime(siteTime.getStartTime());
-            reserve.setPayStatus(0);
-            reserve.setCityId(siteService.getById(siteId).getStadium().getCityId());
-            reserve.setType(0);
-            reserveService.create(reserve);
+        //Reserve reserve = null;
+        Reserve reserve = new Reserve();
+        reserve.setStadium(siteService.getById(siteId).getStadium());
+        reserve.setSiteId(siteId);
+        reserve.setUser(userService.getById(userId));
+        if (insuranceId != null) {
+            reserve.setInsurance(sysInsuranceService.getById(insuranceId));
+        }
+        if (type == 0) {
+            //将球场预订表的支付方式设置为全额支付
+            reserve.setPayment(0);
+        } else if (type == 1) {
+            //将球场预订表的支付方式设置为AA支付
+            reserve.setPayment(1);
+        }
+        reserve.setPrice(price);
+        reserve.setMatchType(siteService.getById(siteId).getType());
+        reserve.setStartTime(siteTime.getStartTime());
+        reserve.setPayStatus(0);
+        reserve.setCityId(siteService.getById(siteId).getStadium().getCityId());
+        reserve.setType(0);
+        reserve.setReserveType(status);
+        reserveService.create(reserve);
+        /*if (status == 0) {
+
         }else if (status == 1) {
             reserveTeam = new ReserveTeam();
             reserveTeam.setStatus(0);
@@ -546,16 +550,17 @@ public class StadiumApi extends CommonController {
             }
             reserveTeam.setPrice(price);
             reserveTeamService.create(reserveTeam);
-        }
+        }*/
 
         Order order = new Order();
         order.setUser(userService.getById(userId));
         //order.setStadium(reserve.getSite().getStadium());
         order.setReserve(reserve);
-        order.setReserveTeam(reserveTeam);
+        //order.setReserveTeam(reserveTeam);
         order.setPrice(price);
         order.setAction(2);
         order.setSn(sn);
+        order.setInsuranceNum(num);
         orderService.create(order);
 
         // 当前没有支付接口，因此状态直接为已支付

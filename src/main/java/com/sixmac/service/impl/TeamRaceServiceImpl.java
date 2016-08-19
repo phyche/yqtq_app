@@ -2,9 +2,12 @@ package com.sixmac.service.impl;
 
 import com.sixmac.core.Constant;
 import com.sixmac.dao.TeamRaceDao;
+import com.sixmac.entity.TeamMember;
 import com.sixmac.entity.TeamRace;
 import com.sixmac.service.TeamRaceService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +26,8 @@ import java.util.Map;
  */
 @Service
 public class TeamRaceServiceImpl implements TeamRaceService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TeamRaceServiceImpl.class);
 
     @Autowired
     private TeamRaceDao teamRaceDao;
@@ -79,22 +84,26 @@ public class TeamRaceServiceImpl implements TeamRaceService {
     @Override
     public List<TeamRace> findByHomeTeamId(String homeId) {
         EntityManager em = factory.createEntityManager();
-
+        Long startDate = System.currentTimeMillis();
         String sql = "select a from TeamRace a where a.homeTeam.id in (" + homeId + ") and a.status = 1";
         Query query = em.createQuery(sql);
         List<TeamRace> list = (List<TeamRace>) query.getResultList();
+        Long endDate = System.currentTimeMillis();
 //        return teamRaceDao.findByHomeTeamId(homeId);
+        LOGGER.info("findByHomeTeamId == 查询时间:" + (endDate - startDate) / 1000.0 + "秒");
         return list;
     }
 
     @Override
     public List<TeamRace> findByVisitingId(String visitingId) {
         EntityManager em = factory.createEntityManager();
-
+        Long startDate = System.currentTimeMillis();
         String sql = "select a from TeamRace a where a.visitingTeam.id in (" + visitingId + ") and a.status = 1";
         Query query = em.createQuery(sql);
         List<TeamRace> list = (List<TeamRace>) query.getResultList();
 
+        Long endDate = System.currentTimeMillis();
+        LOGGER.info("findByVisitingId == 查询时间:" + (endDate - startDate) / 1000.0 + "秒");
         return list;
     }
 
@@ -106,6 +115,23 @@ public class TeamRaceServiceImpl implements TeamRaceService {
     @Override
     public List<TeamRace> findVisitingId(Long visitingId) {
         return teamRaceDao.findVisitingId(visitingId);
+    }
+
+    @Override
+    public List<TeamRace> findByTeamId(List<TeamMember> list) {
+
+        EntityManager em = factory.createEntityManager();
+        StringBuffer buffer = new StringBuffer("");
+        for (TeamMember teamMember : list) {
+            buffer.append(teamMember.getTeamId()).append(",");
+        }
+        String params = buffer.toString().substring(0, buffer.length() - 1);
+        String sql = "select a from TeamRace a where (a.visitingTeam.id in (" + params + ") or a.homeTeam.id in (" + params + ")) and a.status = 1 order by a.id desc";
+        Query query = em.createQuery(sql, TeamRace.class);
+        query.setMaxResults(3);
+
+        List<TeamRace> _list = query.getResultList();
+        return _list;
     }
 
 }

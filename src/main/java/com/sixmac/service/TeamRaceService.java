@@ -1,5 +1,6 @@
 package com.sixmac.service;
 
+import com.sixmac.entity.TeamMember;
 import com.sixmac.entity.TeamRace;
 import com.sixmac.service.common.ICommonService;
 
@@ -19,4 +20,6 @@ public interface TeamRaceService extends ICommonService<TeamRace> {
     public List<TeamRace> findHomeId(Long homeId);
 
     public List<TeamRace> findVisitingId(Long visitingId);
+
+    public List<TeamRace> findByTeamId(List<TeamMember> list);
 }

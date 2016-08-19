@@ -22,8 +22,11 @@ public class Reserve extends BaseEntity {
     @JoinColumn(name = "insurance_id")
     private SysInsurance insurance;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "reserve_id")
+//    @OneToMany(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "reserve_id")
+//    private List<UserReserve> userReservelist;
+
+    @Transient
     private List<UserReserve> userReservelist;
 
     @Column(name = "site_id")
@@ -77,6 +80,9 @@ public class Reserve extends BaseEntity {
 
     @Transient
     private double distance;
+
+    @Column(name = "reserve_type")
+    private Integer reserveType;
 
     /*@Transient
     private Map<String, Object> stadiumMap = new HashMap<String, Object>();*/
@@ -247,5 +253,17 @@ public class Reserve extends BaseEntity {
 
     public void setDistance(double distance) {
         this.distance = distance;
+    }
+
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
+    }
+
+    public Integer getReserveType() {
+        return reserveType;
+    }
+
+    public void setReserveType(Integer reserveType) {
+        this.reserveType = reserveType;
     }
 }

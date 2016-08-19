@@ -17,10 +17,6 @@ public class Order extends BaseEntity{
     @JoinColumn(name = "reserve_id")
     private Reserve reserve;
 
-    @ManyToOne
-    @JoinColumn(name = "reserve_team_id")
-    private ReserveTeam reserveTeam;
-
     @Column(name = "price")
     private Double price;
 
@@ -42,6 +38,9 @@ public class Order extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "girl_user_id")
     private GirlUser girlUser;
+
+    @Column(name = "insurance_num")
+    private Integer insuranceNum;
 
     public User getUser() {
         return user;
@@ -115,11 +114,11 @@ public class Order extends BaseEntity{
         this.reserve = reserve;
     }
 
-    public ReserveTeam getReserveTeam() {
-        return reserveTeam;
+    public Integer getInsuranceNum() {
+        return insuranceNum;
     }
 
-    public void setReserveTeam(ReserveTeam reserveTeam) {
-        this.reserveTeam = reserveTeam;
+    public void setInsuranceNum(Integer insuranceNum) {
+        this.insuranceNum = insuranceNum;
     }
 }
