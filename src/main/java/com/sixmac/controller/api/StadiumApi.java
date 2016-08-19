@@ -355,14 +355,16 @@ public class StadiumApi extends CommonController {
 
         // 查询所有可用场地
         List<Site> siteList = siteService.findByStadiumId(stadiumId);
+        List<SiteTime> siteTime = null;
+        List<SiteManage> siteManage = null;
         for (Site site : siteList) {
             // 根据场地id查询所有被预定的场地的时间
             list = new ArrayList<NumVo>();
             for (int i = 8; i < 24; i+=2) {
 
                 numVo = new NumVo();
-                List<SiteTime> siteTime = siteTimeService.findBySiteAndTime(site.getId(), time + i * 1000 * 3600);
-                List<SiteManage> siteManage = siteManageService.findBySiteAndTime(site.getId(), time + i * 1000 * 3600);
+                siteTime = siteTimeService.findBySiteAndTime(site.getId(), time + i * 1000 * 3600);
+                siteManage = siteManageService.findBySiteAndTime(site.getId(), time + i * 1000 * 3600);
                 if (siteTime.size() == 0 && siteManage.size() == 0) {
                     numVo.setStatus(1);
                     list.add(numVo);

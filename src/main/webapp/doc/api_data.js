@@ -2463,154 +2463,182 @@ define({ "api": [
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "reserve",
+            "field": "reserveInfo",
             "description": "<p>约球列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "reserve.id",
+            "field": "reserveInfo.id",
             "description": "<p>约球id</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "reserve.type",
+            "field": "reserveInfo.type",
             "description": "<p>约球类型（0：散客，1：公共）</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "reserve.status",
+            "field": "reserveInfo.status",
             "description": "<p>状态（0:正在组队1:组队成功2:组队失败3:比赛结束）</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "reserve.payment",
+            "field": "reserveInfo.payment",
             "description": "<p>付款方式 （0:AA 1:全额）</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "reserve.content",
+            "field": "reserveInfo.content",
             "description": "<p>约球内容</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "reserve.matchType",
+            "field": "reserveInfo.matchType",
             "description": "<p>赛制</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "reserve.joinCount",
+            "field": "reserveInfo.joinCount",
             "description": "<p>已报人数</p>"
           },
           {
             "group": "Success 200",
             "type": "Integer",
             "optional": false,
-            "field": "reserve.lackCount",
+            "field": "reserveInfo.lackCount",
             "description": "<p>剩余人数</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "reserve.user",
+            "field": "reserveInfo.user",
             "description": "<p>创建人</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "reserve.user.nickname",
+            "field": "reserveInfo.user.nickname",
             "description": "<p>创建人昵称</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "reserve.user.avater",
+            "field": "reserveInfo.user.avater",
             "description": "<p>创建人头像</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "reserve.stadium",
+            "field": "reserveInfo.stadium",
             "description": "<p>球场</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "reserve.stadium.id",
+            "field": "reserveInfo.stadium.id",
             "description": "<p>球场id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "reserve.stadium.name",
+            "field": "reserveInfo.stadium.name",
             "description": "<p>球场名字</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Double",
-            "optional": false,
-            "field": "reserve.avePrice",
-            "description": "<p>AA制金额</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Double",
-            "optional": false,
-            "field": "reserve.sumPrice",
-            "description": "<p>支付总金额</p>"
           },
           {
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "reserve.userReservelist",
+            "field": "reserveInfo.insurance",
+            "description": "<p>保险</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "reserveInfo.insurance.id",
+            "description": "<p>保险id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "reserveInfo.insurance.name",
+            "description": "<p>保险名字</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "reserveInfo.insurance.price",
+            "description": "<p>保险金额</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "reserveInfo.avePrice",
+            "description": "<p>支付金额</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Double",
+            "optional": false,
+            "field": "reserveInfo.sumPrice",
+            "description": "<p>AA制总金额</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "reserveInfo.userReservelist",
             "description": "<p>已报名球友列表</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "reserve.userReservelist.id",
+            "field": "reserveInfo.userReservelist.id",
             "description": "<p>报名球友id</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "reserve.userReservelist.nickname",
+            "field": "reserveInfo.userReservelist.nickname",
             "description": "<p>报名球友昵称</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "reserve.userReservelist.avater",
+            "field": "reserveInfo.userReservelist.avater",
             "description": "<p>报名球友头像</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "reserve.userReservelist.startTime",
+            "field": "reserveInfo.userReservelist.startTime",
             "description": "<p>开始时间</p>"
           }
         ]
@@ -2783,35 +2811,35 @@ define({ "api": [
             "group": "Success 200",
             "type": "Object",
             "optional": false,
-            "field": "order",
+            "field": "payInfo",
             "description": "<p>订单</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "order.userName",
+            "field": "payInfo.userName",
             "description": "<p>用户昵称</p>"
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
-            "field": "order.stadiumName",
+            "field": "payInfo.stadiumName",
             "description": "<p>球场名称</p>"
           },
           {
             "group": "Success 200",
             "type": "Double",
             "optional": false,
-            "field": "order.price",
+            "field": "payInfo.price",
             "description": "<p>订单金额</p>"
           },
           {
             "group": "Success 200",
             "type": "Long",
             "optional": false,
-            "field": "order.sn",
+            "field": "payInfo.sn",
             "description": "<p>订单号</p>"
           }
         ]

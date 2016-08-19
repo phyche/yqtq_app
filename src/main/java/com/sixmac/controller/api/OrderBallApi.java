@@ -142,28 +142,32 @@ public class OrderBallApi extends CommonController {
      * @apiName orderBall.orderInfo
      * @apiGroup orderBall
      * @apiParam {Long} reserveId 约球ID <必传 />
-     * @apiSuccess {Object}  reserve 约球列表
-     * @apiSuccess {Long} reserve.id 约球id
-     * @apiSuccess {Integer} reserve.type 约球类型（0：散客，1：公共）
-     * @apiSuccess {Integer} reserve.status 状态（0:正在组队1:组队成功2:组队失败3:比赛结束）
-     * @apiSuccess {Integer} reserve.payment 付款方式 （0:AA 1:全额）
-     * @apiSuccess {String} reserve.content 约球内容
-     * @apiSuccess {Integer} reserve.matchType 赛制
-     * @apiSuccess {Integer} reserve.joinCount 已报人数
-     * @apiSuccess {Integer} reserve.lackCount 剩余人数
-     * @apiSuccess {Object} reserve.user 创建人
-     * @apiSuccess {String} reserve.user.nickname 创建人昵称
-     * @apiSuccess {String} reserve.user.avater 创建人头像
-     * @apiSuccess {Object} reserve.stadium 球场
-     * @apiSuccess {Long} reserve.stadium.id 球场id
-     * @apiSuccess {String} reserve.stadium.name 球场名字
-     * @apiSuccess {Double} reserve.avePrice AA制金额
-     * @apiSuccess {Double} reserve.sumPrice 支付总金额
-     * @apiSuccess {Object} reserve.userReservelist 已报名球友列表
-     * @apiSuccess {Long} reserve.userReservelist.id 报名球友id
-     * @apiSuccess {String} reserve.userReservelist.nickname 报名球友昵称
-     * @apiSuccess {String} reserve.userReservelist.avater 报名球友头像
-     * @apiSuccess {Long} reserve.userReservelist.startTime 开始时间
+     * @apiSuccess {Object}  reserveInfo 约球列表
+     * @apiSuccess {Long} reserveInfo.id 约球id
+     * @apiSuccess {Integer} reserveInfo.type 约球类型（0：散客，1：公共）
+     * @apiSuccess {Integer} reserveInfo.status 状态（0:正在组队1:组队成功2:组队失败3:比赛结束）
+     * @apiSuccess {Integer} reserveInfo.payment 付款方式 （0:AA 1:全额）
+     * @apiSuccess {String} reserveInfo.content 约球内容
+     * @apiSuccess {Integer} reserveInfo.matchType 赛制
+     * @apiSuccess {Integer} reserveInfo.joinCount 已报人数
+     * @apiSuccess {Integer} reserveInfo.lackCount 剩余人数
+     * @apiSuccess {Object} reserveInfo.user 创建人
+     * @apiSuccess {String} reserveInfo.user.nickname 创建人昵称
+     * @apiSuccess {String} reserveInfo.user.avater 创建人头像
+     * @apiSuccess {Object} reserveInfo.stadium 球场
+     * @apiSuccess {Long} reserveInfo.stadium.id 球场id
+     * @apiSuccess {String} reserveInfo.stadium.name 球场名字
+     * @apiSuccess {Object} reserveInfo.insurance 保险
+     * @apiSuccess {Long} reserveInfo.insurance.id 保险id
+     * @apiSuccess {String} reserveInfo.insurance.name 保险名字
+     * @apiSuccess {Double} reserveInfo.insurance.price 保险金额
+     * @apiSuccess {Double} reserveInfo.avePrice 支付金额
+     * @apiSuccess {Double} reserveInfo.sumPrice AA制总金额
+     * @apiSuccess {Object} reserveInfo.userReservelist 已报名球友列表
+     * @apiSuccess {Long} reserveInfo.userReservelist.id 报名球友id
+     * @apiSuccess {String} reserveInfo.userReservelist.nickname 报名球友昵称
+     * @apiSuccess {String} reserveInfo.userReservelist.avater 报名球友头像
+     * @apiSuccess {Long} reserveInfo.userReservelist.startTime 开始时间
      */
     @RequestMapping(value = "/orderInfo")
     public void orderInfo(HttpServletResponse response, Long reserveId) {
@@ -204,18 +208,19 @@ public class OrderBallApi extends CommonController {
                 userList.add(userReserve.getUser());
             }*/
 
-            reserve.setAvePrice(reserve.getPrice() / reserve.getMatchType());
-            if (reserve.getInsurance() != null) {
-                reserve.setSumPrice(reserve.getAvePrice() + reserve.getInsurance().getPrice());
-            }else {
-                reserve.setSumPrice(reserve.getAvePrice());
+            if (reserve.getType() == 0) {
+                reserve.setAvePrice(reserve.getPrice() / reserve.getMatchType());
+                reserve.setSumPrice(reserve.getPrice());
+                reserveService.update(reserve);
             }
-            reserveService.update(reserve);
 
+            if (reserve.getInsurance() == null) {
+                reserve.setInsurance(new SysInsurance());
+            }
             //map.put("userList", userList);
             //map.put("reserve", reserve);
 
-            Result obj = new Result(true).data(createMap("reserve", reserve));
+            Result obj = new Result(true).data(createMap("reserveInfo", reserve));
             String result = JsonUtil.obj2ApiJson(obj, "set", "site", "list");
             WebUtil.printApi(response, result);
         } catch (Exception e) {
@@ -451,11 +456,11 @@ public class OrderBallApi extends CommonController {
      * @apiGroup orderBall
      * @apiParam {Long} reserveId 约球ID <必传 />
      * @apiParam {Long} userId 用户ID <必传 />
-     * @apiSuccess {Object} order 订单
-     * @apiSuccess {String} order.userName 用户昵称
-     * @apiSuccess {String} order.stadiumName 球场名称
-     * @apiSuccess {Double} order.price 订单金额
-     * @apiSuccess {Long} order.sn 订单号
+     * @apiSuccess {Object} payInfo 订单
+     * @apiSuccess {String} payInfo.userName 用户昵称
+     * @apiSuccess {String} payInfo.stadiumName 球场名称
+     * @apiSuccess {Double} payInfo.price 订单金额
+     * @apiSuccess {Long} payInfo.sn 订单号
      */
     @RequestMapping(value = "/pay")
     public void pay(HttpServletResponse response, Long reserveId, Long userId, Double money) {
@@ -467,17 +472,25 @@ public class OrderBallApi extends CommonController {
 
         Reserve reserve = reserveService.getById(reserveId);
         Order order = null;
-        if (reserve.getJoinCount() < reserve.getMatchType() * 2) {
+        if (reserve.getType() == 0) {
+            if (reserve.getJoinCount() < reserve.getMatchType() * 2) {
 
-            Insurance insurance = new Insurance();
+                Insurance insurance = new Insurance();
 
-            //球场已经全额付款的
-            if (reserve.getPayment() == 0) {
-                WebUtil.printApi(response, new Result(true).data("加入成功"));
-            }
-            //球场AA付款
-            if (reserve.getPayment() == 1) {
-                insurance.setMoney(reserve.getInsurance().getPrice());
+                //球场已经全额付款的
+                if (reserve.getPayment() == 0) {
+                    UserReserve userReserve = new UserReserve();
+                    userReserve.setUser(userService.getById(userId));
+                    userReserve.setReserveId(reserveId);
+                    //userReserve.setReserve(reserve);
+                    userReserve.setStatus(0);
+                    userReserveService.create(userReserve);
+
+                    WebUtil.printApi(response, new Result(true));
+                }
+                //球场AA付款
+                if (reserve.getPayment() == 1) {
+                    insurance.setMoney(reserve.getInsurance().getPrice());
                 /*if (userService.getById(userId).getVipNum() != 0) {
                     VipLevel vipLevel = vipLevelService.findBylevel(userService.getById(userId).getVipNum());
                     money = (reserve.getPrice() / reserve.getMatchType() + reserve.getInsurance().getPrice()) * vipLevel.getPreferente();
@@ -485,29 +498,40 @@ public class OrderBallApi extends CommonController {
                     money = reserve.getPrice() / reserve.getMatchType() + reserve.getInsurance().getPrice();
                 }*/
 
-                money = reserve.getPrice() / reserve.getMatchType();
+                    money = reserve.getPrice() / reserve.getMatchType();
+                    String sn = CommonUtils.generateSn(); // 订单号
+
+                    order = new Order();
+                    order.setUser(userService.getById(userId));
+                    order.setReserve(reserve);
+                /*order.setStadium(reserve.getStadium());
+                order.setSite(reserve.getSite());*/
+                    order.setPrice(money);
+                    order.setAction(1);
+                    order.setSn(sn);
+                    orderService.create(order);
+
+                    // 当前没有支付接口，因此状态直接为已支付
+                    PayCallBackApi.changeOrderStatus(orderService, order.getSn(), null, response);
+                }
+
                 insurance.setUserId(userId);
                 insurance.setReserveId(reserve.getId());
                 insuranceService.create(insurance);
-
-                String sn = CommonUtils.generateSn(); // 订单号
-
-                order = new Order();
-                order.setUser(userService.getById(userId));
-                order.setReserve(reserve);
-                /*order.setStadium(reserve.getStadium());
-                order.setSite(reserve.getSite());*/
-                order.setPrice(money);
-                order.setAction(1);
-                order.setSn(sn);
-                orderService.create(order);
-
-                // 当前没有支付接口，因此状态直接为已支付
-                PayCallBackApi.changeOrderStatus(orderService, order.getSn(), null, response);
             }
+        }else if (reserve.getType() == 1){
+            UserReserve userReserve = new UserReserve();
+            userReserve.setUser(userService.getById(userId));
+            userReserve.setReserveId(reserveId);
+            //userReserve.setReserve(reserve);
+            userReserve.setStatus(0);
+            userReserveService.create(userReserve);
+
+            WebUtil.printApi(response, new Result(true));
         }
 
-        Result obj = new Result(true).data(createMap("order", order));
+
+        Result obj = new Result(true).data(createMap("payInfo", order));
         String result = JsonUtil.obj2ApiJson(obj, "reserve", "user", "reserveTeam", "girlUser", "stadium");
         WebUtil.printApi(response, result);
     }

@@ -152,8 +152,6 @@ public class PlayIndexApi extends CommonController {
                 }
             }
 
-            //map.put("list", list);
-
             Result obj = new Result(true).data(createMap("list",list));
             String result = JsonUtil.obj2ApiJson(obj,"userReservelist","insurance");
             WebUtil.printApi(response, result);
@@ -178,7 +176,6 @@ public class PlayIndexApi extends CommonController {
         List<Reserve> list = reserveService.findAll();
         Reserve reserve = list.get(list.size()-1);
         reserve.setContent(DateUtils.chinaDayOfWeekAndAM(DateUtils.longToDate(reserve.getStartTime(),"yyyy-MM-dd HH:mm:ss")) + "," + reserve.getStadium().getName() + "约球了");
-
 
         Result obj = new Result(true).data(createMap("reserve",reserve));
         String result = JsonUtil.obj2ApiJson(obj);
@@ -334,11 +331,10 @@ public class PlayIndexApi extends CommonController {
         }
 
         String teamIds = "";
-        StringBuffer buffer = null;
+        StringBuffer buffer = new StringBuffer("");
         for (Team team : teams) {
             //根据球队列表查询球队赛事
             // select * from t_race r  where r.host_id in(1,2,3) or r.visitingid in (1,2,3)
-            buffer = new StringBuffer("");
             buffer.append(team.getId()).append(",");
         }
         teamIds = buffer.toString().substring(0, buffer.length() - 1);
