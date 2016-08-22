@@ -42,6 +42,9 @@ public class Order extends BaseEntity{
     @Column(name = "insurance_num")
     private Integer insuranceNum;
 
+    @Column(name = "message_id")
+    private Long messageId;
+
     public User getUser() {
         return user;
     }
@@ -120,5 +123,13 @@ public class Order extends BaseEntity{
 
     public void setInsuranceNum(Integer insuranceNum) {
         this.insuranceNum = insuranceNum;
+    }
+
+    public Long getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(Long messageId) {
+        this.messageId = messageId;
     }
 }

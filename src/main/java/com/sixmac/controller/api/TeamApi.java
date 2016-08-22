@@ -52,6 +52,9 @@ public class TeamApi extends CommonController {
     @Autowired
     private TeamMemberService teamMemberService;
 
+    @Autowired
+    private MessageRecordService messageRecordService;
+
 
     /**
      * 完成
@@ -280,13 +283,30 @@ public class TeamApi extends CommonController {
         }
 
         Team team = teamService.findListByLeaderId(userId);
+        if (team != null) {
+            MessageTeam messageTeam = new MessageTeam();
+            messageTeam.setUser(userService.getById(userId));
+            messageTeam.setToUser(userService.getById(toUserId));
+            messageTeam.setTeam(team);
+            messageTeam.setStatus(0);
+            messageTeamService.create(messageTeam);
 
-        MessageTeam messageTeam = new MessageTeam();
-        messageTeam.setUser(userService.getById(userId));
-        messageTeam.setToUser(userService.getById(toUserId));
-        messageTeam.setTeam(team);
-        messageTeam.setStatus(0);
-        messageTeamService.create(messageTeam);
+            /*// 邀请加入球队
+            MessageRecord messageRecord = new MessageRecord();
+            messageRecord.setUserId(userId);
+            messageRecord.setStatus(0);
+            messageRecord.setMessageId(messageTeam.getId());
+            messageRecord.setType(9);
+            messageRecordService.create(messageRecord);*/
+
+            // 好友被邀请加入球队
+            MessageRecord messageRecord = new MessageRecord();
+            messageRecord.setUserId(toUserId);
+            messageRecord.setStatus(0);
+            messageRecord.setMessageId(messageTeam.getId());
+            messageRecord.setType(8);
+            messageRecordService.create(messageRecord);
+        }
 
         WebUtil.printApi(response, new Result(true));
     }
@@ -314,6 +334,13 @@ public class TeamApi extends CommonController {
         messageJoin.setUser(userService.getById(userId));
         messageJoin.setTeam(teamService.getById(teamId));
         messageJoinService.create(messageJoin);
+
+        MessageRecord messageRecord = new MessageRecord();
+        messageRecord.setUserId(userId);
+        messageRecord.setStatus(0);
+        messageRecord.setMessageId(messageJoin.getId());
+        messageRecord.setType(10);
+        messageRecordService.create(messageRecord);
 
         WebUtil.printApi(response, new Result(true));
     }
@@ -386,6 +413,13 @@ public class TeamApi extends CommonController {
         team2.setDeclareNum(team2.getDeclareNum() + 1);
         teamService.update(team2);
         teamRaceService.create(teamRace);
+
+        MessageRecord messageRecord = new MessageRecord();
+        messageRecord.setUserId(team1.getLeaderUser().getId());
+        messageRecord.setStatus(0);
+        messageRecord.setMessageId(teamRace.getId());
+        messageRecord.setType(13);
+        messageRecordService.create(messageRecord);
 
         WebUtil.printApi(response, new Result(true));
 

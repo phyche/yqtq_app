@@ -19,6 +19,12 @@ public class MessageVo {
     private String teamName;
     private String teamAvater;
 
+    private Integer reserveType;
+    private Long reserveId;
+    private Integer matchType;
+    private Integer joinCount;
+    private Integer lackNum;
+
     public Long getId() {
         return id;
     }
@@ -121,5 +127,45 @@ public class MessageVo {
 
     public void setTeamAvater(String teamAvater) {
         this.teamAvater = teamAvater;
+    }
+
+    public Integer getReserveType() {
+        return reserveType;
+    }
+
+    public void setReserveType(Integer reserveType) {
+        this.reserveType = reserveType;
+    }
+
+    public Long getReserveId() {
+        return reserveId;
+    }
+
+    public void setReserveId(Long reserveId) {
+        this.reserveId = reserveId;
+    }
+
+    public Integer getMatchType() {
+        return matchType;
+    }
+
+    public void setMatchType(Integer matchType) {
+        this.matchType = matchType;
+    }
+
+    public Integer getJoinCount() {
+        return joinCount;
+    }
+
+    public void setJoinCount(Integer joinCount) {
+        this.joinCount = joinCount;
+    }
+
+    public Integer getLackNum() {
+        return lackNum;
+    }
+
+    public void setLackNum(Integer lackNum) {
+        this.lackNum = lackNum;
     }
 }

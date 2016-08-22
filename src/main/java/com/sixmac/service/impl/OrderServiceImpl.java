@@ -51,6 +51,12 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private InsuranceService insuranceService;
 
+    @Autowired
+    private MessageRecordService messageRecordService;
+
+    @Autowired
+    private MessageOrderBallService messageOrderBallService;
+
     @Override
     public List<Order> findAll() {
         return orderDao.findAll();
@@ -155,6 +161,19 @@ public class OrderServiceImpl implements OrderService {
             userReserve.setReserve(orders.getReserve());
             userReserve.setStatus(0);
             userReserveService.create(userReserve);
+
+            MessageRecord messageRecord = new MessageRecord();
+            messageRecord.setUserId(orders.getReserve().getUser().getId());
+            messageRecord.setStatus(0);
+            messageRecord.setMessageId(userReserve.getId());
+            messageRecord.setType(1);
+            messageRecordService.create(messageRecord);
+
+            if (orders.getMessageId() != null) {
+                MessageOrderBall messageOrderBall = messageOrderBallService.getById(orders.getMessageId());
+                messageOrderBall.setStatus(1);
+                messageOrderBallService.update(messageOrderBall);
+            }
         }
 
         Double preferente = 1.0;

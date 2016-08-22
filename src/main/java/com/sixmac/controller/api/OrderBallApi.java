@@ -61,6 +61,9 @@ public class OrderBallApi extends CommonController {
     @Autowired
     private TeamService teamService;
 
+    @Autowired
+    private MessageRecordService messageRecordService;
+
 
     /**
      * 完成
@@ -317,6 +320,13 @@ public class OrderBallApi extends CommonController {
         messageOrderBall.setToUser(userService.getById(toUserId));
         messageOrderBall.setReserve(reserveService.getById(reserveId));
 
+        MessageRecord messageRecord = new MessageRecord();
+        messageRecord.setUserId(toUserId);
+        messageRecord.setStatus(0);
+        messageRecord.setMessageId(messageOrderBall.getId());
+        messageRecord.setType(0);
+        messageRecordService.create(messageRecord);
+
         messageOrderBallService.create(messageOrderBall);
         WebUtil.printApi(response, new Result(true).data(0));
     }
@@ -456,6 +466,7 @@ public class OrderBallApi extends CommonController {
      * @apiGroup orderBall
      * @apiParam {Long} reserveId 约球ID <必传 />
      * @apiParam {Long} userId 用户ID <必传 />
+     * @apiParam {Long} messageId 约球消息ID
      * @apiSuccess {Object} payInfo 订单
      * @apiSuccess {String} payInfo.userName 用户昵称
      * @apiSuccess {String} payInfo.stadiumName 球场名称
@@ -463,7 +474,7 @@ public class OrderBallApi extends CommonController {
      * @apiSuccess {Long} payInfo.sn 订单号
      */
     @RequestMapping(value = "/pay")
-    public void pay(HttpServletResponse response, Long reserveId, Long userId, Double money) {
+    public void pay(HttpServletResponse response, Long reserveId, Long userId, Long messageId, Double money) {
 
         if (null == userId || reserveId == null) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -485,6 +496,17 @@ public class OrderBallApi extends CommonController {
                     userReserve.setReserve(reserve);
                     userReserve.setStatus(0);
                     userReserveService.create(userReserve);
+
+                    MessageRecord messageRecord = new MessageRecord();
+                    messageRecord.setUserId(reserve.getUser().getId());
+                    messageRecord.setStatus(0);
+                    messageRecord.setMessageId(userReserve.getId());
+                    messageRecord.setType(1);
+                    messageRecordService.create(messageRecord);
+
+                    MessageOrderBall messageOrderBall = messageOrderBallService.getById(messageId);
+                    messageOrderBall.setStatus(1);
+                    messageOrderBallService.update(messageOrderBall);
 
                     WebUtil.printApi(response, new Result(true));
                 }
@@ -509,6 +531,7 @@ public class OrderBallApi extends CommonController {
                     order.setPrice(money);
                     order.setAction(1);
                     order.setSn(sn);
+                    order.setMessageId(messageId);
                     orderService.create(order);
 
                     // 当前没有支付接口，因此状态直接为已支付

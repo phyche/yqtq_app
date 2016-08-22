@@ -12,4 +12,6 @@ import java.util.List;
 public interface MessageJoinService extends ICommonService<MessageJoin> {
 
     public List<MessageJoin> findByTeam(Team team);
+
+    public List<MessageJoin> findByUserId(Long userId);
 }

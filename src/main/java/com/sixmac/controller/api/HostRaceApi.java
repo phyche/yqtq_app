@@ -179,7 +179,7 @@ public class HostRaceApi extends CommonController {
         Team team = teamService.findListByLeaderId(userId);
 
         if (team == null) {
-            WebUtil.printApi(response, new Result(true).data("没有球队，提示创建球队"));
+            WebUtil.printApi(response, new Result(true));
         }else {
 
             HostJoin hostJoin = new HostJoin();
@@ -188,6 +188,6 @@ public class HostRaceApi extends CommonController {
             hostRaceService.create(hostRace);
         }
 
-        WebUtil.printApi(response, new Result(true).data("报名成功"));
+        WebUtil.printApi(response, new Result(true));
     }
 }

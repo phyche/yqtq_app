@@ -97,7 +97,7 @@ public class PlayIndexApi extends CommonController {
                 reserve.setStadium(new Stadium());
             }
             reserveList.add(reserve);
-            reserveList.add(userReserve.getReserve());
+            //reserveList.add(userReserve.getReserve());
 
         }
 

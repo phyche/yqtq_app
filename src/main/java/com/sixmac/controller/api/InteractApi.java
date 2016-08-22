@@ -55,6 +55,9 @@ public class InteractApi extends CommonController {
     @Autowired
     private MessageAddService messageAddService;
 
+    @Autowired
+    private MessageRecordService messageRecordService;
+
     /**
      * 完成
      *
@@ -262,6 +265,13 @@ public class InteractApi extends CommonController {
         postComment.setContent(content);
         postCommentService.create(postComment);
 
+        MessageRecord messageRecord = new MessageRecord();
+        messageRecord.setUserId(postService.getById(postId).getUser().getId());
+        messageRecord.setStatus(0);
+        messageRecord.setMessageId(postComment.getId());
+        messageRecord.setType(4);
+        messageRecordService.create(messageRecord);
+
         WebUtil.printApi(response, new Result(true));
     }
 
@@ -326,9 +336,23 @@ public class InteractApi extends CommonController {
         messageAdd.setStatus(0);
         messageAdd.setUser(userService.getById(userId));
         messageAdd.setToUser(user);
-
         messageAddService.create(messageAdd);
-        WebUtil.printApi(response, new Result(true).data(0));
+
+        /*MessageRecord messageRecord = new MessageRecord();
+        messageRecord.setUserId(userId);
+        messageRecord.setStatus(0);
+        messageRecord.setMessageId(messageAdd.getId());
+        messageRecord.setType(6);
+        messageRecordService.create(messageRecord);*/
+
+        MessageRecord messageRecord = new MessageRecord();
+        messageRecord.setUserId(user.getId());
+        messageRecord.setStatus(0);
+        messageRecord.setMessageId(messageAdd.getId());
+        messageRecord.setType(7);
+        messageRecordService.create(messageRecord);
+
+        WebUtil.printApi(response, new Result(true));
 
     }
 

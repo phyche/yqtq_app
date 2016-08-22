@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletResponse;
+import java.text.ParseException;
 import java.util.*;
 
 /**
@@ -61,6 +62,12 @@ public class MessageApi extends CommonController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private PostService postService;
+
+    @Autowired
+    private MessageRecordService messageRecordService;
+
     /**
      * 完成
      *
@@ -79,10 +86,15 @@ public class MessageApi extends CommonController {
      * @apiSuccess {String} list.nickname 好友昵称
      * @apiSuccess {String} list.stadiumname 球场名称
      * @apiSuccess {Integer} list.status 约球状态（1：成功，2：失败）
+     * @apiSuccess {Integer} list.reserveType 约球类型（0：私人，1：公共）
+     * @apiSuccess {Integer} list.matchType 约球赛制（N赛制）
+     * @apiSuccess {Integer} list.joinCount 约球参加人数
+     * @apiSuccess {Integer} list.lackNum 约球缺的人数
+     * @apiSuccess {Long} list.reserveId 约球id
      *
      */
     @RequestMapping(value = "/orderBall")
-    public void orderBall(HttpServletResponse response, Long userId) {
+    public void orderBall(HttpServletResponse response, Long userId) throws ParseException {
 
         if (null == userId ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
@@ -92,26 +104,45 @@ public class MessageApi extends CommonController {
         List<MessageVo> messageVoList = new ArrayList<MessageVo>();
         MessageVo messageVo = null;
         List<MessageOrderBall> list1 = messageOrderBallService.findByToUserId(userId);
+        Reserve reserve = null;
+        MessageRecord messageRecord = null;
         for (MessageOrderBall messageOrderBall : list1) {
 
+            reserve = messageOrderBall.getReserve();
+            messageRecord = messageRecordService.findByMessageId(messageOrderBall.getId(), 0);
+            messageRecord.setStatus(1);
+            messageRecordService.update(messageRecord);
             messageVo = new MessageVo();
             messageVo.setId(messageOrderBall.getId());
             messageVo.setUserId(messageOrderBall.getUser().getId());
             messageVo.setNickname(messageOrderBall.getUser().getNickname());
             messageVo.setContent("您的好友" + "user" + "约您去踢球啦！");
             messageVo.setCreateDate(messageOrderBall.getCreateDate());
-            messageVo.setStartTime(messageOrderBall.getReserve().getStartTime());
-            messageVo.setStadiumName(messageOrderBall.getReserve().getStadium().getName());
+            messageVo.setStartTime(reserve.getStartTime());
+            messageVo.setStadiumName(reserve.getStadium().getName());
             messageVo.setType(4);
+
+            messageVo.setReserveType(reserve.getType());
+            messageVo.setReserveId(reserve.getId());
+            if (reserve.getType() == 0) {
+                messageVo.setMatchType(reserve.getMatchType());
+                messageVo.setJoinCount(reserve.getJoinCount());
+                messageVo.setLackNum(reserve.getMatchType() * 2 - reserve.getJoinCount());
+            }
             messageVoList.add(messageVo);
 
         }
 
         List<Reserve> reserveList = reserveService.findByUserId(userId);
         List<UserReserve> list2 = new ArrayList<UserReserve>();
-        for (Reserve reserve : reserveList) {
-            for (UserReserve userReserve : userReserveService.findByReserverId(reserve.getId())){
+        for (Reserve reserve1 : reserveList) {
+            for (UserReserve userReserve : userReserveService.findByReserverId(reserve1.getId())){
 
+                reserve = userReserve.getReserve();
+                messageRecord = messageRecordService.findByMessageId(userReserve.getId(), 1);
+                messageRecord.setStatus(1);
+                messageRecordService.update(messageRecord);
+                messageRecordService.update(messageRecord);
                 messageVo = new MessageVo();
                 messageVo.setUserId(userReserve.getUser().getId());
                 messageVo.setNickname(userReserve.getUser().getNickname());
@@ -120,24 +151,43 @@ public class MessageApi extends CommonController {
                 messageVo.setStartTime(reserve.getStartTime());
                 messageVo.setStadiumName(reserve.getStadium().getName());
                 messageVo.setType(5);
+
+                messageVo.setReserveType(reserve.getType());
+                messageVo.setReserveId(reserve.getId());
+                if (reserve.getType() == 0) {
+                    messageVo.setMatchType(reserve.getMatchType());
+                    messageVo.setJoinCount(reserve.getJoinCount());
+                    messageVo.setLackNum(reserve.getMatchType() * 2 - reserve.getJoinCount());
+                }
                 messageVoList.add(messageVo);
             }
         }
 
         List<UserReserve> list3 = userReserveService.findByUserId(userId);
-        Reserve reserve = null;
         for (UserReserve userReserve : list3) {
 
 //            reserve = reserveService.getById(userReserve.getReserveId());
             reserve = userReserve.getReserve();
+            messageRecord = messageRecordService.findByMessageId(userReserve.getId(), 2);
+            messageRecord.setStatus(1);
+            messageRecordService.update(messageRecord);
+            messageRecordService.update(messageRecord);
             if (reserve.getStatus() == 1 || reserve.getStatus() == 2) {
                 messageVo = new MessageVo();
-                messageVo.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
+                messageVo.setContent(DateUtils.chinaDayOfWeekAndAM(DateUtils.longToDate(reserve.getStartTime(),"yyyy-MM-dd HH:mm:ss")) + "," + reserve.getStadium().getName() + "约球了");
                 messageVo.setCreateDate(userReserve.getCreateDate());
                 messageVo.setStartTime(reserve.getStartTime());
                 messageVo.setStadiumName(reserve.getStadium().getName());
                 messageVo.setType(6);
                 messageVo.setStatus(reserve.getStatus());
+
+                messageVo.setReserveType(reserve.getType());
+                messageVo.setReserveId(reserve.getId());
+                if (reserve.getType() == 0) {
+                    messageVo.setMatchType(reserve.getMatchType());
+                    messageVo.setJoinCount(reserve.getJoinCount());
+                    messageVo.setLackNum(reserve.getMatchType() * 2 - reserve.getJoinCount());
+                }
                 messageVoList.add(messageVo);
             }
         }
@@ -155,7 +205,7 @@ public class MessageApi extends CommonController {
      * @api {post} /api/message/doMessage 处理消息
      * @apiName message.doMessage
      * @apiGroup message
-     * @apiParam {Long} messageOrderBallId 约球消息id <必传 />
+     * @apiParam {Long} id 消息id <必传 />
      * @apiParam {Integer} status 状态（1：同意，2：拒绝） <必传 />
      * @apiParam {Integer} type 类型（1：处理约球消息，2：处理添加好友消息，3：处理加入球队消息，4：处理球队约战消息） <必传 />
      *
@@ -173,7 +223,7 @@ public class MessageApi extends CommonController {
             messageOrderBall.setStatus(status);
             messageOrderBallService.update(messageOrderBall);
 
-            if (status == 1) {
+            /*if (status == 1) {
                 UserReserve userReserve = new UserReserve();
                 userReserve.setUser(messageOrderBall.getToUser());
 
@@ -181,11 +231,18 @@ public class MessageApi extends CommonController {
                 userReserve.setReserve(messageOrderBall.getReserve());
 
                 userReserveService.create(userReserve);
-            }
+            }*/
         }else if (type == 2) {
             MessageAdd messageAdd = messageAddService.getById(id);
             messageAdd.setStatus(status);
             messageAddService.update(messageAdd);
+
+            MessageRecord messageRecord = new MessageRecord();
+            messageRecord.setUserId(messageAdd.getUser().getId());
+            messageRecord.setStatus(1);
+            messageRecord.setMessageId(messageAdd.getId());
+            messageRecord.setType(6);
+            messageRecordService.create(messageRecord);
         }else if (type == 3) {
             MessageJoin messageJoin = messageJoinService.getById(id);
             messageJoin.setStatus(status);
@@ -197,6 +254,14 @@ public class MessageApi extends CommonController {
                 teamMember.setTeamId(messageJoin.getTeam().getId());
                 teamMemberService.create(teamMember);
             }
+
+            MessageRecord messageRecord = new MessageRecord();
+            messageRecord.setUserId(messageJoin.getTeam().getId());
+            messageRecord.setStatus(1);
+            messageRecord.setMessageId(messageJoin.getId());
+            messageRecord.setType(14);
+            messageRecordService.create(messageRecord);
+
         }else if (type == 4) {
             TeamRace teamRace = teamRaceService.getById(id);
             teamRace.setStatus(status);
@@ -205,6 +270,17 @@ public class MessageApi extends CommonController {
                 teamRace.getHomeTeam().setDeclareNum(teamRace.getHomeTeam().getDeclareNum() + 1);
             }
             teamRaceService.update(teamRace);
+
+            MessageRecord messageRecord = new MessageRecord();
+            messageRecord.setUserId(teamRace.getVisitingTeam().getLeaderUser().getId());
+            messageRecord.setStatus(1);
+            messageRecord.setMessageId(teamRace.getId());
+            if (status == 1) {
+                messageRecord.setType(11);
+            }else if (status == 2) {
+                messageRecord.setType(12);
+            }
+            messageRecordService.create(messageRecord);
         }
 
 
@@ -228,7 +304,7 @@ public class MessageApi extends CommonController {
      * @apiSuccess {Object} list.bigRace 现场看球
      * @apiSuccess {Long} list.bigRace.id 现场看球id
      * @apiSuccess {String} list.bigRace.stadium.name 现场看球球场名字
-     * @apiSuccess {Long} list.bigRace.startTime 现场看球开始时间
+     * @apiSuccess {Long} list.bigRace.startDate 现场看球开始时间
      *
      * @apiSuccess {Object} list.watchingRace 直播看球
      * @apiSuccess {Long} list.watchingRace.id 直播看球id
@@ -248,12 +324,19 @@ public class MessageApi extends CommonController {
         }
 
         List<MessageWatching> list = messageWatchingService.findByToUserId(userId);
+        MessageRecord messageRecord = null;
         for (MessageWatching messageWatching : list) {
+            messageRecord = messageRecordService.findByMessageId(messageWatching.getId(), 3);
+            messageRecord.setStatus(1);
+            messageRecordService.update(messageRecord);
+            messageRecordService.update(messageRecord);
             messageWatching.setContent("user" + "约您看球");
             if (messageWatching.getType() == 0) {
                 messageWatching.setWatchingRace(new WatchingRace());
             }else if (messageWatching.getType() == 1) {
                 messageWatching.setBigRace(new BigRace());
+                messageWatching.getBigRace().setStadium(new Stadium());
+
             }
             if (messageWatching.getWatchingRace()!= null && StringUtils.isNotBlank(messageWatching.getWatchingRace().getAvater())) {
                 messageWatching.getWatchingRace().setAvater(messageWatching.getWatchingRace().getAvater());
@@ -276,14 +359,14 @@ public class MessageApi extends CommonController {
      * @apiSuccess {Object}  list 帖子消息列表
      * @apiSuccess {Long} list.id 消息id
      * @apiSuccess {String} list.title 消息标题
+     * @apiSuccess {String} list.content 消息评论内容
+     * @apiSuccess {Long} list.createDate 消息评论时间
      * @apiSuccess {Object} list.fUser 好友
      * @apiSuccess {Long} list.fUser.id 好友id
      * @apiSuccess {String} list.fUser.nickname 好友昵称
      * @apiSuccess {Object} list.post 帖子
      * @apiSuccess {Long} list.post.id 帖子id
      * @apiSuccess {String} list.post.content 帖子内容
-     * @apiSuccess {Long} list.createDate 评论时间
-     *
      *
      */
     @RequestMapping(value = "/post")
@@ -295,12 +378,20 @@ public class MessageApi extends CommonController {
         }
 
         List<PostComment> list = postCommentService.findByToUserId(userId);
+        Post post = null;
+        MessageRecord messageRecord = null;
         for (PostComment postComment : list) {
+            messageRecord = messageRecordService.findByMessageId(postComment.getId(), 4);
+            messageRecord.setStatus(1);
+            messageRecordService.update(messageRecord);
+            messageRecordService.update(messageRecord);
+            post = postService.getById(postComment.getPostId());
+            postComment.setPost(post);
             postComment.setTitle("user" + "评论了您的" + "post");
         }
 
         Result obj = new Result(true).data(createMap("list",list));
-        String result = JsonUtil.obj2ApiJson(obj,"toUser","content");
+        String result = JsonUtil.obj2ApiJson(obj,"tUser","user", "postImages", "postCommentList", "postId");
         WebUtil.printApi(response, result);
     }
 
@@ -337,8 +428,13 @@ public class MessageApi extends CommonController {
         List<MessageAdd> list3 = messageAddService.findByToUserId(userId);
         List<MessageVo> list = new ArrayList<MessageVo>();
         MessageVo messageVo = null;
+        MessageRecord messageRecord = null;
         for (SystemMessage systemMessage : list1) {
             messageVo = new MessageVo();
+            messageRecord = messageRecordService.findByMessageId(systemMessage.getId(), 5);
+            messageRecord.setStatus(1);
+            messageRecordService.update(messageRecord);
+            messageRecordService.update(messageRecord);
             messageVo.setId(systemMessage.getId());
             messageVo.setContent(systemMessage.getTitle());
             messageVo.setCreateDate(systemMessage.getCreateDate());
@@ -347,7 +443,10 @@ public class MessageApi extends CommonController {
         }
         for (MessageAdd messageAdd : list2) {
             if (messageAdd.getUser().getId() == userId && messageAdd.getStatus() != 0) {
-
+                messageRecord = messageRecordService.findByMessageId(messageAdd.getId(), 6);
+                messageRecord.setStatus(1);
+                messageRecordService.update(messageRecord);
+                messageRecordService.update(messageRecord);
                 messageVo = new MessageVo();
                 messageVo.setId(messageAdd.getId());
                 messageVo.setToUserId(messageAdd.getToUser().getId());
@@ -366,6 +465,10 @@ public class MessageApi extends CommonController {
         }
         for (MessageAdd messageAdd : list3) {
             if (messageAdd.getToUser().getId() == userId  && messageAdd.getStatus() == 0) {
+                messageRecord = messageRecordService.findByMessageId(messageAdd.getId(), 7);
+                messageRecord.setStatus(1);
+                messageRecordService.update(messageRecord);
+                messageRecordService.update(messageRecord);
                 messageVo = new MessageVo();
                 messageVo.setId(messageAdd.getId());
                 messageVo.setUserId(messageAdd.getUser().getId());
@@ -425,7 +528,7 @@ public class MessageApi extends CommonController {
      *
      * @apiSuccess {Object}  list 消息列表
      * @apiSuccess {Long} list.id 消息id
-     * @apiSuccess {Integer} list.type 消息类型（7：被邀请加入球队消息，8：邀请加入球队，9：申请加入球队, 10：约战成功,11：约战失败,12：申请约战）
+     * @apiSuccess {Integer} list.type 消息类型（7：被邀请加入球队消息，8：邀请加入球队，9：申请加入球队, 10：约战成功,11：约战失败,12：申请约战, 13：申请加入球队回复）
      * @apiSuccess {String} list.content 消息内容
      * @apiSuccess {Long} list.createDate 消息时间
      * @apiSuccess {Long} list.toUserId 好友id (邀请加入球队)
@@ -447,7 +550,13 @@ public class MessageApi extends CommonController {
         List<MessageVo> messageVoList = new ArrayList<MessageVo>();
         MessageVo messageVo = null;
         List<MessageTeam> list = messageTeamService.findByToUserId(userId);
+        MessageRecord messageRecord = null;
         for (MessageTeam messageTeam : list) {
+
+            messageRecord = messageRecordService.findByMessageId(messageTeam.getId(), 8);
+            messageRecord.setStatus(1);
+            messageRecordService.update(messageRecord);
+            messageRecordService.update(messageRecord);
 
             messageVo = new MessageVo();
             messageVo.setId(messageTeam.getId());
@@ -468,6 +577,12 @@ public class MessageApi extends CommonController {
 
             List<MessageTeam> list1 = messageTeamService.findByTeam(team);
             for (MessageTeam messageTeam : list1) {
+
+                messageRecord = messageRecordService.findByMessageId(messageTeam.getId(), 9);
+                messageRecord.setStatus(1);
+                messageRecordService.update(messageRecord);
+                messageRecordService.update(messageRecord);
+
                 messageVo = new MessageVo();
                 messageVo.setToUserId(messageTeam.getUser().getId());
                 messageVo.setNickname(messageTeam.getUser().getNickname());
@@ -485,11 +600,40 @@ public class MessageApi extends CommonController {
 
             List<MessageJoin> list2 = messageJoinService.findByTeam(team);
             for (MessageJoin messageJoin : list2) {
+                messageRecord = messageRecordService.findByMessageId(messageJoin.getId(), 10);
+                messageRecord.setStatus(1);
+                messageRecordService.update(messageRecord);
+                messageRecordService.update(messageRecord);
+
                 messageVo = new MessageVo();
+                messageVo.setId(messageJoin.getId());
                 messageVo.setUserId(messageJoin.getUser().getId());
                 messageVo.setNickname(messageJoin.getUser().getNickname());
                 messageVo.setContent("user" + "申请加入您的球队");
                 messageVo.setType(9);
+                messageVo.setCreateDate(messageJoin.getCreateDate());
+                messageVoList.add(messageVo);
+            }
+
+            List<MessageJoin> list3 = messageJoinService.findByUserId(userId);
+            for (MessageJoin messageJoin : list3) {
+                messageRecord = messageRecordService.findByMessageId(messageJoin.getId(), 14);
+                messageRecord.setStatus(1);
+                messageRecordService.update(messageRecord);
+                messageRecordService.update(messageRecord);
+
+                messageVo = new MessageVo();
+                messageVo.setId(messageJoin.getId());
+                messageVo.setUserId(messageJoin.getUser().getId());
+                messageVo.setNickname(messageJoin.getUser().getNickname());
+                messageVo.setTeamId(messageJoin.getTeam().getId());
+                messageVo.setTeamName(messageJoin.getTeam().getName());
+                if (messageJoin.getStatus() == 1) {
+                    messageVo.setContent("team" + "同意您加入球队");
+                }else if (messageJoin.getStatus() == 2){
+                    messageVo.setContent("team" + "拒绝您加入球队");
+                }
+                messageVo.setType(13);
                 messageVo.setCreateDate(messageJoin.getCreateDate());
                 messageVoList.add(messageVo);
             }
@@ -507,6 +651,10 @@ public class MessageApi extends CommonController {
             List<TeamRace> teamRaceList1 = teamRaceService.findHomeId(team1.getId());
             for (TeamRace teamRace : teamRaceList1) {
                 if (teamRace.getStatus() == 1) {
+                    messageRecord = messageRecordService.findByMessageId(teamRace.getId(), 11);
+                    messageRecord.setStatus(1);
+                    messageRecordService.update(messageRecord);
+                    messageRecordService.update(messageRecord);
                     messageVo = new MessageVo();
                     messageVo.setTeamId(teamRace.getVisitingTeam().getId());
                     messageVo.setTeamName(teamRace.getVisitingTeam().getName());
@@ -520,6 +668,11 @@ public class MessageApi extends CommonController {
             List<TeamRace> teamRaceList2 = teamRaceService.findVisitingId(team.getId());
             for (TeamRace teamRace : teamRaceList2) {
                 if (teamRace.getStatus() == 1) {
+                    messageRecord = messageRecordService.findByMessageId(teamRace.getId(), 11);
+                    messageRecord.setStatus(1);
+                    messageRecordService.update(messageRecord);
+                    messageRecordService.update(messageRecord);
+
                     messageVo = new MessageVo();
                     messageVo.setTeamId(teamRace.getHomeTeam().getId());
                     messageVo.setTeamName(teamRace.getHomeTeam().getName());
@@ -535,6 +688,10 @@ public class MessageApi extends CommonController {
         List<TeamRace> teamRaceList1 = teamRaceService.findHomeId(team.getId());
         for (TeamRace teamRace : teamRaceList1) {
             if (teamRace.getStatus() == 2) {
+                messageRecord = messageRecordService.findByMessageId(teamRace.getId(), 12);
+                messageRecord.setStatus(1);
+                messageRecordService.update(messageRecord);
+                messageRecordService.update(messageRecord);
 
                 messageVo = new MessageVo();
                 messageVo.setTeamId(teamRace.getVisitingTeam().getId());
@@ -543,9 +700,15 @@ public class MessageApi extends CommonController {
                 messageVo.setContent("visitingTeam" + "拒绝了和您约战");
                 messageVo.setType(11);
                 messageVo.setCreateDate(teamRace.getUpdateDate());
+                messageVo.setStadiumName(teamRace.getAddress());
                 messageVoList.add(messageVo);
             }
             if (teamRace.getStatus() == 1) {
+                messageRecord = messageRecordService.findByMessageId(teamRace.getId(), 11);
+                messageRecord.setStatus(1);
+                messageRecordService.update(messageRecord);
+                messageRecordService.update(messageRecord);
+
                 messageVo = new MessageVo();
                 messageVo.setTeamId(teamRace.getVisitingTeam().getId());
                 messageVo.setTeamName(teamRace.getVisitingTeam().getName());
@@ -560,7 +723,13 @@ public class MessageApi extends CommonController {
         for (TeamRace teamRace : teamRaceList2) {
             if (teamRace.getStatus() == 0) {
 
+                messageRecord = messageRecordService.findByMessageId(teamRace.getId(), 13);
+                messageRecord.setStatus(1);
+                messageRecordService.update(messageRecord);
+                messageRecordService.update(messageRecord);
+
                 messageVo = new MessageVo();
+                messageVo.setId(teamRace.getId());
                 messageVo.setTeamId(teamRace.getHomeTeam().getId());
                 messageVo.setTeamName(teamRace.getHomeTeam().getName());
                 messageVo.setTeamAvater(ConfigUtil.getString("upload.url") + teamRace.getHomeTeam().getAvater());
@@ -571,6 +740,10 @@ public class MessageApi extends CommonController {
                 messageVoList.add(messageVo);
             }
             if (teamRace.getStatus() == 1) {
+                messageRecord = messageRecordService.findByMessageId(teamRace.getId(), 11);
+                messageRecord.setStatus(1);
+                messageRecordService.update(messageRecord);
+                messageRecordService.update(messageRecord);
                 messageVo = new MessageVo();
                 messageVo.setTeamId(teamRace.getHomeTeam().getId());
                 messageVo.setTeamName(teamRace.getHomeTeam().getName());
@@ -701,6 +874,29 @@ public class MessageApi extends CommonController {
         }
 
         Result obj = new Result(true).data(createMap("list",list));
+        String result = JsonUtil.obj2ApiJson(obj,"leaderUser");
+        WebUtil.printApi(response, result);
+    }
+
+    /**
+     * 完成
+     *
+     * @api {post} /api/message/messageStatus 消息状态
+     * @apiName message.messageStatus
+     * @apiGroup message
+     * @apiParam {Long} userId 消息id <必传 />
+     * @apiSuccess {Object} list 消息状态
+     *
+     */
+    @RequestMapping(value = "/messageStatus")
+    private void messageStatus(HttpServletResponse response, Long userId) {
+        if (userId == null) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
+        }
+
+        List<MessageRecord> messageRecordList = messageRecordService.findByUserId(userId);
+        Result obj = new Result(true).data(createMap("list",messageRecordList));
         String result = JsonUtil.obj2ApiJson(obj,"leaderUser");
         WebUtil.printApi(response, result);
     }

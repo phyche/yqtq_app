@@ -16,4 +16,7 @@ public interface MessageJoinDao extends JpaRepository<MessageJoin, Long> {
     //根据球队查询等待用户处理的申请加入球队消息
     @Query("select a from MessageJoin a where a.team = ?1 and a.status = 0 ")
     public List<MessageJoin> findByTeam(Team team);
+
+    @Query("select a from MessageJoin a where a.user.id = ?1 and a.status != 0 ")
+    public List<MessageJoin> findByUserId(Long userId);
 }

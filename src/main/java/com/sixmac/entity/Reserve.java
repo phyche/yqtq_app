@@ -27,7 +27,7 @@ public class Reserve extends BaseEntity {
 //    private List<UserReserve> userReservelist;
 
     @Transient
-    private List<UserReserve> userReservelist;
+    private List<UserReserve> userReservelist = new ArrayList<UserReserve>();
 
     @Column(name = "site_id")
     private Long siteId;

@@ -72,4 +72,9 @@ public class MessageJoinServiceImpl implements MessageJoinService {
     public List<MessageJoin> findByTeam(Team team) {
         return messageJoinDao.findByTeam(team);
     }
+
+    @Override
+    public List<MessageJoin> findByUserId(Long userId) {
+        return messageJoinDao.findByUserId(userId);
+    }
 }

@@ -90,7 +90,7 @@ public class GirlCommentServiceImpl implements GirlCommentService {
                 List<Predicate> predicateList = new ArrayList<Predicate>();
 
                 if (girlId != null) {
-                    Predicate pre = cb.equal(root.get("girl").get("id").as(Long.class), girlId);
+                    Predicate pre = cb.equal(root.get("girlId").as(Long.class), girlId);
                     predicateList.add(pre);
                 }
 
