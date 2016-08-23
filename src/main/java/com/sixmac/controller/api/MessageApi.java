@@ -5,8 +5,8 @@ import com.sixmac.core.ErrorCode;
 import com.sixmac.core.bean.Result;
 import com.sixmac.entity.*;
 import com.sixmac.entity.vo.MessageVo;
-import com.sixmac.utils.*;
 import com.sixmac.service.*;
+import com.sixmac.utils.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -75,7 +75,6 @@ public class MessageApi extends CommonController {
      * @apiName message.orderBall
      * @apiGroup message
      * @apiParam {Integer} userId 用户id <必传 />
-     *
      * @apiSuccess {Object}  list 消息列表
      * @apiSuccess {Long} list.id 消息id
      * @apiSuccess {Integer} list.type 消息类型（4：好友约球消息，5：好友加入约球消息，6：约球成功或失败消息）
@@ -91,12 +90,11 @@ public class MessageApi extends CommonController {
      * @apiSuccess {Integer} list.joinCount 约球参加人数
      * @apiSuccess {Integer} list.lackNum 约球缺的人数
      * @apiSuccess {Long} list.reserveId 约球id
-     *
      */
     @RequestMapping(value = "/orderBall")
     public void orderBall(HttpServletResponse response, Long userId) throws ParseException {
 
-        if (null == userId ) {
+        if (null == userId) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
@@ -138,7 +136,7 @@ public class MessageApi extends CommonController {
         List<Reserve> reserveList = reserveService.findByUserId(userId);
         List<UserReserve> list2 = new ArrayList<UserReserve>();
         for (Reserve reserve1 : reserveList) {
-            for (UserReserve userReserve : userReserveService.findByReserverId(reserve1.getId())){
+            for (UserReserve userReserve : userReserveService.findByReserverId(reserve1.getId())) {
 
                 reserve = userReserve.getReserve();
                 messageRecord = messageRecordService.findByMessageId(userReserve.getId(), 1);
@@ -178,7 +176,7 @@ public class MessageApi extends CommonController {
             }
             if (reserve.getStatus() == 1 || reserve.getStatus() == 2) {
                 messageVo = new MessageVo();
-                messageVo.setContent(DateUtils.chinaDayOfWeekAndAM(DateUtils.longToDate(reserve.getStartTime(),"yyyy-MM-dd HH:mm:ss")) + "," + reserve.getStadium().getName() + "约球了");
+                messageVo.setContent(DateUtils.chinaDayOfWeekAndAM(DateUtils.longToDate(reserve.getStartTime(), "yyyy-MM-dd HH:mm:ss")) + "," + reserve.getStadium().getName() + "约球了");
                 messageVo.setCreateDate(userReserve.getCreateDate());
                 messageVo.setStartTime(reserve.getStartTime());
                 messageVo.setStadiumName(reserve.getStadium().getName());
@@ -196,10 +194,12 @@ public class MessageApi extends CommonController {
             }
         }
 
-        Collections.sort(messageVoList,new Compare());
+        if (null != messageVoList && messageVoList.size() > 1) {
+            Collections.sort(messageVoList, new Compare());
+        }
 
-        Result obj = new Result(true).data(createMap("list",messageVoList));
-        String result = JsonUtil.obj2ApiJson(obj,"set","site","insurance","toUser");
+        Result obj = new Result(true).data(createMap("list", messageVoList));
+        String result = JsonUtil.obj2ApiJson(obj, "set", "site", "insurance", "toUser");
         WebUtil.printApi(response, result);
     }
 
@@ -212,7 +212,6 @@ public class MessageApi extends CommonController {
      * @apiParam {Long} id 消息id <必传 />
      * @apiParam {Integer} status 状态（1：同意，2：拒绝） <必传 />
      * @apiParam {Integer} type 类型（1：处理约球消息，2：处理添加好友消息，3：处理加入球队消息，4：处理球队约战消息） <必传 />
-     *
      */
     @RequestMapping(value = "/doMessage")
     public void doMessage(HttpServletResponse response, Long id, Integer status, Integer type) {
@@ -236,7 +235,7 @@ public class MessageApi extends CommonController {
 
                 userReserveService.create(userReserve);
             }*/
-        }else if (type == 2) {
+        } else if (type == 2) {
             MessageAdd messageAdd = messageAddService.getById(id);
             if (messageAdd != null) {
                 messageAdd.setStatus(status);
@@ -249,7 +248,7 @@ public class MessageApi extends CommonController {
             messageRecord.setMessageId(messageAdd.getId());
             messageRecord.setType(6);
             messageRecordService.create(messageRecord);
-        }else if (type == 3) {
+        } else if (type == 3) {
             MessageJoin messageJoin = messageJoinService.getById(id);
             messageJoin.setStatus(status);
             messageJoinService.update(messageJoin);
@@ -268,7 +267,7 @@ public class MessageApi extends CommonController {
             messageRecord.setType(14);
             messageRecordService.create(messageRecord);
 
-        }else if (type == 4) {
+        } else if (type == 4) {
             TeamRace teamRace = teamRaceService.getById(id);
             teamRace.setStatus(status);
             if (status == 1) {
@@ -283,14 +282,13 @@ public class MessageApi extends CommonController {
             messageRecord.setMessageId(teamRace.getId());
             if (status == 1) {
                 messageRecord.setType(11);
-            }else if (status == 2) {
+            } else if (status == 2) {
                 messageRecord.setType(12);
             }
             messageRecordService.create(messageRecord);
         }
 
-
-        WebUtil.printApi(response,new Result(true));
+        WebUtil.printApi(response, new Result(true));
     }
 
     /**
@@ -300,7 +298,6 @@ public class MessageApi extends CommonController {
      * @apiName message.watching
      * @apiGroup message
      * @apiParam {Long} userId 用户id <必传 />
-     *
      * @apiSuccess {Object}  list 约看列表
      * @apiSuccess {Long} list.id 约看id
      * @apiSuccess {Integer} list.type 类型（0：现场看球，1：直播看球）
@@ -311,20 +308,17 @@ public class MessageApi extends CommonController {
      * @apiSuccess {Long} list.bigRace.id 现场看球id
      * @apiSuccess {String} list.bigRace.stadium.name 现场看球球场名字
      * @apiSuccess {Long} list.bigRace.startDate 现场看球开始时间
-     *
      * @apiSuccess {Object} list.watchingRace 直播看球
      * @apiSuccess {Long} list.watchingRace.id 直播看球id
      * @apiSuccess {String} list.watchingRace.name 直播看球球馆名字
      * @apiSuccess {String} list.watchingRace.avater 直播看球球馆封面
      * @apiSuccess {Long} list.watchingRace.startTime 直播看球开始时间
-     *
      * @apiSuccess {Long} list.createDate 记录生成时间
-     *
      */
     @RequestMapping(value = "/watching")
     public void watching(HttpServletResponse response, Long userId) {
 
-        if (null == userId ) {
+        if (null == userId) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
@@ -340,18 +334,18 @@ public class MessageApi extends CommonController {
             messageWatching.setContent("user" + "约您看球");
             if (messageWatching.getType() == 0) {
                 messageWatching.setWatchingRace(new WatchingRace());
-            }else if (messageWatching.getType() == 1) {
+            } else if (messageWatching.getType() == 1) {
                 messageWatching.setBigRace(new BigRace());
                 messageWatching.getBigRace().setStadium(new Stadium());
 
             }
-            if (messageWatching.getWatchingRace()!= null && StringUtils.isNotBlank(messageWatching.getWatchingRace().getAvater())) {
+            if (messageWatching.getWatchingRace() != null && StringUtils.isNotBlank(messageWatching.getWatchingRace().getAvater())) {
                 messageWatching.getWatchingRace().setAvater(messageWatching.getWatchingRace().getAvater());
             }
         }
 
-        Result obj = new Result(true).data(createMap("list",list));
-        String result = JsonUtil.obj2ApiJson(obj,"toUser");
+        Result obj = new Result(true).data(createMap("list", list));
+        String result = JsonUtil.obj2ApiJson(obj, "toUser");
         WebUtil.printApi(response, result);
     }
 
@@ -362,7 +356,6 @@ public class MessageApi extends CommonController {
      * @apiName message.post
      * @apiGroup message
      * @apiParam {Long} userId 用户id <必传 />
-     *
      * @apiSuccess {Object}  list 帖子消息列表
      * @apiSuccess {Long} list.id 消息id
      * @apiSuccess {String} list.title 消息标题
@@ -374,12 +367,11 @@ public class MessageApi extends CommonController {
      * @apiSuccess {Object} list.post 帖子
      * @apiSuccess {Long} list.post.id 帖子id
      * @apiSuccess {String} list.post.content 帖子内容
-     *
      */
     @RequestMapping(value = "/post")
     public void post(HttpServletResponse response, Long userId) {
 
-        if (null == userId ) {
+        if (null == userId) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
@@ -399,8 +391,8 @@ public class MessageApi extends CommonController {
             postComment.setTitle("user" + "评论了您的" + "post");
         }
 
-        Result obj = new Result(true).data(createMap("list",list));
-        String result = JsonUtil.obj2ApiJson(obj,"tUser","user", "postImages", "postCommentList", "postId");
+        Result obj = new Result(true).data(createMap("list", list));
+        String result = JsonUtil.obj2ApiJson(obj, "tUser", "user", "postImages", "postCommentList", "postId");
         WebUtil.printApi(response, result);
     }
 
@@ -411,7 +403,6 @@ public class MessageApi extends CommonController {
      * @apiName message.system
      * @apiGroup message
      * @apiParam {Long} userId 用户id <必传/>
-     *
      * @apiSuccess {Object}  list 消息列表
      * @apiSuccess {Long} list.id 消息id
      * @apiSuccess {Integer} list.type 消息类型（1：系统消息，2：添加好友消息，3：好友请求消息）
@@ -420,12 +411,11 @@ public class MessageApi extends CommonController {
      * @apiSuccess {Long} list.toUserId 好友id (添加好友)
      * @apiSuccess {String} list.nickname 好友昵称
      * @apiSuccess {Long} list.userId 好友id (好友请求)
-     *
      */
     @RequestMapping(value = "/system")
     public void system(HttpServletResponse response, Long userId) {
 
-        if (null == userId ) {
+        if (null == userId) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
@@ -477,7 +467,7 @@ public class MessageApi extends CommonController {
             }
         }
         for (MessageAdd messageAdd : list3) {
-            if (messageAdd.getToUser().getId() == userId  && messageAdd.getStatus() == 0) {
+            if (messageAdd.getToUser().getId() == userId && messageAdd.getStatus() == 0) {
                 messageRecord = messageRecordService.findByMessageId(messageAdd.getId(), 7);
                 if (messageRecord != null) {
                     messageRecord.setStatus(1);
@@ -495,10 +485,12 @@ public class MessageApi extends CommonController {
             }
         }
 
-        Collections.sort(list,new Compare());
+        if (null != list && list.size() > 1) {
+            Collections.sort(list, new Compare());
+        }
 
-        Result obj = new Result(true).data(createMap("list",list));
-        String result = JsonUtil.obj2ApiJson(obj,"toUser");
+        Result obj = new Result(true).data(createMap("list", list));
+        String result = JsonUtil.obj2ApiJson(obj, "toUser");
         WebUtil.printApi(response, result);
     }
 
@@ -509,27 +501,24 @@ public class MessageApi extends CommonController {
      * @apiName message.systemInfo
      * @apiGroup message
      * @apiParam {Long} systemId 系统消息id <必传/>
-     *
      * @apiSuccess {Object}  message 系统消息列表
      * @apiSuccess {Long} message.id 消息id
      * @apiSuccess {String} message.title 消息标题
      * @apiSuccess {String} message.content 消息内容
      * @apiSuccess {Long} message.createDate 消息时间
-     *
-     *
      */
     @RequestMapping(value = "/systemInfo")
     public void systemInfo(HttpServletResponse response, Long systemId) {
 
-        if (null == systemId ) {
+        if (null == systemId) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
 
         SystemMessage message = systemMessageService.getById(systemId);
 
-        Result obj = new Result(true).data(createMap("message",message));
-        String result = JsonUtil.obj2ApiJson(obj,"toUser");
+        Result obj = new Result(true).data(createMap("message", message));
+        String result = JsonUtil.obj2ApiJson(obj, "toUser");
         WebUtil.printApi(response, result);
     }
 
@@ -540,7 +529,6 @@ public class MessageApi extends CommonController {
      * @apiName message.team
      * @apiGroup message
      * @apiParam {Long} userId 用户id <必传/>
-     *
      * @apiSuccess {Object}  list 消息列表
      * @apiSuccess {Long} list.id 消息id
      * @apiSuccess {Integer} list.type 消息类型（7：被邀请加入球队消息，8：邀请加入球队，9：申请加入球队, 10：约战成功,11：约战失败,12：申请约战, 13：申请加入球队回复）
@@ -552,12 +540,11 @@ public class MessageApi extends CommonController {
      * @apiSuccess {Long} list.userId 球队id
      * @apiSuccess {String} list.nickname 球队名称
      * @apiSuccess {String} list.nickname 球队队徽
-     *
      */
     @RequestMapping(value = "/team")
     public void team(HttpServletResponse response, Long userId) {
 
-        if (null == userId ) {
+        if (null == userId) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
@@ -589,7 +576,7 @@ public class MessageApi extends CommonController {
         Team team = teamService.findListByLeaderId(userId);
         if (team == null) {
             WebUtil.printApi(response, new Result(true));
-        }else {
+        } else {
 
             List<MessageTeam> list1 = messageTeamService.findByTeam(team);
             for (MessageTeam messageTeam : list1) {
@@ -649,7 +636,7 @@ public class MessageApi extends CommonController {
                 messageVo.setTeamName(messageJoin.getTeam().getName());
                 if (messageJoin.getStatus() == 1) {
                     messageVo.setContent("team" + "同意您加入球队");
-                }else if (messageJoin.getStatus() == 2){
+                } else if (messageJoin.getStatus() == 2) {
                     messageVo.setContent("team" + "拒绝您加入球队");
                 }
                 messageVo.setType(13);
@@ -782,10 +769,12 @@ public class MessageApi extends CommonController {
             }
         }
 
-        Collections.sort(messageVoList, new Compare());
+        if (null != messageVoList && messageVoList.size() > 1) {
+            Collections.sort(messageVoList, new Compare());
+        }
 
-        Result obj = new Result(true).data(createMap("list",messageVoList));
-        String result = JsonUtil.obj2ApiJson(obj,"leaderUser","toUser");
+        Result obj = new Result(true).data(createMap("list", messageVoList));
+        String result = JsonUtil.obj2ApiJson(obj, "leaderUser", "toUser");
         WebUtil.printApi(response, result);
 
     }
@@ -797,7 +786,6 @@ public class MessageApi extends CommonController {
      * @apiName message.teamOrder
      * @apiGroup message
      * @apiParam {Long} userId 用户id <必传/>
-     *
      * @apiSuccess {Object}  list 消息列表
      * @apiSuccess {Long} list.id 消息id
      * @apiSuccess {String} list.content 消息内容
@@ -811,12 +799,11 @@ public class MessageApi extends CommonController {
      * @apiSuccess {String} list.homeTeam.avater 客队队徽
      * @apiSuccess {Long} list.startTime 约战时间
      * @apiSuccess {Long} list.createDate 消息时间
-     *
      */
     @RequestMapping(value = "/teamOrder")
     public void teamOrder(HttpServletResponse response, Long userId) {
 
-        if (null == userId ) {
+        if (null == userId) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
@@ -900,8 +887,8 @@ public class MessageApi extends CommonController {
             }
         }
 
-        Result obj = new Result(true).data(createMap("list",list));
-        String result = JsonUtil.obj2ApiJson(obj,"leaderUser");
+        Result obj = new Result(true).data(createMap("list", list));
+        String result = JsonUtil.obj2ApiJson(obj, "leaderUser");
         WebUtil.printApi(response, result);
     }
 
@@ -912,8 +899,7 @@ public class MessageApi extends CommonController {
      * @apiName message.messageStatus
      * @apiGroup message
      * @apiParam {Long} userId 消息id <必传 />
-     * @apiSuccess {Object} list 消息状态
-     *
+     * @apiSuccess {Integer} status 消息状态(0：有新消息，1：没有)
      */
     @RequestMapping(value = "/messageStatus")
     private void messageStatus(HttpServletResponse response, Long userId) {
@@ -922,9 +908,13 @@ public class MessageApi extends CommonController {
             return;
         }
 
+        Integer status = 0;
         List<MessageRecord> messageRecordList = messageRecordService.findByUserId(userId);
-        Result obj = new Result(true).data(createMap("list",messageRecordList));
-        String result = JsonUtil.obj2ApiJson(obj,"leaderUser");
+        if (messageRecordList == null || messageRecordList.size() == 0) {
+            status = 1;
+        }
+        Result obj = new Result(true).data(createMap("status", status));
+        String result = JsonUtil.obj2ApiJson(obj, "leaderUser");
         WebUtil.printApi(response, result);
     }
 }

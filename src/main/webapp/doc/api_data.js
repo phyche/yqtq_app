@@ -1489,10 +1489,10 @@ define({ "api": [
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "Object",
+            "type": "Integer",
             "optional": false,
-            "field": "list",
-            "description": "<p>消息状态</p>"
+            "field": "status",
+            "description": "<p>消息状态(0：有新消息，1：没有)</p>"
           }
         ]
       }

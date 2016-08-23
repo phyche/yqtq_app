@@ -504,9 +504,13 @@ public class OrderBallApi extends CommonController {
                     messageRecord.setType(1);
                     messageRecordService.create(messageRecord);
 
-                    MessageOrderBall messageOrderBall = messageOrderBallService.getById(messageId);
-                    messageOrderBall.setStatus(1);
-                    messageOrderBallService.update(messageOrderBall);
+                    if (messageId != null) {
+                        MessageOrderBall messageOrderBall = messageOrderBallService.getById(messageId);
+                        if (messageRecord != null) {
+                            messageRecord.setStatus(1);
+                            messageRecordService.update(messageRecord);
+                        }
+                    }
 
                     WebUtil.printApi(response, new Result(true));
                 }
@@ -557,9 +561,13 @@ public class OrderBallApi extends CommonController {
             messageRecord.setType(1);
             messageRecordService.create(messageRecord);
 
-            MessageOrderBall messageOrderBall = messageOrderBallService.getById(messageId);
-            messageOrderBall.setStatus(1);
-            messageOrderBallService.update(messageOrderBall);
+            if (messageId != null) {
+                MessageOrderBall messageOrderBall = messageOrderBallService.getById(messageId);
+                if (messageRecord != null) {
+                    messageRecord.setStatus(1);
+                    messageRecordService.update(messageRecord);
+                }
+            }
 
             WebUtil.printApi(response, new Result(true));
         }
