@@ -59,6 +59,9 @@ public class WatchingApi extends CommonController {
     @Autowired
     private VipLevelService vipLevelService;
 
+    @Autowired
+    private MessageRecordService messageRecordService;
+
     /**
      * 完成
      *
@@ -119,15 +122,24 @@ public class WatchingApi extends CommonController {
         }
 
         MessageWatching messageWatching = new MessageWatching();
-
         messageWatching.setUser(userService.getById(userId));
         messageWatching.setType(type);
         messageWatching.setToUser(userService.getById(toUserId));
-        messageWatching.setWatchingRace(watchingRaceService.getById(id));
-
+        if (type == 0) {
+            messageWatching.setWatchingRace(watchingRaceService.getById(id));
+        }else if (type == 1) {
+            messageWatching.setBigRace(bigRaceService.getById(id));
+        }
         messageWatchingService.create(messageWatching);
 
-        WebUtil.printApi(response, new Result(true).data(0));
+        MessageRecord messageRecord = new MessageRecord();
+        messageRecord.setUserId(toUserId);
+        messageRecord.setStatus(0);
+        messageRecord.setMessageId(messageWatching.getId());
+        messageRecord.setType(3);
+        messageRecordService.create(messageRecord);
+
+        WebUtil.printApi(response, new Result(true));
     }
 
     /**

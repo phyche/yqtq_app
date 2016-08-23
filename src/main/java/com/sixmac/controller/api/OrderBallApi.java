@@ -550,6 +550,17 @@ public class OrderBallApi extends CommonController {
             userReserve.setStatus(0);
             userReserveService.create(userReserve);
 
+            MessageRecord messageRecord = new MessageRecord();
+            messageRecord.setUserId(reserve.getUser().getId());
+            messageRecord.setStatus(0);
+            messageRecord.setMessageId(userReserve.getId());
+            messageRecord.setType(1);
+            messageRecordService.create(messageRecord);
+
+            MessageOrderBall messageOrderBall = messageOrderBallService.getById(messageId);
+            messageOrderBall.setStatus(1);
+            messageOrderBallService.update(messageOrderBall);
+
             WebUtil.printApi(response, new Result(true));
         }
 

@@ -110,8 +110,10 @@ public class MessageApi extends CommonController {
 
             reserve = messageOrderBall.getReserve();
             messageRecord = messageRecordService.findByMessageId(messageOrderBall.getId(), 0);
-            messageRecord.setStatus(1);
-            messageRecordService.update(messageRecord);
+            if (messageRecord != null) {
+                messageRecord.setStatus(1);
+                messageRecordService.update(messageRecord);
+            }
             messageVo = new MessageVo();
             messageVo.setId(messageOrderBall.getId());
             messageVo.setUserId(messageOrderBall.getUser().getId());
@@ -140,9 +142,10 @@ public class MessageApi extends CommonController {
 
                 reserve = userReserve.getReserve();
                 messageRecord = messageRecordService.findByMessageId(userReserve.getId(), 1);
-                messageRecord.setStatus(1);
-                messageRecordService.update(messageRecord);
-                messageRecordService.update(messageRecord);
+                if (messageRecord != null) {
+                    messageRecord.setStatus(1);
+                    messageRecordService.update(messageRecord);
+                }
                 messageVo = new MessageVo();
                 messageVo.setUserId(userReserve.getUser().getId());
                 messageVo.setNickname(userReserve.getUser().getNickname());
@@ -169,9 +172,10 @@ public class MessageApi extends CommonController {
 //            reserve = reserveService.getById(userReserve.getReserveId());
             reserve = userReserve.getReserve();
             messageRecord = messageRecordService.findByMessageId(userReserve.getId(), 2);
-            messageRecord.setStatus(1);
-            messageRecordService.update(messageRecord);
-            messageRecordService.update(messageRecord);
+            if (messageRecord != null) {
+                messageRecord.setStatus(1);
+                messageRecordService.update(messageRecord);
+            }
             if (reserve.getStatus() == 1 || reserve.getStatus() == 2) {
                 messageVo = new MessageVo();
                 messageVo.setContent(DateUtils.chinaDayOfWeekAndAM(DateUtils.longToDate(reserve.getStartTime(),"yyyy-MM-dd HH:mm:ss")) + "," + reserve.getStadium().getName() + "约球了");
@@ -234,7 +238,9 @@ public class MessageApi extends CommonController {
             }*/
         }else if (type == 2) {
             MessageAdd messageAdd = messageAddService.getById(id);
-            messageAdd.setStatus(status);
+            if (messageAdd != null) {
+                messageAdd.setStatus(status);
+            }
             messageAddService.update(messageAdd);
 
             MessageRecord messageRecord = new MessageRecord();
@@ -327,9 +333,10 @@ public class MessageApi extends CommonController {
         MessageRecord messageRecord = null;
         for (MessageWatching messageWatching : list) {
             messageRecord = messageRecordService.findByMessageId(messageWatching.getId(), 3);
-            messageRecord.setStatus(1);
-            messageRecordService.update(messageRecord);
-            messageRecordService.update(messageRecord);
+            if (messageRecord != null) {
+                messageRecord.setStatus(1);
+                messageRecordService.update(messageRecord);
+            }
             messageWatching.setContent("user" + "约您看球");
             if (messageWatching.getType() == 0) {
                 messageWatching.setWatchingRace(new WatchingRace());
@@ -382,9 +389,11 @@ public class MessageApi extends CommonController {
         MessageRecord messageRecord = null;
         for (PostComment postComment : list) {
             messageRecord = messageRecordService.findByMessageId(postComment.getId(), 4);
-            messageRecord.setStatus(1);
-            messageRecordService.update(messageRecord);
-            messageRecordService.update(messageRecord);
+            if (messageRecord != null) {
+                messageRecord.setStatus(1);
+                messageRecordService.update(messageRecord);
+            }
+
             post = postService.getById(postComment.getPostId());
             postComment.setPost(post);
             postComment.setTitle("user" + "评论了您的" + "post");
@@ -432,9 +441,11 @@ public class MessageApi extends CommonController {
         for (SystemMessage systemMessage : list1) {
             messageVo = new MessageVo();
             messageRecord = messageRecordService.findByMessageId(systemMessage.getId(), 5);
-            messageRecord.setStatus(1);
-            messageRecordService.update(messageRecord);
-            messageRecordService.update(messageRecord);
+            if (messageRecord != null) {
+                messageRecord.setStatus(1);
+                messageRecordService.update(messageRecord);
+            }
+
             messageVo.setId(systemMessage.getId());
             messageVo.setContent(systemMessage.getTitle());
             messageVo.setCreateDate(systemMessage.getCreateDate());
@@ -444,9 +455,11 @@ public class MessageApi extends CommonController {
         for (MessageAdd messageAdd : list2) {
             if (messageAdd.getUser().getId() == userId && messageAdd.getStatus() != 0) {
                 messageRecord = messageRecordService.findByMessageId(messageAdd.getId(), 6);
-                messageRecord.setStatus(1);
-                messageRecordService.update(messageRecord);
-                messageRecordService.update(messageRecord);
+                if (messageRecord != null) {
+                    messageRecord.setStatus(1);
+                    messageRecordService.update(messageRecord);
+                }
+
                 messageVo = new MessageVo();
                 messageVo.setId(messageAdd.getId());
                 messageVo.setToUserId(messageAdd.getToUser().getId());
@@ -466,9 +479,11 @@ public class MessageApi extends CommonController {
         for (MessageAdd messageAdd : list3) {
             if (messageAdd.getToUser().getId() == userId  && messageAdd.getStatus() == 0) {
                 messageRecord = messageRecordService.findByMessageId(messageAdd.getId(), 7);
-                messageRecord.setStatus(1);
-                messageRecordService.update(messageRecord);
-                messageRecordService.update(messageRecord);
+                if (messageRecord != null) {
+                    messageRecord.setStatus(1);
+                    messageRecordService.update(messageRecord);
+                }
+
                 messageVo = new MessageVo();
                 messageVo.setId(messageAdd.getId());
                 messageVo.setUserId(messageAdd.getUser().getId());
@@ -554,9 +569,10 @@ public class MessageApi extends CommonController {
         for (MessageTeam messageTeam : list) {
 
             messageRecord = messageRecordService.findByMessageId(messageTeam.getId(), 8);
-            messageRecord.setStatus(1);
-            messageRecordService.update(messageRecord);
-            messageRecordService.update(messageRecord);
+            if (messageRecord != null) {
+                messageRecord.setStatus(1);
+                messageRecordService.update(messageRecord);
+            }
 
             messageVo = new MessageVo();
             messageVo.setId(messageTeam.getId());
@@ -579,9 +595,10 @@ public class MessageApi extends CommonController {
             for (MessageTeam messageTeam : list1) {
 
                 messageRecord = messageRecordService.findByMessageId(messageTeam.getId(), 9);
-                messageRecord.setStatus(1);
-                messageRecordService.update(messageRecord);
-                messageRecordService.update(messageRecord);
+                if (messageRecord != null) {
+                    messageRecord.setStatus(1);
+                    messageRecordService.update(messageRecord);
+                }
 
                 messageVo = new MessageVo();
                 messageVo.setToUserId(messageTeam.getUser().getId());
@@ -601,9 +618,10 @@ public class MessageApi extends CommonController {
             List<MessageJoin> list2 = messageJoinService.findByTeam(team);
             for (MessageJoin messageJoin : list2) {
                 messageRecord = messageRecordService.findByMessageId(messageJoin.getId(), 10);
-                messageRecord.setStatus(1);
-                messageRecordService.update(messageRecord);
-                messageRecordService.update(messageRecord);
+                if (messageRecord != null) {
+                    messageRecord.setStatus(1);
+                    messageRecordService.update(messageRecord);
+                }
 
                 messageVo = new MessageVo();
                 messageVo.setId(messageJoin.getId());
@@ -618,9 +636,10 @@ public class MessageApi extends CommonController {
             List<MessageJoin> list3 = messageJoinService.findByUserId(userId);
             for (MessageJoin messageJoin : list3) {
                 messageRecord = messageRecordService.findByMessageId(messageJoin.getId(), 14);
-                messageRecord.setStatus(1);
-                messageRecordService.update(messageRecord);
-                messageRecordService.update(messageRecord);
+                if (messageRecord != null) {
+                    messageRecord.setStatus(1);
+                    messageRecordService.update(messageRecord);
+                }
 
                 messageVo = new MessageVo();
                 messageVo.setId(messageJoin.getId());
@@ -652,9 +671,11 @@ public class MessageApi extends CommonController {
             for (TeamRace teamRace : teamRaceList1) {
                 if (teamRace.getStatus() == 1) {
                     messageRecord = messageRecordService.findByMessageId(teamRace.getId(), 11);
-                    messageRecord.setStatus(1);
-                    messageRecordService.update(messageRecord);
-                    messageRecordService.update(messageRecord);
+                    if (messageRecord != null) {
+                        messageRecord.setStatus(1);
+                        messageRecordService.update(messageRecord);
+                    }
+
                     messageVo = new MessageVo();
                     messageVo.setTeamId(teamRace.getVisitingTeam().getId());
                     messageVo.setTeamName(teamRace.getVisitingTeam().getName());
@@ -669,9 +690,10 @@ public class MessageApi extends CommonController {
             for (TeamRace teamRace : teamRaceList2) {
                 if (teamRace.getStatus() == 1) {
                     messageRecord = messageRecordService.findByMessageId(teamRace.getId(), 11);
-                    messageRecord.setStatus(1);
-                    messageRecordService.update(messageRecord);
-                    messageRecordService.update(messageRecord);
+                    if (messageRecord != null) {
+                        messageRecord.setStatus(1);
+                        messageRecordService.update(messageRecord);
+                    }
 
                     messageVo = new MessageVo();
                     messageVo.setTeamId(teamRace.getHomeTeam().getId());
@@ -689,9 +711,10 @@ public class MessageApi extends CommonController {
         for (TeamRace teamRace : teamRaceList1) {
             if (teamRace.getStatus() == 2) {
                 messageRecord = messageRecordService.findByMessageId(teamRace.getId(), 12);
-                messageRecord.setStatus(1);
-                messageRecordService.update(messageRecord);
-                messageRecordService.update(messageRecord);
+                if (messageRecord != null) {
+                    messageRecord.setStatus(1);
+                    messageRecordService.update(messageRecord);
+                }
 
                 messageVo = new MessageVo();
                 messageVo.setTeamId(teamRace.getVisitingTeam().getId());
@@ -705,9 +728,10 @@ public class MessageApi extends CommonController {
             }
             if (teamRace.getStatus() == 1) {
                 messageRecord = messageRecordService.findByMessageId(teamRace.getId(), 11);
-                messageRecord.setStatus(1);
-                messageRecordService.update(messageRecord);
-                messageRecordService.update(messageRecord);
+                if (messageRecord != null) {
+                    messageRecord.setStatus(1);
+                    messageRecordService.update(messageRecord);
+                }
 
                 messageVo = new MessageVo();
                 messageVo.setTeamId(teamRace.getVisitingTeam().getId());
@@ -724,9 +748,10 @@ public class MessageApi extends CommonController {
             if (teamRace.getStatus() == 0) {
 
                 messageRecord = messageRecordService.findByMessageId(teamRace.getId(), 13);
-                messageRecord.setStatus(1);
-                messageRecordService.update(messageRecord);
-                messageRecordService.update(messageRecord);
+                if (messageRecord != null) {
+                    messageRecord.setStatus(1);
+                    messageRecordService.update(messageRecord);
+                }
 
                 messageVo = new MessageVo();
                 messageVo.setId(teamRace.getId());
@@ -741,9 +766,11 @@ public class MessageApi extends CommonController {
             }
             if (teamRace.getStatus() == 1) {
                 messageRecord = messageRecordService.findByMessageId(teamRace.getId(), 11);
-                messageRecord.setStatus(1);
-                messageRecordService.update(messageRecord);
-                messageRecordService.update(messageRecord);
+                if (messageRecord != null) {
+                    messageRecord.setStatus(1);
+                    messageRecordService.update(messageRecord);
+                }
+
                 messageVo = new MessageVo();
                 messageVo.setTeamId(teamRace.getHomeTeam().getId());
                 messageVo.setTeamName(teamRace.getHomeTeam().getName());
