@@ -73,7 +73,7 @@ public class MessageRecordServiceImpl implements MessageRecordService {
     }
 
     @Override
-    public MessageRecord findByMessageId(Long messageId, Integer type) {
+    public List<MessageRecord> findByMessageId(Long messageId, Integer type) {
         return messageRecordDao.findByMessageId(messageId, type);
     }
 }

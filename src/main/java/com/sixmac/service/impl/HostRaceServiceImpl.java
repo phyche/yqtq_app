@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -34,8 +35,8 @@ public class HostRaceServiceImpl implements HostRaceService {
     @Autowired
     private HostRaceDao hostRaceDao;
 
-    @Autowired
-    private EntityManagerFactory factory;
+    @PersistenceContext
+    private EntityManager em;
 
     @Override
     public List<HostRace> findAll() {
@@ -84,7 +85,6 @@ public class HostRaceServiceImpl implements HostRaceService {
 
     @Override
     public List<HostRace> findNew() {
-        EntityManager em = factory.createEntityManager();
         String params = "0,1";
         Query query = em.createQuery("SELECT hr from HostRace hr where hr.status in (" + params +") order by hr.id desc",HostRace.class);
         query.setMaxResults(1);

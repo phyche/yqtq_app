@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -36,8 +37,8 @@ public class ReserveServiceImpl implements ReserveService {
     @Autowired
     private ReserveDao reserveDao;
 
-    @Autowired
-    private EntityManagerFactory factory;
+    @PersistenceContext
+    private EntityManager em;
 
     @Override
     public List<Reserve> findAll() {
@@ -137,7 +138,7 @@ public class ReserveServiceImpl implements ReserveService {
 
     @Override
     public List<Reserve> findNew() {
-        EntityManager em = factory.createEntityManager();
+
         String params = "0,1";
         Query query = em.createQuery("SELECT r from Reserve r where r.status in (" + params +") and r.reserveType = 0 order by r.id desc",Reserve.class);
         query.setMaxResults(1);

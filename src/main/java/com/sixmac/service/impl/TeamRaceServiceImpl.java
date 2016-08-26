@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
 import java.util.Map;
@@ -32,8 +33,8 @@ public class TeamRaceServiceImpl implements TeamRaceService {
     @Autowired
     private TeamRaceDao teamRaceDao;
 
-    @Autowired
-    private EntityManagerFactory factory;
+    @PersistenceContext
+    private EntityManager em;
 
     @Override
     public List<TeamRace> findAll() {
@@ -83,7 +84,6 @@ public class TeamRaceServiceImpl implements TeamRaceService {
 
     @Override
     public List<TeamRace> findByHomeTeamId(String homeId) {
-        EntityManager em = factory.createEntityManager();
         Long startDate = System.currentTimeMillis();
         String sql = "select a from TeamRace a where a.homeTeam.id in (" + homeId + ") and a.status = 1";
         Query query = em.createQuery(sql);
@@ -96,7 +96,6 @@ public class TeamRaceServiceImpl implements TeamRaceService {
 
     @Override
     public List<TeamRace> findByVisitingId(String visitingId) {
-        EntityManager em = factory.createEntityManager();
         Long startDate = System.currentTimeMillis();
         String sql = "select a from TeamRace a where a.visitingTeam.id in (" + visitingId + ") and a.status = 1";
         Query query = em.createQuery(sql);
@@ -120,7 +119,6 @@ public class TeamRaceServiceImpl implements TeamRaceService {
     @Override
     public List<TeamRace> findByTeamId(List<TeamMember> list) {
 
-        EntityManager em = factory.createEntityManager();
         StringBuffer buffer = new StringBuffer("");
         for (TeamMember teamMember : list) {
             buffer.append(teamMember.getTeamId()).append(",");

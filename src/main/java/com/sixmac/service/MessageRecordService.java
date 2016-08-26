@@ -12,5 +12,5 @@ public interface MessageRecordService extends ICommonService<MessageRecord> {
 
     public List<MessageRecord> findByUserId(Long userId);
 
-    public MessageRecord findByMessageId(Long messageId, Integer type);
+    public List<MessageRecord> findByMessageId(Long messageId, Integer type);
 }

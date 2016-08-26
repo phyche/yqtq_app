@@ -18,5 +18,5 @@ public interface MessageRecordDao extends JpaRepository<MessageRecord, Long> {
 
     //根据messageId查询消息
     @Query("select a from MessageRecord a where a.messageId = ?1 and a.type = ?2")
-    public MessageRecord findByMessageId(Long messageId, Integer type);
+    public List<MessageRecord> findByMessageId(Long messageId, Integer type);
 }

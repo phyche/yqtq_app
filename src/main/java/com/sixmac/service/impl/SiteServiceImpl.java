@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
 
@@ -25,8 +26,8 @@ public class SiteServiceImpl implements SiteService {
     @Autowired
     private SiteDao siteDao;
 
-    @Autowired
-    private EntityManagerFactory factory;
+    @PersistenceContext
+    private EntityManager em;
 
     @Override
     public List<Site> findAll() {

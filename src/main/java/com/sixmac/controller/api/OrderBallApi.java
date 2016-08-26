@@ -319,6 +319,7 @@ public class OrderBallApi extends CommonController {
         messageOrderBall.setUser(userService.getById(userId));
         messageOrderBall.setToUser(userService.getById(toUserId));
         messageOrderBall.setReserve(reserveService.getById(reserveId));
+        messageOrderBallService.create(messageOrderBall);
 
         MessageRecord messageRecord = new MessageRecord();
         messageRecord.setUserId(toUserId);
@@ -327,8 +328,7 @@ public class OrderBallApi extends CommonController {
         messageRecord.setType(0);
         messageRecordService.create(messageRecord);
 
-        messageOrderBallService.create(messageOrderBall);
-        WebUtil.printApi(response, new Result(true).data(0));
+        WebUtil.printApi(response, new Result(true));
     }
 
     /**
