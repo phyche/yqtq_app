@@ -1,7 +1,10 @@
 package com.sixmac.service.impl;
 
 import com.sixmac.core.Constant;
+import com.sixmac.dao.ReserveDao;
 import com.sixmac.dao.StadiumDao;
+import com.sixmac.dao.UserDao;
+import com.sixmac.dao.UserReserveDao;
 import com.sixmac.entity.*;
 import com.sixmac.service.ReserveService;
 import com.sixmac.service.StadiumService;
@@ -36,13 +39,13 @@ public class StadiumServiceImpl implements StadiumService {
     private StadiumDao stadiumDao;
 
     @Autowired
-    private ReserveService reserveService;
+    private ReserveDao reserveDao;
 
     @Autowired
-    private UserReserveService userReserveService;
+    private UserReserveDao userReserveDao;
 
     @Autowired
-    private UserService userService;
+    private UserDao userDao;
 
     @Override
     public List<Stadium> findAll() {
@@ -92,7 +95,7 @@ public class StadiumServiceImpl implements StadiumService {
     @Override
     @Transactional
     public void publish(HttpServletResponse response, Long userId, Long stadiumId, String title, Long time) {
-        User user = userService.getById(userId);
+        User user = userDao.findOne(userId);
         Stadium stadium = stadiumDao.findOne(stadiumId);
 
         Reserve reserve = new Reserve();
@@ -104,7 +107,7 @@ public class StadiumServiceImpl implements StadiumService {
         reserve.setReserveType(0);
         reserve.setCityId(stadium.getCityId());
         reserve.setPayStatus(1);
-        reserveService.create(reserve);
+        reserveDao.save(reserve);
 
         UserReserve userReserve = new UserReserve();
         userReserve.setUser(user);
@@ -112,7 +115,7 @@ public class StadiumServiceImpl implements StadiumService {
         userReserve.setReserve(reserve);
         userReserve.setStatus(1);
 
-        userReserveService.create(userReserve);
+        userReserveDao.save(userReserve);
     }
 
     /*@Override

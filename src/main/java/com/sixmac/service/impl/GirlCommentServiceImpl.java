@@ -2,6 +2,7 @@ package com.sixmac.service.impl;
 
 import com.sixmac.core.Constant;
 import com.sixmac.dao.GirlCommentDao;
+import com.sixmac.dao.GirlUserDao;
 import com.sixmac.entity.GirlComment;
 import com.sixmac.entity.GirlUser;
 import com.sixmac.entity.WatchingRace;
@@ -33,7 +34,7 @@ public class GirlCommentServiceImpl implements GirlCommentService {
     private GirlCommentDao girlCommentDao;
 
     @Autowired
-    private GirlUserService girlUserService;
+    private GirlUserDao girlUserDao;
 
     @Override
     public List<GirlComment> findAll() {
@@ -117,7 +118,7 @@ public class GirlCommentServiceImpl implements GirlCommentService {
 
     @Override
     public void comment(HttpServletResponse response, Double star, String content, Long watchingId) {
-        GirlUser girlUser = girlUserService.getById(watchingId);
+        GirlUser girlUser = girlUserDao.findOne(watchingId);
 
         if (girlUser.getStatus() == 1) {
 
@@ -129,6 +130,6 @@ public class GirlCommentServiceImpl implements GirlCommentService {
             girlCommentDao.save(girlComment);
         }
         girlUser.setStatus(2);
-        girlUserService.update(girlUser);
+        girlUserDao.save(girlUser);
     }
 }

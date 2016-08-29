@@ -1,7 +1,7 @@
 package com.sixmac.service.impl;
 
 import com.sixmac.core.Constant;
-import com.sixmac.dao.TeamDao;
+import com.sixmac.dao.*;
 import com.sixmac.entity.*;
 import com.sixmac.service.*;
 import com.sixmac.utils.ConfigUtil;
@@ -34,28 +34,28 @@ public class TeamServiceImpl implements TeamService {
     private TeamDao teamDao;
 
     @Autowired
-    private TeamRaceService teamRaceService;
+    private TeamRaceDao teamRaceDao;
 
     @Autowired
-    private UserService userService;
+    private UserDao userDao;
 
     @Autowired
-    private CityService cityService;
+    private CityDao cityDao;
 
     @Autowired
-    private ProvinceService provinceService;
+    private ProvinceDao provinceDao;
 
     @Autowired
-    private MessageJoinService messageJoinService;
+    private MessageJoinDao messageJoinDao;
 
     @Autowired
-    private MessageTeamService messageTeamService;
+    private MessageTeamDao messageTeamDao;
 
     @Autowired
-    private TeamMemberService teamMemberService;
+    private TeamMemberDao teamMemberDao;
 
     @Autowired
-    private MessageRecordService messageRecordService;
+    private MessageRecordDao messageRecordDao;
 
     @Override
     public List<Team> findAll() {
@@ -205,11 +205,11 @@ public class TeamServiceImpl implements TeamService {
         Team team = teamDao.findListByLeaderId(userId);
         if (team != null) {
             MessageTeam messageTeam = new MessageTeam();
-            messageTeam.setUser(userService.getById(userId));
-            messageTeam.setToUser(userService.getById(toUserId));
+            messageTeam.setUser(userDao.findOne(userId));
+            messageTeam.setToUser(userDao.findOne(toUserId));
             messageTeam.setTeam(team);
             messageTeam.setStatus(0);
-            messageTeamService.create(messageTeam);
+            messageTeamDao.save(messageTeam);
 
             /*// 邀请加入球队
             MessageRecord messageRecord = new MessageRecord();
@@ -225,7 +225,7 @@ public class TeamServiceImpl implements TeamService {
             messageRecord.setStatus(0);
             messageRecord.setMessageId(messageTeam.getId());
             messageRecord.setType(8);
-            messageRecordService.create(messageRecord);
+            messageRecordDao.save(messageRecord);
         }
 
     }
@@ -235,16 +235,16 @@ public class TeamServiceImpl implements TeamService {
     public void apply(HttpServletResponse response, Long userId, Long teamId) {
         MessageJoin messageJoin = new MessageJoin();
         messageJoin.setStatus(0);
-        messageJoin.setUser(userService.getById(userId));
+        messageJoin.setUser(userDao.findOne(userId));
         messageJoin.setTeam(teamDao.findOne(teamId));
-        messageJoinService.create(messageJoin);
+        messageJoinDao.save(messageJoin);
 
         MessageRecord messageRecord = new MessageRecord();
         messageRecord.setUserId(userId);
         messageRecord.setStatus(0);
         messageRecord.setMessageId(messageJoin.getId());
         messageRecord.setType(10);
-        messageRecordService.create(messageRecord);
+        messageRecordDao.save(messageRecord);
     }
 
     @Override
@@ -260,13 +260,13 @@ public class TeamServiceImpl implements TeamService {
         teamRace.setHomeTeam(team2);
         teamRace.setVisitingTeam(team1);
         teamRace.setStartTime(time);
-        teamRaceService.create(teamRace);
+        teamRaceDao.save(teamRace);
 
         MessageRecord messageRecord = new MessageRecord();
         messageRecord.setUserId(team1.getLeaderUser().getId());
         messageRecord.setStatus(0);
         messageRecord.setMessageId(teamRace.getId());
         messageRecord.setType(13);
-        messageRecordService.create(messageRecord);
+        messageRecordDao.save(messageRecord);
     }
 }

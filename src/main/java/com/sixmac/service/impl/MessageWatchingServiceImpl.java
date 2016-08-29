@@ -1,10 +1,14 @@
 package com.sixmac.service.impl;
 
 import com.sixmac.core.Constant;
-import com.sixmac.dao.MessageWatchingDao;
+import com.sixmac.dao.*;
+import com.sixmac.entity.BigRace;
 import com.sixmac.entity.MessageRecord;
 import com.sixmac.entity.MessageWatching;
-import com.sixmac.service.*;
+import com.sixmac.service.BigRaceService;
+import com.sixmac.service.MessageRecordService;
+import com.sixmac.service.MessageWatchingService;
+import com.sixmac.service.WatchingRaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,16 +29,16 @@ public class MessageWatchingServiceImpl implements MessageWatchingService {
     private MessageWatchingDao messageWatchingDao;
 
     @Autowired
-    private UserService userService;
+    private UserDao userDao;
 
     @Autowired
-    private WatchingRaceService watchingRaceService;
+    private WatchingRaceDao watchingRaceDao;
 
     @Autowired
-    private BigRaceService bigRaceService;
+    private BigRaceDao bigRaceDao;
 
     @Autowired
-    private MessageRecordService messageRecordService;
+    private MessageRecordDao messageRecordDao;
 
     @Override
     public List<MessageWatching> findAll() {
@@ -89,13 +93,13 @@ public class MessageWatchingServiceImpl implements MessageWatchingService {
     @Override
     public void inviteBall(HttpServletResponse response, Integer type, Long id, Long userId, Long toUserId) {
         MessageWatching messageWatching = new MessageWatching();
-        messageWatching.setUser(userService.getById(userId));
+        messageWatching.setUser(userDao.findOne(userId));
         messageWatching.setType(type);
-        messageWatching.setToUser(userService.getById(toUserId));
+        messageWatching.setToUser(userDao.findOne(toUserId));
         if (type == 0) {
-            messageWatching.setWatchingRace(watchingRaceService.getById(id));
-        }else if (type == 1) {
-            messageWatching.setBigRace(bigRaceService.getById(id));
+            messageWatching.setWatchingRace(watchingRaceDao.findOne(id));
+        } else if (type == 1) {
+            messageWatching.setBigRace(bigRaceDao.findOne(id));
         }
         messageWatchingDao.save(messageWatching);
 
@@ -104,6 +108,6 @@ public class MessageWatchingServiceImpl implements MessageWatchingService {
         messageRecord.setStatus(0);
         messageRecord.setMessageId(messageWatching.getId());
         messageRecord.setType(3);
-        messageRecordService.create(messageRecord);
+        messageRecordDao.save(messageRecord);
     }
 }

@@ -371,6 +371,9 @@ public class OrderBallApi extends CommonController {
 
         Order order = reserveService.pay(response, reserveId, userId, messageId, money);
 
+        // 当前没有支付接口，因此状态直接为已支付
+        PayCallBackApi.changeOrderStatus(orderService, order.getSn(), null, response);
+
         Result obj = new Result(true).data(createMap("payInfo", order));
         String result = JsonUtil.obj2ApiJson(obj, "reserve", "user", "reserveTeam", "girlUser", "stadium");
         WebUtil.printApi(response, result);

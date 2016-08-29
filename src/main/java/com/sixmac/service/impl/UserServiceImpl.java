@@ -37,73 +37,28 @@ public class UserServiceImpl implements UserService {
     private CityDao cityDao;
 
     @Autowired
-    private VipLevelDao vipLevelDao;
-
-    @Autowired
     private MessageAddDao messageAddDao;
 
     @Autowired
     private MessageRecordDao messageRecordDao;
 
     @Autowired
-    private TeamMemberService teamMemberService;
+    private TeamMemberDao teamMemberDao;
 
     @Autowired
-    private UserService userService;
+    private TeamDao teamDao;
 
     @Autowired
-    private PostImageService postImageService;
+    private UserVipDao userVipDao;
 
     @Autowired
-    private PostCommentService postCommentService;
+    private VipLevelDao vipLevelDao;
 
     @Autowired
-    private PostService postService;
+    private OrderDao orderDao;
 
     @Autowired
-    private TeamService teamService;
-
-    @Autowired
-    private GirlCommentService girlCommentService;
-
-    @Autowired
-    private GirlImageService girlImageService;
-
-    @Autowired
-    private UserVipService userVipService;
-
-    @Autowired
-    private MessageService messageService;
-
-    @Autowired
-    private VipLevelService vipLevelService;
-
-    @Autowired
-    private OrderService orderService;
-
-    @Autowired
-    private SysVipService sysVipService;
-
-    @Autowired
-    private ProvinceService provinceService;
-
-    @Autowired
-    private CityService cityService;
-
-    @Autowired
-    private AreaService areaService;
-
-    @Autowired
-    private ReportService reportService;
-
-    @Autowired
-    private GirlService girlService;
-
-    @Autowired
-    private GirlUserService girlUserService;
-
-    @Autowired
-    private SiteService siteService;
+    private SysVipDao sysVipDao;
 
     @Override
     public List<User> findAll() {
@@ -227,23 +182,23 @@ public class UserServiceImpl implements UserService {
     public Map<String, Object> homePage(HttpServletResponse response, Long userId) {
         Map<String, Object> map = new HashMap<String, Object>();
 
-        User user = userService.getById(userId);
+        User user = userDao.findOne(userId);
         if (StringUtils.isNotBlank(user.getAvater())) {
             user.setAvater(ConfigUtil.getString("upload.url") + user.getAvater());
         }
 
         //加入的球队
         List<Team> teamList = new ArrayList<Team>();
-        List<TeamMember> teamMemberList = teamMemberService.findByUserId(userId);
+        List<TeamMember> teamMemberList = teamMemberDao.findByUserId(userId);
         User user1 = null;
         Team team = null;
         for (TeamMember teamMember : teamMemberList) {
 
-            user1 = userService.getById(teamMember.getUserId());
-            team = teamService.getById(teamMember.getTeamId());
-            if (teamService.findListByLeaderId(userId) != null) {
+            user1 = userDao.findOne(teamMember.getUserId());
+            team = teamDao.findListByLeaderId(teamMember.getTeamId());
+            if (teamDao.findListByLeaderId(userId) != null) {
 
-                if (teamMember.getTeamId() != teamService.findListByLeaderId(userId).getId()) {
+                if (teamMember.getTeamId() != teamDao.findListByLeaderId(userId).getId()) {
                     if (StringUtils.isNotBlank(user1.getAvater())) {
                         user1.setAvater(ConfigUtil.getString("upload.url") + user1.getAvater());
                     }
@@ -261,8 +216,8 @@ public class UserServiceImpl implements UserService {
 
         //自己创建的球队
         Team myTeam = null;
-        if (teamService.findListByLeaderId(userId) != null) {
-            myTeam = teamService.findListByLeaderId(userId);
+        if (teamDao.findListByLeaderId(userId) != null) {
+            myTeam = teamDao.findListByLeaderId(userId);
             if (StringUtils.isNotBlank(myTeam.getAvater())) {
                 myTeam.setAvater(ConfigUtil.getString("upload.url") + myTeam.getAvater());
             }
@@ -270,7 +225,7 @@ public class UserServiceImpl implements UserService {
         }
         map.put("myTeam", myTeam);
 
-        UserVip userVip = userVipService.findByUserId(userId);
+        UserVip userVip = userVipDao.findByUserId(userId);
         if (userVip != null && user.getVipNum() != 0) {
             user.setEndDays((int) ((userVip.getEndDate() - System.currentTimeMillis())/1000/3600/24));
         }
@@ -286,7 +241,7 @@ public class UserServiceImpl implements UserService {
         Integer level = 0;
         String endDate = null;
         String status = null;
-        UserVip userVip = userVipService.findByUserId(userId);
+        UserVip userVip = userVipDao.findByUserId(userId);
         Double price = 0.0;
 
         if (userVip == null || userVip.getEndDate() < System.currentTimeMillis()) {
@@ -296,18 +251,18 @@ public class UserServiceImpl implements UserService {
             if (num == 1) {
 
                 //endDate = DateUtils.longToString(System.currentTimeMillis() + 1000 * 3600 * 365, "yyyy年-MM月-dd日 HH:mm:ss");
-                price = sysVipService.getById(1l).getPrice();
+                price = sysVipDao.findOne(1l).getPrice();
             } else if (num == 2) {
                 //endDate = DateUtils.longToString(System.currentTimeMillis() + 2 * 1000 * 3600 * 365, "yyyy年-MM月-dd日 HH:mm:ss");
-                price = sysVipService.getById(1l).getPrice() * 2;
+                price = sysVipDao.findOne(1l).getPrice() * 2;
             } else if (num == 3) {
                 //endDate = DateUtils.longToString(System.currentTimeMillis() + 3 * 1000 * 3600 * 365, "yyyy年-MM月-dd日 HH:mm:ss");
-                price = sysVipService.getById(1l).getPrice() * 3;
+                price = sysVipDao.findOne(1l).getPrice() * 3;
             }
 
 
         } else {
-            level = userService.getById(userId).getVipNum();
+            level = userDao.findOne(userId).getVipNum();
             status = DateUtils.longToString(userVip.getEndDate(), "yyyy年-MM月-dd日");
             //userVip.setStatus("会员到期时间" + DateUtils.longToString(userVip.getEndDate(),"yyyy年-MM月-dd日 HH:mm:ss"));
             if (num == 1) {
@@ -315,24 +270,24 @@ public class UserServiceImpl implements UserService {
                 Date secord = DateUtils.dateAddYear(DateUtils.longToDate(userVip.getEndDate(),"yyyy-MM-dd HH:mm:ss"),1);
                 System.out.println("续费第二年日期:" + DateUtils.dateToStringWithFormat(secord,"yyyy-MM-dd HH:mm:ss"));*/
 
-                price = sysVipService.getById(level.longValue()).getPrice() * vipLevelService.findBylevel(level).getPreferente();
+                price = sysVipDao.findOne(level.longValue()).getPrice() * vipLevelDao.findBylevel(level).getPreferente();
             } else if (num == 2) {
                 //endDate = DateUtils.longToString(userVip.getEndDate() + 2 * 1000 * 3600 * 365, "yyyy年-MM月-dd日 HH:mm:ss");
-                price = sysVipService.getById(1l).getPrice() * vipLevelService.findBylevel(level).getPreferente() * 2;
+                price = sysVipDao.findOne(level.longValue()).getPrice() * vipLevelDao.findBylevel(level).getPreferente() * 2;
             } else if (num == 3) {
                 //endDate = DateUtils.longToString(userVip.getEndDate() + 3 * 1000 * 3600 * 365, "yyyy年-MM月-dd日 HH:mm:ss");
-                price = sysVipService.getById(1l).getPrice() * vipLevelService.findBylevel(level).getPreferente() * 3;
+                price = sysVipDao.findOne(level.longValue()).getPrice() * vipLevelDao.findBylevel(level).getPreferente() * 3;
             }
         }
 
         Integer experience = 0;
         Integer leftExperience = 0;
         if (level != 0) {
-            VipLevel vipLevel = vipLevelService.findBylevel(level);
+            VipLevel vipLevel = vipLevelDao.findBylevel(level);
             experience = vipLevel.getExperience();
-            leftExperience = vipLevelService.findBylevel(level + 1).getExperience() - vipLevel.getExperience();
+            leftExperience = vipLevelDao.findBylevel(level + 1).getExperience() - vipLevel.getExperience();
         }else {
-            leftExperience = vipLevelService.findBylevel(level + 1).getExperience();
+            leftExperience = vipLevelDao.findBylevel(level + 1).getExperience();
         }
 
         map.put("level", level);

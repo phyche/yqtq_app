@@ -1,6 +1,7 @@
 package com.sixmac.service.impl;
 
 import com.sixmac.core.Constant;
+import com.sixmac.dao.TeamDao;
 import com.sixmac.dao.TeamRaceDao;
 import com.sixmac.entity.TeamMember;
 import com.sixmac.entity.TeamRace;
@@ -41,7 +42,7 @@ public class TeamRaceServiceImpl implements TeamRaceService {
     private TeamRaceDao teamRaceDao;
 
     @Autowired
-    private TeamService teamService;
+    private TeamDao teamDao;
 
     @PersistenceContext
     private EntityManager em;
@@ -94,25 +95,21 @@ public class TeamRaceServiceImpl implements TeamRaceService {
 
     @Override
     public List<TeamRace> findByHomeTeamId(String homeId) {
-        Long startDate = System.currentTimeMillis();
+
         String sql = "select a from TeamRace a where a.homeTeam.id in (" + homeId + ") and a.status = 1";
         Query query = em.createQuery(sql);
         List<TeamRace> list = (List<TeamRace>) query.getResultList();
-        Long endDate = System.currentTimeMillis();
 //        return teamRaceDao.findByHomeTeamId(homeId);
-        LOGGER.info("findByHomeTeamId == 查询时间:" + (endDate - startDate) / 1000.0 + "秒");
         return list;
     }
 
     @Override
     public List<TeamRace> findByVisitingId(String visitingId) {
-        Long startDate = System.currentTimeMillis();
+
         String sql = "select a from TeamRace a where a.visitingTeam.id in (" + visitingId + ") and a.status = 1";
         Query query = em.createQuery(sql);
         List<TeamRace> list = (List<TeamRace>) query.getResultList();
 
-        Long endDate = System.currentTimeMillis();
-        LOGGER.info("findByVisitingId == 查询时间:" + (endDate - startDate) / 1000.0 + "秒");
         return list;
     }
 

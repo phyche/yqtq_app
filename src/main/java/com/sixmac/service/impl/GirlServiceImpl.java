@@ -2,6 +2,7 @@ package com.sixmac.service.impl;
 
 import com.sixmac.core.Constant;
 import com.sixmac.dao.GirlDao;
+import com.sixmac.dao.GirlUserDao;
 import com.sixmac.entity.*;
 import com.sixmac.service.CityService;
 import com.sixmac.service.GirlService;
@@ -39,7 +40,7 @@ public class GirlServiceImpl implements GirlService {
     private CityService cityService;
 
     @Autowired
-    private GirlUserService girlUserService;
+    private GirlUserDao girlUserDao;
 
     @Override
     public List<Girl> findAll() {
@@ -115,7 +116,7 @@ public class GirlServiceImpl implements GirlService {
         }
 
         //宝贝预约数
-        List<GirlUser> girlUserList = girlUserService.findByGirlId(girlId);
+        List<GirlUser> girlUserList = girlUserDao.findByGirlId(girlId);
         if (girlUserList == null) {
             girl.setOrderNum(0);
         }

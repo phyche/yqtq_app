@@ -1,9 +1,7 @@
 package com.sixmac.service.impl;
 
 import com.sixmac.core.Constant;
-import com.sixmac.dao.OrderDao;
-import com.sixmac.dao.SiteDao;
-import com.sixmac.dao.SysInsuranceDao;
+import com.sixmac.dao.*;
 import com.sixmac.entity.*;
 import com.sixmac.pay.excute.PayRequest;
 import com.sixmac.service.*;
@@ -33,52 +31,52 @@ public class OrderServiceImpl implements OrderService {
     private OrderDao orderDao;
 
     @Autowired
-    private SysExperienceService sysExperienceService;
+    private SysExperienceDao sysExperienceDao;
 
     @Autowired
-    private SysCredibilityService sysCredibilityService;
+    private SysCredibilityDao sysCredibilityDao;
 
     @Autowired
-    private UserService userService;
+    private UserDao userDao;
 
     @Autowired
-    private GirlUserService girlUserService;
+    private GirlUserDao girlUserDao;
 
     @Autowired
-    private ReserveService reserveService;
+    private ReserveDao reserveDao;
 
     @Autowired
-    private UserReserveService userReserveService;
+    private UserReserveDao userReserveDao;
 
     @Autowired
-    private VipLevelService vipLevelService;
+    private VipLevelDao vipLevelDao;
 
     @Autowired
-    private InsuranceService insuranceService;
+    private InsuranceDao insuranceDao;
 
     @Autowired
-    private MessageRecordService messageRecordService;
+    private MessageRecordDao messageRecordDao;
 
     @Autowired
-    private MessageOrderBallService messageOrderBallService;
+    private MessageOrderBallDao messageOrderBallDao;
 
     @Autowired
     private SiteDao siteDao;
 
     @Autowired
-    private SysInsuranceService sysInsuranceService;
+    private SysInsuranceDao sysInsuranceDao;
 
     @Autowired
-    private SiteTimeService siteTimeService;
+    private SiteTimeDao siteTimeDao;
 
     @Autowired
-    private UserVipService userVipService;
+    private UserVipDao userVipDao;
 
     @Autowired
-    private GirlService girlService;
+    private GirlDao girlDao;
 
     @Autowired
-    private BigRaceService bigRaceService;
+    private BigRaceDao bigRaceDao;
 
     @Override
     public List<Order> findAll() {
@@ -154,28 +152,42 @@ public class OrderServiceImpl implements OrderService {
 
         if (orders.getAction() != 1) {
             User user = orders.getUser();
-            user.setCredibility(user.getCredibility() + sysCredibilityService.findByAction(orders.getAction()).getCredibility());
-            user.setExperience(user.getExperience() + sysExperienceService.findByAction(orders.getAction()).getExperience());
+            user.setCredibility(user.getCredibility() + sysCredibilityDao.findByAction(orders.getAction()).getCredibility());
+            user.setExperience(user.getExperience() + sysExperienceDao.findByAction(orders.getAction()).getExperience());
 
-            userService.update(user);
-            userService.changeIntegral(user);
+            userDao.save(user);
+            List<VipLevel> levelList = vipLevelDao.findAll();
+            for (VipLevel vipLevel : levelList) {
+                if (user.getExperience() < vipLevel.getExperience()) {
+                    user.setVipNum(vipLevel.getLevel() - 1);
+                    userDao.save(user);
+                }
+            }
+            //userDao.changeIntegral(user);
         }
 
         if (orders.getAction() == 1) {
             orders.getReserve().setJoinCount(orders.getReserve().getJoinCount() + 1);
-            reserveService.update(orders.getReserve());
+            reserveDao.save(orders.getReserve());
             if (orders.getReserve().getJoinCount() == orders.getReserve().getMatchType() * 2) {
 
-                List<UserReserve> userReserveList = userReserveService.findByReserverId(orders.getReserve().getId());
+                List<UserReserve> userReserveList = userReserveDao.findByReserverId(orders.getReserve().getId());
                 for (UserReserve userReserve : userReserveList) {
 
-                    SysExperience sysExperience = sysExperienceService.findByAction(1);
+                    SysExperience sysExperience = sysExperienceDao.findByAction(1);
                     userReserve.getUser().setExperience(userReserve.getUser().getExperience() + sysExperience.getExperience());
-                    SysCredibility sysCredibility = sysCredibilityService.findByAction(1);
+                    SysCredibility sysCredibility = sysCredibilityDao.findByAction(1);
                     userReserve.getUser().setCredibility(userReserve.getUser().getCredibility() + sysCredibility.getCredibility());
 
-                    userService.changeIntegral(userReserve.getUser());
-                    userService.update(userReserve.getUser());
+                    List<VipLevel> levelList = vipLevelDao.findAll();
+                    for (VipLevel vipLevel : levelList) {
+                        if (userReserve.getUser().getExperience() < vipLevel.getExperience()) {
+                            userReserve.getUser().setVipNum(vipLevel.getLevel() - 1);
+                            userDao.save(userReserve.getUser());
+                        }
+                    }
+                    //userService.changeIntegral(userReserve.getUser());
+                    userDao.save(userReserve.getUser());
                 }
             }
 
@@ -184,25 +196,25 @@ public class OrderServiceImpl implements OrderService {
 //            userReserve.setReserveId(orders.getReserve().getId());
             userReserve.setReserve(orders.getReserve());
             userReserve.setStatus(0);
-            userReserveService.create(userReserve);
+            userReserveDao.save(userReserve);
 
             MessageRecord messageRecord = new MessageRecord();
             messageRecord.setUserId(orders.getReserve().getUser().getId());
             messageRecord.setStatus(0);
             messageRecord.setMessageId(userReserve.getId());
             messageRecord.setType(1);
-            messageRecordService.create(messageRecord);
+            messageRecordDao.save(messageRecord);
 
             if (orders.getMessageId() != null) {
-                MessageOrderBall messageOrderBall = messageOrderBallService.getById(orders.getMessageId());
+                MessageOrderBall messageOrderBall = messageOrderBallDao.findOne(orders.getMessageId());
                 messageOrderBall.setStatus(1);
-                messageOrderBallService.update(messageOrderBall);
+                messageOrderBallDao.save(messageOrderBall);
             }
         }
 
         Double preferente = 1.0;
         if (orders.getUser().getVipNum() != 0) {
-            preferente = vipLevelService.findBylevel(orders.getUser().getVipNum()).getPreferente();
+            preferente = vipLevelDao.findBylevel(orders.getUser().getVipNum()).getPreferente();
         }
         if (orders.getAction() == 2 && orders.getReserve() != null) {
 
@@ -211,7 +223,7 @@ public class OrderServiceImpl implements OrderService {
 //            userReserve.setReserveId(orders.getReserve().getId());
             userReserve.setReserve(orders.getReserve());
             userReserve.setStatus(1);
-            userReserveService.create(userReserve);
+            userReserveDao.save(userReserve);
 
             if (orders.getReserve().getInsurance() != null) {
                 Insurance insurance = new Insurance();
@@ -220,7 +232,7 @@ public class OrderServiceImpl implements OrderService {
                 insurance.setSysInsurance(orders.getReserve().getInsurance());
                 insurance.setInsuranceNum(orders.getInsuranceNum());
                 insurance.setMoney(orders.getReserve().getInsurance().getPrice() * preferente);
-                insuranceService.create(insurance);
+                insuranceDao.save(insurance);
             }
         } /*else if (orders.getAction() == 2 && orders.getReserveTeam() != null && orders.getReserveTeam().getInsurance() != null) {
             Insurance insurance = new Insurance();
@@ -234,7 +246,7 @@ public class OrderServiceImpl implements OrderService {
 
         if (orders.getAction() == 3) {
             orders.getGirlUser().setStatus(0);
-            girlUserService.update(orders.getGirlUser());
+            girlUserDao.save(orders.getGirlUser());
         }
     }
 
@@ -253,15 +265,15 @@ public class OrderServiceImpl implements OrderService {
         siteTime.setSite(site);
         siteTime.setStartTime(time + start * 1000 * 3600);
         siteTime.setEndTime(time + end * 1000 * 3600);
-        siteTimeService.create(siteTime);
+        siteTimeDao.save(siteTime);
 
         //Reserve reserve = null;
         Reserve reserve = new Reserve();
         reserve.setStadium(site.getStadium());
         reserve.setSiteId(siteId);
-        reserve.setUser(userService.getById(userId));
+        reserve.setUser(userDao.findOne(userId));
         if (insuranceId != null) {
-            reserve.setInsurance(sysInsuranceService.getById(insuranceId));
+            reserve.setInsurance(sysInsuranceDao.findOne(insuranceId));
         }
         if (type == 0) {
             //将球场预订表的支付方式设置为全额支付
@@ -277,7 +289,7 @@ public class OrderServiceImpl implements OrderService {
         reserve.setCityId(site.getStadium().getCityId());
         reserve.setType(0);
         reserve.setReserveType(status);
-        reserveService.create(reserve);
+        reserveDao.save(reserve);
         /*if (status == 0) {
 
         }else if (status == 1) {
@@ -294,7 +306,7 @@ public class OrderServiceImpl implements OrderService {
         }*/
 
         Order order = new Order();
-        order.setUser(userService.getById(userId));
+        order.setUser(userDao.findOne(userId));
         //order.setStadium(reserve.getSite().getStadium());
         order.setReserve(reserve);
         //order.setReserveTeam(reserveTeam);
@@ -312,10 +324,10 @@ public class OrderServiceImpl implements OrderService {
     public Order pay(HttpServletResponse response, Long userId, Integer num, Long endDate, Double price) throws ParseException {
         UserVip userVip = null;
 
-        if (userVipService.findByUserId(userId) == null) {
+        if (userVipDao.findByUserId(userId) == null) {
             userVip = new UserVip();
         } else {
-            userVip = userVipService.findByUserId(userId);
+            userVip = userVipDao.findByUserId(userId);
         }
         userVip.setUserId(userId);
         userVip.setDuration(num);
@@ -340,14 +352,14 @@ public class OrderServiceImpl implements OrderService {
             }
         }
         userVip.setEndDate(endDate);
-        userVipService.update(userVip);
-        User user = userService.getById(userId);
+        userVipDao.save(userVip);
+        User user = userDao.findOne(userId);
         user.setEndDate(endDate);
-        userService.update(user);
+        userDao.save(user);
 
         String sn = CommonUtils.generateSn(); // 订单号
         Order order = new Order();
-        order.setUser(userService.getById(userId));
+        order.setUser(userDao.findOne(userId));
         order.setPrice(price);
         order.setSn(sn);
         orderDao.save(order);
@@ -359,25 +371,25 @@ public class OrderServiceImpl implements OrderService {
     public Order orderGirl(HttpServletResponse response, Long userId, Long girlId, Long sceneId, Double tip) {
         GirlUser girlUser = new GirlUser();
         girlUser.setUserId(userId);
-        girlUser.setGirl(girlService.getById(girlId));
-        girlUser.setBigRace(bigRaceService.getById(sceneId));
-        girlUser.setStartDate(bigRaceService.getById(sceneId).getStartDate());
-        girlUser.setStadium(bigRaceService.getById(sceneId).getStadium());
-        girlUser.setPrice(girlService.getById(girlId).getPrice());
+        girlUser.setGirl(girlDao.findOne(girlId));
+        girlUser.setBigRace(bigRaceDao.findOne(sceneId));
+        girlUser.setStartDate(bigRaceDao.findOne(sceneId).getStartDate());
+        girlUser.setStadium(bigRaceDao.findOne(sceneId).getStadium());
+        girlUser.setPrice(girlDao.findOne(girlId).getPrice());
         girlUser.setTip(tip);
         girlUser.setStatus(3);
-        girlUserService.create(girlUser);
+        girlUserDao.save(girlUser);
 
         // 生成订单
         String sn = CommonUtils.generateSn(); // 订单号
 
-        User user = userService.getById(girlUser.getUserId());
+        User user = userDao.findOne(girlUser.getUserId());
         Order order = new Order();
         order.setUser(user);
         //order.setStadium(girlUser.getStadium());
         order.setGirlUser(girlUser);
 
-        VipLevel vipLevel = vipLevelService.findBylevel(user.getVipNum());
+        VipLevel vipLevel = vipLevelDao.findBylevel(user.getVipNum());
         if (user.getVipNum() != 0) {
             order.setPrice((girlUser.getPrice() + girlUser.getTip()) * vipLevel.getPreferente());
         } else {

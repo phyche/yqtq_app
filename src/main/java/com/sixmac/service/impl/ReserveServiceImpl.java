@@ -4,7 +4,7 @@ import com.sixmac.controller.api.PayCallBackApi;
 import com.sixmac.controller.common.CommonController;
 import com.sixmac.core.Constant;
 import com.sixmac.core.bean.Result;
-import com.sixmac.dao.ReserveDao;
+import com.sixmac.dao.*;
 import com.sixmac.entity.*;
 import com.sixmac.entity.vo.WatchBallVo;
 import com.sixmac.service.*;
@@ -42,43 +42,40 @@ public class ReserveServiceImpl implements ReserveService {
     private ReserveDao reserveDao;
 
     @Autowired
-    private UserReserveService userReserveService;
+    private UserReserveDao userReserveDao;
 
     @Autowired
-    private UserService userService;
+    private UserDao userDao;
 
     @Autowired
-    private ReserveService reserveService;
+    private TeamRaceDao teamRaceDao;
 
     @Autowired
-    private TeamRaceService teamRaceService;
+    private TeamMemberDao teamMemberDao;
 
     @Autowired
-    private TeamMemberService teamMemberService;
+    private InsuranceDao insuranceDao;
 
     @Autowired
-    private InsuranceService insuranceService;
+    private OrderDao orderDao;
 
     @Autowired
-    private OrderService orderService;
+    private MessageOrderBallDao messageOrderBallDao;
 
     @Autowired
-    private MessageOrderBallService messageOrderBallService;
+    private SysExperienceDao sysExperienceDao;
 
     @Autowired
-    private SysExperienceService sysExperienceService;
+    private SysCredibilityDao sysCredibilityDao;
 
     @Autowired
-    private SysCredibilityService sysCredibilityService;
+    private VipLevelDao vipLevelDao;
 
     @Autowired
-    private VipLevelService vipLevelService;
+    private TeamDao teamDao;
 
     @Autowired
-    private TeamService teamService;
-
-    @Autowired
-    private MessageRecordService messageRecordService;
+    private MessageRecordDao messageRecordDao;
 
     @PersistenceContext
     private EntityManager em;
@@ -194,17 +191,17 @@ public class ReserveServiceImpl implements ReserveService {
         MessageOrderBall messageOrderBall = new MessageOrderBall();
 
         messageOrderBall.setStatus(0);
-        messageOrderBall.setUser(userService.getById(userId));
-        messageOrderBall.setToUser(userService.getById(toUserId));
-        messageOrderBall.setReserve(reserveService.getById(reserveId));
-        messageOrderBallService.create(messageOrderBall);
+        messageOrderBall.setUser(userDao.findOne(userId));
+        messageOrderBall.setToUser(userDao.findOne(userId));
+        messageOrderBall.setReserve(reserveDao.findOne(reserveId));
+        messageOrderBallDao.save(messageOrderBall);
 
         MessageRecord messageRecord = new MessageRecord();
         messageRecord.setUserId(toUserId);
         messageRecord.setStatus(0);
         messageRecord.setMessageId(messageOrderBall.getId());
         messageRecord.setType(0);
-        messageRecordService.create(messageRecord);
+        messageRecordDao.save(messageRecord);
     }
 
     @Override
@@ -212,14 +209,14 @@ public class ReserveServiceImpl implements ReserveService {
         Map<String, Object> map = new HashMap<String, Object>();
 
         List<Team> teams = new ArrayList<Team>();
-        List<TeamMember> teamMemberList = teamMemberService.findByUserId(playerId);
+        List<TeamMember> teamMemberList = teamMemberDao.findByUserId(playerId);
         User user = null;
         for (TeamMember teamMember : teamMemberList) {
-            user = userService.getById(teamMember.getUserId());
+            user = userDao.findOne((teamMember.getUserId()));
             if (StringUtils.isNotBlank(user.getAvater())) {
                 user.setAvater(ConfigUtil.getString("upload.url") + user.getAvater());
             }
-            teams.add(teamService.getById(teamMember.getTeamId()));
+            teams.add(teamDao.findOne(teamMember.getTeamId()));
         }
 
         String teamIds = "";
@@ -231,7 +228,11 @@ public class ReserveServiceImpl implements ReserveService {
         }
         teamIds = buffer.toString().substring(0, buffer.length() - 1);
 
-        List<TeamRace> list = teamRaceService.findByHomeTeamId(teamIds);
+        // 查询主队赛事
+        String sql = "select a from TeamRace a where a.homeTeam.id in (" + teamIds + ") and a.status = 1";
+        Query query = em.createQuery(sql);
+        List<TeamRace> list = (List<TeamRace>) query.getResultList();
+        //List<TeamRace> list = teamRaceDao.findByHomeTeamId(teamIds);
         List<WatchBallVo> watchBallVos = new ArrayList<WatchBallVo>();
         for (TeamRace teamRace : list) {
             WatchBallVo watchBallVo1 = new WatchBallVo();
@@ -254,7 +255,11 @@ public class ReserveServiceImpl implements ReserveService {
             watchBallVos.add(watchBallVo1);
         }
 
-        List<TeamRace> listrace = teamRaceService.findByVisitingId(teamIds);
+        // 查询客队队赛事
+        String sql1 = "select a from TeamRace a where a.visitingTeam.id in (" + teamIds + ") and a.status = 1";
+        Query query1 = em.createQuery(sql1);
+        List<TeamRace> listrace = (List<TeamRace>) query1.getResultList();
+        //List<TeamRace> listrace = teamRaceService.findByVisitingId(teamIds);
         List<WatchBallVo> watchBallVoList = new ArrayList<WatchBallVo>();
         for (TeamRace teamRace : listrace) {
             WatchBallVo watchBallVo2 = new WatchBallVo();
@@ -293,7 +298,7 @@ public class ReserveServiceImpl implements ReserveService {
 
     @Override
     public Order pay(HttpServletResponse response, Long reserveId, Long userId, Long messageId, Double money) {
-        Reserve reserve = reserveService.getById(reserveId);
+        Reserve reserve = reserveDao.findOne(reserveId);
         Order order = null;
         if (reserve.getType() == 0) {
             if (reserve.getJoinCount() < reserve.getMatchType() * 2) {
@@ -303,24 +308,24 @@ public class ReserveServiceImpl implements ReserveService {
                 //球场已经全额付款的
                 if (reserve.getPayment() == 0) {
                     UserReserve userReserve = new UserReserve();
-                    userReserve.setUser(userService.getById(userId));
+                    userReserve.setUser(userDao.findOne(userId));
 //                    userReserve.setReserveId(reserveId);
                     userReserve.setReserve(reserve);
                     userReserve.setStatus(0);
-                    userReserveService.create(userReserve);
+                    userReserveDao.save(userReserve);
 
                     MessageRecord messageRecord = new MessageRecord();
                     messageRecord.setUserId(reserve.getUser().getId());
                     messageRecord.setStatus(0);
                     messageRecord.setMessageId(userReserve.getId());
                     messageRecord.setType(1);
-                    messageRecordService.create(messageRecord);
+                    messageRecordDao.save(messageRecord);
 
                     if (messageId != null) {
-                        MessageOrderBall messageOrderBall = messageOrderBallService.getById(messageId);
+                        MessageOrderBall messageOrderBall = messageOrderBallDao.findOne(messageId);
                         if (messageRecord != null) {
                             messageRecord.setStatus(1);
-                            messageRecordService.update(messageRecord);
+                            messageRecordDao.save(messageRecord);
                         }
                     }
 
@@ -334,7 +339,7 @@ public class ReserveServiceImpl implements ReserveService {
                     String sn = CommonUtils.generateSn(); // 订单号
 
                     order = new Order();
-                    order.setUser(userService.getById(userId));
+                    order.setUser(userDao.findOne(userId));
                     order.setReserve(reserve);
                 /*order.setStadium(reserve.getStadium());
                 order.setSite(reserve.getSite());*/
@@ -342,36 +347,36 @@ public class ReserveServiceImpl implements ReserveService {
                     order.setAction(1);
                     order.setSn(sn);
                     order.setMessageId(messageId);
-                    orderService.create(order);
+                    orderDao.save(order);
 
                     // 当前没有支付接口，因此状态直接为已支付
-                    PayCallBackApi.changeOrderStatus(orderService, order.getSn(), null, response);
+                    //PayCallBackApi.changeOrderStatus(orderService, order.getSn(), null, response);
                 }
 
                 insurance.setUserId(userId);
                 insurance.setReserveId(reserve.getId());
-                insuranceService.create(insurance);
+                insuranceDao.save(insurance);
             }
         }else if (reserve.getType() == 1){
             UserReserve userReserve = new UserReserve();
-            userReserve.setUser(userService.getById(userId));
+            userReserve.setUser(userDao.findOne(userId));
 //            userReserve.setReserveId(reserveId);
             userReserve.setReserve(reserve);
             userReserve.setStatus(0);
-            userReserveService.create(userReserve);
+            userReserveDao.save(userReserve);
 
             MessageRecord messageRecord = new MessageRecord();
             messageRecord.setUserId(reserve.getUser().getId());
             messageRecord.setStatus(0);
             messageRecord.setMessageId(userReserve.getId());
             messageRecord.setType(1);
-            messageRecordService.create(messageRecord);
+            messageRecordDao.save(messageRecord);
 
             if (messageId != null) {
-                MessageOrderBall messageOrderBall = messageOrderBallService.getById(messageId);
+                MessageOrderBall messageOrderBall = messageOrderBallDao.findOne(messageId);
                 if (messageRecord != null) {
                     messageRecord.setStatus(1);
-                    messageRecordService.update(messageRecord);
+                    messageRecordDao.save(messageRecord);
                 }
             }
 
