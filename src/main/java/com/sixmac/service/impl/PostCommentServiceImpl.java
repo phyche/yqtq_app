@@ -1,8 +1,12 @@
 package com.sixmac.service.impl;
 
 import com.sixmac.core.Constant;
+import com.sixmac.dao.MessageRecordDao;
 import com.sixmac.dao.PostCommentDao;
+import com.sixmac.dao.PostDao;
+import com.sixmac.dao.UserDao;
 import com.sixmac.entity.BigRace;
+import com.sixmac.entity.MessageRecord;
 import com.sixmac.entity.Post;
 import com.sixmac.entity.PostComment;
 import com.sixmac.service.PostCommentService;
@@ -18,6 +22,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +34,15 @@ public class PostCommentServiceImpl implements PostCommentService {
 
     @Autowired
     private PostCommentDao postCommentDao;
+
+    @Autowired
+    private UserDao userDao;
+
+    @Autowired
+    private PostDao postDao;
+
+    @Autowired
+    private MessageRecordDao messageRecordDao;
 
     @Override
     public List<PostComment> findAll() {
@@ -113,6 +127,26 @@ public class PostCommentServiceImpl implements PostCommentService {
     @Override
     public List<PostComment> findByToUserId(Long userId) {
         return postCommentDao.findByToUserId(userId);
+    }
+
+    @Override
+    @Transactional
+    public void comment(HttpServletResponse response, Long postId, Long userId, Long touserId, String content) {
+
+        PostComment postComment = new PostComment();
+        postComment.setPostId(postId);
+        postComment.setfUser(userDao.findOne(userId));
+        postComment.settUser(userDao.findOne(touserId));
+        postComment.setContent(content);
+        postCommentDao.save(postComment);
+
+        MessageRecord messageRecord = new MessageRecord();
+        messageRecord.setUserId(postDao.findOne(postId).getUser().getId());
+        messageRecord.setStatus(0);
+        messageRecord.setMessageId(postComment.getId());
+        messageRecord.setType(4);
+        messageRecordDao.save(messageRecord);
+
     }
 
 

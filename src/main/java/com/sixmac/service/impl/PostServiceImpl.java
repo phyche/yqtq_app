@@ -1,10 +1,15 @@
 package com.sixmac.service.impl;
 
 import com.sixmac.core.Constant;
+import com.sixmac.core.ErrorCode;
+import com.sixmac.core.bean.Result;
 import com.sixmac.dao.PostDao;
-import com.sixmac.entity.Post;
-import com.sixmac.entity.PostComment;
+import com.sixmac.dao.PostImageDao;
+import com.sixmac.dao.UserDao;
+import com.sixmac.entity.*;
 import com.sixmac.service.PostService;
+import com.sixmac.utils.FileUtil;
+import com.sixmac.utils.WebUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,12 +17,17 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartRequest;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -28,6 +38,12 @@ public class PostServiceImpl implements PostService {
 
     @Autowired
     private PostDao postDao;
+
+    @Autowired
+    private UserDao userDao;
+
+    @Autowired
+    private PostImageDao postImageDao;
 
     @Override
     public List<Post> findAll() {
@@ -133,4 +149,50 @@ public class PostServiceImpl implements PostService {
 
         return page;
     }
+
+    @Override
+    @Transactional
+    public void publish(HttpServletRequest request, HttpServletResponse response, Long userId, String content) {
+        MultipartFile multipartFile = null;
+        MultipartRequest multipartRequest = null;
+
+        if(request instanceof MultipartRequest) {
+            multipartRequest = (MultipartRequest) request;
+
+        }
+
+        User user = userDao.findOne(userId);
+        Post post = new Post();
+        post.setUser(user);
+        post.setContent(content);
+        post.setStatus(0);
+        postDao.save(post);
+
+        try {
+            // 保存圈子图片集合
+            PostImage postImage = new PostImage();
+
+            if(multipartRequest != null) {
+
+                // 获取图片集合
+                Iterator<String> fileList = multipartRequest.getFileNames();
+                while (fileList.hasNext()) {
+                    String fileName = fileList.next();
+                    MultipartFile file = multipartRequest.getFile(fileName);
+                    if (null != file) {
+                        postImage = new PostImage();
+                        postImage.setPostId(post.getId());
+                        postImage.setStatus(0);
+                        postImage.setAvater(FileUtil.save(file).getPath());
+
+                        postImageDao.save(postImage);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            WebUtil.printApi(response, new Result(false).msg(ErrorCode.ERROR_CODE_0001));
+        }
+    }
+
 }

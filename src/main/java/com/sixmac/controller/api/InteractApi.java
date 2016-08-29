@@ -105,22 +105,17 @@ public class InteractApi extends CommonController {
             if (StringUtils.isNotBlank(post.getUser().getAvater())) {
                 post.getUser().setAvater(ConfigUtil.getString("upload.url") + post.getUser().getAvater());
             }
-            //post.setPostImages(postImageService.findByPostId(post.getId()));
             for (PostImage postImage : post.getPostImages()) {
                 if (StringUtils.isNotBlank(postImage.getAvater())) {
                     postImage.setAvater(ConfigUtil.getString("upload.url") + postImage.getAvater());
                 }
             }
-            //post.setPostCommentList(postCommentService.findByPostId(post.getId()));
             for (PostComment postComment : post.getPostCommentList()) {
                 if (StringUtils.isNotBlank(postComment.getfUser().getAvater())) {
                     postComment.getfUser().setAvater(ConfigUtil.getString("upload.url") + postComment.getfUser().getAvater());
                 }
             }
             post.setCommentNum(post.getPostCommentList().size());
-            /*for (int i = 0; i<2; i++) {
-                post.setPostCommentList(post.getPostCommentList());
-            }*/
         }
 
         Map<String, Object> dataMap = APIFactory.fitting(page);
@@ -169,7 +164,6 @@ public class InteractApi extends CommonController {
     }
 
     /**
-     * 图片保存有问题
      *
      * @api {post} /api/interact/publish 发布圈子
      * @apiName interact.publish
@@ -191,46 +185,7 @@ public class InteractApi extends CommonController {
             return;
         }
 
-        MultipartFile multipartFile = null;
-        MultipartRequest multipartRequest = null;
-
-        if(request instanceof MultipartRequest) {
-            multipartRequest = (MultipartRequest) request;
-
-        }
-
-        User user = userService.getById(userId);
-        Post post = new Post();
-        post.setUser(user);
-        post.setContent(content);
-        post.setStatus(0);
-        postService.create(post);
-
-        try {
-            // 保存圈子图片集合
-            PostImage postImage = new PostImage();
-
-            if(multipartRequest != null) {
-
-                // 获取图片集合
-                Iterator<String> fileList = multipartRequest.getFileNames();
-                while (fileList.hasNext()) {
-                    String fileName = fileList.next();
-                    MultipartFile file = multipartRequest.getFile(fileName);
-                    if (null != file) {
-                        postImage = new PostImage();
-                        postImage.setPostId(post.getId());
-                        postImage.setStatus(0);
-                        postImage.setAvater(FileUtil.save(file).getPath());
-
-                        postImageService.create(postImage);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            WebUtil.printApi(response, new Result(false).msg(ErrorCode.ERROR_CODE_0001));
-        }
+        postService.publish(request, response, userId, content);
 
         WebUtil.printApi(response, new Result(true));
     }
@@ -258,19 +213,7 @@ public class InteractApi extends CommonController {
             return;
         }
 
-        PostComment postComment = new PostComment();
-        postComment.setPostId(postId);
-        postComment.setfUser(userService.getById(userId));
-        postComment.settUser(userService.getById(touserId));
-        postComment.setContent(content);
-        postCommentService.create(postComment);
-
-        MessageRecord messageRecord = new MessageRecord();
-        messageRecord.setUserId(postService.getById(postId).getUser().getId());
-        messageRecord.setStatus(0);
-        messageRecord.setMessageId(postComment.getId());
-        messageRecord.setType(4);
-        messageRecordService.create(messageRecord);
+        postCommentService.comment(response, postId, userId, touserId, content);
 
         WebUtil.printApi(response, new Result(true));
     }
@@ -330,30 +273,7 @@ public class InteractApi extends CommonController {
             return;
         }
 
-        User user = userService.findByMobile(mobile);
-
-        MessageAdd messageAdd = new MessageAdd();
-        messageAdd.setStatus(0);
-        messageAdd.setUser(userService.getById(userId));
-        messageAdd.setToUser(user);
-        messageAddService.create(messageAdd);
-
-        /*MessageRecord messageRecord = new MessageRecord();
-        messageRecord.setUserId(userId);
-        messageRecord.setStatus(0);
-        messageRecord.setMessageId(messageAdd.getId());
-        messageRecord.setType(6);
-        messageRecordService.create(messageRecord);*/
-
-        MessageRecord messageRecord = new MessageRecord();
-        messageRecord.setUserId(user.getId());
-        messageRecord.setStatus(0);
-        messageRecord.setMessageId(messageAdd.getId());
-        messageRecord.setType(7);
-        messageRecordService.create(messageRecord);
-
-        WebUtil.printApi(response, new Result(true));
-
+        userService.addFriend(response, userId, mobile);
     }
 
     /**

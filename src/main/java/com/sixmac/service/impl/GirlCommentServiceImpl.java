@@ -3,8 +3,10 @@ package com.sixmac.service.impl;
 import com.sixmac.core.Constant;
 import com.sixmac.dao.GirlCommentDao;
 import com.sixmac.entity.GirlComment;
+import com.sixmac.entity.GirlUser;
 import com.sixmac.entity.WatchingRace;
 import com.sixmac.service.GirlCommentService;
+import com.sixmac.service.GirlUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +19,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +31,9 @@ public class GirlCommentServiceImpl implements GirlCommentService {
 
     @Autowired
     private GirlCommentDao girlCommentDao;
+
+    @Autowired
+    private GirlUserService girlUserService;
 
     @Override
     public List<GirlComment> findAll() {
@@ -107,5 +113,22 @@ public class GirlCommentServiceImpl implements GirlCommentService {
         }, pageRequest);
 
         return page;
+    }
+
+    @Override
+    public void comment(HttpServletResponse response, Double star, String content, Long watchingId) {
+        GirlUser girlUser = girlUserService.getById(watchingId);
+
+        if (girlUser.getStatus() == 1) {
+
+            GirlComment girlComment = new GirlComment();
+            girlComment.setUserId(girlUser.getUserId());
+            girlComment.setGirlId(girlUser.getGirl().getId());
+            girlComment.setStar(star);
+            girlComment.setContent(content);
+            girlCommentDao.save(girlComment);
+        }
+        girlUser.setStatus(2);
+        girlUserService.update(girlUser);
     }
 }

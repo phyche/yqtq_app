@@ -5,6 +5,7 @@ import com.sixmac.entity.PostComment;
 import com.sixmac.service.common.ICommonService;
 import org.springframework.data.domain.Page;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -17,5 +18,12 @@ public interface PostCommentService extends ICommonService<PostComment> {
     public Page<PostComment> findByFuserId(Long userId, Integer pageNum, Integer pageSize);
 
     public List<PostComment> findByToUserId(Long userId);
+
+    // 评论回复
+    public void comment(HttpServletResponse response,
+                        Long postId,
+                        Long userId,
+                        Long touserId,
+                        String content);
 
 }

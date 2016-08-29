@@ -142,56 +142,7 @@ public class UserApi extends CommonController {
             return;
         }
 
-        Map<String, Object> map = new HashMap<String, Object>();
-
-        User user = userService.getById(userId);
-        if (StringUtils.isNotBlank(user.getAvater())) {
-            user.setAvater(ConfigUtil.getString("upload.url") + user.getAvater());
-        }
-
-        //加入的球队
-        List<Team> teamList = new ArrayList<Team>();
-        List<TeamMember> teamMemberList = teamMemberService.findByUserId(userId);
-        User user1 = null;
-        Team team = null;
-        for (TeamMember teamMember : teamMemberList) {
-
-            user1 = userService.getById(teamMember.getUserId());
-            team = teamService.getById(teamMember.getTeamId());
-            if (teamService.findListByLeaderId(userId) != null) {
-
-                if (teamMember.getTeamId() != teamService.findListByLeaderId(userId).getId()) {
-                    if (StringUtils.isNotBlank(user1.getAvater())) {
-                        user1.setAvater(ConfigUtil.getString("upload.url") + user1.getAvater());
-                    }
-                    teamList.add(team);
-                }
-            } else {
-                if (StringUtils.isNotBlank(user1.getAvater())) {
-                    user1.setAvater(ConfigUtil.getString("upload.url") + user1.getAvater());
-                }
-                teamList.add(team);
-            }
-            team.setCount(team.getList().size() + 1);
-        }
-        map.put("teamList", teamList);
-
-        //自己创建的球队
-        if (teamService.findListByLeaderId(userId) != null) {
-            Team myTeam = teamService.findListByLeaderId(userId);
-            if (StringUtils.isNotBlank(myTeam.getAvater())) {
-                myTeam.setAvater(ConfigUtil.getString("upload.url") + myTeam.getAvater());
-            }
-            myTeam.setCount(myTeam.getList().size() + 1);
-            map.put("myTeam", myTeam);
-        }
-
-        UserVip userVip = userVipService.findByUserId(userId);
-        if (userVip != null && user.getVipNum() != 0) {
-            user.setEndDays((int) ((userVip.getEndDate() - System.currentTimeMillis())/1000/3600/24));
-        }
-
-        map.put("user", user);
+        Map<String, Object> map = userService.homePage(response, userId);
 
         Result obj = new Result(true).data(createMap("userInfo", map));
         String result = JsonUtil.obj2ApiJson(obj, "leaderUser");
@@ -238,17 +189,6 @@ public class UserApi extends CommonController {
     @RequestMapping(value = "/provinceList")
     public void provinceList(HttpServletResponse response) {
 
-        /*List<Province> list = provinceService.findAll();
-        for (Province province : list) {
-            List<City> cityList = cityService.getByProvinceId(province.getProvinceId());
-            for (City city : cityList) {
-                province.getCityList().add(city);
-                List<Area> areaList = areaService.getByCityId(city.getCityId());
-                for (Area area : areaList) {
-                    city.getAreaList().add(area);
-                }
-            }
-        }*/
         List<Province> list = provinceService.findList();
 
         Result obj = new Result(true).data(createMap("list", list));
@@ -361,7 +301,6 @@ public class UserApi extends CommonController {
     }
 
     /**
-     * 计算几年后时间戳有问题
      *
      * @api {post} /api/user/operation 会员操作
      * @apiName user.operation
@@ -384,65 +323,7 @@ public class UserApi extends CommonController {
             return;
         }
 
-        Map<String, Object> map = new HashMap<String, Object>();
-        Integer level = 0;
-        String endDate = null;
-        String status = null;
-        UserVip userVip = userVipService.findByUserId(userId);
-        Double price = 0.0;
-
-        if (userVip == null || userVip.getEndDate() < System.currentTimeMillis()) {
-            level = 0;
-            //status = "您不是会员";
-            //userVip.setStatus("您不是会员");
-            if (num == 1) {
-
-                //endDate = DateUtils.longToString(System.currentTimeMillis() + 1000 * 3600 * 365, "yyyy年-MM月-dd日 HH:mm:ss");
-                price = sysVipService.getById(1l).getPrice();
-            } else if (num == 2) {
-                //endDate = DateUtils.longToString(System.currentTimeMillis() + 2 * 1000 * 3600 * 365, "yyyy年-MM月-dd日 HH:mm:ss");
-                price = sysVipService.getById(1l).getPrice() * 2;
-            } else if (num == 3) {
-                //endDate = DateUtils.longToString(System.currentTimeMillis() + 3 * 1000 * 3600 * 365, "yyyy年-MM月-dd日 HH:mm:ss");
-                price = sysVipService.getById(1l).getPrice() * 3;
-            }
-
-
-        } else {
-            level = userService.getById(userId).getVipNum();
-            status = DateUtils.longToString(userVip.getEndDate(), "yyyy年-MM月-dd日");
-            //userVip.setStatus("会员到期时间" + DateUtils.longToString(userVip.getEndDate(),"yyyy年-MM月-dd日 HH:mm:ss"));
-            if (num == 1) {
-                /*endDate = DateUtils.longToString(userVip.getEndDate() + 1000 * 3600 * 365 * 24, "yyyy年-MM月-dd日 HH:mm:ss");
-                Date secord = DateUtils.dateAddYear(DateUtils.longToDate(userVip.getEndDate(),"yyyy-MM-dd HH:mm:ss"),1);
-                System.out.println("续费第二年日期:" + DateUtils.dateToStringWithFormat(secord,"yyyy-MM-dd HH:mm:ss"));*/
-
-                price = sysVipService.getById(level.longValue()).getPrice() * vipLevelService.findBylevel(level).getPreferente();
-            } else if (num == 2) {
-                //endDate = DateUtils.longToString(userVip.getEndDate() + 2 * 1000 * 3600 * 365, "yyyy年-MM月-dd日 HH:mm:ss");
-                price = sysVipService.getById(1l).getPrice() * vipLevelService.findBylevel(level).getPreferente() * 2;
-            } else if (num == 3) {
-                //endDate = DateUtils.longToString(userVip.getEndDate() + 3 * 1000 * 3600 * 365, "yyyy年-MM月-dd日 HH:mm:ss");
-                price = sysVipService.getById(1l).getPrice() * vipLevelService.findBylevel(level).getPreferente() * 3;
-            }
-        }
-
-        Integer experience = 0;
-        Integer leftExperience = 0;
-        if (level != 0) {
-            VipLevel vipLevel = vipLevelService.findBylevel(level);
-            experience = vipLevel.getExperience();
-            leftExperience = vipLevelService.findBylevel(level + 1).getExperience() - vipLevel.getExperience();
-        }else {
-            leftExperience = vipLevelService.findBylevel(level + 1).getExperience();
-        }
-
-        map.put("level", level);
-        //map.put("endDate", endDate);
-        map.put("price", price);
-        map.put("status", status);
-        map.put("experience", experience);
-        map.put("leftExperience", leftExperience);
+        Map<String, Object> map = userService.operation(response, userId, num);
 
         Result obj = new Result(true).data(createMap("vip", map));
         String result = JsonUtil.obj2ApiJson(obj);
@@ -470,61 +351,11 @@ public class UserApi extends CommonController {
                     Long endDate,
                     Double price) throws ParseException {
 
-        UserVip userVip = null;
-
-        if (userVipService.findByUserId(userId) == null) {
-            userVip = new UserVip();
-        } else {
-            userVip = userVipService.findByUserId(userId);
+        if (userId == null || num == null || price == null) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
         }
-        userVip.setUserId(userId);
-        userVip.setDuration(num);
-        if (num == 1) {
-            if (userVip != null && userVip.getEndDate()!= null && userVip.getEndDate() >= System.currentTimeMillis()) {
-                endDate = DateUtils.dateAddYear(DateUtils.longToDate(userVip.getEndDate(),"yyyy-MM-dd HH:mm:ss"),1).getTime();
-            }else {
-                endDate = DateUtils.dateAddYear(DateUtils.longToDate(System.currentTimeMillis(),"yyyy-MM-dd HH:mm:ss"),1).getTime();
-            }
-
-        } else if (num == 2) {
-            if (userVip != null && userVip.getEndDate() >= System.currentTimeMillis()) {
-                endDate = DateUtils.dateAddYear(DateUtils.longToDate(userVip.getEndDate(),"yyyy-MM-dd HH:mm:ss"),1).getTime();
-            }else {
-                endDate = DateUtils.dateAddYear(DateUtils.longToDate(System.currentTimeMillis(),"yyyy-MM-dd HH:mm:ss"),1).getTime();
-            }
-        } else if (num == 3) {
-            if (userVip != null && userVip.getEndDate() >= System.currentTimeMillis()) {
-                endDate = DateUtils.dateAddYear(DateUtils.longToDate(userVip.getEndDate(),"yyyy-MM-dd HH:mm:ss"),1).getTime();
-            }else {
-                endDate = DateUtils.dateAddYear(DateUtils.longToDate(System.currentTimeMillis(),"yyyy-MM-dd HH:mm:ss"),1).getTime();
-            }
-        }
-        userVip.setEndDate(endDate);
-        userVipService.update(userVip);
-        User user = userService.getById(userId);
-        user.setEndDate(endDate);
-        userService.update(user);
-
-        /*User user = userService.getById(userId);
-        user.setVipNum(level);
-        if (num == 1) {
-
-            user.setExperience(user.getExperience() + 30);
-        }else if (num == 2) {
-
-            user.setExperience(user.getExperience() + 100);
-        }else if (num == 3) {
-
-            user.setExperience(user.getExperience() + 500);
-        }
-        userService.update(user);*/
-
-        String sn = CommonUtils.generateSn(); // 订单号
-        Order order = new Order();
-        order.setUser(userService.getById(userId));
-        order.setPrice(price);
-        order.setSn(sn);
-        orderService.create(order);
+        Order order = orderService.pay(response, userId, num, endDate, price);
 
         Result obj = new Result(true).data(createMap("payInfo", order));
         String result = JsonUtil.obj2ApiJson(obj);
@@ -793,19 +624,7 @@ public class UserApi extends CommonController {
             return;
         }
 
-        GirlUser girlUser = girlUserService.getById(watchingId);
-
-        if (girlUser.getStatus() == 1) {
-
-            GirlComment girlComment = new GirlComment();
-            girlComment.setUserId(girlUser.getUserId());
-            girlComment.setGirlId(girlUser.getGirl().getId());
-            girlComment.setStar(star);
-            girlComment.setContent(content);
-            girlCommentService.create(girlComment);
-        }
-        girlUser.setStatus(2);
-        girlUserService.update(girlUser);
+        girlCommentService.comment(response, star, content, watchingId);
 
         WebUtil.printApi(response, new Result(true));
     }

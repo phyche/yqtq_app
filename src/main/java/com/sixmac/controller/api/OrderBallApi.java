@@ -200,17 +200,6 @@ public class OrderBallApi extends CommonController {
                 return;
             }
 
-            /*//已报名该预定的用户
-            List<User> userList = new ArrayList<User>();
-            List<UserReserve> userReserves = userReserveService.findByReserverId(reserveId);
-            for (UserReserve userReserve : userReserves) {
-
-                if (StringUtils.isNotBlank(userReserve.getUser().getAvater())) {
-                    userReserve.getUser().setAvater(ConfigUtil.getString("upload.url") + userReserve.getUser().getAvater());
-                }
-                userList.add(userReserve.getUser());
-            }*/
-
             if (reserve.getType() == 0) {
                 reserve.setAvePrice(reserve.getPrice() / reserve.getMatchType());
                 reserve.setSumPrice(reserve.getPrice());
@@ -220,8 +209,6 @@ public class OrderBallApi extends CommonController {
             if (reserve.getInsurance() == null) {
                 reserve.setInsurance(new SysInsurance());
             }
-            //map.put("userList", userList);
-            //map.put("reserve", reserve);
 
             Result obj = new Result(true).data(createMap("reserveInfo", reserve));
             String result = JsonUtil.obj2ApiJson(obj, "set", "site", "list");
@@ -260,8 +247,6 @@ public class OrderBallApi extends CommonController {
             return;
         }
 
-        //Map<String, Object> map = new HashMap<String, Object>();
-
         List<Reserve> reserveList = new ArrayList<Reserve>();
         List<UserReserve> userReserves = userReserveService.findByUserId(playerId);
         for (UserReserve userReserve : userReserves) {
@@ -280,16 +265,9 @@ public class OrderBallApi extends CommonController {
             }
         }
 
-        //map.put("reserveList", reserveList);
-
         Result obj = new Result(true).data(createMap("list", reserveList));
         String result = JsonUtil.obj2ApiJson(obj, "set", "insurance", "list", "userReservelist");
         WebUtil.printApi(response, result);
-    }
-
-    private Map<String, Object> setMap(Stadium stadium) {
-
-        return null;
     }
 
     /**
@@ -313,20 +291,7 @@ public class OrderBallApi extends CommonController {
             return;
         }
 
-        MessageOrderBall messageOrderBall = new MessageOrderBall();
-
-        messageOrderBall.setStatus(0);
-        messageOrderBall.setUser(userService.getById(userId));
-        messageOrderBall.setToUser(userService.getById(toUserId));
-        messageOrderBall.setReserve(reserveService.getById(reserveId));
-        messageOrderBallService.create(messageOrderBall);
-
-        MessageRecord messageRecord = new MessageRecord();
-        messageRecord.setUserId(toUserId);
-        messageRecord.setStatus(0);
-        messageRecord.setMessageId(messageOrderBall.getId());
-        messageRecord.setType(0);
-        messageRecordService.create(messageRecord);
+        reserveService.order(response, reserveId, userId, toUserId);
 
         WebUtil.printApi(response, new Result(true));
     }
@@ -367,84 +332,7 @@ public class OrderBallApi extends CommonController {
             return;
         }
 
-        Map<String, Object> map = new HashMap<String, Object>();
-
-        List<Team> teams = new ArrayList<Team>();
-        List<TeamMember> teamMemberList = teamMemberService.findByUserId(playerId);
-        User user = null;
-        for (TeamMember teamMember : teamMemberList) {
-            user = userService.getById(teamMember.getUserId());
-            if (StringUtils.isNotBlank(user.getAvater())) {
-                user.setAvater(ConfigUtil.getString("upload.url") + user.getAvater());
-            }
-            teams.add(teamService.getById(teamMember.getTeamId()));
-        }
-
-        String teamIds = "";
-        StringBuffer buffer = new StringBuffer("");
-        for (Team team : teams) {
-            //根据球队列表查询球队赛事
-            // select * from t_race r  where r.host_id in(1,2,3) or r.visitingid in (1,2,3)
-            buffer.append(team.getId() + ",");
-        }
-        teamIds = buffer.toString().substring(0, buffer.length() - 1);
-
-        List<TeamRace> list = teamRaceService.findByHomeTeamId(teamIds);
-        List<WatchBallVo> watchBallVos = new ArrayList<WatchBallVo>();
-        for (TeamRace teamRace : list) {
-            WatchBallVo watchBallVo1 = new WatchBallVo();
-            if (teamRace.getHomeTeam().getLeaderUser().getId() == playerId) {
-                watchBallVo1.setMobile(teamRace.getVisitingTeam().getLeaderUser().getMobile());
-            }
-            watchBallVo1.setId(teamRace.getId());
-            watchBallVo1.setStadiumName(teamRace.getAddress());
-            watchBallVo1.setStartTime(teamRace.getStartTime());
-            watchBallVo1.setCreateDate(teamRace.getCreateDate());
-            watchBallVo1.setHomeTeamName(teamRace.getHomeTeam().getName());
-            if (StringUtils.isNotBlank(teamRace.getHomeTeam().getAvater())) {
-                watchBallVo1.setHomeTeamAvater(ConfigUtil.getString("upload.url") + teamRace.getHomeTeam().getAvater());
-            }
-            watchBallVo1.setvTeamName(teamRace.getVisitingTeam().getName());
-            if (StringUtils.isNotBlank(teamRace.getVisitingTeam().getAvater())) {
-                watchBallVo1.setvTeamAvater(ConfigUtil.getString("upload.url") + teamRace.getVisitingTeam().getAvater());
-            }
-            watchBallVo1.setStatus(teamRace.getStatus());
-            watchBallVos.add(watchBallVo1);
-        }
-
-        List<TeamRace> listrace = teamRaceService.findByVisitingId(teamIds);
-        List<WatchBallVo> watchBallVoList = new ArrayList<WatchBallVo>();
-        for (TeamRace teamRace : listrace) {
-            WatchBallVo watchBallVo2 = new WatchBallVo();
-            if (teamRace.getVisitingTeam().getLeaderUser().getId() == playerId) {
-                watchBallVo2.setMobile(teamRace.getHomeTeam().getLeaderUser().getMobile());
-            }
-            watchBallVo2.setId(teamRace.getId());
-            watchBallVo2.setStadiumName(teamRace.getAddress());
-            watchBallVo2.setStartTime(teamRace.getStartTime());
-            watchBallVo2.setHomeTeamName(teamRace.getHomeTeam().getName());
-            watchBallVo2.setCreateDate(teamRace.getCreateDate());
-            if (StringUtils.isNotBlank(teamRace.getHomeTeam().getAvater())) {
-                watchBallVo2.setHomeTeamAvater(ConfigUtil.getString("upload.url") + teamRace.getHomeTeam().getAvater());
-            }
-            watchBallVo2.setvTeamName(teamRace.getVisitingTeam().getName());
-            if (StringUtils.isNotBlank(teamRace.getVisitingTeam().getAvater())) {
-                watchBallVo2.setvTeamAvater(ConfigUtil.getString("upload.url") + teamRace.getVisitingTeam().getAvater());
-            }
-            watchBallVo2.setStatus(teamRace.getStatus());
-
-            if (watchBallVos.getClass().equals(watchBallVo2)) return;
-            watchBallVoList.add(watchBallVo2);
-        }
-
-        map.put("watchBallVos", watchBallVos);
-        map.put("watchBallVoList", watchBallVoList);
-
-        try {
-            System.out.println(JsonUtil.obj2Json(map));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Map<String, Object> map = reserveService.raceList(response, playerId);
 
         Result obj = new Result(true).data(createMap("schedule", map));
         String result = JsonUtil.obj2ApiJson(obj);
@@ -481,97 +369,7 @@ public class OrderBallApi extends CommonController {
             return;
         }
 
-        Reserve reserve = reserveService.getById(reserveId);
-        Order order = null;
-        if (reserve.getType() == 0) {
-            if (reserve.getJoinCount() < reserve.getMatchType() * 2) {
-
-                Insurance insurance = new Insurance();
-
-                //球场已经全额付款的
-                if (reserve.getPayment() == 0) {
-                    UserReserve userReserve = new UserReserve();
-                    userReserve.setUser(userService.getById(userId));
-//                    userReserve.setReserveId(reserveId);
-                    userReserve.setReserve(reserve);
-                    userReserve.setStatus(0);
-                    userReserveService.create(userReserve);
-
-                    MessageRecord messageRecord = new MessageRecord();
-                    messageRecord.setUserId(reserve.getUser().getId());
-                    messageRecord.setStatus(0);
-                    messageRecord.setMessageId(userReserve.getId());
-                    messageRecord.setType(1);
-                    messageRecordService.create(messageRecord);
-
-                    if (messageId != null) {
-                        MessageOrderBall messageOrderBall = messageOrderBallService.getById(messageId);
-                        if (messageRecord != null) {
-                            messageRecord.setStatus(1);
-                            messageRecordService.update(messageRecord);
-                        }
-                    }
-
-                    WebUtil.printApi(response, new Result(true));
-                }
-                //球场AA付款
-                if (reserve.getPayment() == 1) {
-                    insurance.setMoney(reserve.getInsurance().getPrice());
-                /*if (userService.getById(userId).getVipNum() != 0) {
-                    VipLevel vipLevel = vipLevelService.findBylevel(userService.getById(userId).getVipNum());
-                    money = (reserve.getPrice() / reserve.getMatchType() + reserve.getInsurance().getPrice()) * vipLevel.getPreferente();
-                }else {
-                    money = reserve.getPrice() / reserve.getMatchType() + reserve.getInsurance().getPrice();
-                }*/
-
-                    money = reserve.getPrice() / reserve.getMatchType();
-                    String sn = CommonUtils.generateSn(); // 订单号
-
-                    order = new Order();
-                    order.setUser(userService.getById(userId));
-                    order.setReserve(reserve);
-                /*order.setStadium(reserve.getStadium());
-                order.setSite(reserve.getSite());*/
-                    order.setPrice(money);
-                    order.setAction(1);
-                    order.setSn(sn);
-                    order.setMessageId(messageId);
-                    orderService.create(order);
-
-                    // 当前没有支付接口，因此状态直接为已支付
-                    PayCallBackApi.changeOrderStatus(orderService, order.getSn(), null, response);
-                }
-
-                insurance.setUserId(userId);
-                insurance.setReserveId(reserve.getId());
-                insuranceService.create(insurance);
-            }
-        }else if (reserve.getType() == 1){
-            UserReserve userReserve = new UserReserve();
-            userReserve.setUser(userService.getById(userId));
-//            userReserve.setReserveId(reserveId);
-            userReserve.setReserve(reserve);
-            userReserve.setStatus(0);
-            userReserveService.create(userReserve);
-
-            MessageRecord messageRecord = new MessageRecord();
-            messageRecord.setUserId(reserve.getUser().getId());
-            messageRecord.setStatus(0);
-            messageRecord.setMessageId(userReserve.getId());
-            messageRecord.setType(1);
-            messageRecordService.create(messageRecord);
-
-            if (messageId != null) {
-                MessageOrderBall messageOrderBall = messageOrderBallService.getById(messageId);
-                if (messageRecord != null) {
-                    messageRecord.setStatus(1);
-                    messageRecordService.update(messageRecord);
-                }
-            }
-
-            WebUtil.printApi(response, new Result(true));
-        }
-
+        Order order = reserveService.pay(response, reserveId, userId, messageId, money);
 
         Result obj = new Result(true).data(createMap("payInfo", order));
         String result = JsonUtil.obj2ApiJson(obj, "reserve", "user", "reserveTeam", "girlUser", "stadium");

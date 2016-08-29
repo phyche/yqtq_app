@@ -121,23 +121,7 @@ public class WatchingApi extends CommonController {
             return;
         }
 
-        MessageWatching messageWatching = new MessageWatching();
-        messageWatching.setUser(userService.getById(userId));
-        messageWatching.setType(type);
-        messageWatching.setToUser(userService.getById(toUserId));
-        if (type == 0) {
-            messageWatching.setWatchingRace(watchingRaceService.getById(id));
-        }else if (type == 1) {
-            messageWatching.setBigRace(bigRaceService.getById(id));
-        }
-        messageWatchingService.create(messageWatching);
-
-        MessageRecord messageRecord = new MessageRecord();
-        messageRecord.setUserId(toUserId);
-        messageRecord.setStatus(0);
-        messageRecord.setMessageId(messageWatching.getId());
-        messageRecord.setType(3);
-        messageRecordService.create(messageRecord);
+        messageWatchingService.inviteBall(response, type, id, userId, toUserId);
 
         WebUtil.printApi(response, new Result(true));
     }
@@ -169,74 +153,14 @@ public class WatchingApi extends CommonController {
      * @apiSuccess {Double} info.girlImageList.weight 宝贝体重
      */
     @RequestMapping(value = "/sceneList")
-    public void sceneList(HttpServletResponse response,
-                          Long cityId) {
+    public void sceneList(HttpServletResponse response, Long cityId) {
 
-        List<BigRace> bigRaceList = bigRaceService.page(cityId, 0);
-        // Page<BigRace> page = bigRaceService.page(cityId, 0, pageNum, pageSize);
-
-        Map<String, Object> map = new HashMap<String, Object>();
-
-        List<Long> numList = new ArrayList<Long>();
-        Long systemTime = System.currentTimeMillis();
-        for (BigRace bigRace : bigRaceList) {
-
-            Long time = bigRace.getStartDate() - systemTime;
-            if (time > 0) {
-                numList.add(time);
-            }
+        if (cityId == null) {
+            WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
+            return;
         }
 
-        if (numList.size() > 0) {
-            Long minnum = numList.get(0);
-            for (int i = 0; i < numList.size(); i++) {
-                if (numList.get(i) > minnum) {
-                    minnum = numList.get(i);
-                }
-            }
-            BigRace bigRace = bigRaceService.getByStartDate(minnum + systemTime);
-            if (StringUtils.isNotBlank(bigRace.getAvater1())) {
-                bigRace.setAvater1(ConfigUtil.getString("upload.url") + bigRace.getAvater1());
-            }
-            if (StringUtils.isNotBlank(bigRace.getAvater2())) {
-                bigRace.setAvater2(ConfigUtil.getString("upload.url") + bigRace.getAvater2());
-            }
-
-            List<GirlImageVo> girlImageList = new ArrayList<GirlImageVo>();
-            if (bigRace == null) {
-                girlImageList = null;
-            } else {
-                List<Girl> list = girlService.page(0, cityId);
-                for (Girl girl : list) {
-                    for (GirlImage girlImage : girl.getGirlImageList()) {
-                        if (girlImage.getType() == 0) {
-                            if (StringUtils.isNotBlank(girlImage.getUrl())) {
-                                girlImage.setUrl(ConfigUtil.getString("upload.url") + girlImage.getUrl());
-                            }
-                            GirlImageVo girlImageVo = new GirlImageVo();
-                            girlImageVo.setId(girlImage.getId());
-                            girlImageVo.setGirlId(girl.getId());
-                            girlImageVo.setUrl(girlImage.getUrl());
-                            girlImageVo.setName(girl.getName());
-                            girlImageVo.setAge(girl.getAge());
-                            girlImageVo.setHeight(girl.getHeight());
-                            girlImageVo.setWeight(girl.getWeight());
-                            girlImageList.add(girlImageVo);
-                        }
-                    }
-                }
-
-            }
-            for (int i = 0; i < girlImageList.size(); i++) {
-                GirlImageVo girlImage = girlImageList.get(i);
-                if (girlImageList.contains(girlImage)) {
-                    girlImageList.remove(i);
-                }
-            }
-
-            map.put("bigRace", bigRace);
-            map.put("girlImageList", girlImageList);
-        }
+        Map<String, Object> map = bigRaceService.sceneList(response, cityId);
 
         //Map<String, Object> dataMap = APIFactory.fitting(page);
         Result obj = new Result(true).data(createMap("info", map));
@@ -280,48 +204,7 @@ public class WatchingApi extends CommonController {
             return;
         }
 
-        Map<String, Object> map = new HashMap<String, Object>();
-        //宝贝个人信息
-        Girl girl = girlService.getById(girlId);
-        girl.setCityName(cityService.getByCityId(girl.getCityId()).getCity());
-
-        //List<GirlImage> girlImages = girlImageService.find(girlId, 0);
-        //宝贝封面
-        List<GirlImage> girlImages = new ArrayList<GirlImage>();
-        //宝贝相册
-        List<GirlImage> girlImages1 = new ArrayList<GirlImage>();
-        for (GirlImage girlImage : girl.getGirlImageList()) {
-            if (StringUtils.isNotBlank(girlImage.getUrl())) {
-                girlImage.setUrl(ConfigUtil.getString("upload.url") + girlImage.getUrl());
-                if (girlImage.getType() == 0) {
-                    girlImages.add(girlImage);
-                } else if (girlImage.getType() == 1) {
-                    girlImages1.add(girlImage);
-                }
-            }
-        }
-
-        //宝贝预约数
-        List<GirlUser> girlUserList = girlUserService.findByGirlId(girlId);
-        if (girlUserList == null) {
-            girl.setOrderNum(0);
-        }
-        girl.setOrderNum(girlUserList.size());
-        girlService.update(girl);
-
-        Double star = 0.0;
-        for (GirlComment girlComment : girl.getGirlComments()) {
-            star += girlComment.getStar();
-        }
-        if (girl.getGirlComments().size() != 0) {
-            girl.setAveStar(star / girl.getGirlComments().size());
-        } else {
-            girl.setAveStar(0.0);
-        }
-
-        map.put("girl", girl);
-        map.put("girlImages", girlImages);
-        map.put("girlImages1", girlImages1);
+        Map<String, Object> map = girlService.girlInfo(response, girlId);
 
         Result obj = new Result(true).data(createMap("girlInfo", map));
         String result = JsonUtil.obj2ApiJson(obj, "girl", "type", "girlImageList");
@@ -394,35 +277,7 @@ public class WatchingApi extends CommonController {
             return;
         }
 
-        GirlUser girlUser = new GirlUser();
-        girlUser.setUserId(userId);
-        girlUser.setGirl(girlService.getById(girlId));
-        girlUser.setBigRace(bigRaceService.getById(sceneId));
-        girlUser.setStartDate(bigRaceService.getById(sceneId).getStartDate());
-        girlUser.setStadium(bigRaceService.getById(sceneId).getStadium());
-        girlUser.setPrice(girlService.getById(girlId).getPrice());
-        girlUser.setTip(tip);
-        girlUser.setStatus(3);
-        girlUserService.create(girlUser);
-
-        // 生成订单
-        String sn = CommonUtils.generateSn(); // 订单号
-
-        User user = userService.getById(girlUser.getUserId());
-        Order order = new Order();
-        order.setUser(user);
-        //order.setStadium(girlUser.getStadium());
-        order.setGirlUser(girlUser);
-
-        VipLevel vipLevel = vipLevelService.findBylevel(user.getVipNum());
-        if (user.getVipNum() != 0) {
-            order.setPrice((girlUser.getPrice() + girlUser.getTip()) * vipLevel.getPreferente());
-        } else {
-            order.setPrice(girlUser.getPrice() + girlUser.getTip());
-        }
-        order.setSn(sn);
-        order.setAction(3);
-        orderService.create(order);
+        Order order = orderService.orderGirl(response, userId, girlId, sceneId, tip);
 
         // 当前没有支付接口，因此状态直接为已支付
         PayCallBackApi.changeOrderStatus(orderService, order.getSn(), null, response);

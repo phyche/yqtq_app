@@ -142,57 +142,7 @@ public class TeamApi extends CommonController {
             return;
         }
 
-        Map<String, Object> map = new HashMap<String, Object>();
-        Integer sum = 0;
-        double sumAge = 0;
-        double sumWeight = 0.0;
-        double sumHeight = 0.0;
-
-        Team team = teamService.getById(teamId);
-        if (StringUtils.isNotBlank(team.getAvater())) {
-            team.setAvater(ConfigUtil.getString("upload.url") + team.getAvater());
-        }
-        if (StringUtils.isNotBlank(team.getLeaderUser().getAvater())) {
-            team.getLeaderUser().setAvater(ConfigUtil.getString("upload.url") + team.getLeaderUser().getAvater());
-        }
-
-        List<User> userList = new ArrayList<User>();
-        if (team.getList().size() != 0) {
-            for (sum = 0; sum < team.getList().size(); sum++) {
-                sumAge += team.getList().get(sum).getAge();
-                sumHeight += team.getList().get(sum).getHeight();
-                sumWeight += team.getList().get(sum).getWeight();
-            }
-
-            sumAge = sumAge + teamService.getById(teamId).getLeaderUser().getAge();
-            sumHeight = sumHeight + teamService.getById(teamId).getLeaderUser().getHeight();
-            sumWeight = sumWeight + teamService.getById(teamId).getLeaderUser().getWeight();
-
-            team.setAveAge(sumAge / (team.getList().size()+1));
-            team.setAveHeight(sumHeight / (team.getList().size()+1));
-            team.setAveWeight(sumWeight / (team.getList().size()+1));
-
-            //球员列表
-            userList = team.getList();
-            for (User user : userList) {
-                if (StringUtils.isNotBlank(user.getAvater())) {
-                    user.setAvater(ConfigUtil.getString("upload.url") + user.getAvater());
-                }
-            }
-            team.setCount(userList.size());
-        }else {
-            sumAge = sumAge + teamService.getById(teamId).getLeaderUser().getAge();
-            sumHeight = sumHeight + teamService.getById(teamId).getLeaderUser().getHeight();
-            sumWeight = sumWeight + teamService.getById(teamId).getLeaderUser().getWeight();
-
-            team.setAveAge(sumAge);
-            team.setAveHeight(sumHeight);
-            team.setAveWeight(sumWeight);
-        }
-
-
-        map.put("team", team);
-        map.put("userList",userList);
+        Map<String, Object> map = teamService.info(response, teamId);
 
         Result obj = new Result(true).data(createMap("teamInfo",map));
         String result = JsonUtil.obj2ApiJson(obj,"declareNum","battleNum","sum");
@@ -282,31 +232,7 @@ public class TeamApi extends CommonController {
             return;
         }
 
-        Team team = teamService.findListByLeaderId(userId);
-        if (team != null) {
-            MessageTeam messageTeam = new MessageTeam();
-            messageTeam.setUser(userService.getById(userId));
-            messageTeam.setToUser(userService.getById(toUserId));
-            messageTeam.setTeam(team);
-            messageTeam.setStatus(0);
-            messageTeamService.create(messageTeam);
-
-            /*// 邀请加入球队
-            MessageRecord messageRecord = new MessageRecord();
-            messageRecord.setUserId(userId);
-            messageRecord.setStatus(0);
-            messageRecord.setMessageId(messageTeam.getId());
-            messageRecord.setType(9);
-            messageRecordService.create(messageRecord);*/
-
-            // 好友被邀请加入球队
-            MessageRecord messageRecord = new MessageRecord();
-            messageRecord.setUserId(toUserId);
-            messageRecord.setStatus(0);
-            messageRecord.setMessageId(messageTeam.getId());
-            messageRecord.setType(8);
-            messageRecordService.create(messageRecord);
-        }
+        teamService.addFriend(response, userId, toUserId);
 
         WebUtil.printApi(response, new Result(true));
     }
@@ -329,18 +255,7 @@ public class TeamApi extends CommonController {
             return;
         }
 
-        MessageJoin messageJoin = new MessageJoin();
-        messageJoin.setStatus(0);
-        messageJoin.setUser(userService.getById(userId));
-        messageJoin.setTeam(teamService.getById(teamId));
-        messageJoinService.create(messageJoin);
-
-        MessageRecord messageRecord = new MessageRecord();
-        messageRecord.setUserId(userId);
-        messageRecord.setStatus(0);
-        messageRecord.setMessageId(messageJoin.getId());
-        messageRecord.setType(10);
-        messageRecordService.create(messageRecord);
+        teamService.apply(response, userId, teamId);
 
         WebUtil.printApi(response, new Result(true));
     }
@@ -399,27 +314,7 @@ public class TeamApi extends CommonController {
             return;
         }
 
-        Map<String, Object> map = new HashMap<String, Object>();
-
-        //被约球球队(客队)
-        Team team1 = teamService.getById(team2Id);
-        //约球球队（主队）
-        Team team2 = teamService.getById(team1Id);
-
-        TeamRace teamRace = new TeamRace();
-        teamRace.setHomeTeam(team2);
-        teamRace.setVisitingTeam(team1);
-        teamRace.setStartTime(time);
-        team2.setDeclareNum(team2.getDeclareNum() + 1);
-        teamService.update(team2);
-        teamRaceService.create(teamRace);
-
-        MessageRecord messageRecord = new MessageRecord();
-        messageRecord.setUserId(team1.getLeaderUser().getId());
-        messageRecord.setStatus(0);
-        messageRecord.setMessageId(teamRace.getId());
-        messageRecord.setType(13);
-        messageRecordService.create(messageRecord);
+        teamService.orderInfo(response, team1Id, team2Id, time, cityId);
 
         WebUtil.printApi(response, new Result(true));
 
@@ -460,69 +355,14 @@ public class TeamApi extends CommonController {
      * @apiSuccess {String} schedule.watchBallVoList.mobile 手机号
      */
     @RequestMapping(value = "/schedule")
-    private void schedule(HttpServletResponse response, Long teamId, Long userId) {
+    public void schedule(HttpServletResponse response, Long teamId, Long userId) {
 
         if (null == teamId ) {
             WebUtil.printJson(response, new Result(false).msg(ErrorCode.ERROR_CODE_0002));
             return;
         }
 
-        Map<String, Object> map = new HashMap<String, Object>();
-
-        //球队为主队的球赛
-        List<TeamRace> teamRaces = teamRaceService.findHomeId(teamId);
-
-        WatchBallVo watchBallVo1 = null;
-        List<WatchBallVo> watchBallVos = new ArrayList<WatchBallVo>();
-        for (TeamRace teamRace : teamRaces) {
-            watchBallVo1 = new WatchBallVo();
-            if (teamRace.getHomeTeam().getLeaderUser().getId() == userId) {
-                watchBallVo1.setMobile(teamRace.getVisitingTeam().getLeaderUser().getMobile());
-            }
-            watchBallVo1.setId(teamRace.getId());
-            watchBallVo1.setStadiumName(teamRace.getAddress());
-            watchBallVo1.setStartTime(teamRace.getStartTime());
-            watchBallVo1.setCreateDate(teamRace.getCreateDate());
-            watchBallVo1.setHomeTeamName(teamRace.getHomeTeam().getName());
-            if (StringUtils.isNotBlank(teamRace.getHomeTeam().getAvater())) {
-                watchBallVo1.setHomeTeamAvater(ConfigUtil.getString("upload.url") + teamRace.getHomeTeam().getAvater());
-            }
-            watchBallVo1.setvTeamName(teamRace.getVisitingTeam().getName());
-            if (StringUtils.isNotBlank(teamRace.getVisitingTeam().getAvater())) {
-                watchBallVo1.setvTeamAvater(ConfigUtil.getString("upload.url") + teamRace.getVisitingTeam().getAvater());
-            }
-            watchBallVo1.setStatus(teamRace.getStatus());
-            watchBallVos.add(watchBallVo1);
-        }
-
-        //球队为客队的球赛
-        List<TeamRace> teamRaces1 = teamRaceService.findVisitingId(teamId);
-        WatchBallVo watchBallVo2 = null;
-        List<WatchBallVo> watchBallVoList = new ArrayList<WatchBallVo>();
-        for (TeamRace teamRace : teamRaces1) {
-
-            watchBallVo2 = new WatchBallVo();
-            if (teamRace.getVisitingTeam().getLeaderUser().getId() == userId) {
-                watchBallVo2.setMobile(teamRace.getHomeTeam().getLeaderUser().getMobile());
-            }
-            watchBallVo2.setId(teamRace.getId());
-            watchBallVo2.setStadiumName(teamRace.getAddress());
-            watchBallVo2.setStartTime(teamRace.getStartTime());
-            watchBallVo2.setHomeTeamName(teamRace.getHomeTeam().getName());
-            watchBallVo2.setCreateDate(teamRace.getCreateDate());
-            if (StringUtils.isNotBlank(teamRace.getHomeTeam().getAvater())) {
-                watchBallVo2.setHomeTeamAvater(ConfigUtil.getString("upload.url") + teamRace.getHomeTeam().getAvater());
-            }
-            watchBallVo2.setvTeamName(teamRace.getVisitingTeam().getName());
-            if (StringUtils.isNotBlank(teamRace.getVisitingTeam().getAvater())) {
-                watchBallVo2.setvTeamAvater(ConfigUtil.getString("upload.url") + teamRace.getVisitingTeam().getAvater());
-            }
-            watchBallVo2.setStatus(teamRace.getStatus());
-            watchBallVoList.add(watchBallVo2);
-        }
-
-        map.put("watchBallVos", watchBallVos);
-        map.put("watchBallVoList", watchBallVoList);
+        Map<String, Object> map = teamRaceService.schedule(response, teamId, userId);
 
         Result obj = new Result(true).data(createMap("schedule",map));
         String result = JsonUtil.obj2ApiJson(obj);

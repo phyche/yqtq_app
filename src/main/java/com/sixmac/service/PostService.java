@@ -6,6 +6,8 @@ import com.sixmac.entity.Stadium;
 import com.sixmac.service.common.ICommonService;
 import org.springframework.data.domain.Page;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -20,4 +22,12 @@ public interface PostService extends ICommonService<Post> {
     public List<Post> findByUserId(Long userId);
 
     public Page<Post> page(Long userId, Integer pageNum, Integer pageSize);
+
+    // 保存发布的圈子
+    public void publish(HttpServletRequest request ,
+                        HttpServletResponse response,
+                        Long userId,
+                        String content);
+
+
 }

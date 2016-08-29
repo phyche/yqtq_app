@@ -2,9 +2,13 @@ package com.sixmac.service.impl;
 
 import com.sixmac.core.Constant;
 import com.sixmac.dao.OrderDao;
+import com.sixmac.dao.SiteDao;
+import com.sixmac.dao.SysInsuranceDao;
 import com.sixmac.entity.*;
 import com.sixmac.pay.excute.PayRequest;
 import com.sixmac.service.*;
+import com.sixmac.utils.CommonUtils;
+import com.sixmac.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +61,24 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private MessageOrderBallService messageOrderBallService;
+
+    @Autowired
+    private SiteDao siteDao;
+
+    @Autowired
+    private SysInsuranceService sysInsuranceService;
+
+    @Autowired
+    private SiteTimeService siteTimeService;
+
+    @Autowired
+    private UserVipService userVipService;
+
+    @Autowired
+    private GirlService girlService;
+
+    @Autowired
+    private BigRaceService bigRaceService;
 
     @Override
     public List<Order> findAll() {
@@ -122,6 +145,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public void changeOrderStatus(String orderNum, Integer type) {
         Order orders = iFindOneByOrderNum(orderNum);
         orders.setStatus(Constant.ORDERS_STATUS_001);
@@ -217,5 +241,152 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> findByUserIdAndAction(Integer action, Long userId) {
         return orderDao.findByUserIdAndAction(action, userId);
+    }
+
+    @Override
+    @Transactional
+    public Order payConfirm(HttpServletResponse response, Long userId, Long siteId, Integer start, Long time, Integer end, Integer type, Long insuranceId, Integer status, Double price, Integer num) {
+        String sn = CommonUtils.generateSn(); // 订单号
+
+        Site site = siteDao.findOne(siteId);
+        SiteTime siteTime = new SiteTime();
+        siteTime.setSite(site);
+        siteTime.setStartTime(time + start * 1000 * 3600);
+        siteTime.setEndTime(time + end * 1000 * 3600);
+        siteTimeService.create(siteTime);
+
+        //Reserve reserve = null;
+        Reserve reserve = new Reserve();
+        reserve.setStadium(site.getStadium());
+        reserve.setSiteId(siteId);
+        reserve.setUser(userService.getById(userId));
+        if (insuranceId != null) {
+            reserve.setInsurance(sysInsuranceService.getById(insuranceId));
+        }
+        if (type == 0) {
+            //将球场预订表的支付方式设置为全额支付
+            reserve.setPayment(0);
+        } else if (type == 1) {
+            //将球场预订表的支付方式设置为AA支付
+            reserve.setPayment(1);
+        }
+        reserve.setPrice(price);
+        reserve.setMatchType(site.getType());
+        reserve.setStartTime(siteTime.getStartTime());
+        reserve.setPayStatus(0);
+        reserve.setCityId(site.getStadium().getCityId());
+        reserve.setType(0);
+        reserve.setReserveType(status);
+        reserveService.create(reserve);
+        /*if (status == 0) {
+
+        }else if (status == 1) {
+            reserveTeam = new ReserveTeam();
+            reserveTeam.setStatus(0);
+            reserveTeam.setSite(site);
+            reserveTeam.setUser(userService.getById(userId));
+            reserveTeam.setStartTime(siteTime.getStartTime());
+            if (insuranceId != null) {
+                reserveTeam.setInsurance(sysInsuranceService.getById(insuranceId));
+            }
+            reserveTeam.setPrice(price);
+            reserveTeamService.create(reserveTeam);
+        }*/
+
+        Order order = new Order();
+        order.setUser(userService.getById(userId));
+        //order.setStadium(reserve.getSite().getStadium());
+        order.setReserve(reserve);
+        //order.setReserveTeam(reserveTeam);
+        order.setPrice(price);
+        order.setAction(2);
+        order.setSn(sn);
+        order.setInsuranceNum(num);
+        orderDao.save(order);
+
+        return order;
+    }
+
+    @Override
+    @Transactional
+    public Order pay(HttpServletResponse response, Long userId, Integer num, Long endDate, Double price) throws ParseException {
+        UserVip userVip = null;
+
+        if (userVipService.findByUserId(userId) == null) {
+            userVip = new UserVip();
+        } else {
+            userVip = userVipService.findByUserId(userId);
+        }
+        userVip.setUserId(userId);
+        userVip.setDuration(num);
+        if (num == 1) {
+            if (userVip != null && userVip.getEndDate()!= null && userVip.getEndDate() >= System.currentTimeMillis()) {
+                endDate = DateUtils.dateAddYear(DateUtils.longToDate(userVip.getEndDate(),"yyyy-MM-dd HH:mm:ss"),1).getTime();
+            }else {
+                endDate = DateUtils.dateAddYear(DateUtils.longToDate(System.currentTimeMillis(),"yyyy-MM-dd HH:mm:ss"),1).getTime();
+            }
+
+        } else if (num == 2) {
+            if (userVip != null && userVip.getEndDate() >= System.currentTimeMillis()) {
+                endDate = DateUtils.dateAddYear(DateUtils.longToDate(userVip.getEndDate(),"yyyy-MM-dd HH:mm:ss"),1).getTime();
+            }else {
+                endDate = DateUtils.dateAddYear(DateUtils.longToDate(System.currentTimeMillis(),"yyyy-MM-dd HH:mm:ss"),1).getTime();
+            }
+        } else if (num == 3) {
+            if (userVip != null && userVip.getEndDate() >= System.currentTimeMillis()) {
+                endDate = DateUtils.dateAddYear(DateUtils.longToDate(userVip.getEndDate(),"yyyy-MM-dd HH:mm:ss"),1).getTime();
+            }else {
+                endDate = DateUtils.dateAddYear(DateUtils.longToDate(System.currentTimeMillis(),"yyyy-MM-dd HH:mm:ss"),1).getTime();
+            }
+        }
+        userVip.setEndDate(endDate);
+        userVipService.update(userVip);
+        User user = userService.getById(userId);
+        user.setEndDate(endDate);
+        userService.update(user);
+
+        String sn = CommonUtils.generateSn(); // 订单号
+        Order order = new Order();
+        order.setUser(userService.getById(userId));
+        order.setPrice(price);
+        order.setSn(sn);
+        orderDao.save(order);
+        return order;
+    }
+
+    @Override
+    @Transactional
+    public Order orderGirl(HttpServletResponse response, Long userId, Long girlId, Long sceneId, Double tip) {
+        GirlUser girlUser = new GirlUser();
+        girlUser.setUserId(userId);
+        girlUser.setGirl(girlService.getById(girlId));
+        girlUser.setBigRace(bigRaceService.getById(sceneId));
+        girlUser.setStartDate(bigRaceService.getById(sceneId).getStartDate());
+        girlUser.setStadium(bigRaceService.getById(sceneId).getStadium());
+        girlUser.setPrice(girlService.getById(girlId).getPrice());
+        girlUser.setTip(tip);
+        girlUser.setStatus(3);
+        girlUserService.create(girlUser);
+
+        // 生成订单
+        String sn = CommonUtils.generateSn(); // 订单号
+
+        User user = userService.getById(girlUser.getUserId());
+        Order order = new Order();
+        order.setUser(user);
+        //order.setStadium(girlUser.getStadium());
+        order.setGirlUser(girlUser);
+
+        VipLevel vipLevel = vipLevelService.findBylevel(user.getVipNum());
+        if (user.getVipNum() != 0) {
+            order.setPrice((girlUser.getPrice() + girlUser.getTip()) * vipLevel.getPreferente());
+        } else {
+            order.setPrice(girlUser.getPrice() + girlUser.getTip());
+        }
+        order.setSn(sn);
+        order.setAction(3);
+        orderDao.save(order);
+
+        return order;
     }
 }

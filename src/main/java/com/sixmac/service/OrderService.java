@@ -5,6 +5,7 @@ import com.sixmac.service.common.ICommonService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
@@ -24,4 +25,31 @@ public interface OrderService extends ICommonService<Order> {
 
     // 根据用户id和支付动作筛选订单
     public List<Order> findByUserIdAndAction(Integer action, Long userId);
+
+    // 球场确认支付订单
+    public Order payConfirm(HttpServletResponse response,
+                           Long userId,
+                           Long siteId,
+                           Integer start,
+                           Long time,
+                           Integer end,
+                           Integer type,
+                           Long insuranceId,
+                           Integer status,
+                           Double price,
+                           Integer num);
+
+    // 会员付款
+    public Order pay(HttpServletResponse response,
+                    Long userId,
+                    Integer num,
+                    Long endDate,
+                    Double price) throws ParseException;
+
+    // 约宝贝看球确认
+    public Order orderGirl(HttpServletResponse response,
+                          Long userId,
+                          Long girlId,
+                          Long sceneId,
+                          Double tip);
 }

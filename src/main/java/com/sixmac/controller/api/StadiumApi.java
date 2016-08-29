@@ -220,7 +220,6 @@ public class StadiumApi extends CommonController {
             String date = null;
             Long time = null;
 
-
             for (int i = 0; i < 7; i++) {
                 TimeVo timeVo = new TimeVo();
 
@@ -236,8 +235,8 @@ public class StadiumApi extends CommonController {
             }
         }
         map.put("time", list);
-
         map.put("stadium", stadium);
+
         Result obj = new Result(true).data(createMap("stadiumInfo", map));
         String result = JsonUtil.obj2ApiJson(obj);
         WebUtil.printApi(response, result);
@@ -303,27 +302,7 @@ public class StadiumApi extends CommonController {
             return;
         }
 
-        User user = userService.getById(userId);
-        Stadium stadium = stadiumService.getById(stadiumId);
-
-        Reserve reserve = new Reserve();
-        reserve.setUser(user);
-        reserve.setStadium(stadium);
-        reserve.setStartTime(time);
-        reserve.setTitle(title);
-        reserve.setType(1);
-        reserve.setReserveType(0);
-        reserve.setCityId(stadium.getCityId());
-        reserve.setPayStatus(1);
-        reserveService.create(reserve);
-
-        UserReserve userReserve = new UserReserve();
-        userReserve.setUser(user);
-//        userReserve.setReserveId(reserve.getId());
-        userReserve.setReserve(reserve);
-        userReserve.setStatus(1);
-
-        userReserveService.create(userReserve);
+        stadiumService.publish(response, userId, stadiumId, title, time);
 
         WebUtil.printApi(response, new Result(true));
     }
@@ -350,7 +329,6 @@ public class StadiumApi extends CommonController {
             return;
         }
 
-        //Map<String, Object> map = new HashMap<String, Object>();
         List<NumVo> list = null;
         NumVo numVo = null;
 
@@ -377,8 +355,6 @@ public class StadiumApi extends CommonController {
             site.setNumList(list);
 
         }
-
-        //map.put("siteList", siteList);
 
         Result obj = new Result(true).data(createMap("list", siteList));
         String result = JsonUtil.obj2ApiJson(obj, "stadium");
@@ -505,63 +481,7 @@ public class StadiumApi extends CommonController {
             return;
         }
 
-        String sn = CommonUtils.generateSn(); // 订单号
-
-        Site site = siteService.getById(siteId);
-        SiteTime siteTime = new SiteTime();
-        siteTime.setSite(site);
-        siteTime.setStartTime(time + start * 1000 * 3600);
-        siteTime.setEndTime(time + end * 1000 * 3600);
-        siteTimeService.create(siteTime);
-
-        //Reserve reserve = null;
-        Reserve reserve = new Reserve();
-        reserve.setStadium(siteService.getById(siteId).getStadium());
-        reserve.setSiteId(siteId);
-        reserve.setUser(userService.getById(userId));
-        if (insuranceId != null) {
-            reserve.setInsurance(sysInsuranceService.getById(insuranceId));
-        }
-        if (type == 0) {
-            //将球场预订表的支付方式设置为全额支付
-            reserve.setPayment(0);
-        } else if (type == 1) {
-            //将球场预订表的支付方式设置为AA支付
-            reserve.setPayment(1);
-        }
-        reserve.setPrice(price);
-        reserve.setMatchType(siteService.getById(siteId).getType());
-        reserve.setStartTime(siteTime.getStartTime());
-        reserve.setPayStatus(0);
-        reserve.setCityId(siteService.getById(siteId).getStadium().getCityId());
-        reserve.setType(0);
-        reserve.setReserveType(status);
-        reserveService.create(reserve);
-        /*if (status == 0) {
-
-        }else if (status == 1) {
-            reserveTeam = new ReserveTeam();
-            reserveTeam.setStatus(0);
-            reserveTeam.setSite(site);
-            reserveTeam.setUser(userService.getById(userId));
-            reserveTeam.setStartTime(siteTime.getStartTime());
-            if (insuranceId != null) {
-                reserveTeam.setInsurance(sysInsuranceService.getById(insuranceId));
-            }
-            reserveTeam.setPrice(price);
-            reserveTeamService.create(reserveTeam);
-        }*/
-
-        Order order = new Order();
-        order.setUser(userService.getById(userId));
-        //order.setStadium(reserve.getSite().getStadium());
-        order.setReserve(reserve);
-        //order.setReserveTeam(reserveTeam);
-        order.setPrice(price);
-        order.setAction(2);
-        order.setSn(sn);
-        order.setInsuranceNum(num);
-        orderService.create(order);
+        Order order = orderService.payConfirm(response, userId, siteId, start, time, end, type, insuranceId, status, price, num);
 
         // 当前没有支付接口，因此状态直接为已支付
         PayCallBackApi.changeOrderStatus(orderService, order.getSn(), null, response);

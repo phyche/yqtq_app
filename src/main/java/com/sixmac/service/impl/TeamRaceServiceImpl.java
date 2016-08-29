@@ -4,8 +4,12 @@ import com.sixmac.core.Constant;
 import com.sixmac.dao.TeamRaceDao;
 import com.sixmac.entity.TeamMember;
 import com.sixmac.entity.TeamRace;
+import com.sixmac.entity.vo.WatchBallVo;
 import com.sixmac.service.TeamRaceService;
 
+import com.sixmac.service.TeamService;
+import com.sixmac.utils.ConfigUtil;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +23,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +39,9 @@ public class TeamRaceServiceImpl implements TeamRaceService {
 
     @Autowired
     private TeamRaceDao teamRaceDao;
+
+    @Autowired
+    private TeamService teamService;
 
     @PersistenceContext
     private EntityManager em;
@@ -130,6 +140,68 @@ public class TeamRaceServiceImpl implements TeamRaceService {
 
         List<TeamRace> _list = query.getResultList();
         return _list;
+    }
+
+    @Override
+    public Map<String, Object> schedule(HttpServletResponse response, Long teamId, Long userId) {
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        //球队为主队的球赛
+        List<TeamRace> teamRaces = teamRaceDao.findHomeId(teamId);
+
+        WatchBallVo watchBallVo1 = null;
+        List<WatchBallVo> watchBallVos = new ArrayList<WatchBallVo>();
+        for (TeamRace teamRace : teamRaces) {
+            watchBallVo1 = new WatchBallVo();
+            if (teamRace.getHomeTeam().getLeaderUser().getId() == userId) {
+                watchBallVo1.setMobile(teamRace.getVisitingTeam().getLeaderUser().getMobile());
+            }
+            watchBallVo1.setId(teamRace.getId());
+            watchBallVo1.setStadiumName(teamRace.getAddress());
+            watchBallVo1.setStartTime(teamRace.getStartTime());
+            watchBallVo1.setCreateDate(teamRace.getCreateDate());
+            watchBallVo1.setHomeTeamName(teamRace.getHomeTeam().getName());
+            if (StringUtils.isNotBlank(teamRace.getHomeTeam().getAvater())) {
+                watchBallVo1.setHomeTeamAvater(ConfigUtil.getString("upload.url") + teamRace.getHomeTeam().getAvater());
+            }
+            watchBallVo1.setvTeamName(teamRace.getVisitingTeam().getName());
+            if (StringUtils.isNotBlank(teamRace.getVisitingTeam().getAvater())) {
+                watchBallVo1.setvTeamAvater(ConfigUtil.getString("upload.url") + teamRace.getVisitingTeam().getAvater());
+            }
+            watchBallVo1.setStatus(teamRace.getStatus());
+            watchBallVos.add(watchBallVo1);
+        }
+
+        //球队为客队的球赛
+        List<TeamRace> teamRaces1 = teamRaceDao.findVisitingId(teamId);
+        WatchBallVo watchBallVo2 = null;
+        List<WatchBallVo> watchBallVoList = new ArrayList<WatchBallVo>();
+        for (TeamRace teamRace : teamRaces1) {
+
+            watchBallVo2 = new WatchBallVo();
+            if (teamRace.getVisitingTeam().getLeaderUser().getId() == userId) {
+                watchBallVo2.setMobile(teamRace.getHomeTeam().getLeaderUser().getMobile());
+            }
+            watchBallVo2.setId(teamRace.getId());
+            watchBallVo2.setStadiumName(teamRace.getAddress());
+            watchBallVo2.setStartTime(teamRace.getStartTime());
+            watchBallVo2.setHomeTeamName(teamRace.getHomeTeam().getName());
+            watchBallVo2.setCreateDate(teamRace.getCreateDate());
+            if (StringUtils.isNotBlank(teamRace.getHomeTeam().getAvater())) {
+                watchBallVo2.setHomeTeamAvater(ConfigUtil.getString("upload.url") + teamRace.getHomeTeam().getAvater());
+            }
+            watchBallVo2.setvTeamName(teamRace.getVisitingTeam().getName());
+            if (StringUtils.isNotBlank(teamRace.getVisitingTeam().getAvater())) {
+                watchBallVo2.setvTeamAvater(ConfigUtil.getString("upload.url") + teamRace.getVisitingTeam().getAvater());
+            }
+            watchBallVo2.setStatus(teamRace.getStatus());
+            watchBallVoList.add(watchBallVo2);
+        }
+
+        map.put("watchBallVos", watchBallVos);
+        map.put("watchBallVoList", watchBallVoList);
+
+        return map;
     }
 
 }

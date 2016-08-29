@@ -4,6 +4,7 @@ import com.sixmac.entity.Stadium;
 import com.sixmac.service.common.ICommonService;
 import org.springframework.data.domain.Page;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -13,5 +14,11 @@ public interface StadiumService extends ICommonService<Stadium> {
 
     /*//根据区域、类型筛选场地
     public List<Stadium> page(Integer type);*/
+
+    public void publish(HttpServletResponse response,
+                        Long userId,
+                        Long stadiumId,
+                        String title,
+                        Long time);
 
 }
