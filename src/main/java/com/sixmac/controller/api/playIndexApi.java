@@ -101,65 +101,10 @@ public class PlayIndexApi extends CommonController {
 
         }
 
-        if (reserveList == null) {
-            WebUtil.printApi(response, new Result(true).data("无赛事信息"));
-        }else {
-            //查询约球的前三条信息
-//            List<Reserve> list = new ArrayList<Reserve>();
-            /*if (reserveList.size() >= 3) {
-                list.add(reserveList.get(reserveList.size()-3));
-                for (Reserve reserve : list) {
-                    if (StringUtils.isNotBlank(reserve.getUser().getAvater())) {
-                        reserve.getUser().setAvater(ConfigUtil.getString("upload.url") + reserve.getUser().getAvater());
-                    }
+        Result obj = new Result(true).data(createMap("list",reserveList));
+        String result = JsonUtil.obj2ApiJson(obj,"userReservelist","insurance","user");
+        WebUtil.printApi(response, result);
 
-                    reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
-                    *//*reserve.setJoinCount(reserve.getUserReservelist() != null ? reserve.getUserReservelist().size() : 0);
-                    reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());*//*
-                }
-            }
-            if (reserveList.size() == 2) {
-                list.add(reserveList.get(reserveList.size()-2));
-                for (Reserve reserve : list) {
-                    if (StringUtils.isNotBlank(reserve.getUser().getAvater())) {
-                        reserve.getUser().setAvater(ConfigUtil.getString("upload.url") + reserve.getUser().getAvater());
-                    }
-
-                    reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
-                    *//*reserve.setJoinCount(reserve.getUserReservelist() != null ? reserve.getUserReservelist().size() : 0);
-                    reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());*//*
-                }
-            }
-            if (reserveList.size() >= 1) {
-                list.add(reserveList.get(reserveList.size()-1));
-                for (Reserve reserve : list) {
-                    if (StringUtils.isNotBlank(reserve.getUser().getAvater())) {
-                        reserve.getUser().setAvater(ConfigUtil.getString("upload.url") + reserve.getUser().getAvater());
-                    }
-
-                    reserve.setContent(DateUtils.chinaDayOfWeekAndAM(new Date()) + "," + reserve.getStadium().getName() + "约球了");
-                    *//*reserve.setJoinCount(reserve.getUserReservelist() != null ? reserve.getUserReservelist().size() : 0);
-                    reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());*//*
-                }
-            }*/
-//            if (reserveList != null) {
-//                if (reserveList.size() >= 1) {
-//                    list.add(reserveList.get(0));
-//                }
-//                if (reserveList.size() >= 2) {
-//                    list.add(reserveList.get(1));
-//                }
-//                if (reserveList.size() >= 3) {
-//                    list.add(reserveList.get(2));
-//                }
-//            }
-
-            Result obj = new Result(true).data(createMap("list",reserveList));
-            String result = JsonUtil.obj2ApiJson(obj,"userReservelist","insurance","user");
-            long end = System.currentTimeMillis();
-            System.out.println("api/playIndex/orderballList:耗时" + (end - start) / 1000.0 + "秒");
-            WebUtil.printApi(response, result);
-        }
     }
 
     /**
@@ -328,7 +273,8 @@ public class PlayIndexApi extends CommonController {
 
         List<TeamMember> teamMemberList = teamMemberService.findByUserId(userId);
         if (teamMemberList == null) {
-            WebUtil.printApi(response, new Result(true).data("没有球队约战"));
+            WebUtil.printApi(response, new Result(true));
+            return;
         }
         List<TeamRace> teamRaceList = teamRaceService.findByTeamId(teamMemberList);
         for (TeamRace teamRace : teamRaceList) {

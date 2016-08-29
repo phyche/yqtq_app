@@ -86,7 +86,12 @@ public class InteractApi extends CommonController {
      * @apiSuccess {Long} list.postCommentList.fUser.id 评论人id
      * @apiSuccess {String} list.postCommentList.fUser.nickname 评论人昵称
      * @apiSuccess {String} list.postCommentList.fUser.avater 评论人头像
+     * @apiSuccess {Object} list.postCommentList.tUser 被评论人
+     * @apiSuccess {Long} list.postCommentList.tUser.id 被评论人id
+     * @apiSuccess {String} list.postCommentList.tUser.nickname 被评论人昵称
+     * @apiSuccess {String} list.postCommentList.tUser.avater 被评论人头像
      * @apiSuccess {String} list.postCommentList.content 评论内容
+     * @apiSuccess {Long} list.postCommentList.createDate 评论时间
      *
      * @apiSuccess {Object}  page 翻页信息
      * @apiSuccess {Integer} page.totalNum 总记录数
@@ -113,6 +118,9 @@ public class InteractApi extends CommonController {
             for (PostComment postComment : post.getPostCommentList()) {
                 if (StringUtils.isNotBlank(postComment.getfUser().getAvater())) {
                     postComment.getfUser().setAvater(ConfigUtil.getString("upload.url") + postComment.getfUser().getAvater());
+                }
+                if (StringUtils.isNotBlank(postComment.gettUser().getAvater())) {
+                    postComment.gettUser().setAvater(ConfigUtil.getString("upload.url") + postComment.gettUser().getAvater());
                 }
             }
             post.setCommentNum(post.getPostCommentList().size());

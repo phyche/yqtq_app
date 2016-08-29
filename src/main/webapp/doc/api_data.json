@@ -912,10 +912,45 @@
           },
           {
             "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list.postCommentList.tUser",
+            "description": "<p>被评论人</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.postCommentList.tUser.id",
+            "description": "<p>被评论人id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.postCommentList.tUser.nickname",
+            "description": "<p>被评论人昵称</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.postCommentList.tUser.avater",
+            "description": "<p>被评论人头像</p>"
+          },
+          {
+            "group": "Success 200",
             "type": "String",
             "optional": false,
             "field": "list.postCommentList.content",
             "description": "<p>评论内容</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.postCommentList.createDate",
+            "description": "<p>评论时间</p>"
           },
           {
             "group": "Success 200",
@@ -1992,6 +2027,13 @@
             "optional": false,
             "field": "list.userId",
             "description": "<p>好友id (被邀请加入球队、申请加入球队)</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.teamAvater",
+            "description": "<p>球队队徽</p>"
           }
         ]
       }
@@ -2002,131 +2044,6 @@
     "sampleRequest": [
       {
         "url": "http://4.16.1.158:8080/yqtq_app/api/message/team"
-      }
-    ]
-  },
-  {
-    "type": "post",
-    "url": "/api/message/teamOrder",
-    "title": "球队约战消息",
-    "name": "message_teamOrder",
-    "group": "message",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Long",
-            "optional": false,
-            "field": "userId",
-            "description": "<p>用户id &lt;必传/&gt;</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "list",
-            "description": "<p>消息列表</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.id",
-            "description": "<p>消息id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "list.content",
-            "description": "<p>消息内容</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "list.visitingTeam",
-            "description": "<p>约战主队</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.visitingTeam.id",
-            "description": "<p>主队id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "list.visitingTeam.name",
-            "description": "<p>主队名称</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "list.visitingTeam.avater",
-            "description": "<p>主队队徽</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "list.homeTeam",
-            "description": "<p>约战客队</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.homeTeam.id",
-            "description": "<p>客队id</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "list.homeTeam.name",
-            "description": "<p>客队名称</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "list.homeTeam.avater",
-            "description": "<p>客队队徽</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.startTime",
-            "description": "<p>约战时间</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Long",
-            "optional": false,
-            "field": "list.createDate",
-            "description": "<p>消息时间</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "src/main/java/com/sixmac/controller/api/MessageApi.java",
-    "groupTitle": "message",
-    "sampleRequest": [
-      {
-        "url": "http://4.16.1.158:8080/yqtq_app/api/message/teamOrder"
       }
     ]
   },

@@ -65,9 +65,6 @@ public class HostRaceApi extends CommonController {
     @RequestMapping(value = "/list")
     public void list(HttpServletResponse response) {
 
-        long start = System.currentTimeMillis();
-        long end = System.currentTimeMillis();
-        System.out.println("api/hostRace/list:耗时" + (end - start) / 1000.0 + "");
         List<HostRace> hostRaceList = hostRaceService.findNew();
         HostRace hostRace = hostRaceList.get(0);
 
