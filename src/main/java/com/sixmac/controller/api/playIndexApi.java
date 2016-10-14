@@ -102,7 +102,7 @@ public class PlayIndexApi extends CommonController {
         }
 
         Result obj = new Result(true).data(createMap("list",reserveList));
-        String result = JsonUtil.obj2ApiJson(obj,"userReservelist","insurance","user");
+        String result = JsonUtil.obj2ApiJson(obj,"userReservelist","insurance");
         WebUtil.printApi(response, result);
 
     }

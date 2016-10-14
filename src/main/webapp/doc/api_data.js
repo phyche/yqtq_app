@@ -5233,6 +5233,69 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "/api/test/test",
+    "title": "场次选择",
+    "name": "test_test",
+    "group": "test",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "list",
+            "description": "<p>场地</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Long",
+            "optional": false,
+            "field": "list.id",
+            "description": "<p>场地id</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.code",
+            "description": "<p>场地编号</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "optional": false,
+            "field": "list.type",
+            "description": "<p>场地类型  N人制</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.numList",
+            "description": "<p>预定字符串</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "list.numList.status",
+            "description": "<p>状态 (0：不可预定 1：可预订)</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/main/java/com/sixmac/controller/api/Test.java",
+    "groupTitle": "test",
+    "sampleRequest": [
+      {
+        "url": "http://4.16.1.158:8080/yqtq_app/api/test/test"
+      }
+    ]
+  },
+  {
+    "type": "post",
     "url": "/api/user/comment",
     "title": "我的看球评价",
     "name": "user_comment",
