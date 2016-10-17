@@ -140,10 +140,12 @@ public class PostCommentServiceImpl implements PostCommentService {
         postComment.setContent(content);
         postCommentDao.save(postComment);
 
+        // 新增帖子评论消息记录
         MessageRecord messageRecord = new MessageRecord();
         messageRecord.setUserId(postDao.findOne(postId).getUser().getId());
         messageRecord.setStatus(0);
         messageRecord.setMessageId(postComment.getId());
+        // 类型（4：帖子评论）
         messageRecord.setType(4);
         messageRecordDao.save(messageRecord);
 

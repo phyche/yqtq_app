@@ -167,6 +167,7 @@ public class TeamServiceImpl implements TeamService {
                 sumWeight += team.getList().get(sum).getWeight();
             }
 
+            // 总年龄（身高、体重）为队员年龄（身高、体重）加队长的年龄（身高体重）
             sumAge = sumAge + teamDao.findOne(teamId).getLeaderUser().getAge();
             sumHeight = sumHeight + teamDao.findOne(teamId).getLeaderUser().getHeight();
             sumWeight = sumWeight + teamDao.findOne(teamId).getLeaderUser().getWeight();
@@ -219,11 +220,12 @@ public class TeamServiceImpl implements TeamService {
             messageRecord.setType(9);
             messageRecordService.create(messageRecord);*/
 
-            // 好友被邀请加入球队
+            // 新增好友被邀请加入球队的消息记录
             MessageRecord messageRecord = new MessageRecord();
             messageRecord.setUserId(toUserId);
             messageRecord.setStatus(0);
             messageRecord.setMessageId(messageTeam.getId());
+            //类型（8：被邀请加入球队）
             messageRecord.setType(8);
             messageRecordDao.save(messageRecord);
         }
@@ -239,10 +241,12 @@ public class TeamServiceImpl implements TeamService {
         messageJoin.setTeam(teamDao.findOne(teamId));
         messageJoinDao.save(messageJoin);
 
+        //新增消息记录
         MessageRecord messageRecord = new MessageRecord();
         messageRecord.setUserId(userId);
         messageRecord.setStatus(0);
         messageRecord.setMessageId(messageJoin.getId());
+        //类型（10：申请加入球队）
         messageRecord.setType(10);
         messageRecordDao.save(messageRecord);
     }
@@ -262,10 +266,12 @@ public class TeamServiceImpl implements TeamService {
         teamRace.setStartTime(time);
         teamRaceDao.save(teamRace);
 
+        // 新增对战的消息记录
         MessageRecord messageRecord = new MessageRecord();
         messageRecord.setUserId(team1.getLeaderUser().getId());
         messageRecord.setStatus(0);
         messageRecord.setMessageId(teamRace.getId());
+        // 类型（13：对战）
         messageRecord.setType(13);
         messageRecordDao.save(messageRecord);
     }

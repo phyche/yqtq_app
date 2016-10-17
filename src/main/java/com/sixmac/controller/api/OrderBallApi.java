@@ -115,6 +115,7 @@ public class OrderBallApi extends CommonController {
             if (longitude == 0.0 && latitude == 0.0) {
                 reserve.getStadium().setDistance(-1);
             } else {
+                // 通过经纬度计算距离
                 reserve.getStadium().setDistance(CountDistance.gps2m(latitude, longitude, reserve.getStadium().getLatitude(), reserve.getStadium().getLongitude()));
             }
             reserve.setContent(DateUtils.chinaDayOfWeekAndAM(DateUtils.longToDate(reserve.getStartTime(),"yyyy-MM-dd HH:mm:ss")) + "," + reserve.getStadium().getName() + "约球了");
@@ -184,26 +185,28 @@ public class OrderBallApi extends CommonController {
             Map<String, Object> map = new HashMap<String, Object>();
 
             Reserve reserve = reserveService.getById(reserveId);
-            reserve.setContent(DateUtils.chinaDayOfWeekAndAM(DateUtils.longToDate(reserve.getStartTime(),"yyyy-MM-dd HH:mm:ss")) + "," + reserve.getStadium().getName() + "约球了");
-
-            if (reserve.getType() == 0) {
-                reserve.setJoinCount(reserve.getUserReservelist() != null ? reserve.getUserReservelist().size() : 0);
-                reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
-            }
-
-            if (StringUtils.isNotBlank(reserve.getUser().getAvater())) {
-                reserve.getUser().setAvater(ConfigUtil.getString("upload.url") + reserve.getUser().getAvater());
-            }
-
             if (null == reserve) {
                 WebUtil.printApi(response, new Result(false).msg(ErrorCode.ERROR_CODE_0003));
                 return;
             }
 
             if (reserve.getType() == 0) {
+
+                // 散客约的人均价格已经总价格
                 reserve.setAvePrice(reserve.getPrice() / reserve.getMatchType());
                 reserve.setSumPrice(reserve.getPrice());
-                reserveService.update(reserve);
+
+                // 约球已加入人数与缺少人数
+                reserve.setJoinCount(reserve.getUserReservelist() != null ? reserve.getUserReservelist().size() : 0);
+                reserve.setLackCount(reserve.getMatchType() * 2 - reserve.getJoinCount());
+                //reserveService.update(reserve);
+            }
+
+            // 约球标题内容
+            reserve.setContent(DateUtils.chinaDayOfWeekAndAM(DateUtils.longToDate(reserve.getStartTime(),"yyyy-MM-dd HH:mm:ss")) + "," + reserve.getStadium().getName() + "约球了");
+
+            if (StringUtils.isNotBlank(reserve.getUser().getAvater())) {
+                reserve.getUser().setAvater(ConfigUtil.getString("upload.url") + reserve.getUser().getAvater());
             }
 
             if (reserve.getInsurance() == null) {

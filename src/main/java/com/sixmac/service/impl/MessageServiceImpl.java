@@ -129,6 +129,8 @@ public class MessageServiceImpl implements MessageService {
         List<MessageOrderBall> list1 = messageOrderBallDao.findByToUserId(userId);
         Reserve reserve = null;
         List<MessageRecord> messageRecordList = null;
+
+        // 类型：4：好友约球消息，
         for (MessageOrderBall messageOrderBall : list1) {
 
             reserve = messageOrderBall.getReserve();
@@ -158,6 +160,7 @@ public class MessageServiceImpl implements MessageService {
 
         }
 
+        // 类型：5：好友加入约球消息，
         List<Reserve> reserveList = reserveDao.findByUserId(userId);
         List<UserReserve> list2 = new ArrayList<UserReserve>();
         for (Reserve reserve1 : reserveList) {
@@ -189,6 +192,7 @@ public class MessageServiceImpl implements MessageService {
             }
         }
 
+        // 类型：6：约球成功或失败消息
         List<UserReserve> list3 = userReserveDao.findByUserId(userId);
         for (UserReserve userReserve : list3) {
 
@@ -219,6 +223,7 @@ public class MessageServiceImpl implements MessageService {
             }
         }
 
+        // 按照时间倒序
         if (null != messageVoList && messageVoList.size() > 1) {
             Collections.sort(messageVoList, new Compare());
         }
@@ -230,17 +235,23 @@ public class MessageServiceImpl implements MessageService {
     @Transactional
     public void doMessage(HttpServletResponse response, Long id, Integer status, Integer type) {
         if (type == 1) {
+
+            // 1：处理约球消息，
             MessageOrderBall messageOrderBall = messageOrderBallDao.findOne(id);
             messageOrderBall.setStatus(status);
             messageOrderBallDao.save(messageOrderBall);
 
         } else if (type == 2) {
+
+            // 2：处理添加好友消息，
             MessageAdd messageAdd = messageAddDao.findOne(id);
             if (messageAdd != null) {
                 messageAdd.setStatus(status);
             }
             messageAddDao.save(messageAdd);
 
+            // 新增消息记录
+            // 类型（6：添加好友，）
             MessageRecord messageRecord = new MessageRecord();
             messageRecord.setUserId(messageAdd.getUser().getId());
             messageRecord.setStatus(1);
@@ -248,10 +259,13 @@ public class MessageServiceImpl implements MessageService {
             messageRecord.setType(6);
             messageRecordDao.save(messageRecord);
         } else if (type == 3) {
+
+            // 3：处理加入球队消息，
             MessageJoin messageJoin = messageJoinDao.findOne(id);
             messageJoin.setStatus(status);
             messageJoinDao.save(messageJoin);
 
+            // 如果同意，则将该用户设置为改球队的队员
             if (status == 1) {
                 TeamMember teamMember = new TeamMember();
                 teamMember.setUserId(messageJoin.getUser().getId());
@@ -259,6 +273,8 @@ public class MessageServiceImpl implements MessageService {
                 teamMemberDao.save(teamMember);
             }
 
+            // 新增消息记录
+            // 类型（14：申请加入球队回复，）
             MessageRecord messageRecord = new MessageRecord();
             messageRecord.setUserId(messageJoin.getTeam().getId());
             messageRecord.setStatus(1);
@@ -267,14 +283,20 @@ public class MessageServiceImpl implements MessageService {
             messageRecordDao.save(messageRecord);
 
         } else if (type == 4) {
+
+            // 4：处理球队约战消息
             TeamRace teamRace = teamRaceDao.findOne(id);
             teamRace.setStatus(status);
+
+            // 如果同意，则主队宣战数加一，客队应战数加一
             if (status == 1) {
                 teamRace.getVisitingTeam().setBattleNum(teamRace.getVisitingTeam().getBattleNum() + 1);
                 teamRace.getHomeTeam().setDeclareNum(teamRace.getHomeTeam().getDeclareNum() + 1);
             }
             teamRaceDao.save(teamRace);
 
+            // 新增消息记录
+            // 类型（11：约战成功，12：约战失败，）
             MessageRecord messageRecord = new MessageRecord();
             messageRecord.setUserId(teamRace.getVisitingTeam().getLeaderUser().getId());
             messageRecord.setStatus(1);
@@ -301,14 +323,13 @@ public class MessageServiceImpl implements MessageService {
             }
             messageWatching.setContent("user" + "约您看球");
             if (messageWatching.getType() == 0) {
-                messageWatching.setWatchingRace(new WatchingRace());
-            } else if (messageWatching.getType() == 1) {
                 messageWatching.setBigRace(new BigRace());
                 messageWatching.getBigRace().setStadium(new Stadium());
-
+            } else if (messageWatching.getType() == 1) {
+                messageWatching.setWatchingRace(new WatchingRace());
             }
             if (messageWatching.getWatchingRace() != null && StringUtils.isNotBlank(messageWatching.getWatchingRace().getAvater())) {
-                messageWatching.getWatchingRace().setAvater(messageWatching.getWatchingRace().getAvater());
+                messageWatching.getWatchingRace().setAvater(ConfigUtil.getString("upload.url") + messageWatching.getWatchingRace().getAvater());
             }
         }
 
@@ -323,6 +344,7 @@ public class MessageServiceImpl implements MessageService {
         for (PostComment postComment : list) {
             messageRecordList = messageRecordDao.findByMessageId(postComment.getId(), 4);
             for (MessageRecord messageRecord : messageRecordList){
+                // 将消息记录状态改为已读
                 messageRecord.setStatus(1);
                 messageRecordDao.save(messageRecord);
             }
@@ -346,6 +368,8 @@ public class MessageServiceImpl implements MessageService {
         List<MessageVo> list = new ArrayList<MessageVo>();
         MessageVo messageVo = null;
         List<MessageRecord> messageRecordList = null;
+
+        // 1：系统消息
         for (SystemMessage systemMessage : list1) {
             messageVo = new MessageVo();
             messageRecordList = messageRecordDao.findByMessageId(systemMessage.getId(), 5);
@@ -360,6 +384,8 @@ public class MessageServiceImpl implements MessageService {
             messageVo.setType(1);
             list.add(messageVo);
         }
+
+        // 2：添加好友消息
         for (MessageAdd messageAdd : list2) {
             if (messageAdd.getUser().getId() == userId && messageAdd.getStatus() != 0) {
                 messageRecordList = messageRecordDao.findByMessageId(messageAdd.getId(), 6);
@@ -384,6 +410,8 @@ public class MessageServiceImpl implements MessageService {
 
             }
         }
+
+        // 3：好友请求消息
         for (MessageAdd messageAdd : list3) {
             if (messageAdd.getToUser().getId() == userId && messageAdd.getStatus() == 0) {
                 messageRecordList = messageRecordDao.findByMessageId(messageAdd.getId(), 7);
@@ -403,6 +431,7 @@ public class MessageServiceImpl implements MessageService {
             }
         }
 
+        // 按时间倒序
         if (null != list && list.size() > 1) {
             Collections.sort(list, new Compare());
         }
@@ -417,6 +446,8 @@ public class MessageServiceImpl implements MessageService {
         MessageVo messageVo = null;
         List<MessageTeam> list = messageTeamDao.findByToUserId(userId);
         List<MessageRecord> messageRecordList = null;
+
+        // 7：被邀请加入球队消息，
         for (MessageTeam messageTeam : list) {
 
             messageRecordList = messageRecordDao.findByMessageId(messageTeam.getId(), 8);
@@ -424,7 +455,6 @@ public class MessageServiceImpl implements MessageService {
                 messageRecord.setStatus(1);
                 messageRecordDao.save(messageRecord);
             }
-
 
             messageVo = new MessageVo();
             messageVo.setId(messageTeam.getId());
@@ -438,11 +468,13 @@ public class MessageServiceImpl implements MessageService {
             messageVoList.add(messageVo);
         }
 
+
         Team team = teamDao.findListByLeaderId(userId);
         if (team == null) {
             WebUtil.printApi(response, new Result(true));
         } else {
 
+            // 8：邀请加入球队，
             List<MessageTeam> list1 = messageTeamDao.findByTeam(team);
             for (MessageTeam messageTeam : list1) {
 
@@ -467,6 +499,7 @@ public class MessageServiceImpl implements MessageService {
             }
 
 
+            // 9：申请加入球队,
             List<MessageJoin> list2 = messageJoinDao.findByTeam(team);
             for (MessageJoin messageJoin : list2) {
                 messageRecordList = messageRecordDao.findByMessageId(messageJoin.getId(), 10);
@@ -485,6 +518,7 @@ public class MessageServiceImpl implements MessageService {
                 messageVoList.add(messageVo);
             }
 
+            // 13：申请加入球队回复
             List<MessageJoin> list3 = messageJoinDao.findByUserId(userId);
             for (MessageJoin messageJoin : list3) {
                 messageRecordList = messageRecordDao.findByMessageId(messageJoin.getId(), 14);
@@ -518,7 +552,10 @@ public class MessageServiceImpl implements MessageService {
             teamList.add(teamDao.findOne(teamMember.getTeamId()));
         }
 
+        // 球队作为主队和客队约战成功的消息
         for (Team team1 : teamList) {
+
+            // 主队 10.约战成功
             List<TeamRace> teamRaceList1 = teamRaceDao.findHomeId(team1.getId());
             for (TeamRace teamRace : teamRaceList1) {
                 if (teamRace.getStatus() == 1) {
@@ -538,6 +575,8 @@ public class MessageServiceImpl implements MessageService {
                     messageVoList.add(messageVo);
                 }
             }
+
+            // 客队 10.约战成功
             List<TeamRace> teamRaceList2 = teamRaceDao.findVisitingId(team.getId());
             for (TeamRace teamRace : teamRaceList2) {
                 if (teamRace.getStatus() == 1) {
@@ -559,6 +598,7 @@ public class MessageServiceImpl implements MessageService {
             }
         }
 
+        // 我自己创建球队作为主队的消息
         List<TeamRace> teamRaceList1 = teamRaceDao.findHomeId(team.getId());
         for (TeamRace teamRace : teamRaceList1) {
             if (teamRace.getStatus() == 2) {
@@ -595,6 +635,8 @@ public class MessageServiceImpl implements MessageService {
                 messageVoList.add(messageVo);
             }
         }
+
+        // 我自己创建球队作为客队的消息
         List<TeamRace> teamRaceList2 = teamRaceDao.findVisitingId(team.getId());
         for (TeamRace teamRace : teamRaceList2) {
             if (teamRace.getStatus() == 0) {
@@ -605,6 +647,7 @@ public class MessageServiceImpl implements MessageService {
                     messageRecordDao.save(messageRecord);
                 }
 
+                // 12：申请约战,
                 messageVo = new MessageVo();
                 messageVo.setId(teamRace.getId());
                 messageVo.setTeamId(teamRace.getHomeTeam().getId());
@@ -634,6 +677,7 @@ public class MessageServiceImpl implements MessageService {
             }
         }
 
+        // 按时间倒序
         if (null != messageVoList && messageVoList.size() > 1) {
             Collections.sort(messageVoList, new Compare());
         }

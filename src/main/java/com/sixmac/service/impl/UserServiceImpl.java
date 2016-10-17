@@ -167,10 +167,12 @@ public class UserServiceImpl implements UserService {
             messageAdd.setToUser(user);
             messageAddDao.save(messageAdd);
 
+            // 新增好友请求消息记录
             MessageRecord messageRecord = new MessageRecord();
             messageRecord.setUserId(user.getId());
             messageRecord.setStatus(0);
             messageRecord.setMessageId(messageAdd.getId());
+            // 类型（7：好友请求）
             messageRecord.setType(7);
             messageRecordDao.save(messageRecord);
 
@@ -195,7 +197,7 @@ public class UserServiceImpl implements UserService {
         for (TeamMember teamMember : teamMemberList) {
 
             user1 = userDao.findOne(teamMember.getUserId());
-            team = teamDao.findListByLeaderId(teamMember.getTeamId());
+            team = teamDao.findOne(teamMember.getTeamId());
             if (teamDao.findListByLeaderId(userId) != null) {
 
                 if (teamMember.getTeamId() != teamDao.findListByLeaderId(userId).getId()) {
@@ -225,6 +227,7 @@ public class UserServiceImpl implements UserService {
         }
         map.put("myTeam", myTeam);
 
+        // 会员到期时间
         UserVip userVip = userVipDao.findByUserId(userId);
         if (userVip != null && user.getVipNum() != 0) {
             user.setEndDays((int) ((userVip.getEndDate() - System.currentTimeMillis())/1000/3600/24));
@@ -245,6 +248,8 @@ public class UserServiceImpl implements UserService {
         Double price = 0.0;
 
         if (userVip == null || userVip.getEndDate() < System.currentTimeMillis()) {
+
+            // 不是会员或者会员到期，则等级清0，并且会员价格按新注册会员计算
             level = 0;
             //status = "您不是会员";
             //userVip.setStatus("您不是会员");
@@ -262,9 +267,13 @@ public class UserServiceImpl implements UserService {
 
 
         } else {
+
+            // 查询会员等级以及会员到期时间
             level = userDao.findOne(userId).getVipNum();
             status = DateUtils.longToString(userVip.getEndDate(), "yyyy年-MM月-dd日");
             //userVip.setStatus("会员到期时间" + DateUtils.longToString(userVip.getEndDate(),"yyyy年-MM月-dd日 HH:mm:ss"));
+
+            // 价格根据会员等级打折后计算
             if (num == 1) {
                 /*endDate = DateUtils.longToString(userVip.getEndDate() + 1000 * 3600 * 365 * 24, "yyyy年-MM月-dd日 HH:mm:ss");
                 Date secord = DateUtils.dateAddYear(DateUtils.longToDate(userVip.getEndDate(),"yyyy-MM-dd HH:mm:ss"),1);
@@ -280,7 +289,9 @@ public class UserServiceImpl implements UserService {
             }
         }
 
+        // 用户当前经验值
         Integer experience = 0;
+        // 用户升到下一级所需的经验值
         Integer leftExperience = 0;
         if (level != 0) {
             VipLevel vipLevel = vipLevelDao.findBylevel(level);

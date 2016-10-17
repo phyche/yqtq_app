@@ -110,11 +110,15 @@ public class InteractApi extends CommonController {
             if (StringUtils.isNotBlank(post.getUser().getAvater())) {
                 post.getUser().setAvater(ConfigUtil.getString("upload.url") + post.getUser().getAvater());
             }
+
+            // 足球圈图片
             for (PostImage postImage : post.getPostImages()) {
                 if (StringUtils.isNotBlank(postImage.getAvater())) {
                     postImage.setAvater(ConfigUtil.getString("upload.url") + postImage.getAvater());
                 }
             }
+
+            // 足球圈评论
             for (PostComment postComment : post.getPostCommentList()) {
                 if (StringUtils.isNotBlank(postComment.getfUser().getAvater())) {
                     postComment.getfUser().setAvater(ConfigUtil.getString("upload.url") + postComment.getfUser().getAvater());

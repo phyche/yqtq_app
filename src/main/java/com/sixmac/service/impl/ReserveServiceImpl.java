@@ -196,10 +196,12 @@ public class ReserveServiceImpl implements ReserveService {
         messageOrderBall.setReserve(reserveDao.findOne(reserveId));
         messageOrderBallDao.save(messageOrderBall);
 
+        // 新增好友约球消息记录
         MessageRecord messageRecord = new MessageRecord();
         messageRecord.setUserId(toUserId);
         messageRecord.setStatus(0);
         messageRecord.setMessageId(messageOrderBall.getId());
+        // 类型（0：好友约球）
         messageRecord.setType(0);
         messageRecordDao.save(messageRecord);
     }

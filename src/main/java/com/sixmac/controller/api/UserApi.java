@@ -245,6 +245,7 @@ public class UserApi extends CommonController {
 
         Date now = new Date();
 
+        // 根据出生日期计算年龄
         if (birthday != null) {
             SimpleDateFormat format_y = new SimpleDateFormat("yyyy");
             SimpleDateFormat format_M = new SimpleDateFormat("MM");
@@ -562,14 +563,20 @@ public class UserApi extends CommonController {
             while (tempImages.hasNext()) {
                 GirlImage girlImage = tempImages.next();
                 if (girlImage.getType() == 1) {
+
+                    // 移除宝贝的相册图片
                     tempImages.remove();
                 } else if (girlImage.getType() == 0) {
+
+                    // 拼接宝贝的封面路径
                     if (StringUtils.isNotBlank(girlImage.getUrl())) {
                         girlImage.setUrl(ConfigUtil.getString("upload.url") + girlImage.getUrl());
                     }
 
                 }
             }
+
+            // 宝贝封面如果有多个，则只取第一个
             if (girlUser.getGirl().getGirlImageList().size() > 1) {
                 tempImage = girlUser.getGirl().getGirlImageList().iterator().next();
                 girlUser.getGirl().getGirlImageList().clear();

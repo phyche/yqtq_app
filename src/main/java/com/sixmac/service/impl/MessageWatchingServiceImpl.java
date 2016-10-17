@@ -96,17 +96,20 @@ public class MessageWatchingServiceImpl implements MessageWatchingService {
         messageWatching.setUser(userDao.findOne(userId));
         messageWatching.setType(type);
         messageWatching.setToUser(userDao.findOne(toUserId));
+        // 类型：0：现场看球，1：直播看球
         if (type == 0) {
-            messageWatching.setWatchingRace(watchingRaceDao.findOne(id));
-        } else if (type == 1) {
             messageWatching.setBigRace(bigRaceDao.findOne(id));
+        } else if (type == 1) {
+            messageWatching.setWatchingRace(watchingRaceDao.findOne(id));
         }
         messageWatchingDao.save(messageWatching);
 
+        // 新增约看消息
         MessageRecord messageRecord = new MessageRecord();
         messageRecord.setUserId(toUserId);
         messageRecord.setStatus(0);
         messageRecord.setMessageId(messageWatching.getId());
+        // 类型（3：约看）
         messageRecord.setType(3);
         messageRecordDao.save(messageRecord);
     }

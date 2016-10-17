@@ -104,7 +104,7 @@ public class WatchingApi extends CommonController {
      * @api {post} /api/watching/inviteBall 看球邀请
      * @apiName watching.inviteBall
      * @apiGroup watching
-     * @apiParam {Integer} type 类型（1：直播看球，0：现场看球） <必传/>
+     * @apiParam {Integer} type 类型（0：现场看球，1：直播看球） <必传/>
      * @apiParam {Long} id 看球id <必传/>
      * @apiParam {Long} userId 用户id <必传/>
      * @apiParam {Long} toUserId 好友id <必传/>

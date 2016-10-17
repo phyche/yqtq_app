@@ -114,6 +114,8 @@ public class StadiumApi extends CommonController {
             for (Site site : siteList) {
                 stadiumList.add(site.getStadium());
             }
+
+            // 如果球场重复则去掉
             for (int i = 0; i < stadiumList.size(); i++) {
                 Stadium stadium = stadiumList.get(i);
                 if (stadiumList.contains(stadium)) {
@@ -121,6 +123,8 @@ public class StadiumApi extends CommonController {
                 }
             }
         }
+
+        // 查询不听区域下的球场
         List<Area> areaList = areaService.getByCityId(cityId);
         for (Area area : areaList) {
             for (Stadium stadium : stadiumList) {

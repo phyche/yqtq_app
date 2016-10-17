@@ -176,6 +176,7 @@ public class HostRaceApi extends CommonController {
         Team team = teamService.findListByLeaderId(userId);
 
         if (team == null) {
+            // 没有球队，提示创建球队
             WebUtil.printApi(response, new Result(true));
         }else {
 

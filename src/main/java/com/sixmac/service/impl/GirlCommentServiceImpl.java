@@ -122,6 +122,7 @@ public class GirlCommentServiceImpl implements GirlCommentService {
 
         if (girlUser.getStatus() == 1) {
 
+            // 宝贝约看已确认后才能评价
             GirlComment girlComment = new GirlComment();
             girlComment.setUserId(girlUser.getUserId());
             girlComment.setGirlId(girlUser.getGirl().getId());
@@ -129,6 +130,8 @@ public class GirlCommentServiceImpl implements GirlCommentService {
             girlComment.setContent(content);
             girlCommentDao.save(girlComment);
         }
+
+        // 修改宝贝约看状态（0 ：未确认 1：已确认 2；已评价 3；未支付）
         girlUser.setStatus(2);
         girlUserDao.save(girlUser);
     }

@@ -333,8 +333,10 @@ public class OrderServiceImpl implements OrderService {
         userVip.setDuration(num);
         if (num == 1) {
             if (userVip != null && userVip.getEndDate()!= null && userVip.getEndDate() >= System.currentTimeMillis()) {
+                // 会员还未到期，续费后会员到期时间将会往后延迟一年
                 endDate = DateUtils.dateAddYear(DateUtils.longToDate(userVip.getEndDate(),"yyyy-MM-dd HH:mm:ss"),1).getTime();
             }else {
+                // 新购买会员，到期时间为当前系统时间后延迟一年
                 endDate = DateUtils.dateAddYear(DateUtils.longToDate(System.currentTimeMillis(),"yyyy-MM-dd HH:mm:ss"),1).getTime();
             }
 

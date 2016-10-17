@@ -97,6 +97,7 @@ public class TeamApi extends CommonController {
             if (StringUtils.isNotBlank(team.getAvater())) {
                 team.setAvater(ConfigUtil.getString("upload.url") + team.getAvater());
             }
+            // 球队人数：球员加队长
             team.setCount(team.getList().size() + 1);
         }
 
