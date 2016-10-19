@@ -285,15 +285,22 @@ public class UserApi extends CommonController {
         }*/
 
         user.setNickname(nickname);
-        user.setGender(gender);
+        if (gender != null) {
+            user.setGender(gender);
+        }
         user.setBirthday(birthday);
         user.setAge(age);
         user.setProvinceId(provinceId);
         user.setCityId(cityId);
-        user.setHeight(height);
-        user.setWeight(weight);
-        user.setPosition(position);
-
+        if (height != null) {
+            user.setHeight(height);
+        }
+        if (weight != null) {
+            user.setWeight(weight);
+        }
+        if (position != null) {
+            user.setPosition(position);
+        }
         userService.update(user);
 
         Result obj = new Result(true).data(createMap("user", user));
